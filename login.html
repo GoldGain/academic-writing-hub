@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Login</title>
+  <style>
+    body {
+      background: linear-gradient(135deg, #4facfe, #00f2fe);
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    }
+    .container {
+      background: #fff;
+      padding: 2.5rem;
+      border-radius: 12px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+      width: 100%;
+      max-width: 420px;
+      animation: fadeIn 0.9s ease;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    h2 {
+      text-align: center;
+      margin-bottom: 1rem;
+      color: #333;
+    }
+    p.subtitle {
+      text-align: center;
+      font-size: 0.95rem;
+      color: #666;
+      margin-bottom: 1.5rem;
+    }
+    .form-group { margin-bottom: 1.2rem; }
+    label {
+      font-weight: 600;
+      color: #444;
+      display: block;
+      margin-bottom: 0.4rem;
+    }
+    input {
+      width: 100%;
+      padding: 0.75rem;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      font-size: 1rem;
+      outline: none;
+      transition: 0.3s;
+    }
+    input:focus {
+      border-color: #4facfe;
+      box-shadow: 0 0 6px rgba(79, 172, 254, 0.5);
+    }
+    .btn {
+      width: 100%;
+      padding: 0.9rem;
+      background: linear-gradient(135deg, #4facfe, #00f2fe);
+      border: none;
+      border-radius: 8px;
+      color: #fff;
+      font-size: 1rem;
+      font-weight: bold;
+      cursor: pointer;
+      transition: 0.3s ease;
+    }
+    .btn:hover { opacity: 0.9; }
+    .links {
+      text-align: center;
+      margin-top: 1rem;
+      font-size: 0.95rem;
+      color: #555;
+    }
+    .links a {
+      color: #4facfe;
+      text-decoration: none;
+      font-weight: 600;
+      transition: 0.3s;
+    }
+    .links a:hover { text-decoration: underline; }
+    .error-message {
+      color: red;
+      text-align: center;
+      margin-top: 1rem;
+      display: none;
+    }
+    .spinner {
+      display: none;
+      margin: 10px auto;
+      border: 4px solid #f3f3f3;
+      border-top: 4px solid #4facfe;
+      border-radius: 50%;
+      width: 28px;
+      height: 28px;
+      animation: spin 1s linear infinite;
+    }
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Welcome Back 👋</h2>
+    <p class="subtitle">Log in to continue to your dashboard</p>
+    <form id="loginForm">
+      <div class="form-group">
+        <label for="email">Email Address</label>
+        <input type="email" id="email" placeholder="Enter your email" required />
+      </div>
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input type="password" id="password" placeholder="Enter your password" required />
+      </div>
+      <button type="submit" class="btn">Login</button>
+      <div class="spinner" id="spinner"></div>
+      <p class="error-message" id="error-message">Invalid email or password</p>
+    </form>
+    <div class="links">
+      <p>Don't have an account? <a href="signup.html">Sign up</a></p>
+      <p><a href="#">Forgot Password?</a></p>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script>
+    const SUPABASE_URL = "https://lfrjtklkbppihaaiuxef.supabase.co";
+    const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imxmcmp0a2xrYnBwaWhhYWl1eGVmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTkwNTI5MzMsImV4cCI6MjA3NDYyODkzM30.2FVqnt5daF2Tw-RmVBwOGgt4GuIQQSkG8IUZt30QxIM"; // replace with real anon key
+    const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+    const form = document.getElementById("loginForm");
+    const errorMessage = document.getElementById("error-message");
+    const spinner = document.getElementById("spinner");
+
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+
+      const email = document.getElementById("email").value.trim();
+      const password = document.getElementById("password").value;
+
+      errorMessage.style.display = "none";
+      spinner.style.display = "block";
+
+      const { data, error } = await supabaseClient.auth.signInWithPassword({
+        email,
+        password
+      });
+
+      spinner.style.display = "none";
+
+      if (error) {
+        // Display friendly error
+        if(error.message.includes("Email not confirmed")) {
+          errorMessage.textContent = "❌ Please confirm your email before logging in.";
+        } else {
+          errorMessage.textContent = "❌ " + error.message;
+        }
+        errorMessage.style.display = "block";
+      } else if (data.user) {
+        // Successful login
+        alert("✅ Login successful! Redirecting...");
+        window.location.href = "dashboard.html";
+      }
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,1086 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Dashboard - Academic Writing Hub</title>
+  <style>
+    :root {
+      --primary: #004aad;
+      --primary-light: #3a6fc8;
+      --secondary: #ff6b35;
+      --success: #28a745;
+      --warning: #ffc107;
+      --danger: #dc3545;
+      --light: #f8f9fa;
+      --dark: #343a40;
+      --gray: #6c757d;
+      --border: #e9ecef;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #f4f6f9 0%, #e9ecef 100%);
+      color: #333;
+      line-height: 1.6;
+    }
+
+    header {
+      background: var(--primary);
+      color: #fff;
+      padding: 15px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 2px 15px rgba(0,0,0,0.1);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .header-left h1 {
+      margin: 0;
+      font-size: 22px;
+      font-weight: 700;
+    }
+
+    .header-left .slogan {
+      font-size: 13px;
+      opacity: 0.9;
+      margin-top: 2px;
+    }
+
+    .header-right {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .user-menu {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      cursor: pointer;
+      padding: 8px 12px;
+      border-radius: 8px;
+      transition: background 0.3s;
+    }
+
+    .user-menu:hover {
+      background: var(--primary-light);
+    }
+
+    .user-avatar {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: var(--secondary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      color: white;
+    }
+
+    .mobile-menu-btn {
+      display: none;
+      background: none;
+      border: none;
+      color: white;
+      font-size: 20px;
+      cursor: pointer;
+    }
+
+    .container {
+      display: flex;
+      min-height: calc(100vh - 70px);
+    }
+
+    nav {
+      width: 260px;
+      background: #fff;
+      border-right: 1px solid var(--border);
+      padding: 20px 0;
+      transition: transform 0.3s ease;
+      box-shadow: 2px 0 10px rgba(0,0,0,0.05);
+    }
+
+    nav a {
+      padding: 15px 25px;
+      text-decoration: none;
+      color: var(--dark);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      transition: all 0.3s;
+      border-left: 3px solid transparent;
+    }
+
+    nav a:hover {
+      background: var(--primary);
+      color: #fff;
+      border-left-color: var(--secondary);
+    }
+
+    nav a.active {
+      background: var(--light);
+      color: var(--primary);
+      border-left-color: var(--primary);
+      font-weight: 600;
+    }
+
+    main {
+      flex: 1;
+      padding: 25px;
+      overflow-y: auto;
+    }
+
+    .welcome-card {
+      background: linear-gradient(135deg, var(--primary), var(--primary-light));
+      color: white;
+      padding: 25px;
+      border-radius: 16px;
+      box-shadow: 0 8px 25px rgba(0,74,173,0.15);
+      margin-bottom: 25px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .welcome-card::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      right: -50%;
+      width: 100%;
+      height: 200%;
+      background: linear-gradient(45deg, transparent, rgba(255,255,255,0.1), transparent);
+      transform: rotate(45deg);
+    }
+
+    .welcome-card h2 {
+      margin: 0 0 8px;
+      font-size: 24px;
+    }
+
+    .welcome-card p {
+      opacity: 0.9;
+      margin: 0;
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 20px;
+      margin-bottom: 25px;
+    }
+
+    .stat-card {
+      background: #fff;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+      border-left: 4px solid var(--primary);
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+
+    .stat-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.12);
+    }
+
+    .stat-card.balance { border-left-color: var(--success); }
+    .stat-card.membership { border-left-color: var(--primary); }
+    .stat-card.referrals { border-left-color: var(--secondary); }
+    .stat-card.tasks { border-left-color: var(--warning); }
+
+    .stat-value {
+      font-size: 28px;
+      font-weight: 700;
+      color: var(--primary);
+      margin-bottom: 5px;
+    }
+
+    .stat-label {
+      color: var(--gray);
+      font-size: 14px;
+      font-weight: 500;
+    }
+
+    .quick-actions {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 15px;
+      margin-bottom: 25px;
+    }
+
+    .action-btn {
+      background: white;
+      border: 2px solid var(--border);
+      padding: 15px;
+      border-radius: 10px;
+      text-align: center;
+      text-decoration: none;
+      color: var(--dark);
+      transition: all 0.3s;
+      cursor: pointer;
+    }
+
+    .action-btn:hover {
+      border-color: var(--primary);
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    }
+
+    .action-btn i {
+      font-size: 24px;
+      margin-bottom: 8px;
+      display: block;
+    }
+
+    .membership-section {
+      background: white;
+      border-radius: 12px;
+      padding: 20px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+      margin-bottom: 25px;
+    }
+
+    .membership-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 20px;
+      margin-top: 15px;
+    }
+
+    .membership-card {
+      border: 2px solid var(--border);
+      border-radius: 10px;
+      padding: 20px;
+      text-align: center;
+      transition: all 0.3s;
+    }
+
+    .membership-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+    }
+
+    .membership-card.starter {
+      border-color: var(--success);
+    }
+
+    .membership-card.pro {
+      border-color: var(--primary);
+    }
+
+    .membership-card.premium {
+      border-color: var(--warning);
+    }
+
+    .membership-name {
+      font-size: 20px;
+      font-weight: 700;
+      margin-bottom: 10px;
+    }
+
+    .membership-price {
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--primary);
+      margin-bottom: 15px;
+    }
+
+    .membership-features {
+      list-style: none;
+      margin-bottom: 20px;
+      text-align: left;
+    }
+
+    .membership-features li {
+      padding: 5px 0;
+      color: var(--gray);
+    }
+
+    .membership-features li:before {
+      content: '✓ ';
+      color: var(--success);
+      font-weight: bold;
+    }
+
+    .upgrade-btn {
+      background: var(--primary);
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s;
+      width: 100%;
+    }
+
+    .upgrade-btn:hover {
+      background: var(--primary-light);
+      transform: translateY(-2px);
+    }
+
+    .upgrade-btn:disabled {
+      background: var(--gray);
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .recent-activity {
+      background: white;
+      border-radius: 12px;
+      padding: 20px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+    }
+
+    .section-title {
+      font-size: 18px;
+      font-weight: 600;
+      margin-bottom: 15px;
+      color: var(--primary);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .activity-list {
+      list-style: none;
+    }
+
+    .activity-item {
+      padding: 12px 0;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .activity-item:last-child {
+      border-bottom: none;
+    }
+
+    .activity-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: var(--light);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--primary);
+    }
+
+    .activity-content {
+      flex: 1;
+    }
+
+    .activity-text {
+      font-size: 14px;
+      margin-bottom: 2px;
+    }
+
+    .activity-time {
+      font-size: 12px;
+      color: var(--gray);
+    }
+
+    .message {
+      padding: 15px;
+      border-radius: 8px;
+      margin: 15px 0;
+      text-align: center;
+      font-weight: 600;
+    }
+
+    .message.success {
+      background: #d4edda;
+      color: #155724;
+      border: 1px solid #c3e6cb;
+    }
+
+    .message.error {
+      background: #f8d7da;
+      color: #721c24;
+      border: 1px solid #f5c6cb;
+    }
+
+    .message.info {
+      background: #cce7ff;
+      color: #004085;
+      border: 1px solid #b3d7ff;
+    }
+
+    footer {
+      text-align: center;
+      padding: 20px;
+      background: var(--dark);
+      color: #fff;
+      font-size: 13px;
+      margin-top: auto;
+    }
+
+    .loading {
+      display: inline-block;
+      width: 20px;
+      height: 20px;
+      border: 3px solid #f3f3f3;
+      border-top: 3px solid var(--primary);
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+
+    .logout-loading {
+      display: inline-block;
+      width: 16px;
+      height: 16px;
+      border: 2px solid #ffffff;
+      border-top: 2px solid transparent;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin-right: 8px;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    /* Mobile Responsive */
+    @media (max-width: 768px) {
+      .header-right .user-name {
+        display: none;
+      }
+
+      .mobile-menu-btn {
+        display: block;
+      }
+
+      nav {
+        position: fixed;
+        top: 70px;
+        left: 0;
+        height: calc(100vh - 70px);
+        transform: translateX(-100%);
+        z-index: 99;
+        background: white;
+      }
+
+      nav.active {
+        transform: translateX(0);
+      }
+
+      .stats-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .quick-actions {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .membership-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .quick-actions {
+        grid-template-columns: 1fr;
+      }
+      
+      main {
+        padding: 15px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="header-left">
+      <h1>Academic Writing Hub</h1>
+      <div class="slogan">Empowering Your Potential Through Academic Writing</div>
+    </div>
+    <div class="header-right">
+      <div class="user-menu" id="userMenu">
+        <div class="user-avatar" id="userAvatar">U</div>
+        <span class="user-name" id="userName">Loading...</span>
+      </div>
+      <button class="mobile-menu-btn" id="mobileMenuBtn">☰</button>
+    </div>
+  </header>
+
+  <div class="container">
+    <nav id="sidebar">
+      <a href="dashboard.html" class="active">🏠 Dashboard</a>
+      <a href="membership.html">💳 Membership</a>
+      <a href="tasks.html">📋 Tasks</a>
+      <a href="withdraw.html">💵 Withdraw</a>
+      <a href="referrals.html">👥 Referrals</a>
+      <a href="profile.html">🙍 Profile</a>
+      <a href="support.html">📩 Support</a>
+      <a href="#" id="logoutBtn">🚪 Logout</a>
+    </nav>
+
+    <main>
+      <div class="welcome-card">
+        <h2 id="welcomeMessage">Welcome back, User!</h2>
+        <p>Here is a quick overview of your account. Navigate using the sidebar to explore Membership, Tasks, Referrals, and more.</p>
+      </div>
+
+      <div class="stats-grid">
+        <div class="stat-card balance">
+          <div class="stat-value" id="balanceAmount">Ksh 0.00</div>
+          <div class="stat-label">Account Balance</div>
+        </div>
+        <div class="stat-card membership">
+          <div class="stat-value" id="membershipType">No Package</div>
+          <div class="stat-label">Membership Package</div>
+        </div>
+        <div class="stat-card referrals">
+          <div class="stat-value" id="referralsCount">0</div>
+          <div class="stat-label">Referrals</div>
+        </div>
+        <div class="stat-card tasks">
+          <div class="stat-value" id="tasksCompleted">0</div>
+          <div class="stat-label">Tasks Completed</div>
+        </div>
+      </div>
+
+      <div id="messageContainer"></div>
+
+      <div class="membership-section">
+        <h3 class="section-title">💳 Choose Membership Package</h3>
+        <p>Select a membership package to start earning. All packages require payment.</p>
+        
+        <div class="membership-grid">
+          <div class="membership-card starter">
+            <div class="membership-name">Starter Package</div>
+            <div class="membership-price">Ksh 3,500</div>
+            <ul class="membership-features">
+              <li>Access to basic tasks</li>
+              <li>Up to Ksh 2,000 daily earnings</li>
+              <li>Email support</li>
+              <li>10 tasks per day limit</li>
+              <li>Standard withdrawal processing</li>
+            </ul>
+            <button class="upgrade-btn" onclick="window.upgradeMembership('starter')" id="starterUpgradeBtn">Get Starter Package</button>
+          </div>
+          
+          <div class="membership-card pro">
+            <div class="membership-name">Pro Package</div>
+            <div class="membership-price">Ksh 5,500</div>
+            <ul class="membership-features">
+              <li>Access to Pro tasks</li>
+              <li>Up to Ksh 8,000 daily earnings</li>
+              <li>Priority support</li>
+              <li>30 tasks per day limit</li>
+              <li>Faster withdrawal processing</li>
+              <li>Higher reward rates</li>
+            </ul>
+            <button class="upgrade-btn" onclick="window.upgradeMembership('pro')" id="proUpgradeBtn">Get Pro Package</button>
+          </div>
+          
+          <div class="membership-card premium">
+            <div class="membership-name">Premium Package</div>
+            <div class="membership-price">Ksh 8,000</div>
+            <ul class="membership-features">
+              <li>All tasks unlocked</li>
+              <li>Unlimited daily earnings</li>
+              <li>24/7 premium support</li>
+              <li>Unlimited tasks per day</li>
+              <li>Instant withdrawal processing</li>
+              <li>Highest reward rates</li>
+              <li>Early access to new features</li>
+            </ul>
+            <button class="upgrade-btn" onclick="window.upgradeMembership('premium')" id="premiumUpgradeBtn">Get Premium Package</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="quick-actions">
+        <a href="tasks.html" class="action-btn">
+          <span>📋</span>
+          Browse Tasks
+        </a>
+        <a href="withdraw.html" class="action-btn">
+          <span>💵</span>
+          Withdraw Funds
+        </a>
+        <a href="referrals.html" class="action-btn">
+          <span>👥</span>
+          Invite Friends
+        </a>
+        <a href="profile.html" class="action-btn">
+          <span>🙍</span>
+          Update Profile
+        </a>
+      </div>
+
+      <div class="recent-activity">
+        <h3 class="section-title">📈 Recent Activity</h3>
+        <ul class="activity-list" id="activityList">
+          <li class="activity-item">
+            <div class="activity-icon">📥</div>
+            <div class="activity-content">
+              <div class="activity-text">Loading activities...</div>
+              <div class="activity-time">Just now</div>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </main>
+  </div>
+
+  <footer>
+    &copy; 2025 Academic Writing Hub | All Rights Reserved
+  </footer>
+
+  <!-- Supabase Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script>
+    // Supabase configuration
+    const SUPABASE_URL = "https://lfrjtklkbppihaaiuxef.supabase.co";
+    const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imxmcmp0a2xrYnBwaWhhYWl1eGVmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTkwNTI5MzMsImV4cCI6MjA3NDYyODkzM30.2FVqnt5daF2Tw-RmVBwOGgt4GuIQQSkG8IUZt30QxIM";
+
+    // Initialize Supabase client
+    let supabaseClient;
+    try {
+      supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    } catch (error) {
+      console.error('Failed to initialize Supabase client:', error);
+    }
+
+    // Global variables
+    let currentUser = null;
+    let userProfile = null;
+
+    // DOM Elements
+    const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+    const sidebar = document.getElementById('sidebar');
+    const logoutBtn = document.getElementById('logoutBtn');
+    const userAvatar = document.getElementById('userAvatar');
+    const userName = document.getElementById('userName');
+    const welcomeMessage = document.getElementById('welcomeMessage');
+    const messageContainer = document.getElementById('messageContainer');
+
+    // Mobile menu toggle
+    mobileMenuBtn.addEventListener('click', function(e) {
+      e.stopPropagation();
+      sidebar.classList.toggle('active');
+    });
+
+    // Close mobile menu when clicking outside
+    document.addEventListener('click', function(e) {
+      if (!sidebar.contains(e.target) && !mobileMenuBtn.contains(e.target)) {
+        sidebar.classList.remove('active');
+      }
+    });
+
+    // Authentication check
+    async function checkAuth() {
+      if (!supabaseClient) {
+        showMessage('Error: Application not initialized', 'error');
+        return;
+      }
+
+      try {
+        const { data: { session }, error } = await supabaseClient.auth.getSession();
+        
+        if (error) {
+          console.error('Session error:', error);
+          window.location.href = "login.html";
+          return;
+        }
+
+        if (!session) {
+          window.location.href = "login.html";
+          return;
+        }
+
+        currentUser = session.user;
+        await loadUserData();
+
+      } catch (error) {
+        console.error('Auth check error:', error);
+        window.location.href = "login.html";
+      }
+    }
+
+    // Load user data from profiles table
+    async function loadUserData() {
+      if (!supabaseClient || !currentUser) return;
+
+      try {
+        // Show loading states
+        document.querySelectorAll('.stat-value').forEach(function(el) {
+          if (!el.innerHTML.includes('loading')) {
+            el.innerHTML = '<span class="loading"></span>';
+          }
+        });
+
+        // Load user profile
+        const { data: profile, error } = await supabaseClient
+          .from('profiles')
+          .select('*')
+          .eq('id', currentUser.id)
+          .single();
+
+        if (error) {
+          console.error('Profile load error:', error);
+          // Create default profile if doesn't exist
+          await createDefaultProfile();
+          return;
+        }
+
+        userProfile = profile;
+        console.log('Loaded user profile:', profile); // Debug log
+        updateDashboard(profile);
+        updateMembershipButtons(profile);
+
+      } catch (error) {
+        console.error('User data load error:', error);
+        showMessage('Failed to load user data', 'error');
+      }
+    }
+
+    // Create default profile if doesn't exist
+    async function createDefaultProfile() {
+      if (!supabaseClient || !currentUser) return;
+
+      try {
+        const defaultProfile = {
+          id: currentUser.id,
+          full_name: currentUser.user_metadata?.full_name || currentUser.email?.split('@')[0] || 'User',
+          balance: 0,
+          role: 'none', // Explicitly set to 'none' for new users
+          referrals: 0,
+          tasks_completed: 0,
+          total_earnings: 0
+        };
+
+        const { data, error } = await supabaseClient
+          .from('profiles')
+          .insert([defaultProfile])
+          .select()
+          .single();
+
+        if (error) throw error;
+
+        userProfile = data;
+        updateDashboard(data);
+        updateMembershipButtons(data);
+
+      } catch (error) {
+        console.error('Create profile error:', error);
+        // Use temporary profile
+        userProfile = {
+          full_name: currentUser.email?.split('@')[0] || 'User',
+          balance: 0,
+          role: 'none',
+          referrals: 0,
+          tasks_completed: 0
+        };
+        updateDashboard(userProfile);
+      }
+    }
+
+    // Update dashboard with user data
+    function updateDashboard(profile) {
+      // Update welcome message and user info
+      welcomeMessage.textContent = 'Welcome back, ' + (profile.full_name || 'User') + '!';
+      userName.textContent = profile.full_name || 'User';
+      userAvatar.textContent = (profile.full_name || 'U').charAt(0).toUpperCase();
+
+      // Update stats
+      document.getElementById('balanceAmount').textContent = 'Ksh ' + ((parseFloat(profile.balance) || 0).toLocaleString());
+      
+      // Format membership type display - FIXED: Check for actual membership
+      let membershipDisplay = 'No Package';
+      if (profile.role === 'starter' && (parseFloat(profile.balance) || 0) >= 0) {
+        membershipDisplay = 'Starter';
+      } else if (profile.role === 'pro') {
+        membershipDisplay = 'Pro';
+      } else if (profile.role === 'premium') {
+        membershipDisplay = 'Premium';
+      } else {
+        membershipDisplay = 'No Package'; // Force 'none' to show as 'No Package'
+      }
+      
+      document.getElementById('membershipType').textContent = membershipDisplay;
+      document.getElementById('referralsCount').textContent = profile.referrals || 0;
+      document.getElementById('tasksCompleted').textContent = profile.tasks_completed || 0;
+
+      // Update recent activities
+      updateRecentActivities(profile);
+    }
+
+    // Update membership upgrade buttons based on balance and current membership
+    function updateMembershipButtons(profile) {
+      const starterBtn = document.getElementById('starterUpgradeBtn');
+      const proBtn = document.getElementById('proUpgradeBtn');
+      const premiumBtn = document.getElementById('premiumUpgradeBtn');
+      const currentBalance = parseFloat(profile.balance) || 0;
+      const currentRole = profile.role || 'none';
+
+      console.log('Updating buttons - Role:', currentRole, 'Balance:', currentBalance); // Debug log
+
+      // Reset all buttons first
+      starterBtn.disabled = false;
+      proBtn.disabled = false;
+      premiumBtn.disabled = false;
+
+      // Starter Package Logic - FIXED: Only show as current if actually purchased
+      if (currentRole === 'none') {
+        // User has no package - can buy starter
+        if (currentBalance >= 3500) {
+          starterBtn.textContent = 'Get Starter Package (Ksh 3,500)';
+          starterBtn.disabled = false;
+        } else {
+          starterBtn.textContent = 'Insufficient Balance - Ksh 3,500';
+          starterBtn.disabled = true;
+        }
+      } else if (currentRole === 'starter') {
+        // User already has starter package
+        starterBtn.textContent = 'Current Package';
+        starterBtn.disabled = true;
+      } else if (currentRole === 'pro' || currentRole === 'premium') {
+        // User has higher package
+        starterBtn.textContent = 'Already Upgraded';
+        starterBtn.disabled = true;
+      } else {
+        // Default case - should not happen
+        starterBtn.textContent = 'Get Starter Package (Ksh 3,500)';
+        starterBtn.disabled = currentBalance < 3500;
+      }
+
+      // Pro Package Logic
+      if (currentRole === 'none' || currentRole === 'starter') {
+        // User can upgrade to pro
+        if (currentBalance >= 5500) {
+          proBtn.textContent = currentRole === 'none' ? 'Get Pro Package (Ksh 5,500)' : 'Upgrade to Pro (Ksh 5,500)';
+          proBtn.disabled = false;
+        } else {
+          proBtn.textContent = 'Insufficient Balance - Ksh 5,500';
+          proBtn.disabled = true;
+        }
+      } else if (currentRole === 'pro') {
+        // User already has pro package
+        proBtn.textContent = 'Current Package';
+        proBtn.disabled = true;
+      } else if (currentRole === 'premium') {
+        // User has premium package
+        proBtn.textContent = 'Already Upgraded';
+        proBtn.disabled = true;
+      } else {
+        // Default case
+        proBtn.textContent = 'Get Pro Package (Ksh 5,500)';
+        proBtn.disabled = currentBalance < 5500;
+      }
+
+      // Premium Package Logic
+      if (currentRole === 'none' || currentRole === 'starter' || currentRole === 'pro') {
+        // User can upgrade to premium
+        if (currentBalance >= 8000) {
+          let buttonText = 'Get Premium Package (Ksh 8,000)';
+          if (currentRole === 'starter') buttonText = 'Upgrade to Premium (Ksh 8,000)';
+          if (currentRole === 'pro') buttonText = 'Upgrade to Premium (Ksh 8,000)';
+          
+          premiumBtn.textContent = buttonText;
+          premiumBtn.disabled = false;
+        } else {
+          premiumBtn.textContent = 'Insufficient Balance - Ksh 8,000';
+          premiumBtn.disabled = true;
+        }
+      } else if (currentRole === 'premium') {
+        // User already has premium package
+        premiumBtn.textContent = 'Current Package';
+        premiumBtn.disabled = true;
+      } else {
+        // Default case
+        premiumBtn.textContent = 'Get Premium Package (Ksh 8,000)';
+        premiumBtn.disabled = currentBalance < 8000;
+      }
+    }
+
+    // Upgrade membership function - attached to window for global access
+    window.upgradeMembership = async function(newRole) {
+      if (!supabaseClient || !userProfile) return;
+
+      const membershipPrices = {
+        'starter': 3500,
+        'pro': 5500,
+        'premium': 8000
+      };
+
+      const price = membershipPrices[newRole];
+      const currentBalance = parseFloat(userProfile.balance) || 0;
+      const currentMembership = userProfile.role || 'none';
+
+      console.log('Upgrade attempt - Current:', currentMembership, 'New:', newRole, 'Balance:', currentBalance); // Debug log
+
+      // Check if user can afford the package
+      if (currentBalance < price) {
+        showMessage('Insufficient balance. You need Ksh ' + price + ' to get the ' + newRole + ' package.', 'error');
+        return;
+      }
+
+      // Check if user already has this package or higher
+      const membershipLevels = { 'none': 0, 'starter': 1, 'pro': 2, 'premium': 3 };
+      const currentLevel = membershipLevels[currentMembership] || 0;
+      const newLevel = membershipLevels[newRole];
+      
+      // User already has this package
+      if (currentMembership === newRole) {
+        showMessage('You already have the ' + newRole + ' package.', 'info');
+        return;
+      }
+      
+      // User has a higher package
+      if (newLevel < currentLevel) {
+        showMessage('You already have a higher package (' + currentMembership + ').', 'info');
+        return;
+      }
+
+      try {
+        showMessage('Processing ' + newRole + ' package upgrade...', 'info');
+
+        // Update user profile with new role and deduct balance
+        const newBalance = currentBalance - price;
+        
+        const { data, error } = await supabaseClient
+          .from('profiles')
+          .update({
+            role: newRole,
+            balance: newBalance,
+            updated_at: new Date().toISOString()
+          })
+          .eq('id', currentUser.id)
+          .select()
+          .single();
+
+        if (error) throw error;
+
+        // Update local profile
+        userProfile = data;
+        updateDashboard(data);
+        updateMembershipButtons(data);
+        
+        showMessage('🎉 Successfully upgraded to ' + newRole + ' package! Ksh ' + price + ' deducted from your balance.', 'success');
+
+        // Add to recent activities
+        addActivity('Upgraded to ' + newRole + ' package', '-Ksh ' + price);
+
+      } catch (error) {
+        console.error('Upgrade error:', error);
+        showMessage('Failed to upgrade: ' + error.message, 'error');
+      }
+    };
+
+    // Update recent activities
+    function updateRecentActivities(profile) {
+      const activityList = document.getElementById('activityList');
+      const activities = [
+        { icon: '📥', text: 'Account created successfully', time: 'Today' },
+        { icon: '💰', text: 'Account balance: Ksh ' + ((profile.balance || 0).toLocaleString()), time: 'Current' },
+        { icon: '👥', text: 'You have ' + (profile.referrals || 0) + ' referrals', time: 'Current' },
+        { icon: '✅', text: 'Completed ' + (profile.tasks_completed || 0) + ' tasks', time: 'Current' }
+      ];
+
+      activityList.innerHTML = activities.map(function(activity) {
+        return '<li class="activity-item">' +
+          '<div class="activity-icon">' + activity.icon + '</div>' +
+          '<div class="activity-content">' +
+            '<div class="activity-text">' + activity.text + '</div>' +
+            '<div class="activity-time">' + activity.time + '</div>' +
+          '</div>' +
+        '</li>';
+      }).join('');
+    }
+
+    // Add new activity
+    function addActivity(text, extra) {
+      const activityList = document.getElementById('activityList');
+      const now = new Date().toLocaleTimeString();
+      
+      const activityItem = document.createElement('li');
+      activityItem.className = 'activity-item';
+      activityItem.innerHTML = 
+        '<div class="activity-icon">📈</div>' +
+        '<div class="activity-content">' +
+          '<div class="activity-text">' + text + ' ' + (extra || '') + '</div>' +
+          '<div class="activity-time">' + now + '</div>' +
+        '</div>';
+      
+      activityList.insertBefore(activityItem, activityList.firstChild);
+      
+      // Keep only last 5 activities
+      while (activityList.children.length > 5) {
+        activityList.removeChild(activityList.lastChild);
+      }
+    }
+
+    // Show message function
+    function showMessage(message, type) {
+      messageContainer.innerHTML = '<div class="message ' + type + '">' + message + '</div>';
+      
+      if (type === 'success' || type === 'info') {
+        setTimeout(function() {
+          messageContainer.innerHTML = '';
+        }, 5000);
+      }
+    }
+
+    // Logout handler
+    async function handleLogout(e) {
+      if (e) e.preventDefault();
+      
+      try {
+        // Show loading state
+        logoutBtn.innerHTML = '<span class="logout-loading"></span> Logging out...';
+        logoutBtn.style.pointerEvents = 'none';
+
+        if (supabaseClient) {
+          const { error } = await supabaseClient.auth.signOut();
+          if (error) console.error('Logout error:', error);
+        }
+
+        // Clear local storage
+        localStorage.clear();
+        sessionStorage.clear();
+
+        // Redirect to login
+        window.location.href = "login.html";
+
+      } catch (error) {
+        console.error('Logout error:', error);
+        window.location.href = "login.html";
+      }
+    }
+
+    // Event listeners
+    logoutBtn.addEventListener('click', handleLogout);
+
+    // Auth state listener
+    if (supabaseClient) {
+      supabaseClient.auth.onAuthStateChange(function(event, session) {
+        if (event === 'SIGNED_OUT') {
+          window.location.href = "login.html";
+        }
+      });
+    }
+
+    // Initialize app
+    checkAuth();
+  </script>
+</body>
+</html>

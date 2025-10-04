@@ -1,0 +1,1031 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Membership - Academic Writing Hub</title>
+  <style>
+    :root {
+      --primary: #004aad;
+      --primary-light: #3a6fc8;
+      --secondary: #ff6b35;
+      --gold: #b8860b;
+      --gold-light: #fff8dc;
+      --success: #28a745;
+      --warning: #ffc107;
+      --danger: #dc3545;
+      --light: #f8f9fa;
+      --dark: #343a40;
+      --gray: #6c757d;
+      --border: #e9ecef;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #f4f6f9 0%, #e9ecef 100%);
+      color: #333;
+      line-height: 1.6;
+    }
+
+    header {
+      background: var(--primary);
+      color: #fff;
+      padding: 15px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 2px 15px rgba(0,0,0,0.1);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .header-left h1 {
+      margin: 0;
+      font-size: 22px;
+      font-weight: 700;
+    }
+
+    .header-left .slogan {
+      font-size: 13px;
+      opacity: 0.9;
+      margin-top: 2px;
+    }
+
+    .mobile-menu-btn {
+      display: none;
+      background: none;
+      border: none;
+      color: white;
+      font-size: 20px;
+      cursor: pointer;
+    }
+
+    .container {
+      display: flex;
+      min-height: calc(100vh - 70px);
+    }
+
+    nav {
+      width: 260px;
+      background: #fff;
+      border-right: 1px solid var(--border);
+      padding: 20px 0;
+      transition: transform 0.3s ease;
+      box-shadow: 2px 0 10px rgba(0,0,0,0.05);
+    }
+
+    nav a {
+      padding: 15px 25px;
+      text-decoration: none;
+      color: var(--dark);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      transition: all 0.3s;
+      border-left: 3px solid transparent;
+    }
+
+    nav a:hover {
+      background: var(--primary);
+      color: #fff;
+      border-left-color: var(--secondary);
+    }
+
+    nav a.active {
+      background: var(--light);
+      color: var(--primary);
+      border-left-color: var(--primary);
+      font-weight: 600;
+    }
+
+    main {
+      flex: 1;
+      padding: 25px;
+      overflow-y: auto;
+    }
+
+    .page-header {
+      background: linear-gradient(135deg, var(--primary), var(--primary-light));
+      color: white;
+      padding: 25px;
+      border-radius: 16px;
+      box-shadow: 0 8px 25px rgba(0,74,173,0.15);
+      margin-bottom: 30px;
+      text-align: center;
+    }
+
+    .page-header h1 {
+      font-size: 28px;
+      margin-bottom: 8px;
+    }
+
+    .page-header p {
+      opacity: 0.9;
+      font-size: 16px;
+    }
+
+    .current-membership {
+      background: white;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+      margin-bottom: 30px;
+      border-left: 4px solid var(--gold);
+    }
+
+    .membership-badge {
+      display: inline-block;
+      background: var(--gold);
+      color: white;
+      padding: 6px 15px;
+      border-radius: 20px;
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 15px;
+    }
+
+    .packages-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 25px;
+      margin-bottom: 30px;
+    }
+
+    .package-card {
+      background: white;
+      border-radius: 16px;
+      padding: 30px;
+      box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+      transition: all 0.3s ease;
+      border: 2px solid transparent;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .package-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 15px 35px rgba(0,0,0,0.15);
+    }
+
+    .package-card.popular {
+      border-color: var(--gold);
+      transform: scale(1.02);
+    }
+
+    .package-card.popular::before {
+      content: 'MOST POPULAR';
+      position: absolute;
+      top: 15px;
+      right: -30px;
+      background: var(--gold);
+      color: white;
+      padding: 5px 30px;
+      font-size: 12px;
+      font-weight: 600;
+      transform: rotate(45deg);
+    }
+
+    .package-header {
+      text-align: center;
+      margin-bottom: 20px;
+      padding-bottom: 15px;
+      border-bottom: 2px solid var(--border);
+    }
+
+    .package-name {
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--primary);
+      margin-bottom: 8px;
+    }
+
+    .package-price {
+      font-size: 32px;
+      font-weight: 800;
+      color: var(--gold);
+      margin-bottom: 5px;
+    }
+
+    .package-period {
+      color: var(--gray);
+      font-size: 14px;
+    }
+
+    .features-list {
+      list-style: none;
+      margin-bottom: 25px;
+    }
+
+    .features-list li {
+      padding: 8px 0;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .features-list li::before {
+      content: '✓';
+      color: var(--success);
+      font-weight: bold;
+    }
+
+    .upgrade-btn {
+      width: 100%;
+      padding: 15px;
+      background: linear-gradient(135deg, var(--gold), #d4af37);
+      color: white;
+      border: none;
+      border-radius: 10px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .upgrade-btn:hover {
+      background: linear-gradient(135deg, #8b6914, var(--gold));
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(184, 134, 11, 0.3);
+    }
+
+    .upgrade-btn:disabled {
+      background: var(--gray);
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    /* Payment Modal Styles */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.7);
+      z-index: 1000;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .modal-content {
+      background: white;
+      border-radius: 16px;
+      width: 90%;
+      max-width: 600px;
+      padding: 30px;
+      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+      position: relative;
+      animation: modalFade 0.3s;
+    }
+
+    @keyframes modalFade {
+      from {opacity: 0; transform: translateY(-50px);}
+      to {opacity: 1; transform: translateY(0);}
+    }
+
+    .close-modal {
+      position: absolute;
+      top: 15px;
+      right: 20px;
+      font-size: 1.5rem;
+      cursor: pointer;
+      color: var(--gray);
+    }
+
+    .close-modal:hover {
+      color: var(--danger);
+    }
+
+    .payment-step {
+      margin-bottom: 25px;
+      padding: 20px;
+      border-radius: 10px;
+      background: var(--light);
+    }
+
+    .payment-step h3 {
+      color: var(--primary);
+      margin-bottom: 15px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .payment-step h3 i {
+      color: var(--gold);
+    }
+
+    .copy-box {
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 15px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin: 15px 0;
+    }
+
+    .copy-box span {
+      font-family: monospace;
+      font-size: 1.2rem;
+      color: var(--dark);
+      font-weight: 600;
+    }
+
+    .copy-btn {
+      background: var(--primary);
+      color: white;
+      border: none;
+      border-radius: 5px;
+      padding: 8px 15px;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    .copy-btn:hover {
+      background: var(--primary-light);
+    }
+
+    .copy-btn.copied {
+      background: var(--success);
+    }
+
+    .transaction-input {
+      width: 100%;
+      padding: 12px 15px;
+      border: 2px solid var(--border);
+      border-radius: 8px;
+      font-size: 1rem;
+      margin: 10px 0;
+    }
+
+    .transaction-input:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 2px rgba(0, 74, 173, 0.2);
+    }
+
+    .note {
+      background: var(--gold-light);
+      border-left: 4px solid var(--gold);
+      padding: 15px;
+      margin: 20px 0;
+      border-radius: 0 8px 8px 0;
+      font-size: 0.9rem;
+    }
+
+    .confirm-btn {
+      width: 100%;
+      padding: 15px;
+      background: var(--success);
+      color: white;
+      border: none;
+      border-radius: 10px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      margin-top: 10px;
+    }
+
+    .confirm-btn:hover {
+      background: #218838;
+      transform: translateY(-2px);
+    }
+
+    .referral-section {
+      background: white;
+      padding: 25px;
+      border-radius: 12px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+      margin-bottom: 30px;
+    }
+
+    .referral-input {
+      display: flex;
+      gap: 10px;
+      margin-top: 15px;
+    }
+
+    .referral-input input {
+      flex: 1;
+      padding: 12px;
+      border: 2px solid var(--border);
+      border-radius: 8px;
+      font-size: 14px;
+      background: var(--light);
+    }
+
+    .team-section {
+      background: white;
+      padding: 25px;
+      border-radius: 12px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+    }
+
+    .team-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 15px;
+    }
+
+    .team-table th,
+    .team-table td {
+      padding: 12px;
+      text-align: left;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .team-table th {
+      background: var(--light);
+      font-weight: 600;
+      color: var(--primary);
+    }
+
+    .message {
+      padding: 15px;
+      border-radius: 8px;
+      margin: 15px 0;
+      text-align: center;
+      font-weight: 600;
+    }
+
+    .message.success {
+      background: #d4edda;
+      color: #155724;
+      border: 1px solid #c3e6cb;
+    }
+
+    .message.error {
+      background: #f8d7da;
+      color: #721c24;
+      border: 1px solid #f5c6cb;
+    }
+
+    .message.info {
+      background: #cce7ff;
+      color: #004085;
+      border: 1px solid #b3d7ff;
+    }
+
+    .loading {
+      display: inline-block;
+      width: 20px;
+      height: 20px;
+      border: 3px solid #f3f3f3;
+      border-top: 3px solid var(--primary);
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    /* Mobile Responsive */
+    @media (max-width: 768px) {
+      .mobile-menu-btn {
+        display: block;
+      }
+
+      nav {
+        position: fixed;
+        top: 70px;
+        left: 0;
+        height: calc(100vh - 70px);
+        transform: translateX(-100%);
+        z-index: 99;
+        background: white;
+      }
+
+      nav.active {
+        transform: translateX(0);
+      }
+
+      .packages-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .package-card.popular {
+        transform: none;
+      }
+
+      .referral-input {
+        flex-direction: column;
+      }
+
+      .modal-content {
+        padding: 20px;
+        width: 95%;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="header-left">
+      <h1>Academic Writing Hub</h1>
+      <div class="slogan">Empowering Your Potential Through Academic Writing</div>
+    </div>
+    <button class="mobile-menu-btn" id="mobileMenuBtn">☰</button>
+  </header>
+
+  <div class="container">
+    <nav id="sidebar">
+      <a href="dashboard.html">🏠 Dashboard</a>
+      <a href="membership.html" class="active">💳 Membership</a>
+      <a href="tasks.html">📋 Tasks</a>
+      <a href="withdraw.html">💵 Withdraw</a>
+      <a href="referrals.html">👥 Referrals</a>
+      <a href="profile.html">🙍 Profile</a>
+      <a href="support.html">📩 Support</a>
+      <a href="#" id="logoutBtn">🚪 Logout</a>
+    </nav>
+
+    <main>
+      <div class="page-header">
+        <h1>Upgrade Your Membership</h1>
+        <p>Choose the perfect package to unlock more earning opportunities and features</p>
+      </div>
+
+      <div class="current-membership">
+        <div class="membership-badge" id="currentMembership">Loading...</div>
+        <h3>Your Current Plan</h3>
+        <p id="membershipDetails">Loading your membership details...</p>
+      </div>
+
+      <div id="messageContainer"></div>
+
+      <div class="packages-grid">
+        <!-- Starter Package -->
+        <div class="package-card">
+          <div class="package-header">
+            <div class="package-name">Starter</div>
+            <div class="package-price">KSh 3,500</div>
+            <div class="package-period">one-time payment</div>
+          </div>
+          <ul class="features-list">
+            <li>Transcription Tasks</li>
+            <li>Network Marketing</li>
+            <li>Affiliate Marketing</li>
+            <li>Online Gaming</li>
+            <li>Basic Support</li>
+          </ul>
+          <button class="upgrade-btn" onclick="selectPackage('starter', 3500)">Upgrade to Starter</button>
+        </div>
+
+        <!-- Pro Package -->
+        <div class="package-card popular">
+          <div class="package-header">
+            <div class="package-name">Pro</div>
+            <div class="package-price">KSh 5,500</div>
+            <div class="package-period">one-time payment</div>
+          </div>
+          <ul class="features-list">
+            <li>Everything in Starter</li>
+            <li>Freelancing/Academic Writing</li>
+            <li>Higher Task Rates</li>
+            <li>Priority Support</li>
+            <li>Team Growth Rewards</li>
+          </ul>
+          <button class="upgrade-btn" onclick="selectPackage('pro', 5500)">Upgrade to Pro</button>
+        </div>
+
+        <!-- Premium Package -->
+        <div class="package-card">
+          <div class="package-header">
+            <div class="package-name">Premium</div>
+            <div class="package-price">KSh 8,000</div>
+            <div class="package-period">one-time payment</div>
+          </div>
+          <ul class="features-list">
+            <li>Everything in Pro</li>
+            <li>Web Design Tasks</li>
+            <li>Data Entry Tasks</li>
+            <li>Priority Withdrawals</li>
+            <li>Dedicated Support</li>
+            <li>Maximum Benefits</li>
+          </ul>
+          <button class="upgrade-btn" onclick="selectPackage('premium', 8000)">Upgrade to Premium</button>
+        </div>
+      </div>
+
+      <!-- Payment Modal -->
+      <div class="modal" id="paymentModal">
+        <div class="modal-content">
+          <span class="close-modal" id="closeModal">&times;</span>
+          <h2 style="color: var(--primary); margin-bottom: 20px; text-align: center;">
+            Complete Your Payment
+          </h2>
+          
+          <div class="payment-step">
+            <h3><i>1</i> Copy Business Number</h3>
+            <p>Send the exact amount to the following business number:</p>
+            <div class="copy-box">
+              <span id="businessNumber">0762353880</span>
+              <button class="copy-btn" id="copyBusinessBtn">Copy</button>
+            </div>
+            <div class="note">
+              <strong>Important:</strong> Make sure to send the exact amount: <strong id="paymentAmount">KSh 0</strong>
+            </div>
+          </div>
+          
+          <div class="payment-step">
+            <h3><i>2</i> Enter Transaction ID</h3>
+            <p>After making the payment, enter your transaction ID below:</p>
+            <input type="text" class="transaction-input" id="transactionId" placeholder="Enter your transaction ID">
+            <div class="note">
+              <strong>Note:</strong> Your upgrade will be processed after admin approval. This usually takes 1-2 hours during business hours.
+            </div>
+          </div>
+          
+          <button class="confirm-btn" id="confirmPayment">Confirm Payment</button>
+        </div>
+      </div>
+
+      <!-- Referral Section -->
+      <div class="referral-section">
+        <h3>🔗 Your Referral Link</h3>
+        <p>Share this link to earn referral bonuses when others sign up:</p>
+        <div class="referral-input">
+          <input type="text" id="referralLink" readonly>
+          <button class="copy-btn" id="copyReferralBtn">Copy</button>
+        </div>
+      </div>
+
+      <!-- Team Section -->
+      <div class="team-section">
+        <h3>👥 Your Referral Team</h3>
+        <table class="team-table">
+          <thead>
+            <tr>
+              <th>Email</th>
+              <th>Phone</th>
+              <th>Joined Date</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody id="teamTableBody">
+            <tr>
+              <td colspan="4" style="text-align: center;">
+                <span class="loading"></span> Loading team members...
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </main>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script>
+    // Supabase configuration
+    const SUPABASE_URL = "https://lfrjtklkbppihaaiuxef.supabase.co";
+    const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imxmcmp0a2xrYnBwaWhhYWl1eGVmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTkwNTI5MzMsImV4cCI6MjA3NDYyODkzM30.2FVqnt5daF2Tw-RmVBwOGgt4GuIQQSkG8IUZt30QxIM";
+
+    // Initialize Supabase client
+    let supabaseClient;
+    try {
+      supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    } catch (error) {
+      console.error('Failed to initialize Supabase client:', error);
+    }
+
+    // Global variables
+    let currentUser = null;
+    let userProfile = null;
+    let selectedPackage = null;
+    let selectedAmount = null;
+
+    // DOM Elements
+    const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+    const sidebar = document.getElementById('sidebar');
+    const logoutBtn = document.getElementById('logoutBtn');
+    const messageContainer = document.getElementById('messageContainer');
+    const paymentModal = document.getElementById('paymentModal');
+    const closeModal = document.getElementById('closeModal');
+    const paymentAmount = document.getElementById('paymentAmount');
+    const confirmPaymentBtn = document.getElementById('confirmPayment');
+    const copyBusinessBtn = document.getElementById('copyBusinessBtn');
+    const copyReferralBtn = document.getElementById('copyReferralBtn');
+    const transactionId = document.getElementById('transactionId');
+
+    // Initialize the application
+    document.addEventListener('DOMContentLoaded', function() {
+      initializeApp();
+    });
+
+    async function initializeApp() {
+      // Set up event listeners
+      setupEventListeners();
+      
+      // Check authentication
+      await checkAuth();
+    }
+
+    function setupEventListeners() {
+      // Mobile menu toggle
+      mobileMenuBtn.addEventListener('click', function() {
+        sidebar.classList.toggle('active');
+      });
+
+      // Close mobile menu when clicking outside
+      document.addEventListener('click', function(e) {
+        if (!sidebar.contains(e.target) && !mobileMenuBtn.contains(e.target)) {
+          sidebar.classList.remove('active');
+        }
+      });
+
+      // Close modal when clicking X
+      closeModal.addEventListener('click', function() {
+        paymentModal.style.display = 'none';
+      });
+
+      // Close modal when clicking outside
+      window.addEventListener('click', function(e) {
+        if (e.target === paymentModal) {
+          paymentModal.style.display = 'none';
+        }
+      });
+
+      // Copy business number
+      copyBusinessBtn.addEventListener('click', function() {
+        copyToClipboard('0762353880', copyBusinessBtn);
+      });
+
+      // Copy referral link
+      copyReferralBtn.addEventListener('click', function() {
+        const referralLink = document.getElementById('referralLink');
+        copyToClipboard(referralLink.value, copyReferralBtn);
+      });
+
+      // Confirm payment
+      confirmPaymentBtn.addEventListener('click', handlePaymentConfirmation);
+
+      // Logout
+      logoutBtn.addEventListener('click', function(e) {
+        e.preventDefault();
+        handleLogout();
+      });
+    }
+
+    // Authentication check
+    async function checkAuth() {
+      try {
+        const { data: { session }, error } = await supabaseClient.auth.getSession();
+        
+        if (!session || error) {
+          window.location.href = "login.html";
+          return;
+        }
+        
+        currentUser = session.user;
+        await loadUserProfile();
+
+      } catch (error) {
+        console.error("Auth error:", error);
+        window.location.href = "login.html";
+      }
+    }
+
+    // Load user profile and data
+    async function loadUserProfile() {
+      try {
+        const { data, error } = await supabaseClient
+          .from('profiles')
+          .select('*')
+          .eq('id', currentUser.id)
+          .single();
+
+        if (error) throw error;
+
+        userProfile = data;
+        updateUI(data);
+        loadTeamMembers(data.referral_code);
+
+      } catch (error) {
+        console.error("Profile load error:", error);
+        showMessage('Failed to load profile data', 'error');
+      }
+    }
+
+    // Update UI with user data
+    function updateUI(profile) {
+      // Update current membership
+      const currentMembership = document.getElementById('currentMembership');
+      const membershipDetails = document.getElementById('membershipDetails');
+      
+      let membershipText = 'No Package';
+      if (profile.role === 'starter') membershipText = 'Starter';
+      if (profile.role === 'pro') membershipText = 'Pro';
+      if (profile.role === 'premium') membershipText = 'Premium';
+      
+      currentMembership.textContent = membershipText;
+      membershipDetails.textContent = 'You are currently on the ' + membershipText + ' plan. Upgrade to access more features and earning opportunities.';
+
+      // Update referral link with proper URL
+      const referralLink = document.getElementById('referralLink');
+      referralLink.value = window.location.origin + '/signup.html?ref=' + profile.referral_code;
+    }
+
+    // Select package - Shows payment modal
+    function selectPackage(pkg, amount) {
+      selectedPackage = pkg;
+      selectedAmount = amount;
+      
+      // Update payment amount in modal
+      paymentAmount.textContent = 'KSh ' + amount.toLocaleString();
+      
+      // Show the modal
+      paymentModal.style.display = 'flex';
+      
+      // Reset transaction ID
+      transactionId.value = '';
+    }
+
+    // Copy to clipboard function
+    function copyToClipboard(text, button) {
+      navigator.clipboard.writeText(text)
+        .then(function() {
+          const originalText = button.textContent;
+          button.textContent = 'Copied!';
+          button.classList.add('copied');
+          
+          setTimeout(function() {
+            button.textContent = originalText;
+            button.classList.remove('copied');
+          }, 2000);
+        })
+        .catch(function(err) {
+          console.error('Failed to copy: ', err);
+          showMessage('Failed to copy text', 'error');
+        });
+    }
+
+    // Handle payment confirmation
+    async function handlePaymentConfirmation() {
+      const transactionIdValue = transactionId.value.trim();
+      
+      if (!transactionIdValue) {
+        showMessage('Please enter your transaction ID', 'error');
+        return;
+      }
+      
+      if (transactionIdValue.length < 5) {
+        showMessage('Please enter a valid transaction ID', 'error');
+        return;
+      }
+      
+      // Show loading state
+      confirmPaymentBtn.innerHTML = '<span class="loading"></span> Processing...';
+      confirmPaymentBtn.disabled = true;
+      
+      try {
+        // Create payment request in Supabase
+        const { data, error } = await supabaseClient
+          .from('payment_requests')
+          .insert([
+            {
+              user_id: currentUser.id,
+              user_email: currentUser.email,
+              package: selectedPackage,
+              amount: selectedAmount,
+              transaction_id: transactionIdValue,
+              status: 'pending',
+              created_at: new Date().toISOString()
+            }
+          ]);
+        
+        if (error) {
+          // If table doesn't exist, show message
+          if (error.message.includes('does not exist')) {
+            showMessage('Payment system is being configured. Please contact support to complete your upgrade.', 'info');
+            return;
+          } else {
+            throw error;
+          }
+        }
+        
+        // Show success message
+        showMessage('Payment confirmation submitted successfully! Your ' + selectedPackage + ' membership will be activated after admin approval.', 'success');
+        
+        // Close modal
+        paymentModal.style.display = 'none';
+        
+      } catch (error) {
+        console.error('Payment confirmation error:', error);
+        showMessage('Failed to submit payment confirmation. Please try again or contact support.', 'error');
+      } finally {
+        // Reset button state
+        confirmPaymentBtn.innerHTML = 'Confirm Payment';
+        confirmPaymentBtn.disabled = false;
+      }
+    }
+
+    // Load team members
+    async function loadTeamMembers(referralCode) {
+      try {
+        const { data: team, error } = await supabaseClient
+          .from('profiles')
+          .select('email, phone, created_at, role')
+          .eq('referred_by', referralCode)
+          .order('created_at', { ascending: false });
+
+        if (error) throw error;
+
+        const teamTableBody = document.getElementById('teamTableBody');
+        
+        if (!team || team.length === 0) {
+          teamTableBody.innerHTML = 
+            '<tr>' +
+              '<td colspan="4" style="text-align: center; color: var(--gray);">' +
+                'No team members yet. Share your referral link to start building your team!' +
+              '</td>' +
+            '</tr>';
+          return;
+        }
+
+        teamTableBody.innerHTML = team.map(function(member) {
+          let statusColor = '#e2e3e5';
+          let statusText = 'Starter';
+          if (member.role === 'pro') {
+            statusColor = '#fff3cd';
+            statusText = 'Pro';
+          } else if (member.role === 'premium') {
+            statusColor = '#d4edda';
+            statusText = 'Premium';
+          }
+          
+          return '<tr>' +
+            '<td>' + (member.email || '-') + '</td>' +
+            '<td>' + (member.phone || '-') + '</td>' +
+            '<td>' + new Date(member.created_at).toLocaleDateString() + '</td>' +
+            '<td>' +
+              '<span style="padding: 4px 8px; border-radius: 12px; font-size: 12px; font-weight: 600; background: ' + statusColor + ';">' +
+                statusText +
+              '</span>' +
+            '</td>' +
+          '</tr>';
+        }).join('');
+
+      } catch (error) {
+        console.error('Team load error:', error);
+        document.getElementById('teamTableBody').innerHTML = 
+          '<tr>' +
+            '<td colspan="4" style="text-align: center; color: var(--danger);">' +
+              'Failed to load team members' +
+            '</td>' +
+          '</tr>';
+      }
+    }
+
+    // Show message
+    function showMessage(message, type) {
+      messageContainer.innerHTML = 
+        '<div class="message ' + type + '">' +
+          message +
+        '</div>';
+      
+      // Auto-hide success messages after 5 seconds
+      if (type === 'success') {
+        setTimeout(function() {
+          messageContainer.innerHTML = '';
+        }, 5000);
+      }
+    }
+
+    // Logout function
+    async function handleLogout() {
+      try {
+        const { error } = await supabaseClient.auth.signOut();
+        if (error) throw error;
+        window.location.href = "login.html";
+      } catch (error) {
+        console.error("Logout error:", error);
+        showMessage('Failed to logout', 'error');
+      }
+    }
+
+    // Auth state listener
+    supabaseClient.auth.onAuthStateChange(function(event, session) {
+      if (event === 'SIGNED_OUT') {
+        window.location.href = "login.html";
+      }
+    });
+
+    // Make functions globally available
+    window.selectPackage = selectPackage;
+  </script>
+</body>
+</html>

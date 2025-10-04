@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin - Withdrawal Approvals</title>
+  <style>
+    :root {
+      --primary: #004aad;
+      --primary-light: #3a6fc8;
+      --secondary: #ff6b35;
+      --success: #28a745;
+      --warning: #ffc107;
+      --danger: #dc3545;
+      --light: #f8f9fa;
+      --dark: #343a40;
+      --gray: #6c757d;
+      --border: #e9ecef;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif; background: linear-gradient(135deg, #f4f6f9 0%, #e9ecef 100%); color: #333; line-height: 1.6; }
+    header { background: var(--primary); color: #fff; padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 15px rgba(0,0,0,0.1); position: sticky; top: 0; z-index: 100; }
+    .header-left h1 { margin: 0; font-size: 22px; font-weight: 700; }
+    .container { display: flex; min-height: calc(100vh - 70px); }
+    nav { width: 260px; background: #fff; border-right: 1px solid var(--border); padding: 20px 0; }
+    nav a { padding: 15px 25px; text-decoration: none; color: var(--dark); display: flex; align-items: center; gap: 12px; transition: all 0.3s; border-left: 3px solid transparent; }
+    nav a:hover { background: var(--primary); color: #fff; }
+    nav a.active { background: var(--light); color: var(--primary); border-left-color: var(--primary); font-weight: 600; }
+    main { flex: 1; padding: 25px; overflow-y: auto; }
+    .page-header { background: linear-gradient(135deg, var(--primary), var(--primary-light)); color: white; padding: 25px; border-radius: 16px; box-shadow: 0 8px 25px rgba(0,74,173,0.15); margin-bottom: 30px; }
+    .withdrawal-card { background: white; border-radius: 12px; padding: 25px; box-shadow: 0 4px 15px rgba(0,0,0,0.08); margin-bottom: 20px; border-left: 4px solid var(--warning); }
+    .withdrawal-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 15px; }
+    .user-info { color: var(--gray); font-size: 14px; margin-bottom: 8px; }
+    .amount { font-size: 24px; font-weight: 800; color: var(--success); text-align: right; }
+    .admin-actions { display: flex; gap: 10px; margin-top: 20px; }
+    .btn { padding: 12px 24px; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; transition: all 0.3s ease; }
+    .btn-success { background: var(--success); color: white; }
+    .btn-success:hover { background: #218838; }
+    .btn-danger { background: var(--danger); color: white; }
+    .btn-danger:hover { background: #c82333; }
+    .btn-warning { background: var(--warning); color: var(--dark); }
+    .reject-form { margin-top: 15px; padding: 15px; background: #fff3cd; border-radius: 8px; display: none; }
+    .reject-form textarea { width: 100%; height: 100px; padding: 12px; border: 2px solid var(--border); border-radius: 8px; font-size: 14px; resize: vertical; margin-bottom: 10px; }
+    .message { padding: 15px; border-radius: 8px; margin: 15px 0; text-align: center; font-weight: 600; }
+    .message.success { background: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+    .message.error { background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+    .loading { display: inline-block; width: 20px; height: 20px; border: 3px solid #f3f3f3; border-top: 3px solid var(--primary); border-radius: 50%; animation: spin 1s linear infinite; }
+    @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+    .no-withdrawals { text-align: center; padding: 60px 20px; color: var(--gray); }
+    .stats-card { background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.08); margin-bottom: 20px; text-align: center; }
+    .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-bottom: 30px; }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="header-left">
+      <h1>Academic Writing Hub - Admin</h1>
+      <div class="slogan">Withdrawal Approval Panel</div>
+    </div>
+  </header>
+
+  <div class="container">
+    <nav>
+      <a href="admin_tasks.html">📋 Review Tasks</a>
+      <a href="admin_withdrawals.html" class="active">💰 Approve Withdrawals</a>
+      <a href="dashboard.html">🏠 User Dashboard</a>
+      <a href="#" id="logoutBtn">🚪 Logout</a>
+    </nav>
+
+    <main>
+      <div class="page-header">
+        <h1>💰 Withdrawal Approvals</h1>
+        <p>Approve or reject withdrawal requests. Approved payments will be marked as paid.</p>
+      </div>
+
+      <div class="stats-grid">
+        <div class="stats-card">
+          <h3>Pending Withdrawals</h3>
+          <div class="amount" id="pendingCount">0</div>
+        </div>
+        <div class="stats-card">
+          <h3>Total Today</h3>
+          <div class="amount">KSh <span id="todayAmount">0</span></div>
+        </div>
+        <div class="stats-card">
+          <h3>Approved This Week</h3>
+          <div class="amount">KSh <span id="weekAmount">0</span></div>
+        </div>
+      </div>
+
+      <div id="messageContainer"></div>
+      <div id="withdrawalsContainer">
+        <div class="no-withdrawals">
+          <h3>📭 Loading withdrawals...</h3>
+          <p><span class="loading"></span> Please wait</p>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script>
+    // Supabase configuration
+    const SUPABASE_URL = "https://lfrjtklkbppihaaiuxef.supabase.co";
+    const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imxmcmp0a2xrYnBwaWhhYWl1eGVmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTkwNTI5MzMsImV4cCI6MjA3NDYyODkzM30.2FVqnt5daF2Tw-RmVBwOGgt4GuIQQSkG8IUZt30QxIM";
+
+    // Initialize Supabase client
+    let supabaseClient;
+    try {
+      supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+      console.log('Supabase client initialized successfully');
+    } catch (error) {
+      console.error('Failed to initialize Supabase client:', error);
+    }
+
+    let currentAdmin = null;
+    let allUsers = {};
+
+    // Check admin authentication
+    async function checkAuth() {
+      if (!supabaseClient) {
+        showMessage('Error: Application not initialized', 'error');
+        return;
+      }
+
+      try {
+        const { data: { session }, error } = await supabaseClient.auth.getSession();
+        
+        if (!session || error) {
+          window.location.href = "login.html";
+          return;
+        }
+
+        currentAdmin = session.user;
+        console.log('Admin authenticated:', currentAdmin.email);
+        await loadAllData();
+
+      } catch (error) {
+        console.error('Auth error:', error);
+        window.location.href = "login.html";
+      }
+    }
+
+    // Load all data
+    async function loadAllData() {
+      try {
+        // Load pending withdrawals
+        const { data: withdrawals, error: withdrawalsError } = await supabaseClient
+          .from('withdrawals')
+          .select('*')
+          .eq('status', 'pending')
+          .order('created_at', { ascending: true });
+
+        if (withdrawalsError) throw withdrawalsError;
+
+        // Load user profiles
+        const userIds = [...new Set(withdrawals.map(w => w.user_id))];
+        
+        for (const userId of userIds) {
+          const { data: userProfile, error: userError } = await supabaseClient
+            .from('profiles')
+            .select('*')
+            .eq('id', userId)
+            .single();
+
+          if (!userError && userProfile) {
+            allUsers[userId] = userProfile;
+          }
+        }
+
+        // Load stats
+        await loadStats();
+        renderWithdrawals(withdrawals);
+
+      } catch (error) {
+        console.error('Error loading data:', error);
+        showMessage('Failed to load withdrawals: ' + error.message, 'error');
+      }
+    }
+
+    // Load statistics
+    async function loadStats() {
+      try {
+        // Today's date range
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+        const tomorrow = new Date(today);
+        tomorrow.setDate(tomorrow.getDate() + 1);
+
+        // This week date range
+        const weekStart = new Date(today);
+        weekStart.setDate(weekStart.getDate() - weekStart.getDay());
+
+        // Pending count
+        const { count: pendingCount, error: pendingError } = await supabaseClient
+          .from('withdrawals')
+          .select('*', { count: 'exact', head: true })
+          .eq('status', 'pending');
+
+        if (!pendingError) {
+          document.getElementById('pendingCount').textContent = pendingCount || 0;
+        }
+
+        // Today's approved amount
+        const { data: todayData, error: todayError } = await supabaseClient
+          .from('withdrawals')
+          .select('amount')
+          .eq('status', 'approved')
+          .gte('approved_at', today.toISOString())
+          .lt('approved_at', tomorrow.toISOString());
+
+        if (!todayError && todayData) {
+          const todayTotal = todayData.reduce((sum, w) => sum + (w.amount || 0), 0);
+          document.getElementById('todayAmount').textContent = todayTotal.toLocaleString();
+        }
+
+        // This week's approved amount
+        const { data: weekData, error: weekError } = await supabaseClient
+          .from('withdrawals')
+          .select('amount')
+          .eq('status', 'approved')
+          .gte('approved_at', weekStart.toISOString());
+
+        if (!weekError && weekData) {
+          const weekTotal = weekData.reduce((sum, w) => sum + (w.amount || 0), 0);
+          document.getElementById('weekAmount').textContent = weekTotal.toLocaleString();
+        }
+
+      } catch (error) {
+        console.error('Error loading stats:', error);
+      }
+    }
+
+    // Render withdrawals
+    function renderWithdrawals(withdrawals) {
+      const container = document.getElementById('withdrawalsContainer');
+      
+      if (!withdrawals || withdrawals.length === 0) {
+        container.innerHTML = 
+          '<div class="no-withdrawals">' +
+            '<h3>🎉 No Pending Withdrawals</h3>' +
+            '<p>All caught up! No withdrawals are waiting for approval.</p>' +
+          '</div>';
+        return;
+      }
+
+      container.innerHTML = withdrawals.map(function(withdrawal) {
+        const user = allUsers[withdrawal.user_id];
+
+        return '<div class="withdrawal-card" id="withdrawal-' + withdrawal.id + '">' +
+          '<div class="withdrawal-header">' +
+            '<div style="flex: 1;">' +
+              '<div style="font-size: 20px; font-weight: 700; color: var(--primary); margin-bottom: 5px;">' +
+                'Withdrawal Request' +
+              '</div>' +
+              '<div class="user-info">' +
+                '<strong>User:</strong> ' + (user ? (user.full_name || user.email) : 'Unknown User') + ' | ' +
+                '<strong>Email:</strong> ' + (user ? user.email : 'Not available') + ' | ' +
+                '<strong>Phone:</strong> ' + (user ? (user.phone || 'Not provided') : 'Not available') +
+              '</div>' +
+              '<div class="user-info">' +
+                '<strong>M-Pesa:</strong> ' + withdrawal.mpesa_number + ' | ' +
+                '<strong>Requested:</strong> ' + new Date(withdrawal.created_at).toLocaleString() +
+              '</div>' +
+            '</div>' +
+            '<div class="amount">' +
+              'KSh ' + (withdrawal.amount || 0).toLocaleString() +
+            '</div>' +
+          '</div>' +
+
+          '<div class="admin-actions">' +
+            '<button class="btn btn-success" onclick="approveWithdrawal(\'' + withdrawal.id + '\', \'' + withdrawal.user_id + '\', \'' + withdrawal.mpesa_number + '\', ' + withdrawal.amount + ')">' +
+              '✅ Approve & Mark Paid' +
+            '</button>' +
+            '<button class="btn btn-danger" onclick="showRejectForm(\'' + withdrawal.id + '\')">' +
+              '❌ Reject' +
+            '</button>' +
+          '</div>' +
+
+          '<div class="reject-form" id="reject-form-' + withdrawal.id + '">' +
+            '<textarea id="feedback-' + withdrawal.id + '" placeholder="Provide reason for rejection..."></textarea>' +
+            '<button class="btn btn-warning" onclick="rejectWithdrawal(\'' + withdrawal.id + '\')">Submit Rejection</button>' +
+          '</div>' +
+        '</div>';
+      }).join('');
+    }
+
+    // Approve withdrawal and mark as paid
+    async function approveWithdrawal(withdrawalId, userId, mpesaNumber, amount) {
+      if (!supabaseClient) {
+        showMessage('Error: Database connection failed', 'error');
+        return;
+      }
+
+      try {
+        // Show loading state
+        const button = document.querySelector('#withdrawal-' + withdrawalId + ' .btn-success');
+        const originalText = button.innerHTML;
+        button.innerHTML = '<span class="loading"></span> Processing...';
+        button.disabled = true;
+
+        // Try different status values that might work with your constraint
+        const possibleStatuses = ['approved', 'completed', 'paid', 'success', 'successful'];
+        
+        let updateError = null;
+        let workingStatus = null;
+
+        // Try each status until one works
+        for (const status of possibleStatuses) {
+          const { error } = await supabaseClient
+            .from('withdrawals')
+            .update({
+              status: status,
+              approved_at: new Date().toISOString(),
+              admin_reviewer_id: currentAdmin.id,
+              paid_at: new Date().toISOString()
+            })
+            .eq('id', withdrawalId);
+
+          if (!error) {
+            workingStatus = status;
+            break;
+          }
+          updateError = error;
+        }
+
+        if (updateError && !workingStatus) {
+          throw updateError;
+        }
+
+        // Remove the withdrawal card from view
+        document.getElementById('withdrawal-' + withdrawalId).remove();
+
+        showMessage('✅ Withdrawal approved! KSh ' + amount.toLocaleString() + ' marked as paid to ' + mpesaNumber, 'success');
+
+        // Reload stats
+        await loadStats();
+
+        // Check if any withdrawals left
+        const remainingWithdrawals = document.querySelectorAll('.withdrawal-card').length;
+        if (remainingWithdrawals === 0) {
+          document.getElementById('withdrawalsContainer').innerHTML = 
+            '<div class="no-withdrawals">' +
+              '<h3>🎉 All Caught Up!</h3>' +
+              '<p>No more withdrawals to approve.</p>' +
+            '</div>';
+        }
+
+      } catch (error) {
+        console.error('Approval error:', error);
+        showMessage('❌ Failed to approve withdrawal: ' + error.message, 'error');
+        
+        // Reset button
+        const button = document.querySelector('#withdrawal-' + withdrawalId + ' .btn-success');
+        button.innerHTML = '✅ Approve & Mark Paid';
+        button.disabled = false;
+      }
+    }
+
+    // Show reject form
+    function showRejectForm(withdrawalId) {
+      const form = document.getElementById('reject-form-' + withdrawalId);
+      form.style.display = form.style.display === 'block' ? 'none' : 'block';
+    }
+
+    // Reject withdrawal
+    async function rejectWithdrawal(withdrawalId) {
+      if (!supabaseClient) {
+        showMessage('Error: Database connection failed', 'error');
+        return;
+      }
+
+      const feedback = document.getElementById('feedback-' + withdrawalId).value.trim();
+      
+      if (!feedback) {
+        showMessage('Please provide rejection reason', 'error');
+        return;
+      }
+
+      try {
+        // Get withdrawal details first to refund user
+        const { data: withdrawal, error: getError } = await supabaseClient
+          .from('withdrawals')
+          .select('*')
+          .eq('id', withdrawalId)
+          .single();
+
+        if (getError) throw getError;
+
+        // Refund the amount back to user's balance
+        const { data: userProfile, error: userError } = await supabaseClient
+          .from('profiles')
+          .select('balance')
+          .eq('id', withdrawal.user_id)
+          .single();
+
+        if (userError) throw userError;
+
+        const newBalance = (parseFloat(userProfile.balance) || 0) + parseFloat(withdrawal.amount);
+
+        const { error: refundError } = await supabaseClient
+          .from('profiles')
+          .update({ balance: newBalance })
+          .eq('id', withdrawal.user_id);
+
+        if (refundError) throw refundError;
+
+        // Try different rejection status values
+        const possibleRejectStatuses = ['rejected', 'cancelled', 'failed', 'declined'];
+        
+        let updateError = null;
+        let workingStatus = null;
+
+        for (const status of possibleRejectStatuses) {
+          const { error } = await supabaseClient
+            .from('withdrawals')
+            .update({
+              status: status,
+              admin_feedback: feedback,
+              admin_reviewed_at: new Date().toISOString(),
+              admin_reviewer_id: currentAdmin.id
+            })
+            .eq('id', withdrawalId);
+
+          if (!error) {
+            workingStatus = status;
+            break;
+          }
+          updateError = error;
+        }
+
+        if (updateError && !workingStatus) {
+          throw updateError;
+        }
+
+        // Remove the withdrawal card from view
+        document.getElementById('withdrawal-' + withdrawalId).remove();
+
+        showMessage('✅ Withdrawal rejected and amount refunded to user', 'success');
+
+        // Reload stats
+        await loadStats();
+
+        // Check if any withdrawals left
+        const remainingWithdrawals = document.querySelectorAll('.withdrawal-card').length;
+        if (remainingWithdrawals === 0) {
+          document.getElementById('withdrawalsContainer').innerHTML = 
+            '<div class="no-withdrawals">' +
+              '<h3>🎉 All Caught Up!</h3>' +
+              '<p>No more withdrawals to approve.</p>' +
+            '</div>';
+        }
+
+      } catch (error) {
+        console.error('Rejection error:', error);
+        showMessage('❌ Failed to reject withdrawal: ' + error.message, 'error');
+      }
+    }
+
+    // Helper functions
+    function showMessage(message, type) {
+      const container = document.getElementById('messageContainer');
+      container.innerHTML = '<div class="message ' + type + '">' + message + '</div>';
+      
+      if (type === 'success') {
+        setTimeout(function() {
+          container.innerHTML = '';
+        }, 5000);
+      }
+    }
+
+    // Logout
+    async function handleLogout() {
+      try {
+        const { error } = await supabaseClient.auth.signOut();
+        if (error) throw error;
+        window.location.href = "login.html";
+      } catch (error) {
+        console.error("Logout error:", error);
+      }
+    }
+
+    document.getElementById('logoutBtn').addEventListener('click', function(e) {
+      e.preventDefault();
+      handleLogout();
+    });
+
+    // Start the application
+    checkAuth();
+  </script>
+</body>
+</html>

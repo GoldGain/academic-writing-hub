@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Payment Confirmation - Academic Writing Hub</title>
+  <style>
+    :root {
+      --primary: #004aad;
+      --success: #28a745;
+      --warning: #ffc107;
+    }
+    
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: #f4f6f9;
+      margin: 0;
+      padding: 20px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+    }
+    
+    .payment-container {
+      background: white;
+      padding: 30px;
+      border-radius: 15px;
+      box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+      max-width: 500px;
+      width: 100%;
+      text-align: center;
+    }
+    
+    .success-icon {
+      font-size: 64px;
+      color: var(--success);
+      margin-bottom: 20px;
+    }
+    
+    .mpesa-number {
+      background: #f8f9fa;
+      padding: 15px;
+      border-radius: 10px;
+      font-size: 24px;
+      font-weight: bold;
+      margin: 20px 0;
+      border: 2px dashed var(--primary);
+    }
+    
+    .btn {
+      padding: 12px 25px;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      margin: 10px;
+      text-decoration: none;
+      display: inline-block;
+    }
+    
+    .btn-primary {
+      background: var(--primary);
+      color: white;
+    }
+    
+    .btn-secondary {
+      background: #6c757d;
+      color: white;
+    }
+  </style>
+</head>
+<body>
+  <div class="payment-container">
+    <div class="success-icon">✅</div>
+    <h2>Payment Instructions</h2>
+    <p>Please send <strong id="paymentAmount">KSh 0</strong> to the M-Pesa number below:</p>
+    
+    <div class="mpesa-number" id="mpesaDisplay">0762353880</div>
+    
+    <p><strong>Steps:</strong></p>
+    <ol style="text-align: left; margin: 20px 0;">
+      <li>Go to M-Pesa menu</li>
+      <li>Select "Lipa Na M-Pesa"</li>
+      <li>Select "Pay Bill"</li>
+      <li>Enter Business No: <strong>0762353880</strong></li>
+      <li>Enter Account No: <strong id="accountNumber">Your Phone Number</strong></li>
+      <li>Enter Amount: <strong id="amountDisplay">KSh 0</strong></li>
+    </ol>
+    
+    <div>
+      <button class="btn btn-primary" onclick="copyMpesaNumber()">📋 Copy M-Pesa Number</button>
+      <button class="btn btn-secondary" onclick="confirmPayment()">✅ I've Made Payment</button>
+    </div>
+    
+    <p id="message" style="margin-top: 20px; font-weight: bold;"></p>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script>
+    const SUPABASE_URL = "https://lfrjtklkbppihaaiuxef.supabase.co";
+    const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imxmcmp0a2xrYnBwaWhhYWl1eGVmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTkwNTI5MzMsImV4cCI6MjA3NDYyODkzM30.2FVqnt5daF2Tw-RmVBwOGgt4GuIQQSkG8IUZt30QxIM";
+    const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+    // Get payment details from URL parameters
+    const urlParams = new URLSearchParams(window.location.search);
+    const packageName = urlParams.get('package');
+    const amount = urlParams.get('amount');
+
+    document.getElementById('paymentAmount').textContent = KSh ${amount};
+    document.getElementById('amountDisplay').textContent = KSh ${amount};
+    document.getElementById('accountNumber').textContent = UPGRADE-${packageName};
+
+    async function copyMpesaNumber() {
+      const mpesaNumber = '0762353880';
+      navigator.clipboard.writeText(mpesaNumber)
+        .then(() => {
+          document.getElementById('message').textContent = '✅ M-Pesa number copied!';
+          document.getElementById('message').style.color = 'green';
+        })
+        .catch(() => {
+          document.getElementById('message').textContent = '❌ Failed to copy';
+          document.getElementById('message').style.color = 'red';
+        });
+    }
+
+    async function confirmPayment() {
+      const { data: { user } } = await supabase.auth.getUser();
+      
+      if (!user) {
+        alert('Please log in first');
+        return;
+      }
+
+      // Record payment in database
+      const { error } = await supabase
+        .from('payments')
+        .insert([{
+          user_id: user.id,
+          package: packageName,
+          amount: parseFloat(amount),
+          status: 'pending',
+          mpesa_number: '0762353880',
+          created_at: new Date().toISOString()
+        }]);
+
+      if (error) {
+        document.getElementById('message').textContent = '❌ Failed to record payment';
+        document.getElementById('message').style.color = 'red';
+      } else {
+        document.getElementById('message').textContent = '✅ Payment recorded! Admin will verify and upgrade your account.';
+        document.getElementById('message').style.color = 'green';
+        
+        // Redirect to dashboard after 3 seconds
+        setTimeout(() => {
+          window.location.href = 'dashboard.html';
+        }, 3000);
+      }
+    }
+  </script>
+</body>
+</html>

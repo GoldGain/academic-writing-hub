@@ -1,0 +1,904 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Support - Academic Writing Hub</title>
+  <style>
+    :root {
+      --primary: #004aad;
+      --primary-light: #3a6fc8;
+      --secondary: #ff6b35;
+      --success: #28a745;
+      --warning: #ffc107;
+      --danger: #dc3545;
+      --light: #f8f9fa;
+      --dark: #343a40;
+      --gray: #6c757d;
+      --border: #e9ecef;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #f4f6f9 0%, #e9ecef 100%);
+      color: #333;
+      line-height: 1.6;
+    }
+
+    header {
+      background: var(--primary);
+      color: #fff;
+      padding: 15px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 2px 15px rgba(0,0,0,0.1);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .header-left h1 {
+      margin: 0;
+      font-size: 22px;
+      font-weight: 700;
+    }
+
+    .header-left .slogan {
+      font-size: 13px;
+      opacity: 0.9;
+      margin-top: 2px;
+    }
+
+    .mobile-menu-btn {
+      display: none;
+      background: none;
+      border: none;
+      color: white;
+      font-size: 20px;
+      cursor: pointer;
+    }
+
+    .container {
+      display: flex;
+      min-height: calc(100vh - 70px);
+    }
+
+    nav {
+      width: 260px;
+      background: #fff;
+      border-right: 1px solid var(--border);
+      padding: 20px 0;
+      transition: transform 0.3s ease;
+      box-shadow: 2px 0 10px rgba(0,0,0,0.05);
+    }
+
+    nav a {
+      padding: 15px 25px;
+      text-decoration: none;
+      color: var(--dark);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      transition: all 0.3s;
+      border-left: 3px solid transparent;
+    }
+
+    nav a:hover {
+      background: var(--primary);
+      color: #fff;
+      border-left-color: var(--secondary);
+    }
+
+    nav a.active {
+      background: var(--light);
+      color: var(--primary);
+      border-left-color: var(--primary);
+      font-weight: 600;
+    }
+
+    main {
+      flex: 1;
+      padding: 25px;
+      overflow-y: auto;
+    }
+
+    .page-header {
+      background: linear-gradient(135deg, var(--primary), var(--primary-light));
+      color: white;
+      padding: 25px;
+      border-radius: 16px;
+      box-shadow: 0 8px 25px rgba(0,74,173,0.15);
+      margin-bottom: 30px;
+    }
+
+    .page-header h1 {
+      font-size: 28px;
+      margin-bottom: 8px;
+    }
+
+    .page-header p {
+      opacity: 0.9;
+      font-size: 16px;
+    }
+
+    .support-stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 20px;
+      margin-bottom: 30px;
+    }
+
+    .stat-card {
+      background: white;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+      text-align: center;
+      border-left: 4px solid var(--primary);
+    }
+
+    .stat-card.open { border-left-color: var(--warning); }
+    .stat-card.progress { border-left-color: var(--primary); }
+    .stat-card.resolved { border-left-color: var(--success); }
+
+    .stat-value {
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--primary);
+      margin-bottom: 5px;
+    }
+
+    .stat-label {
+      color: var(--gray);
+      font-size: 14px;
+      font-weight: 500;
+    }
+
+    .new-ticket-section {
+      background: white;
+      padding: 25px;
+      border-radius: 12px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+      margin-bottom: 30px;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    .form-group label {
+      display: block;
+      font-weight: 600;
+      margin-bottom: 8px;
+      color: var(--dark);
+    }
+
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+      width: 100%;
+      padding: 12px;
+      border: 2px solid var(--border);
+      border-radius: 8px;
+      font-size: 16px;
+      transition: border-color 0.3s;
+    }
+
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus {
+      border-color: var(--primary);
+      outline: none;
+    }
+
+    .form-group textarea {
+      resize: vertical;
+      min-height: 120px;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 20px;
+    }
+
+    .btn {
+      padding: 15px 25px;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      color: white;
+    }
+
+    .btn-primary:hover:not(:disabled) {
+      background: var(--primary-light);
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(0,74,173,0.3);
+    }
+
+    .btn:disabled {
+      background: var(--gray);
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .tickets-section {
+      background: white;
+      padding: 25px;
+      border-radius: 12px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+    }
+
+    .tickets-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+      gap: 15px;
+    }
+
+    .filter-controls {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .filter-select {
+      padding: 8px 12px;
+      border: 2px solid var(--border);
+      border-radius: 6px;
+      background: white;
+    }
+
+    .tickets-list {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+
+    .ticket-card {
+      border: 2px solid var(--border);
+      border-radius: 10px;
+      padding: 20px;
+      transition: all 0.3s ease;
+    }
+
+    .ticket-card:hover {
+      border-color: var(--primary-light);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+
+    .ticket-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 15px;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .ticket-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: var(--primary);
+      margin: 0;
+    }
+
+    .ticket-meta {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .status-badge {
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    .status-open { background: #fff3cd; color: #856404; }
+    .status-in-progress { background: #cce7ff; color: #004085; }
+    .status-resolved { background: #d4edda; color: #155724; }
+    .status-closed { background: #e2e3e5; color: #383d41; }
+
+    .priority-badge {
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    .priority-low { background: #d4edda; color: #155724; }
+    .priority-medium { background: #fff3cd; color: #856404; }
+    .priority-high { background: #f8d7da; color: #721c24; }
+    .priority-urgent { background: #f8d7da; color: #721c24; border: 1px solid #721c24; }
+
+    .ticket-content {
+      margin-bottom: 15px;
+    }
+
+    .ticket-message {
+      color: var(--dark);
+      line-height: 1.5;
+    }
+
+    .ticket-response {
+      background: var(--light);
+      padding: 15px;
+      border-radius: 8px;
+      margin-top: 15px;
+      border-left: 4px solid var(--primary);
+    }
+
+    .response-label {
+      font-weight: 600;
+      color: var(--primary);
+      margin-bottom: 8px;
+      display: block;
+    }
+
+    .ticket-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 10px;
+      padding-top: 15px;
+      border-top: 1px solid var(--border);
+      font-size: 14px;
+      color: var(--gray);
+    }
+
+    .no-tickets {
+      text-align: center;
+      padding: 40px 20px;
+      color: var(--gray);
+    }
+
+    .no-tickets h3 {
+      margin-bottom: 10px;
+      color: var(--dark);
+    }
+
+    .message {
+      padding: 15px;
+      border-radius: 8px;
+      margin: 15px 0;
+      text-align: center;
+      font-weight: 600;
+    }
+
+    .message.success {
+      background: #d4edda;
+      color: #155724;
+      border: 1px solid #c3e6cb;
+    }
+
+    .message.error {
+      background: #f8d7da;
+      color: #721c24;
+      border: 1px solid #f5c6cb;
+    }
+
+    .message.info {
+      background: #cce7ff;
+      color: #004085;
+      border: 1px solid #b3d7ff;
+    }
+
+    .loading {
+      display: inline-block;
+      width: 20px;
+      height: 20px;
+      border: 3px solid #f3f3f3;
+      border-top: 3px solid var(--primary);
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    /* Mobile Responsive */
+    @media (max-width: 768px) {
+      .mobile-menu-btn {
+        display: block;
+      }
+
+      nav {
+        position: fixed;
+        top: 70px;
+        left: 0;
+        height: calc(100vh - 70px);
+        transform: translateX(-100%);
+        z-index: 99;
+        background: white;
+      }
+
+      nav.active {
+        transform: translateX(0);
+      }
+
+      .form-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .ticket-header {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .ticket-meta {
+        width: 100%;
+        justify-content: flex-start;
+      }
+
+      .filter-controls {
+        width: 100%;
+        justify-content: center;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="header-left">
+      <h1>Academic Writing Hub</h1>
+      <div class="slogan">Empowering Your Potential Through Academic Writing</div>
+    </div>
+    <button class="mobile-menu-btn" id="mobileMenuBtn">☰</button>
+  </header>
+
+  <div class="container">
+    <nav id="sidebar">
+      <a href="dashboard.html">🏠 Dashboard</a>
+      <a href="membership.html">💳 Membership</a>
+      <a href="tasks.html">📋 Tasks</a>
+      <a href="withdraw.html">💵 Withdraw</a>
+      <a href="referrals.html">👥 Referrals</a>
+      <a href="profile.html">🙍 Profile</a>
+      <a href="support.html" class="active">📩 Support</a>
+      <a href="#" id="logoutBtn">🚪 Logout</a>
+    </nav>
+
+    <main>
+      <div class="page-header">
+        <h1>📩 Support Center</h1>
+        <p>Get help with any issues or questions about our platform</p>
+      </div>
+
+      <div class="support-stats">
+        <div class="stat-card open">
+          <div class="stat-value" id="openTickets">0</div>
+          <div class="stat-label">Open Tickets</div>
+        </div>
+        <div class="stat-card progress">
+          <div class="stat-value" id="progressTickets">0</div>
+          <div class="stat-label">In Progress</div>
+        </div>
+        <div class="stat-card resolved">
+          <div class="stat-value" id="resolvedTickets">0</div>
+          <div class="stat-label">Resolved</div>
+        </div>
+      </div>
+
+      <div id="messageContainer"></div>
+
+      <div class="new-ticket-section">
+        <h3 style="color: var(--primary); margin-bottom: 20px;">🆕 Create New Support Ticket</h3>
+        <div class="form-grid">
+          <div class="form-group">
+            <label for="ticketSubject">Subject</label>
+            <input type="text" id="ticketSubject" placeholder="Brief description of your issue">
+          </div>
+          <div class="form-group">
+            <label for="ticketCategory">Category</label>
+            <select id="ticketCategory">
+              <option value="technical">Technical Issue</option>
+              <option value="billing">Billing & Payments</option>
+              <option value="membership">Membership</option>
+              <option value="tasks">Tasks & Earnings</option>
+              <option value="withdrawal">Withdrawal Issues</option>
+              <option value="general">General Inquiry</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="ticketPriority">Priority</label>
+            <select id="ticketPriority">
+              <option value="low">Low</option>
+              <option value="medium" selected>Medium</option>
+              <option value="high">High</option>
+              <option value="urgent">Urgent</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="ticketMessage">Detailed Description</label>
+          <textarea id="ticketMessage" placeholder="Please provide detailed information about your issue..."></textarea>
+        </div>
+        <button class="btn btn-primary" id="createTicketBtn">
+          📨 Submit Ticket
+        </button>
+      </div>
+
+      <div class="tickets-section">
+        <div class="tickets-header">
+          <h3 style="color: var(--primary); margin: 0;">📋 Your Support Tickets</h3>
+          <div class="filter-controls">
+            <select class="filter-select" id="statusFilter">
+              <option value="all">All Status</option>
+              <option value="open">Open</option>
+              <option value="in_progress">In Progress</option>
+              <option value="resolved">Resolved</option>
+              <option value="closed">Closed</option>
+            </select>
+            <select class="filter-select" id="categoryFilter">
+              <option value="all">All Categories</option>
+              <option value="technical">Technical</option>
+              <option value="billing">Billing</option>
+              <option value="membership">Membership</option>
+              <option value="tasks">Tasks</option>
+              <option value="withdrawal">Withdrawal</option>
+              <option value="general">General</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="tickets-list" id="ticketsList">
+          <div class="no-tickets">
+            <h3>📭 No Support Tickets</h3>
+            <p>You haven't created any support tickets yet. Use the form above to get help.</p>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script>
+    // Initialize Supabase first
+    const SUPABASE_URL = "https://lfrjtklkbppihaaiuxef.supabase.co";
+    const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imxmcmp0a2xrYnBwaWhhYWl1eGVmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTkwNTI5MzMsImV4cCI6MjA3NDYyODkzM30.2FVqnt5daF2Tw-RmVBwOGgt4GuIQQSkG8IUZt30QxIM";
+    
+    // Initialize Supabase client
+    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+    // Global variables
+    let currentUser = null;
+    let userTickets = [];
+
+    // Show message function
+    function showMessage(message, type) {
+      const messageContainer = document.getElementById('messageContainer');
+      if (!messageContainer) {
+        console.log(type + ': ' + message);
+        return;
+      }
+      
+      messageContainer.innerHTML = '<div class="message ' + type + '">' + message + '</div>';
+      
+      // Auto-hide success messages after 5 seconds
+      if (type === 'success') {
+        setTimeout(function() {
+          if (messageContainer) {
+            messageContainer.innerHTML = '';
+          }
+        }, 5000);
+      }
+    }
+
+    // Format status for display
+    function formatStatus(status) {
+      const statusMap = {
+        'open': 'Open',
+        'in_progress': 'In Progress',
+        'resolved': 'Resolved',
+        'closed': 'Closed'
+      };
+      return statusMap[status] || status;
+    }
+
+    // Format priority for display
+    function formatPriority(priority) {
+      return priority.charAt(0).toUpperCase() + priority.slice(1);
+    }
+
+    // Authentication check
+    async function checkAuth() {
+      try {
+        const { data: { session }, error } = await supabase.auth.getSession();
+        
+        if (!session || error) {
+          window.location.href = "login.html";
+          return;
+        }
+        
+        currentUser = session.user;
+        await loadTickets();
+      } catch (error) {
+        console.error("Auth check error:", error);
+        showMessage('Authentication error', 'error');
+      }
+    }
+
+    // Load user tickets
+    async function loadTickets() {
+      try {
+        const statusFilter = document.getElementById('statusFilter');
+        const categoryFilter = document.getElementById('categoryFilter');
+        const statusValue = statusFilter ? statusFilter.value : 'all';
+        const categoryValue = categoryFilter ? categoryFilter.value : 'all';
+
+        let query = supabase
+          .from('support_tickets')
+          .select('*')
+          .eq('user_id', currentUser.id)
+          .order('created_at', { ascending: false });
+
+        // Apply filters
+        if (statusValue !== 'all') {
+          query = query.eq('status', statusValue);
+        }
+        if (categoryValue !== 'all') {
+          query = query.eq('category', categoryValue);
+        }
+
+        const { data: tickets, error } = await query;
+
+        if (error) throw error;
+
+        userTickets = tickets || [];
+        updateTicketStats();
+        renderTickets();
+
+      } catch (error) {
+        console.error("Tickets load error:", error);
+        showMessage('Failed to load support tickets', 'error');
+      }
+    }
+
+    // Update ticket statistics
+    function updateTicketStats() {
+      const openTickets = userTickets.filter(function(t) { return t.status === 'open'; }).length;
+      const progressTickets = userTickets.filter(function(t) { return t.status === 'in_progress'; }).length;
+      const resolvedTickets = userTickets.filter(function(t) { return t.status === 'resolved'; }).length;
+
+      const openEl = document.getElementById('openTickets');
+      const progressEl = document.getElementById('progressTickets');
+      const resolvedEl = document.getElementById('resolvedTickets');
+      
+      if (openEl) openEl.textContent = openTickets;
+      if (progressEl) progressEl.textContent = progressTickets;
+      if (resolvedEl) resolvedEl.textContent = resolvedTickets;
+    }
+
+    // Render tickets list
+    function renderTickets() {
+      const ticketsList = document.getElementById('ticketsList');
+      if (!ticketsList) return;
+      
+      if (userTickets.length === 0) {
+        ticketsList.innerHTML = '<div class="no-tickets"><h3>📭 No Support Tickets</h3><p>You haven\'t created any support tickets yet. Use the form above to get help.</p></div>';
+        return;
+      }
+
+      let ticketsHTML = '';
+      for (let i = 0; i < userTickets.length; i++) {
+        const ticket = userTickets[i];
+        const createdDate = new Date(ticket.created_at).toLocaleDateString();
+        const updatedDate = new Date(ticket.updated_at).toLocaleDateString();
+        let updatedText = '';
+        if (createdDate !== updatedDate) {
+          updatedText = ' • <strong>Updated:</strong> ' + updatedDate;
+        }
+        
+        let responseHTML = '';
+        if (ticket.admin_response) {
+          responseHTML = '<div class="ticket-response"><span class="response-label">📝 Admin Response:</span><div>' + ticket.admin_response + '</div></div>';
+        }
+        
+        ticketsHTML += '<div class="ticket-card">' +
+          '<div class="ticket-header">' +
+            '<h4 class="ticket-title">' + ticket.subject + '</h4>' +
+            '<div class="ticket-meta">' +
+              '<span class="status-badge status-' + ticket.status.replace('_', '-') + '">' +
+                formatStatus(ticket.status) +
+              '</span>' +
+              '<span class="priority-badge priority-' + ticket.priority + '">' +
+                formatPriority(ticket.priority) +
+              '</span>' +
+              '<span style="color: var(--gray); font-size: 12px;">' +
+                ticket.category +
+              '</span>' +
+            '</div>' +
+          '</div>' +
+          '<div class="ticket-content">' +
+            '<div class="ticket-message">' + ticket.message + '</div>' +
+            responseHTML +
+          '</div>' +
+          '<div class="ticket-footer">' +
+            '<div><strong>Created:</strong> ' + createdDate + updatedText + '</div>' +
+            '<div>Ticket #' + (ticket.id ? ticket.id.substring(0, 8) : 'N/A') + '</div>' +
+          '</div>' +
+        '</div>';
+      }
+      
+      ticketsList.innerHTML = ticketsHTML;
+    }
+
+    // Create new support ticket
+    async function createSupportTicket() {
+      const subjectInput = document.getElementById('ticketSubject');
+      const categoryInput = document.getElementById('ticketCategory');
+      const priorityInput = document.getElementById('ticketPriority');
+      const messageInput = document.getElementById('ticketMessage');
+      const createTicketBtn = document.getElementById('createTicketBtn');
+
+      if (!subjectInput || !categoryInput || !priorityInput || !messageInput || !createTicketBtn) {
+        showMessage('Form elements not found', 'error');
+        return;
+      }
+
+      const subject = subjectInput.value.trim();
+      const category = categoryInput.value;
+      const priority = priorityInput.value;
+      const message = messageInput.value.trim();
+
+      // Validation
+      if (!subject || !message) {
+        showMessage('❌ Please fill in all required fields', 'error');
+        return;
+      }
+
+      if (message.length < 10) {
+        showMessage('❌ Please provide a detailed description of your issue', 'error');
+        return;
+      }
+
+      try {
+        // Disable button and show loading
+        createTicketBtn.disabled = true;
+        createTicketBtn.innerHTML = '<span class="loading"></span> Creating...';
+
+        const { error } = await supabase
+          .from('support_tickets')
+          .insert([{
+            user_id: currentUser.id,
+            subject: subject,
+            category: category,
+            priority: priority,
+            message: message,
+            status: 'open',
+            created_at: new Date().toISOString(),
+            updated_at: new Date().toISOString()
+          }]);
+
+        if (error) throw error;
+
+        // Success
+        showMessage('✅ Support ticket created successfully! We will respond within 24 hours.', 'success');
+        
+        // Clear form
+        subjectInput.value = '';
+        messageInput.value = '';
+        categoryInput.value = 'technical';
+        priorityInput.value = 'medium';
+        
+        // Reload tickets
+        await loadTickets();
+
+      } catch (error) {
+        console.error('Ticket creation error:', error);
+        showMessage('❌ Failed to create support ticket: ' + error.message, 'error');
+      } finally {
+        // Re-enable button
+        createTicketBtn.disabled = false;
+        createTicketBtn.innerHTML = '📨 Submit Ticket';
+      }
+    }
+
+    // Logout function
+    async function handleLogout() {
+      try {
+        const { error } = await supabase.auth.signOut();
+        if (error) throw error;
+        window.location.href = "login.html";
+      } catch (error) {
+        console.error("Logout error:", error);
+        showMessage('Failed to logout', 'error');
+      }
+    }
+
+    // Initialize the application
+    document.addEventListener('DOMContentLoaded', function() {
+      // DOM Elements
+      const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+      const sidebar = document.getElementById('sidebar');
+      const logoutBtn = document.getElementById('logoutBtn');
+      const createTicketBtn = document.getElementById('createTicketBtn');
+      const statusFilter = document.getElementById('statusFilter');
+      const categoryFilter = document.getElementById('categoryFilter');
+
+      // Mobile menu toggle
+      if (mobileMenuBtn && sidebar) {
+        mobileMenuBtn.addEventListener('click', function() {
+          sidebar.classList.toggle('active');
+        });
+
+        // Close mobile menu when clicking outside
+        document.addEventListener('click', function(e) {
+          if (!sidebar.contains(e.target) && !mobileMenuBtn.contains(e.target)) {
+            sidebar.classList.remove('active');
+          }
+        });
+      }
+
+      // Logout event listener
+      if (logoutBtn) {
+        logoutBtn.addEventListener('click', function(e) {
+          e.preventDefault();
+          handleLogout();
+        });
+      }
+
+      // Create ticket button event listener
+      if (createTicketBtn) {
+        createTicketBtn.addEventListener('click', createSupportTicket);
+      }
+
+      // Filter event listeners
+      if (statusFilter) {
+        statusFilter.addEventListener('change', loadTickets);
+      }
+
+      if (categoryFilter) {
+        categoryFilter.addEventListener('change', loadTickets);
+      }
+
+      // Auth state listener
+      supabase.auth.onAuthStateChange(function(event, session) {
+        if (event === 'SIGNED_OUT') {
+          window.location.href = "login.html";
+        } else if (event === 'SIGNED_IN') {
+          // Refresh data when user signs in
+          if (currentUser) {
+            loadTickets();
+          }
+        }
+      });
+
+      // Start the application
+      checkAuth();
+
+      // Auto-refresh tickets every 30 seconds
+      setInterval(function() {
+        if (currentUser) {
+          loadTickets();
+        }
+      }, 30000);
+    });
+  </script>
+</body>
+</html>

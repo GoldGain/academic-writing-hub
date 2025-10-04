@@ -1,0 +1,659 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Withdraw - Academic Writing Hub</title>
+  <style>
+    :root { 
+      --primary:#004aad; 
+      --primary-light:#3a6fc8; 
+      --secondary:#ff6b35; 
+      --success:#28a745; 
+      --warning:#ffc107; 
+      --danger:#dc3545; 
+      --light:#f8f9fa; 
+      --dark:#343a40; 
+      --gray:#6c757d; 
+      --border:#e9ecef; 
+    }
+    *{margin:0;padding:0;box-sizing:border-box}
+    body{font-family:"Segoe UI",Tahoma,Geneva,Verdana,sans-serif;background:linear-gradient(135deg,#f4f6f9 0%,#e9ecef 100%);color:#333;line-height:1.6}
+    header{background:var(--primary);color:#fff;padding:15px 20px;display:flex;justify-content:space-between;align-items:center;box-shadow:0 2px 15px rgba(0,0,0,0.1);position:sticky;top:0;z-index:100}
+    .header-left h1{margin:0;font-size:22px;font-weight:700}
+    .header-left .slogan{font-size:13px;opacity:.9;margin-top:2px}
+    .mobile-menu-btn{display:none;background:none;border:none;color:white;font-size:20px;cursor:pointer}
+    .container{display:flex;min-height:calc(100vh - 70px)}
+    nav{width:260px;background:#fff;border-right:1px solid var(--border);padding:20px 0;transition:transform .3s ease;box-shadow:2px 0 10px rgba(0,0,0,0.05)}
+    nav a{padding:15px 25px;text-decoration:none;color:var(--dark);display:flex;align-items:center;gap:12px;transition:all .3s;border-left:3px solid transparent}
+    nav a:hover{background:var(--primary);color:#fff;border-left-color:var(--secondary)}
+    nav a.active{background:var(--light);color:var(--primary);border-left-color:var(--primary);font-weight:600}
+    main{flex:1;padding:25px;overflow-y:auto}
+    .page-header{background:linear-gradient(135deg,var(--primary),var(--primary-light));color:white;padding:25px;border-radius:16px;box-shadow:0 8px 25px rgba(0,74,173,0.15);margin-bottom:30px}
+    .page-header h1{font-size:28px;margin-bottom:8px}
+    .page-header p{opacity:.9;font-size:16px}
+    .balance-card{background:white;padding:25px;border-radius:12px;box-shadow:0 4px 15px rgba(0,0,0,0.08);margin-bottom:30px;text-align:center;border-left:4px solid var(--success)}
+    .balance-amount{font-size:42px;font-weight:800;color:var(--success);margin:10px 0}
+    .balance-label{color:var(--gray);font-size:16px}
+    .withdrawal-rules{background:#fff3cd;border:1px solid #ffeaa7;border-radius:10px;padding:20px;margin-bottom:25px}
+    .rules-list{list-style:none;margin-top:10px}
+    .rules-list li{padding:8px 0;display:flex;align-items:center;gap:10px}
+    .rules-list li::before{content:'📌';font-size:14px}
+    .withdraw-form,.password-section,.withdrawal-history{background:white;padding:25px;border-radius:12px;box-shadow:0 4px 15px rgba(0,0,0,0.08);margin-bottom:30px}
+    .form-group{margin-bottom:20px}
+    .form-group label{display:block;font-weight:600;margin-bottom:8px;color:var(--dark)}
+    .form-group input{width:100%;padding:12px;border:2px solid var(--border);border-radius:8px;font-size:16px;transition:border-color .3s}
+    .form-group input:focus{border-color:var(--primary);outline:none}
+    .amount-input{position:relative}
+    .currency-symbol{position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--gray);font-weight:600}
+    .amount-input input{padding-left:30px}
+    .btn{padding:15px 25px;border:none;border-radius:8px;font-size:16px;font-weight:600;cursor:pointer;transition:all .3s ease;width:100%}
+    .btn-primary{background:var(--primary);color:white}
+    .btn-primary:hover:not(:disabled){background:var(--primary-light);transform:translateY(-2px);box-shadow:0 5px 15px rgba(0,74,173,.3)}
+    .btn:disabled{background:var(--gray);cursor:not-allowed;transform:none}
+    .password-form{display:grid;grid-template-columns:1fr 1fr 1fr;gap:15px;margin-top:15px}
+    .history-table{width:100%;border-collapse:collapse;margin-top:15px}
+    .history-table th,.history-table td{padding:12px;text-align:left;border-bottom:1px solid var(--border)}
+    .history-table th{background:var(--light);font-weight:600;color:var(--primary)}
+    .status-badge{padding:4px 12px;border-radius:20px;font-size:12px;font-weight:600}
+    .status-pending{background:#fff3cd;color:#856404}
+    .status-approved{background:#d4edda;color:#155724}
+    .status-rejected{background:#f8d7da;color:#721c24}
+    .status-processing{background:#cce7ff;color:#004085}
+    .message{padding:15px;border-radius:8px;margin:15px 0;text-align:center;font-weight:600}
+    .message.success{background:#d4edda;color:#155724;border:1px solid #c3e6cb}
+    .message.error{background:#f8d7da;color:#721c24;border:1px solid #f5c6cb}
+    .message.info{background:#cce7ff;color:#004085;border:1px solid #b3d7ff}
+    .loading{display:inline-block;width:20px;height:20px;border:3px solid #f3f3f3;border-top:3px solid var(--primary);border-radius:50%;animation:spin 1s linear infinite}
+    @keyframes spin{0%{transform:rotate(0deg)}100%{transform:rotate(360deg)}}
+    @media (max-width:768px){
+      .mobile-menu-btn{display:block}
+      nav{position:fixed;top:70px;left:0;height:calc(100vh - 70px);transform:translateX(-100%);z-index:99;background:white}
+      nav.active{transform:translateX(0)}
+      .password-form{grid-template-columns:1fr}
+      .history-table{font-size:14px}
+      .history-table th,.history-table td{padding:8px}
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="header-left">
+      <h1>Academic Writing Hub</h1>
+      <div class="slogan">Empowering Your Potential Through Academic Writing</div>
+    </div>
+    <button class="mobile-menu-btn" id="mobileMenuBtn">☰</button>
+  </header>
+
+  <div class="container">
+    <nav id="sidebar">
+      <a href="dashboard.html">🏠 Dashboard</a>
+      <a href="membership.html">💳 Membership</a>
+      <a href="tasks.html">📋 Tasks</a>
+      <a href="withdraw.html" class="active">💵 Withdraw</a>
+      <a href="referrals.html">👥 Referrals</a>
+      <a href="profile.html">🙍 Profile</a>
+      <a href="support.html">📩 Support</a>
+      <a href="#" id="logoutBtn">🚪 Logout</a>
+    </nav>
+
+    <main>
+      <div class="page-header">
+        <h1>💵 Withdraw Earnings</h1>
+        <p>Request withdrawal of your earnings to your M-Pesa account</p>
+      </div>
+
+      <div class="balance-card">
+        <div class="balance-label">Available Balance</div>
+        <div class="balance-amount" id="balanceAmount">KSh 0.00</div>
+        <div class="balance-label" id="withdrawableInfo">Minimum withdrawal: KSh 500</div>
+      </div>
+
+      <div class="withdrawal-rules">
+        <h3 style="color: #856404; margin-bottom: 15px;">📋 Withdrawal Rules</h3>
+        <ul class="rules-list">
+          <li>Minimum withdrawal amount: <strong>KSh 500</strong></li>
+          <li>Maximum withdrawal amount: <strong>KSh 50,000</strong> per transaction</li>
+          <li>Withdrawals processed on <strong>Wednesdays and Fridays</strong> only</li>
+          <li>Processing time: 24-48 hours after approval</li>
+          <li>Maintain minimum balance of KSh 500 after withdrawal</li>
+          <li>Ensure your M-Pesa number is registered in your name</li>
+          <li>Withdrawal password required for security</li>
+        </ul>
+      </div>
+
+      <div id="messageContainer"></div>
+
+      <div class="withdraw-form">
+        <h3 style="color: var(--primary); margin-bottom: 20px;">💰 Request Withdrawal</h3>
+        <div class="form-group">
+          <label for="withdrawAmount">Amount (KSh)</label>
+          <div class="amount-input">
+            <span class="currency-symbol">KSh</span>
+            <input type="number" id="withdrawAmount" placeholder="500" min="500" max="50000" step="100">
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="withdrawMpesa">M-Pesa Number</label>
+          <input type="text" id="withdrawMpesa" placeholder="07XX XXX XXX" maxlength="10">
+        </div>
+        <div class="form-group">
+          <label for="withdrawPassword">Withdrawal Password</label>
+          <input type="password" id="withdrawPassword" placeholder="Enter your withdrawal password" maxlength="6">
+        </div>
+        <button class="btn btn-primary" id="withdrawBtn">Submit Withdrawal Request</button>
+      </div>
+
+      <div class="password-section">
+        <h3 style="color: var(--primary); margin-bottom: 15px;">🔑 Change Withdrawal Password</h3>
+        <div class="password-form">
+          <div class="form-group">
+            <label for="oldWithdrawPassword">Current Password</label>
+            <input type="password" id="oldWithdrawPassword" placeholder="Current password" maxlength="6">
+          </div>
+          <div class="form-group">
+            <label for="newWithdrawPassword">New Password</label>
+            <input type="password" id="newWithdrawPassword" placeholder="New password (6 characters)" maxlength="6">
+          </div>
+          <div class="form-group">
+            <label for="confirmWithdrawPassword">Confirm New Password</label>
+            <input type="password" id="confirmWithdrawPassword" placeholder="Confirm new password" maxlength="6">
+          </div>
+        </div>
+        <button class="btn btn-primary" id="passwordBtn">Update Password</button>
+      </div>
+
+      <div class="withdrawal-history">
+        <h3 style="color: var(--primary); margin-bottom: 15px;">📊 Withdrawal History</h3>
+        <table class="history-table">
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Amount</th>
+              <th>M-Pesa</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody id="withdrawalHistory">
+            <tr>
+              <td colspan="4" style="text-align:center;padding:30px;color:var(--gray);">
+                <span class="loading"></span> Loading withdrawal history...
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </main>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script>
+    // Supabase configuration
+    const SUPABASE_URL = "https://lfrjtklkbppihaaiuxef.supabase.co";
+    const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imxmcmp0a2xrYnBwaWhhYWl1eGVmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTkwNTI5MzMsImV4cCI6MjA3NDYyODkzM30.2FVqnt5daF2Tw-RmVBwOGgt4GuIQQSkG8IUZt30QxIM";
+
+    // Initialize Supabase client
+    let supabaseClient;
+    try {
+      supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+      console.log('Supabase client initialized');
+    } catch (error) {
+      console.error('Failed to initialize Supabase client:', error);
+    }
+
+    // Global variables
+    let currentUser = null;
+    let userProfile = null;
+
+    // DOM Elements
+    const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+    const sidebar = document.getElementById('sidebar');
+    const logoutBtn = document.getElementById('logoutBtn');
+    const messageContainer = document.getElementById('messageContainer');
+    const balanceAmount = document.getElementById('balanceAmount');
+    const withdrawBtn = document.getElementById('withdrawBtn');
+    const passwordBtn = document.getElementById('passwordBtn');
+
+    // Initialize the application
+    document.addEventListener('DOMContentLoaded', function() {
+      initializeApp();
+    });
+
+    async function initializeApp() {
+      // Set up event listeners
+      setupEventListeners();
+      
+      // Check authentication
+      await checkAuth();
+    }
+
+    function setupEventListeners() {
+      // Mobile menu toggle
+      if (mobileMenuBtn) {
+        mobileMenuBtn.addEventListener('click', function() {
+          sidebar.classList.toggle('active');
+        });
+      }
+
+      // Close mobile menu when clicking outside
+      document.addEventListener('click', function(e) {
+        if (sidebar && mobileMenuBtn && !sidebar.contains(e.target) && !mobileMenuBtn.contains(e.target)) {
+          sidebar.classList.remove('active');
+        }
+      });
+
+      // Withdraw button
+      if (withdrawBtn) {
+        withdrawBtn.addEventListener('click', handleWithdrawal);
+      }
+
+      // Change password button
+      if (passwordBtn) {
+        passwordBtn.addEventListener('click', changeWithdrawPassword);
+      }
+
+      // Logout
+      if (logoutBtn) {
+        logoutBtn.addEventListener('click', function(e) {
+          e.preventDefault();
+          handleLogout();
+        });
+      }
+    }
+
+    // Authentication check
+    async function checkAuth() {
+      if (!supabaseClient) {
+        showMessage('Error: Application not initialized', 'error');
+        return;
+      }
+
+      try {
+        const { data: { session }, error } = await supabaseClient.auth.getSession();
+        
+        if (error) {
+          console.error('Session error:', error);
+          window.location.href = "login.html";
+          return;
+        }
+
+        if (!session) {
+          window.location.href = "login.html";
+          return;
+        }
+
+        currentUser = session.user;
+        console.log('User authenticated:', currentUser.email);
+        await loadUserData();
+
+      } catch (error) {
+        console.error('Auth check error:', error);
+        window.location.href = "login.html";
+      }
+    }
+
+    // Load user data from profiles table
+    async function loadUserData() {
+      if (!supabaseClient || !currentUser) {
+        console.error('No Supabase client or user');
+        return;
+      }
+
+      try {
+        console.log('Loading user data for:', currentUser.id);
+        
+        const { data: profile, error } = await supabaseClient
+          .from('profiles')
+          .select('*')
+          .eq('id', currentUser.id)
+          .single();
+
+        if (error) {
+          console.error('Error loading profile:', error);
+          throw error;
+        }
+
+        if (!profile) {
+          throw new Error('Profile not found');
+        }
+
+        userProfile = profile;
+        console.log('User profile loaded:', profile);
+        updateUI(profile);
+        await loadWithdrawalHistory();
+
+      } catch (error) {
+        console.error('User data load error:', error);
+        showMessage('Failed to load user data: ' + error.message, 'error');
+      }
+    }
+
+    // Update UI with user data
+    function updateUI(profile) {
+      // Update balance
+      if (balanceAmount) {
+        const balance = parseFloat(profile.balance) || 0;
+        balanceAmount.textContent = 'KSh ' + balance.toLocaleString();
+      }
+      
+      // Update withdrawable info - FIXED: No emoji in template literals
+      const minWithdrawal = 500;
+      const currentBalance = parseFloat(profile.balance) || 0;
+      const canWithdraw = currentBalance >= minWithdrawal;
+      const infoElement = document.getElementById('withdrawableInfo');
+      
+      if (infoElement) {
+        if (canWithdraw) {
+          infoElement.innerHTML = 'You can withdraw up to: KSh ' + Math.min(currentBalance, 50000).toLocaleString();
+          infoElement.style.color = 'var(--success)';
+        } else {
+          infoElement.innerHTML = 'Need KSh ' + (minWithdrawal - currentBalance).toLocaleString() + ' more to withdraw';
+          infoElement.style.color = 'var(--danger)';
+        }
+      }
+      
+      // Update M-Pesa field if available
+      const mpesaField = document.getElementById('withdrawMpesa');
+      if (mpesaField && profile.phone) {
+        mpesaField.value = profile.phone;
+      }
+    }
+
+    // Handle withdrawal request
+    async function handleWithdrawal() {
+      if (!supabaseClient || !userProfile) {
+        showMessage('System not ready. Please refresh the page.', 'error');
+        return;
+      }
+
+      const amountInput = document.getElementById('withdrawAmount');
+      const mpesaInput = document.getElementById('withdrawMpesa');
+      const passwordInput = document.getElementById('withdrawPassword');
+
+      if (!amountInput || !mpesaInput || !passwordInput) {
+        showMessage('Form fields not found', 'error');
+        return;
+      }
+
+      const amount = parseFloat(amountInput.value);
+      const mpesaNumber = mpesaInput.value.trim();
+      const password = passwordInput.value.trim();
+
+      // Validation
+      if (!amount || amount < 500) {
+        showMessage('Minimum withdrawal amount is KSh 500', 'error');
+        return;
+      }
+
+      if (amount > 50000) {
+        showMessage('Maximum withdrawal amount is KSh 50,000 per transaction', 'error');
+        return;
+      }
+
+      if (!mpesaNumber || mpesaNumber.length !== 10 || !mpesaNumber.startsWith('07')) {
+        showMessage('Please enter a valid M-Pesa number (10 digits starting with 07)', 'error');
+        return;
+      }
+
+      if (!password || password.length !== 6) {
+        showMessage('Please enter your 6-digit withdrawal password', 'error');
+        return;
+      }
+
+      const currentBalance = parseFloat(userProfile.balance) || 0;
+
+      // Check balance
+      if (amount > currentBalance) {
+        showMessage('Insufficient balance. Available: KSh ' + currentBalance.toLocaleString(), 'error');
+        return;
+      }
+
+      // Check minimum balance after withdrawal
+      if ((currentBalance - amount) < 500) {
+        showMessage('You must maintain a minimum balance of KSh 500 after withdrawal', 'error');
+        return;
+      }
+
+      // Verify withdrawal password
+      if (password !== userProfile.withdraw_password) {
+        showMessage('Invalid withdrawal password', 'error');
+        return;
+      }
+
+      try {
+        // Show loading state
+        withdrawBtn.innerHTML = '<span class="loading"></span> Processing...';
+        withdrawBtn.disabled = true;
+
+        // Create withdrawal request
+        const { data, error } = await supabaseClient
+          .from('withdrawals')
+          .insert([
+            {
+              user_id: currentUser.id,
+              user_email: currentUser.email,
+              amount: amount,
+              mpesa_number: mpesaNumber,
+              status: 'pending',
+              created_at: new Date().toISOString()
+            }
+          ]);
+
+        if (error) throw error;
+
+        // Update user balance
+        const newBalance = currentBalance - amount;
+        const { error: updateError } = await supabaseClient
+          .from('profiles')
+          .update({ balance: newBalance })
+          .eq('id', currentUser.id);
+
+        if (updateError) throw updateError;
+
+        // Update local profile
+        userProfile.balance = newBalance;
+        updateUI(userProfile);
+
+        // Clear form
+        amountInput.value = '';
+        passwordInput.value = '';
+
+        showMessage('Withdrawal request submitted successfully! It will be processed on the next withdrawal day.', 'success');
+        
+        // Reload history
+        await loadWithdrawalHistory();
+
+      } catch (error) {
+        console.error('Withdrawal error:', error);
+        showMessage('Failed to process withdrawal: ' + error.message, 'error');
+      } finally {
+        // Reset button state
+        if (withdrawBtn) {
+          withdrawBtn.innerHTML = 'Submit Withdrawal Request';
+          withdrawBtn.disabled = false;
+        }
+      }
+    }
+
+    // Change withdrawal password
+    async function changeWithdrawPassword() {
+      if (!supabaseClient || !userProfile) return;
+
+      const oldPasswordInput = document.getElementById('oldWithdrawPassword');
+      const newPasswordInput = document.getElementById('newWithdrawPassword');
+      const confirmPasswordInput = document.getElementById('confirmWithdrawPassword');
+
+      if (!oldPasswordInput || !newPasswordInput || !confirmPasswordInput) return;
+
+      const oldPassword = oldPasswordInput.value.trim();
+      const newPassword = newPasswordInput.value.trim();
+      const confirmPassword = confirmPasswordInput.value.trim();
+
+      // Validation
+      if (!oldPassword) {
+        showMessage('Please enter your current password', 'error');
+        return;
+      }
+
+      if (!newPassword || newPassword.length !== 6) {
+        showMessage('New password must be exactly 6 characters', 'error');
+        return;
+      }
+
+      if (newPassword !== confirmPassword) {
+        showMessage('New passwords do not match', 'error');
+        return;
+      }
+
+      // Verify old password
+      if (oldPassword !== userProfile.withdraw_password) {
+        showMessage('Current password is incorrect', 'error');
+        return;
+      }
+
+      try {
+        // Show loading state
+        passwordBtn.innerHTML = '<span class="loading"></span> Updating...';
+        passwordBtn.disabled = true;
+
+        // Update password in database
+        const { error } = await supabaseClient
+          .from('profiles')
+          .update({ withdraw_password: newPassword })
+          .eq('id', currentUser.id);
+
+        if (error) throw error;
+
+        // Update local profile
+        userProfile.withdraw_password = newPassword;
+
+        // Clear form
+        oldPasswordInput.value = '';
+        newPasswordInput.value = '';
+        confirmPasswordInput.value = '';
+
+        showMessage('Withdrawal password updated successfully!', 'success');
+
+      } catch (error) {
+        console.error('Password change error:', error);
+        showMessage('Failed to update password: ' + error.message, 'error');
+      } finally {
+        // Reset button state
+        if (passwordBtn) {
+          passwordBtn.innerHTML = 'Update Password';
+          passwordBtn.disabled = false;
+        }
+      }
+    }
+
+    // Load withdrawal history
+    async function loadWithdrawalHistory() {
+      if (!supabaseClient || !currentUser) return;
+
+      try {
+        const { data: withdrawals, error } = await supabaseClient
+          .from('withdrawals')
+          .select('*')
+          .eq('user_id', currentUser.id)
+          .order('created_at', { ascending: false })
+          .limit(10);
+
+        if (error) throw error;
+
+        const historyBody = document.getElementById('withdrawalHistory');
+        if (!historyBody) return;
+        
+        if (!withdrawals || withdrawals.length === 0) {
+          historyBody.innerHTML = 
+            '<tr>' +
+              '<td colspan="4" style="text-align:center;padding:30px;color:var(--gray);">' +
+                'No withdrawal history found' +
+              '</td>' +
+            '</tr>';
+          return;
+        }
+
+        historyBody.innerHTML = withdrawals.map(function(withdrawal) {
+          const date = new Date(withdrawal.created_at).toLocaleDateString();
+          const amount = 'KSh ' + (parseFloat(withdrawal.amount) || 0).toLocaleString();
+          const mpesa = withdrawal.mpesa_number || '-';
+          
+          let statusClass = 'status-pending';
+          let statusText = 'Pending';
+          
+          if (withdrawal.status === 'approved') {
+            statusClass = 'status-approved';
+            statusText = 'Approved';
+          } else if (withdrawal.status === 'rejected') {
+            statusClass = 'status-rejected';
+            statusText = 'Rejected';
+          } else if (withdrawal.status === 'processing') {
+            statusClass = 'status-processing';
+            statusText = 'Processing';
+          }
+
+          return '<tr>' +
+            '<td>' + date + '</td>' +
+            '<td>' + amount + '</td>' +
+            '<td>' + mpesa + '</td>' +
+            '<td><span class="status-badge ' + statusClass + '">' + statusText + '</span></td>' +
+          '</tr>';
+        }).join('');
+
+      } catch (error) {
+        console.error('History load error:', error);
+        const historyBody = document.getElementById('withdrawalHistory');
+        if (historyBody) {
+          historyBody.innerHTML = 
+            '<tr>' +
+              '<td colspan="4" style="text-align:center;padding:30px;color:var(--danger);">' +
+                'Failed to load withdrawal history' +
+              '</td>' +
+            '</tr>';
+        }
+      }
+    }
+
+    // Show message
+    function showMessage(message, type) {
+      if (!messageContainer) return;
+      
+      messageContainer.innerHTML = 
+        '<div class="message ' + type + '">' +
+          message +
+        '</div>';
+      
+      // Auto-hide success messages after 5 seconds
+      if (type === 'success') {
+        setTimeout(function() {
+          if (messageContainer) {
+            messageContainer.innerHTML = '';
+          }
+        }, 5000);
+      }
+    }
+
+    // Logout function
+    async function handleLogout() {
+      try {
+        const { error } = await supabaseClient.auth.signOut();
+        if (error) throw error;
+        window.location.href = "login.html";
+      } catch (error) {
+        console.error("Logout error:", error);
+        showMessage('Failed to logout', 'error');
+      }
+    }
+
+    // Auth state listener
+    if (supabaseClient) {
+      supabaseClient.auth.onAuthStateChange(function(event, session) {
+        if (event === 'SIGNED_OUT') {
+          window.location.href = "login.html";
+        }
+      });
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,699 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Profile - Academic Writing Hub</title>
+  <style>
+    :root {
+      --primary: #004aad;
+      --primary-light: #3a6fc8;
+      --secondary: #ff6b35;
+      --success: #28a745;
+      --warning: #ffc107;
+      --danger: #dc3545;
+      --light: #f8f9fa;
+      --dark: #343a40;
+      --gray: #6c757d;
+      --border: #e9ecef;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #f4f6f9 0%, #e9ecef 100%);
+      color: #333;
+      line-height: 1.6;
+    }
+
+    header {
+      background: var(--primary);
+      color: #fff;
+      padding: 15px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 2px 15px rgba(0,0,0,0.1);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .header-left h1 {
+      margin: 0;
+      font-size: 22px;
+      font-weight: 700;
+    }
+
+    .header-left .slogan {
+      font-size: 13px;
+      opacity: 0.9;
+      margin-top: 2px;
+    }
+
+    .mobile-menu-btn {
+      display: none;
+      background: none;
+      border: none;
+      color: white;
+      font-size: 20px;
+      cursor: pointer;
+    }
+
+    .container {
+      display: flex;
+      min-height: calc(100vh - 70px);
+    }
+
+    nav {
+      width: 260px;
+      background: #fff;
+      border-right: 1px solid var(--border);
+      padding: 20px 0;
+      transition: transform 0.3s ease;
+      box-shadow: 2px 0 10px rgba(0,0,0,0.05);
+    }
+
+    nav a {
+      padding: 15px 25px;
+      text-decoration: none;
+      color: var(--dark);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      transition: all 0.3s;
+      border-left: 3px solid transparent;
+    }
+
+    nav a:hover {
+      background: var(--primary);
+      color: #fff;
+      border-left-color: var(--secondary);
+    }
+
+    nav a.active {
+      background: var(--light);
+      color: var(--primary);
+      border-left-color: var(--primary);
+      font-weight: 600;
+    }
+
+    main {
+      flex: 1;
+      padding: 25px;
+      overflow-y: auto;
+    }
+
+    .page-header {
+      background: linear-gradient(135deg, var(--primary), var(--primary-light));
+      color: white;
+      padding: 25px;
+      border-radius: 16px;
+      box-shadow: 0 8px 25px rgba(0,74,173,0.15);
+      margin-bottom: 30px;
+    }
+
+    .page-header h1 {
+      font-size: 28px;
+      margin-bottom: 8px;
+    }
+
+    .page-header p {
+      opacity: 0.9;
+      font-size: 16px;
+    }
+
+    .profile-card {
+      background: white;
+      padding: 30px;
+      border-radius: 16px;
+      box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+      margin-bottom: 30px;
+    }
+
+    .profile-header {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      margin-bottom: 25px;
+      padding-bottom: 20px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .profile-avatar {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--primary), var(--primary-light));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 32px;
+      font-weight: bold;
+      color: white;
+    }
+
+    .profile-info h2 {
+      margin: 0 0 5px 0;
+      color: var(--primary);
+    }
+
+    .profile-info p {
+      color: var(--gray);
+      margin: 0;
+    }
+
+    .membership-badge {
+      display: inline-block;
+      background: var(--warning);
+      color: var(--dark);
+      padding: 6px 15px;
+      border-radius: 20px;
+      font-size: 14px;
+      font-weight: 600;
+      margin-top: 8px;
+    }
+
+    .form-section {
+      margin-bottom: 30px;
+    }
+
+    .section-title {
+      font-size: 18px;
+      font-weight: 600;
+      margin-bottom: 20px;
+      color: var(--primary);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 20px;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    .form-group label {
+      display: block;
+      font-weight: 600;
+      margin-bottom: 8px;
+      color: var(--dark);
+    }
+
+    .form-group input {
+      width: 100%;
+      padding: 12px;
+      border: 2px solid var(--border);
+      border-radius: 8px;
+      font-size: 16px;
+      transition: border-color 0.3s;
+    }
+
+    .form-group input:focus {
+      border-color: var(--primary);
+      outline: none;
+    }
+
+    .form-group input.error {
+      border-color: var(--danger);
+    }
+
+    .error-text {
+      color: var(--danger);
+      font-size: 12px;
+      margin-top: 5px;
+      display: none;
+    }
+
+    .btn {
+      padding: 15px 25px;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      color: white;
+    }
+
+    .btn-primary:hover:not(:disabled) {
+      background: var(--primary-light);
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(0,74,173,0.3);
+    }
+
+    .btn:disabled {
+      background: var(--gray);
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .message {
+      padding: 15px;
+      border-radius: 8px;
+      margin: 15px 0;
+      text-align: center;
+      font-weight: 600;
+    }
+
+    .message.success {
+      background: #d4edda;
+      color: #155724;
+      border: 1px solid #c3e6cb;
+    }
+
+    .message.error {
+      background: #f8d7da;
+      color: #721c24;
+      border: 1px solid #f5c6cb;
+    }
+
+    .message.info {
+      background: #cce7ff;
+      color: #004085;
+      border: 1px solid #b3d7ff;
+    }
+
+    .loading {
+      display: inline-block;
+      width: 20px;
+      height: 20px;
+      border: 3px solid #f3f3f3;
+      border-top: 3px solid var(--primary);
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    /* Mobile Responsive */
+    @media (max-width: 768px) {
+      .mobile-menu-btn {
+        display: block;
+      }
+
+      nav {
+        position: fixed;
+        top: 70px;
+        left: 0;
+        height: calc(100vh - 70px);
+        transform: translateX(-100%);
+        z-index: 99;
+        background: white;
+      }
+
+      nav.active {
+        transform: translateX(0);
+      }
+
+      .profile-header {
+        flex-direction: column;
+        text-align: center;
+      }
+
+      .form-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="header-left">
+      <h1>Academic Writing Hub</h1>
+      <div class="slogan">Empowering Your Potential Through Academic Writing</div>
+    </div>
+    <button class="mobile-menu-btn" id="mobileMenuBtn">☰</button>
+  </header>
+
+  <div class="container">
+    <nav id="sidebar">
+      <a href="dashboard.html">🏠 Dashboard</a>
+      <a href="membership.html">💳 Membership</a>
+      <a href="tasks.html">📋 Tasks</a>
+      <a href="withdraw.html">💵 Withdraw</a>
+      <a href="referrals.html">👥 Referrals</a>
+      <a href="profile.html" class="active">🙍 Profile</a>
+      <a href="support.html">📩 Support</a>
+      <a href="#" id="logoutBtn">🚪 Logout</a>
+    </nav>
+
+    <main>
+      <div class="page-header">
+        <h1>🙍 My Profile</h1>
+        <p>Manage your personal information and security settings</p>
+      </div>
+
+      <div id="messageContainer"></div>
+
+      <div class="profile-card">
+        <div class="profile-header">
+          <div class="profile-avatar" id="userAvatar">U</div>
+          <div class="profile-info">
+            <h2 id="userFullName">Loading...</h2>
+            <p id="userEmail">Loading...</p>
+            <div class="membership-badge" id="userMembership">Loading...</div>
+          </div>
+        </div>
+
+        <div class="form-section">
+          <h3 class="section-title">👤 Personal Information</h3>
+          <div class="form-grid">
+            <div class="form-group">
+              <label for="fullName">Full Name</label>
+              <input type="text" id="fullName" placeholder="Enter your full name">
+              <div class="error-text" id="fullNameError">Please enter your full name</div>
+            </div>
+            <div class="form-group">
+              <label for="email">Email Address</label>
+              <input type="email" id="email" placeholder="Enter your email">
+              <div class="error-text" id="emailError">Please enter a valid email</div>
+            </div>
+            <div class="form-group">
+              <label for="phone">Phone Number</label>
+              <input type="text" id="phone" placeholder="Enter your phone number">
+              <div class="error-text" id="phoneError">Please enter a valid phone number</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-section">
+          <h3 class="section-title">🔐 Login Password</h3>
+          <div class="form-grid">
+            <div class="form-group">
+              <label for="oldLoginPassword">Current Password</label>
+              <input type="password" id="oldLoginPassword" placeholder="Enter current password">
+              <div class="error-text" id="oldLoginError">Current password is required</div>
+            </div>
+            <div class="form-group">
+              <label for="newLoginPassword">New Password</label>
+              <input type="password" id="newLoginPassword" placeholder="Enter new password">
+              <div class="error-text" id="newLoginError">Password must be at least 6 characters</div>
+            </div>
+            <div class="form-group">
+              <label for="confirmLoginPassword">Confirm New Password</label>
+              <input type="password" id="confirmLoginPassword" placeholder="Confirm new password">
+              <div class="error-text" id="confirmLoginError">Passwords do not match</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-section">
+          <h3 class="section-title">💰 Withdrawal Password</h3>
+          <div class="form-grid">
+            <div class="form-group">
+              <label for="oldWithdrawPassword">Current Password</label>
+              <input type="password" id="oldWithdrawPassword" placeholder="Enter current password">
+              <div class="error-text" id="oldWithdrawError">Current password is required</div>
+            </div>
+            <div class="form-group">
+              <label for="newWithdrawPassword">New Password (6 characters)</label>
+              <input type="password" id="newWithdrawPassword" placeholder="Enter new password" maxlength="6">
+              <div class="error-text" id="newWithdrawError">Password must be exactly 6 characters</div>
+            </div>
+            <div class="form-group">
+              <label for="confirmWithdrawPassword">Confirm New Password</label>
+              <input type="password" id="confirmWithdrawPassword" placeholder="Confirm new password" maxlength="6">
+              <div class="error-text" id="confirmWithdrawError">Passwords do not match</div>
+            </div>
+          </div>
+        </div>
+
+        <button class="btn btn-primary" onclick="updateProfile()" id="updateBtn">
+          💾 Update Profile
+        </button>
+      </div>
+    </main>
+  </div>
+
+  <!-- Supabase CDN (keep this one) -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+
+<script>
+(function () {
+  // ====== CONFIG - put your real anon key here ======
+  const SUPABASE_URL = "https://lfrjtklkbppihaaiuxef.supabase.co";
+  const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imxmcmp0a2xrYnBwaWhhYWl1eGVmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTkwNTI5MzMsImV4cCI6MjA3NDYyODkzM30.2FVqnt5daF2Tw-RmVBwOGgt4GuIQQSkG8IUZt30QxIM";
+
+  // Create client (safe check in case the CDN didn't load)
+  const supabase = (window.supabase && typeof window.supabase.createClient === 'function')
+    ? window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY)
+    : null;
+
+  // tiny helper
+  const $ = id => document.getElementById(id);
+
+  // message UI helper
+  function showMessage(msg, type = "info") {
+    const container = $("messageContainer");
+    if (!container) { console.log(msg); return; }
+    container.innerHTML = '<div class="message ' + type + '">' + msg + '</div>';
+    if (type === "success" || type === "info") {
+      setTimeout(() => { if (container) container.innerHTML = ""; }, 5000);
+    }
+  }
+
+  // simple show/hide error helper for small form messages
+  function showError(el, text) { if (!el) return; el.textContent = text; el.style.display = "block"; }
+  function hideError(el) { if (!el) return; el.style.display = "none"; }
+
+  // Form validation functions (same ids as your HTML)
+  function validateEmail() {
+    const emailEl = $("email");
+    const err = $("emailError");
+    if (!emailEl) return true;
+    const value = (emailEl.value || "").trim();
+    if (!value) { showError(err, "Email is required"); return false; }
+    const rx = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!rx.test(value)) { showError(err, "Please enter a valid email"); return false; }
+    hideError(err);
+    return true;
+  }
+  function validateLoginPassword() {
+    const pw = $("newLoginPassword");
+    const err = $("newLoginError");
+    if (!pw) return true;
+    const v = pw.value || "";
+    if (v && v.length < 6) { showError(err, "Password must be at least 6 characters"); return false; }
+    hideError(err);
+    return true;
+  }
+  function validateLoginPasswordMatch() {
+    const a = $("newLoginPassword"), b = $("confirmLoginPassword"), err = $("confirmLoginError");
+    if (!a || !b) return true;
+    if (a.value && b.value && a.value !== b.value) { showError(err, "Passwords do not match"); return false; }
+    hideError(err);
+    return true;
+  }
+  function validateWithdrawPassword() {
+    const pw = $("newWithdrawPassword"), err = $("newWithdrawError");
+    if (!pw) return true;
+    const v = pw.value || "";
+    if (v && v.length !== 6) { showError(err, "Withdrawal password must be exactly 6 characters"); return false; }
+    hideError(err);
+    return true;
+  }
+  function validateWithdrawPasswordMatch() {
+    const a = $("newWithdrawPassword"), b = $("confirmWithdrawPassword"), err = $("confirmWithdrawError");
+    if (!a || !b) return true;
+    if (a.value && b.value && a.value !== b.value) { showError(err, "Passwords do not match"); return false; }
+    hideError(err);
+    return true;
+  }
+
+  function setupFormValidation() {
+    $("email")?.addEventListener("blur", validateEmail);
+    $("newLoginPassword")?.addEventListener("input", validateLoginPassword);
+    $("confirmLoginPassword")?.addEventListener("input", validateLoginPasswordMatch);
+    $("newWithdrawPassword")?.addEventListener("input", validateWithdrawPassword);
+    $("confirmWithdrawPassword")?.addEventListener("input", validateWithdrawPasswordMatch);
+  }
+
+  // state
+  let currentUser = null;
+  let userProfile = null;
+
+  // Load profile from Supabase
+  async function loadProfile() {
+    if (!supabase) { showMessage("Supabase not initialized", "error"); return; }
+    try {
+      showMessage("Loading your profile...", "info");
+      const { data: profile, error } = await supabase
+        .from("profiles")
+        .select("*")
+        .eq("id", currentUser.id)
+        .single();
+
+      if (error) throw error;
+      userProfile = profile;
+      updateProfileUI(profile);
+      showMessage("Profile loaded", "success");
+    } catch (err) {
+      console.error("Profile load error:", err);
+      showMessage("Failed to load profile", "error");
+    }
+  }
+
+  // Render profile values into the page (keeps your CSS/HTML unchanged)
+  function updateProfileUI(profile) {
+    if (!profile) return;
+    $("userFullName").textContent = profile.full_name || "User";
+    $("userEmail").textContent = profile.email || "No email";
+    $("userMembership").textContent = profile.role === "premium" ? "Premium" : (profile.role === "pro" ? "Pro" : "Starter");
+    $("userAvatar").textContent = (profile.full_name || "U").charAt(0).toUpperCase();
+
+    $("fullName").value = profile.full_name || "";
+    $("email").value = profile.email || "";
+    $("phone").value = profile.phone || "";
+
+    // Masked placeholders for current passwords
+    $("oldLoginPassword").value = "••••••••";
+    $("oldWithdrawPassword").value = "••••••";
+
+    $("newLoginPassword").value = "";
+    $("confirmLoginPassword").value = "";
+    $("newWithdrawPassword").value = "";
+    $("confirmWithdrawPassword").value = "";
+
+    setupFormValidation();
+  }
+
+  // The function called by your button: make it global so onclick="updateProfile()" finds it
+  async function updateProfile() {
+    if (!supabase) { showMessage("Supabase not initialized", "error"); return; }
+
+    const fullName = ($("fullName").value || "").trim();
+    const email = ($("email").value || "").trim();
+    const phone = ($("phone").value || "").trim();
+
+    // Basic required validation
+    if (!fullName || !email) {
+      showMessage("Please fill in the required fields (name & email)", "error");
+      return;
+    }
+    if (!validateEmail()) return;
+    if (!validateLoginPassword() || !validateLoginPasswordMatch()) return;
+    if (!validateWithdrawPassword() || !validateWithdrawPasswordMatch()) return;
+
+    // prepare updates
+    const updates = {
+      full_name: fullName,
+      email: email,
+      phone: phone,
+      updated_at: new Date().toISOString()
+    };
+
+    // login password change
+    const oldLogin = ($("oldLoginPassword").value || "");
+    const newLogin = ($("newLoginPassword").value || "");
+    if (newLogin && newLogin !== "••••••••") {
+      // if user entered an old password (not the mask) verify against stored (if available)
+      if (oldLogin !== "••••••••" && userProfile && userProfile.login_password && oldLogin !== userProfile.login_password) {
+        showMessage("Current login password is incorrect", "error");
+        return;
+      }
+      updates.login_password = newLogin;
+    }
+
+    // withdraw password change
+    const oldWithdraw = ($("oldWithdrawPassword").value || "");
+    const newWithdraw = ($("newWithdrawPassword").value || "");
+    if (newWithdraw && newWithdraw !== "••••••") {
+      if (oldWithdraw !== "••••••" && userProfile && userProfile.withdraw_password && oldWithdraw !== userProfile.withdraw_password) {
+        showMessage("Current withdrawal password is incorrect", "error");
+        return;
+      }
+      updates.withdraw_password = newWithdraw;
+    }
+
+    try {
+      $("updateBtn").disabled = true;
+      $("updateBtn").innerHTML = '<span class="loading"></span> Updating...';
+
+      const { error } = await supabase
+        .from("profiles")
+        .update(updates)
+        .eq("id", currentUser.id);
+
+      if (error) throw error;
+
+      // merge local profile state
+      userProfile = Object.assign({}, userProfile, updates);
+      updateProfileUI(userProfile);
+
+      showMessage("Profile updated successfully", "success");
+    } catch (err) {
+      console.error("Profile update error:", err);
+      showMessage("Failed to update profile: " + (err.message || err), "error");
+    } finally {
+      $("updateBtn").disabled = false;
+      $("updateBtn").innerHTML = '💾 Update Profile';
+    }
+  }
+
+  // Expose the function so inline onclick finds it
+  window.updateProfile = updateProfile;
+
+  // Auth check and initialization
+  async function checkAuth() {
+    if (!supabase) { showMessage("Supabase not initialized", "error"); return; }
+    try {
+      const { data: { session }, error } = await supabase.auth.getSession();
+      if (error) { console.error(error); }
+      if (!session) {
+        // user not logged in -> redirect to login
+        window.location.href = "login.html";
+        return;
+      }
+      currentUser = session.user;
+      await loadProfile();
+    } catch (err) {
+      console.error("Auth check failed:", err);
+      showMessage("Auth error", "error");
+    }
+  }
+
+  // Hook logout and button click in case your HTML doesn't rely on inline onclick
+  document.addEventListener("DOMContentLoaded", function () {
+    $("updateBtn")?.addEventListener("click", updateProfile);
+    $("logoutBtn")?.addEventListener("click", async function (e) {
+      e.preventDefault();
+      if (!supabase) return;
+      await supabase.auth.signOut();
+      window.location.href = "login.html";
+    });
+
+    // Start auth check (works even if DOMContentLoaded already fired)
+    checkAuth();
+  });
+
+  // Also attempt immediate init if DOM already ready (avoids timing issues)
+  if (document.readyState !== "loading") {
+    checkAuth();
+  }
+
+})(); // end IIFE
+</script>
+</body>
+</html>

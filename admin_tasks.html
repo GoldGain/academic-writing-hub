@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Task Review - Academic Writing Hub</title>
+  <style>
+    :root {
+      --primary: #004aad;
+      --primary-light: #3a6fc8;
+      --secondary: #ff6b35;
+      --success: #28a745;
+      --warning: #ffc107;
+      --danger: #dc3545;
+      --light: #f8f9fa;
+      --dark: #343a40;
+      --gray: #6c757d;
+      --border: #e9ecef;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif; background: linear-gradient(135deg, #f4f6f9 0%, #e9ecef 100%); color: #333; line-height: 1.6; }
+    header { background: var(--primary); color: #fff; padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 15px rgba(0,0,0,0.1); position: sticky; top: 0; z-index: 100; }
+    .header-left h1 { margin: 0; font-size: 22px; font-weight: 700; }
+    .container { display: flex; min-height: calc(100vh - 70px); }
+    nav { width: 260px; background: #fff; border-right: 1px solid var(--border); padding: 20px 0; }
+    nav a { padding: 15px 25px; text-decoration: none; color: var(--dark); display: flex; align-items: center; gap: 12px; transition: all 0.3s; border-left: 3px solid transparent; }
+    nav a:hover { background: var(--primary); color: #fff; }
+    nav a.active { background: var(--light); color: var(--primary); border-left-color: var(--primary); font-weight: 600; }
+    main { flex: 1; padding: 25px; overflow-y: auto; }
+    .page-header { background: linear-gradient(135deg, var(--primary), var(--primary-light)); color: white; padding: 25px; border-radius: 16px; box-shadow: 0 8px 25px rgba(0,74,173,0.15); margin-bottom: 30px; }
+    .submission-card { background: white; border-radius: 12px; padding: 25px; box-shadow: 0 4px 15px rgba(0,0,0,0.08); margin-bottom: 20px; border-left: 4px solid var(--warning); }
+    .submission-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 15px; }
+    .task-title { font-size: 20px; font-weight: 700; color: var(--primary); margin-bottom: 5px; }
+    .user-info { color: var(--gray); font-size: 14px; margin-bottom: 8px; }
+    .user-contact { background: #f8f9fa; padding: 10px; border-radius: 6px; border-left: 3px solid var(--primary); }
+    .reward-amount { font-size: 24px; font-weight: 800; color: var(--success); text-align: right; }
+    .submission-content { background: var(--light); padding: 20px; border-radius: 8px; margin: 15px 0; white-space: pre-wrap; font-size: 14px; line-height: 1.5; }
+    .admin-actions { display: flex; gap: 10px; margin-top: 20px; }
+    .btn { padding: 12px 24px; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; transition: all 0.3s ease; }
+    .btn-success { background: var(--success); color: white; }
+    .btn-success:hover { background: #218838; }
+    .btn-danger { background: var(--danger); color: white; }
+    .btn-danger:hover { background: #c82333; }
+    .btn-warning { background: var(--warning); color: var(--dark); }
+    .reject-form { margin-top: 15px; padding: 15px; background: #fff3cd; border-radius: 8px; display: none; }
+    .reject-form textarea { width: 100%; height: 100px; padding: 12px; border: 2px solid var(--border); border-radius: 8px; font-size: 14px; resize: vertical; margin-bottom: 10px; }
+    .message { padding: 15px; border-radius: 8px; margin: 15px 0; text-align: center; font-weight: 600; }
+    .message.success { background: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+    .message.error { background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+    .loading { display: inline-block; width: 20px; height: 20px; border: 3px solid #f3f3f3; border-top: 3px solid var(--primary); border-radius: 50%; animation: spin 1s linear infinite; }
+    @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+    .no-submissions { text-align: center; padding: 60px 20px; color: var(--gray); }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="header-left">
+      <h1>Academic Writing Hub - Admin</h1>
+      <div class="slogan">Task Review Panel</div>
+    </div>
+  </header>
+
+  <div class="container">
+    <nav>
+      <a href="admin_tasks.html" class="active">📋 Review Tasks</a>
+      <a href="dashboard.html">🏠 User Dashboard</a>
+      <a href="#" id="logoutBtn">🚪 Logout</a>
+    </nav>
+
+    <main>
+      <div class="page-header">
+        <h1>👑 Admin Task Review</h1>
+        <p>Review and approve/reject submitted tasks. Approvals will automatically reward users.</p>
+      </div>
+
+      <div id="messageContainer"></div>
+      <div id="submissionsContainer">
+        <div class="no-submissions">
+          <h3>📭 Loading submissions...</h3>
+          <p><span class="loading"></span> Please wait</p>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script>
+    // Supabase configuration
+    const SUPABASE_URL = "https://lfrjtklkbppihaaiuxef.supabase.co";
+    const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imxmcmp0a2xrYnBwaWhhYWl1eGVmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTkwNTI5MzMsImV4cCI6MjA3NDYyODkzM30.2FVqnt5daF2Tw-RmVBwOGgt4GuIQQSkG8IUZt30QxIM";
+
+    // Initialize Supabase client
+    let supabaseClient;
+    try {
+      supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+      console.log('Supabase client initialized successfully');
+    } catch (error) {
+      console.error('Failed to initialize Supabase client:', error);
+    }
+
+    let currentAdmin = null;
+    let allTasks = [];
+    let allUsers = {};
+
+    // Check admin authentication
+    async function checkAuth() {
+      if (!supabaseClient) {
+        showMessage('Error: Application not initialized', 'error');
+        return;
+      }
+
+      try {
+        const { data: { session }, error } = await supabaseClient.auth.getSession();
+        
+        if (!session || error) {
+          window.location.href = "login.html";
+          return;
+        }
+
+        currentAdmin = session.user;
+        console.log('Admin authenticated:', currentAdmin.email);
+        await loadAllData();
+
+      } catch (error) {
+        console.error('Auth error:', error);
+        window.location.href = "login.html";
+      }
+    }
+
+    // Load all data separately
+    async function loadAllData() {
+      try {
+        // Load all tasks
+        const { data: tasks, error: tasksError } = await supabaseClient
+          .from('tasks')
+          .select('*')
+          .eq('status', 'active');
+
+        if (tasksError) throw tasksError;
+        allTasks = tasks || [];
+
+        // Load all submitted user_tasks
+        const { data: submissions, error: submissionsError } = await supabaseClient
+          .from('user_tasks')
+          .select('*')
+          .eq('status', 'submitted')
+          .order('submitted_at', { ascending: true });
+
+        if (submissionsError) throw submissionsError;
+
+        // Enhanced user data loading with better error handling
+        const userIds = [...new Set(submissions.map(sub => sub.user_id))];
+        
+        for (const userId of userIds) {
+          try {
+            // Get user profile data
+            const { data: userProfile, error: userError } = await supabaseClient
+              .from('profiles')
+              .select('*')
+              .eq('id', userId)
+              .single();
+
+            if (!userError && userProfile) {
+              allUsers[userId] = userProfile;
+            } else {
+              // If profile not found, try to get auth user data
+              const { data: authData, error: authError } = await supabaseClient.auth.admin.getUserById(userId);
+              
+              if (!authError && authData) {
+                allUsers[userId] = {
+                  id: userId,
+                  full_name: 'User',
+                  email: authData.user.email || 'No email',
+                  phone: 'Not provided',
+                  ...userProfile
+                };
+              } else {
+                // Fallback user data
+                allUsers[userId] = {
+                  id: userId,
+                  full_name: 'Unknown User',
+                  email: 'Email not found',
+                  phone: 'Phone not found'
+                };
+              }
+            }
+          } catch (error) {
+            console.error('Error loading user data for:', userId, error);
+            allUsers[userId] = {
+              id: userId,
+              full_name: 'Error Loading User',
+              email: 'Check console',
+              phone: 'N/A'
+            };
+          }
+        }
+
+        renderSubmissions(submissions);
+
+      } catch (error) {
+        console.error('Error loading data:', error);
+        showMessage('Failed to load submissions: ' + error.message, 'error');
+      }
+    }
+
+    // Render submissions with enhanced user info display
+    function renderSubmissions(submissions) {
+      const container = document.getElementById('submissionsContainer');
+      
+      if (!submissions || submissions.length === 0) {
+        container.innerHTML = 
+          '<div class="no-submissions">' +
+            '<h3>🎉 No Submissions to Review</h3>' +
+            '<p>All caught up! No tasks are waiting for review.</p>' +
+          '</div>';
+        return;
+      }
+
+      container.innerHTML = submissions.map(function(submission) {
+        const task = allTasks.find(t => t.id === submission.task_id);
+        const user = allUsers[submission.user_id];
+
+        if (!task) {
+          return '<div class="submission-card">' +
+            '<div class="message error">Task not found (ID: ' + submission.task_id + ')</div>' +
+          '</div>';
+        }
+
+        return '<div class="submission-card" id="submission-' + submission.id + '">' +
+          '<div class="submission-header">' +
+            '<div style="flex: 1;">' +
+              '<div class="task-title">' + (task.title || 'No Title') + '</div>' +
+              '<div class="user-info">' +
+                '<strong>User:</strong> ' + (user ? (user.full_name || 'No Name') : 'Unknown User') + ' | ' +
+                '<strong>Submitted:</strong> ' + new Date(submission.submitted_at).toLocaleString() +
+              '</div>' +
+              '<div class="user-info">' +
+                '<strong>Task Type:</strong> ' + formatTaskType(task.task_type) + ' | ' +
+                '<strong>Difficulty:</strong> ' + formatDifficulty(task.difficulty) +
+              '</div>' +
+              '<div class="user-contact">' +
+                '<strong>📧 Email:</strong> ' + (user?.email || 'Not available') + ' | ' +
+                '<strong>📞 Phone:</strong> ' + (user?.phone || 'Not provided') +
+              '</div>' +
+            '</div>' +
+            '<div class="reward-amount">' +
+              'KSh ' + (task.reward_amount || '0') +
+            '</div>' +
+          '</div>' +
+
+          '<div class="submission-content">' +
+            (submission.submission_text || 'No content submitted') +
+          '</div>' +
+
+          '<div class="admin-actions">' +
+            '<button class="btn btn-success" onclick="approveTask(\'' + submission.id + '\', \'' + submission.task_id + '\', \'' + submission.user_id + '\', ' + (task.reward_amount || 0) + ')">' +
+              '✅ Approve & Pay' +
+            '</button>' +
+            '<button class="btn btn-danger" onclick="showRejectForm(\'' + submission.id + '\')">' +
+              '❌ Reject' +
+            '</button>' +
+          '</div>' +
+
+          '<div class="reject-form" id="reject-form-' + submission.id + '">' +
+            '<textarea id="feedback-' + submission.id + '" placeholder="Provide constructive feedback for rejection..."></textarea>' +
+            '<button class="btn btn-warning" onclick="rejectTask(\'' + submission.id + '\')">Submit Rejection</button>' +
+          '</div>' +
+        '</div>';
+      }).join('');
+    }
+
+    // Approve task and reward user
+    async function approveTask(userTaskId, taskId, userId, rewardAmount) {
+      if (!supabaseClient) {
+        showMessage('Error: Database connection failed', 'error');
+        return;
+      }
+
+      try {
+        // Show loading state
+        const button = document.querySelector('#submission-' + userTaskId + ' .btn-success');
+        const originalText = button.innerHTML;
+        button.innerHTML = '<span class="loading"></span> Processing...';
+        button.disabled = true;
+
+        // 1. Update user_task status to approved
+        const { error: taskUpdateError } = await supabaseClient
+          .from('user_tasks')
+          .update({
+            status: 'approved',
+            completed_at: new Date().toISOString(),
+            reward_paid: true,
+            paid_amount: parseFloat(rewardAmount),
+            admin_reviewed_at: new Date().toISOString(),
+            admin_reviewer_id: currentAdmin.id
+          })
+          .eq('id', userTaskId);
+
+        if (taskUpdateError) throw taskUpdateError;
+
+        // 2. Get current user profile to update balance and tasks_completed
+        const { data: userProfile, error: profileError } = await supabaseClient
+          .from('profiles')
+          .select('balance, tasks_completed, total_earnings')
+          .eq('id', userId)
+          .single();
+
+        if (profileError) throw profileError;
+
+        // 3. Update user's profile with new balance and tasks completed
+        const newBalance = (parseFloat(userProfile.balance) || 0) + parseFloat(rewardAmount);
+        const newTasksCompleted = (parseInt(userProfile.tasks_completed) || 0) + 1;
+        const newTotalEarnings = (parseFloat(userProfile.total_earnings) || 0) + parseFloat(rewardAmount);
+
+        const { error: profileUpdateError } = await supabaseClient
+          .from('profiles')
+          .update({
+            balance: newBalance,
+            tasks_completed: newTasksCompleted,
+            total_earnings: newTotalEarnings
+          })
+          .eq('id', userId);
+
+        if (profileUpdateError) throw profileUpdateError;
+
+        // Remove the submission card from view
+        document.getElementById('submission-' + userTaskId).remove();
+
+        showMessage('✅ Task approved! User rewarded KSh ' + rewardAmount + '. Balance updated.', 'success');
+
+        // Check if any submissions left
+        const remainingSubmissions = document.querySelectorAll('.submission-card').length;
+        if (remainingSubmissions === 0) {
+          document.getElementById('submissionsContainer').innerHTML = 
+            '<div class="no-submissions">' +
+              '<h3>🎉 All Caught Up!</h3>' +
+              '<p>No more submissions to review.</p>' +
+            '</div>';
+        }
+
+      } catch (error) {
+        console.error('Approval error:', error);
+        showMessage('❌ Failed to approve task: ' + error.message, 'error');
+        
+        // Reset button
+        const button = document.querySelector('#submission-' + userTaskId + ' .btn-success');
+        button.innerHTML = '✅ Approve & Pay';
+        button.disabled = false;
+      }
+    }
+
+    // Show reject form
+    function showRejectForm(userTaskId) {
+      const form = document.getElementById('reject-form-' + userTaskId);
+      form.style.display = form.style.display === 'block' ? 'none' : 'block';
+    }
+
+    // Reject task with feedback
+    async function rejectTask(userTaskId) {
+      if (!supabaseClient) {
+        showMessage('Error: Database connection failed', 'error');
+        return;
+      }
+
+      const feedback = document.getElementById('feedback-' + userTaskId).value.trim();
+      
+      if (!feedback) {
+        showMessage('Please provide rejection feedback', 'error');
+        return;
+      }
+
+      try {
+        const { error } = await supabaseClient
+          .from('user_tasks')
+          .update({
+            status: 'rejected',
+            admin_feedback: feedback,
+            admin_reviewed_at: new Date().toISOString(),
+            admin_reviewer_id: currentAdmin.id
+          })
+          .eq('id', userTaskId);
+
+        if (error) throw error;
+
+        // Remove the submission card from view
+        document.getElementById('submission-' + userTaskId).remove();
+
+        showMessage('✅ Task rejected with feedback provided', 'success');
+
+        // Check if any submissions left
+        const remainingSubmissions = document.querySelectorAll('.submission-card').length;
+        if (remainingSubmissions === 0) {
+          document.getElementById('submissionsContainer').innerHTML = 
+            '<div class="no-submissions">' +
+              '<h3>🎉 All Caught Up!</h3>' +
+              '<p>No more submissions to review.</p>' +
+            '</div>';
+        }
+
+      } catch (error) {
+        console.error('Rejection error:', error);
+        showMessage('❌ Failed to reject task: ' + error.message, 'error');
+      }
+    }
+
+    // Helper functions
+    function formatTaskType(type) {
+      const types = {
+        'transcription': 'Transcription',
+        'academic_writing': 'Academic Writing',
+        'data_entry': 'Data Entry',
+        'web_design': 'Web Design',
+        'affiliate_marketing': 'Affiliate Marketing',
+        'network_marketing': 'Network Marketing',
+        'online_gaming': 'Online Gaming'
+      };
+      return types[type] || type;
+    }
+
+    function formatDifficulty(difficulty) {
+      if (!difficulty) return 'Unknown';
+      return difficulty.charAt(0).toUpperCase() + difficulty.slice(1);
+    }
+
+    function showMessage(message, type) {
+      const container = document.getElementById('messageContainer');
+      container.innerHTML = '<div class="message ' + type + '">' + message + '</div>';
+      
+      if (type === 'success') {
+        setTimeout(function() {
+          container.innerHTML = '';
+        }, 5000);
+      }
+    }
+
+    // Logout
+    async function handleLogout() {
+      try {
+        const { error } = await supabaseClient.auth.signOut();
+        if (error) throw error;
+        window.location.href = "login.html";
+      } catch (error) {
+        console.error("Logout error:", error);
+      }
+    }
+
+    document.getElementById('logoutBtn').addEventListener('click', function(e) {
+      e.preventDefault();
+      handleLogout();
+    });
+
+    // Start the application
+    checkAuth();
+  </script>
+</body>
+</html>
