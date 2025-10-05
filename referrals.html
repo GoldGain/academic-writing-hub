@@ -286,6 +286,11 @@
       color: #ef6c00;
     }
 
+    .status-upgraded {
+      background: #e3f2fd;
+      color: #1565c0;
+    }
+
     .message {
       padding: 0.8rem 1rem;
       border-radius: 5px;
@@ -405,7 +410,7 @@
 
       <div class="card">
         <h2>🔗 Your Referral Link</h2>
-        <p>Share your unique referral link with friends and earn bonuses when they join!</p>
+        <p>Share your unique referral link with friends and earn bonuses when they upgrade!</p>
         
         <div class="referral-link-container">
           <input type="text" id="referralLink" readonly>
@@ -464,15 +469,16 @@
         
         <div style="margin-top: 1.5rem; padding: 1rem; background: #f0f7ff; border-radius: 5px;">
           <h3 style="color: var(--primary); margin-bottom: 0.5rem;">💡 How It Works</h3>
-          <p><strong>Level 1:</strong> Direct referrals - when someone signs up using your link</p>
-          <p><strong>Level 2:</strong> Referrals of your referrals - when people referred by your referrals sign up others</p>
-          <p><strong>Level 3:</strong> Third-level referrals - extends your earning potential</p>
+          <p><strong>Step 1:</strong> Share your referral link with friends</p>
+          <p><strong>Step 2:</strong> They sign up using your link</p>
+          <p><strong>Step 3:</strong> When they upgrade their membership and admin confirms payment</p>
+          <p><strong>Step 4:</strong> You automatically receive the bonus in your balance!</p>
         </div>
       </div>
 
       <div class="card">
         <h2>👥 Your Referral Team</h2>
-        <p>Track your referrals and their membership status:</p>
+        <p>Track your referrals and their upgrade status:</p>
         
         <div style="overflow-x: auto;">
           <table class="team-table">
@@ -498,8 +504,7 @@
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-  <script>
+<script>
     // Supabase configuration
     const SUPABASE_URL = "https://lfrjtklkbppihaaiuxef.supabase.co";
     const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imxmcmp0a2xrYnBwaWhhYWl1eGVmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTkwNTI5MzMsImV4cCI6MjA3NDYyODkzM30.2FVqnt5daF2Tw-RmVBwOGgt4GuIQQSkG8IUZt30QxIM";
@@ -656,6 +661,7 @@
     // Load referral statistics
     async function loadReferralStats() {
       try {
+        // Get all referrals
         const { data: referrals, error: refError } = await supabaseClient
           .from('profiles')
           .select('id')
@@ -663,7 +669,7 @@
 
         if (refError) throw refError;
 
-        // Try to get actual bonus data if table exists
+        // Get actual paid bonuses from referral_bonus table
         let totalEarnings = 0;
         let pendingEarnings = 0;
         
@@ -695,12 +701,13 @@
       }
     }
 
-    // Load referral team table
+    // Load referral team table - FIXED VERSION
     async function loadReferralTeam() {
       try {
+        // First get all referrals
         const { data: members, error } = await supabaseClient
           .from('profiles')
-          .select('full_name, email, created_at, role')
+          .select('id, full_name, email, created_at, role')
           .eq('referred_by', userProfile.referral_code);
 
         if (error) throw error;
@@ -711,27 +718,67 @@
           return;
         }
 
+        // Get bonus data separately to avoid join errors
+        let bonusData = [];
+        try {
+          const { data: bonuses, error: bonusError } = await supabaseClient
+            .from('referral_bonus')
+            .select('referred_user_id, amount, status')
+            .eq('referrer_id', currentUser.id);
+
+          if (!bonusError && bonuses) {
+            bonusData = bonuses;
+          }
+        } catch (bonusErr) {
+          console.log("Could not load bonus data:", bonusErr);
+        }
+
         let html = '';
-        members.forEach(function(m) {
-          const date = new Date(m.created_at).toLocaleDateString();
-          let membership = "Starter";
-          let bonus = 1000;
+        members.forEach(function(member) {
+          const date = new Date(member.created_at).toLocaleDateString();
+          let membership = "Free";
+          let bonus = 0;
+          let status = "Pending Upgrade";
+          let statusClass = "status-pending";
           
-          if (m.role === "premium") {
+          // Determine membership and potential bonus
+          if (member.role === "premium") {
             membership = "Premium";
             bonus = 3000;
-          } else if (m.role === "pro") {
+            status = "Upgraded";
+            statusClass = "status-upgraded";
+          } else if (member.role === "pro") {
             membership = "Pro";
             bonus = 1800;
+            status = "Upgraded";
+            statusClass = "status-upgraded";
+          } else if (member.role === "starter") {
+            membership = "Starter";
+            bonus = 1000;
+            status = "Upgraded";
+            statusClass = "status-upgraded";
+          }
+
+          // Check if bonus was already paid for this member
+          const memberBonus = bonusData.find(b => b.referred_user_id === member.id);
+          if (memberBonus) {
+            if (memberBonus.status === "paid") {
+              status = "Bonus Paid";
+              statusClass = "status-active";
+              bonus = memberBonus.amount; // Use actual paid amount
+            } else if (memberBonus.status === "pending") {
+              status = "Bonus Pending";
+              statusClass = "status-pending";
+            }
           }
           
           html += `
             <tr>
-              <td>${m.full_name || "User"}</td>
-              <td>${m.email}</td>
+              <td>${member.full_name || "User"}</td>
+              <td>${member.email}</td>
               <td>${date}</td>
               <td>${membership}</td>
-              <td><span class="status-badge status-active">Active</span></td>
+              <td><span class="status-badge ${statusClass}">${status}</span></td>
               <td>KSh ${bonus.toLocaleString()}</td>
             </tr>`;
         });
@@ -740,7 +787,7 @@
       } catch (err) {
         console.error("Team error:", err);
         const body = document.getElementById("teamTableBody");
-        body.innerHTML = '<tr><td colspan="6" style="text-align:center;color:var(--danger);">Error loading referral team</td></tr>';
+        body.innerHTML = '<tr><td colspan="6" style="text-align:center;color:var(--danger);">Error loading referral team: ' + err.message + '</td></tr>';
       }
     }
 
@@ -782,7 +829,7 @@
     // Share on WhatsApp
     function shareOnWhatsApp() {
       const link = document.getElementById("referralLink").value;
-      const msg = "Join Academic Writing Hub and start earning! Use my referral link: " + link;
+      const msg = "Join Academic Writing Hub! Use my referral link to sign up. I'll earn bonuses when you upgrade: " + link;
       window.open("https://wa.me/?text=" + encodeURIComponent(msg), "_blank");
     }
 
@@ -827,7 +874,7 @@
         loadReferralTeam();
       }
     }, 30000);
-  </script>
+</script>
 
 </body>
 </html>
