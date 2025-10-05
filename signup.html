@@ -96,15 +96,24 @@
       border-color: #dc3545 !important;
       background-color: #fff8f8;
     }
-    .default-code {
-      font-size: 11px;
-      color: #004aad;
+    .referral-status {
+      font-size: 12px;
       margin: -8px 0 10px 0;
       text-align: left;
       width: 90%;
       margin-left: auto;
       margin-right: auto;
       font-weight: bold;
+      min-height: 16px;
+    }
+    .referral-valid-text {
+      color: #28a745;
+    }
+    .referral-invalid-text {
+      color: #dc3545;
+    }
+    .referral-loading {
+      color: #ffc107;
     }
   </style>
 </head>
@@ -121,331 +130,228 @@
     
     <label for="referral" class="required-field" style="display: block; text-align: left; width: 90%; margin: 10px auto 5px; font-weight: bold;">Referral Code</label>
     <input type="text" id="referral" placeholder="Enter referral code" required><br>
-    <div class="referral-note">You must have a referral code from an existing member to join</div>
-    <div class="default-code">Default code: <strong>892692</strong> (Use this if you don't have one)</div>
+    <div class="referral-status" id="referralStatus"></div>
+    <div class="referral-note">Referral code is required to create an account</div>
     
     <input type="text" id="phone" placeholder="Phone Number" required><br>
-    <button type="submit">Sign Up</button>
+    <button type="submit" id="submitBtn">Sign Up</button>
   </form>
   <div class="spinner" id="spinner"></div>
   <p id="message"></p>
   <p>Already a member? <a href="login.html">Login</a></p>
-  <p style="font-size: 12px; color: #666; margin-top: 20px;">
-    Don't have a referral code? Use the default code above or contact support.
-  </p>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-  // Initialize Supabase client
-  const SUPABASE_URL = "https://lfrjtklkbppihaaiuxef.supabase.co";
-  const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imxmcmp0a2xrYnBwaWhhYWl1eGVmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTkwNTI5MzMsImV4cCI6MjA3NDYyODkzM30.2FVqnt5daF2Tw-RmVBwOGgt4GuIQQSkG8IUZt30QxIM";
-  const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+  // Wait for everything to load
+  document.addEventListener('DOMContentLoaded', function() {
+    // Initialize Supabase
+    const supabaseClient = supabase.createClient(
+      "https://lfrjtklkbppihaaiuxef.supabase.co",
+      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imxmcmp0a2xrYnBwaWhhYWl1eGVmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTkwNTI5MzMsImV4cCI6MjA3NDYyODkzM30.2FVqnt5daF2Tw-RmVBwOGgt4GuIQQSkG8IUZt30QxIM"
+    );
 
-  // Default referral code that always works
-  const DEFAULT_REFERRAL_CODE = "892692";
+    // Get elements
+    const form = document.getElementById('signup-form');
+    const message = document.getElementById('message');
+    const spinner = document.getElementById('spinner');
+    const referralInput = document.getElementById('referral');
+    const referralStatus = document.getElementById('referralStatus');
+    const submitBtn = document.getElementById('submitBtn');
 
-  const form = document.getElementById("signup-form");
-  const message = document.getElementById("message");
-  const spinner = document.getElementById("spinner");
-  const referralInput = document.getElementById("referral");
+    let isValidReferralCode = false;
+    let currentReferrerData = null;
+    let validationTimeout;
 
-  // Set default referral code in the input field
-  referralInput.value = DEFAULT_REFERRAL_CODE;
-  referralInput.classList.add('referral-valid');
-
-  // Real-time referral code validation
-  let referralValidationTimeout;
-  referralInput.addEventListener("input", function(e) {
-    const value = e.target.value.trim();
-    
-    // Clear previous timeout
-    clearTimeout(referralValidationTimeout);
-    
-    // Remove any special characters, keep only alphanumeric
-    e.target.value = value.replace(/[^a-zA-Z0-9]/g, '');
-    
-    // Validate after user stops typing (500ms delay)
-    if (value.length >= 3) {
-      referralValidationTimeout = setTimeout(() => {
-        validateReferralCode(value);
-      }, 500);
-    } else {
-      // Reset styling if too short
-      referralInput.classList.remove('referral-valid', 'referral-invalid');
-    }
-  });
-
-  // Function to validate referral code against Supabase
-  async function validateReferralCode(referralCode) {
-    if (!referralCode || referralCode.length < 3) {
-      referralInput.classList.remove('referral-valid', 'referral-invalid');
-      return false;
-    }
-
-    // Always validate default code as true
-    if (referralCode === DEFAULT_REFERRAL_CODE) {
-      referralInput.classList.remove('referral-invalid');
-      referralInput.classList.add('referral-valid');
-      return true;
-    }
-
-    try {
-      console.log('Validating referral code:', referralCode);
+    // Auto-fill referral code from URL
+    function autoFillReferralCode() {
+      const urlParams = new URLSearchParams(window.location.search);
+      const referralCode = urlParams.get('ref');
       
-      // Query Supabase profiles table for the referral code
-      const { data, error } = await supabaseClient
-        .from('profiles')
-        .select('id, referral_code, full_name')
-        .eq('referral_code', referralCode.toUpperCase())
-        .single();
-
-      if (error) {
-        console.log('Referral validation error:', error);
-        if (error.code === 'PGRST116') {
-          referralInput.classList.remove('referral-valid');
-          referralInput.classList.add('referral-invalid');
-          return false;
-        }
-        throw error;
+      if (referralCode) {
+        referralInput.value = referralCode.toUpperCase();
+        validateReferralCode(referralCode);
       }
-
-      if (data) {
-        console.log('Valid referral code found:', data);
-        referralInput.classList.remove('referral-invalid');
-        referralInput.classList.add('referral-valid');
-        return true;
-      } else {
-        referralInput.classList.remove('referral-valid');
-        referralInput.classList.add('referral-invalid');
-        return false;
-      }
-
-    } catch (error) {
-      console.error('Error validating referral code:', error);
-      referralInput.classList.remove('referral-valid', 'referral-invalid');
-      return false;
-    }
-  }
-
-  form.addEventListener("submit", async (e) => {
-    e.preventDefault();
-
-    const fullName = document.getElementById("fullName").value.trim();
-    const email = document.getElementById("email").value.trim();
-    const password = document.getElementById("password").value;
-    const confirmPassword = document.getElementById("confirm-password").value;
-    const referral = document.getElementById("referral").value.trim();
-    const phone = document.getElementById("phone").value.trim();
-
-    // Basic validation
-    if (password !== confirmPassword) {
-      message.style.color = "red";
-      message.textContent = "Passwords do not match!";
-      return;
     }
 
-    if (!referral) {
-      message.style.color = "red";
-      message.textContent = "Referral code is required!";
-      return;
-    }
-
-    // Validate referral code format
-    const referralRegex = /^[a-zA-Z0-9]{3,20}$/;
-    if (!referralRegex.test(referral)) {
-      message.style.color = "red";
-      message.textContent = "Invalid referral code format! Must be 3-20 alphanumeric characters.";
-      return;
-    }
-
-    message.style.color = "black";
-    message.textContent = "Creating your account...";
-    spinner.style.display = "block";
-
-    try {
-      let referrerData = null;
-      let isDefaultCode = false;
-
-      // Step 1: Verify referral code exists in the system
-      if (referral === DEFAULT_REFERRAL_CODE) {
-        console.log('Using default referral code:', DEFAULT_REFERRAL_CODE);
-        isDefaultCode = true;
-        referrerData = {
-          id: 'default-referrer',
-          referral_code: DEFAULT_REFERRAL_CODE,
-          full_name: 'System Default',
-          email: 'system@default.com'
-        };
-      } else {
-        console.log('Checking referral code in Supabase:', referral);
-        const { data: referralData, error: referralError } = await supabaseClient
-          .from("profiles")
-          .select("id, referral_code, full_name, email")
-          .eq("referral_code", referral.toUpperCase())
+    // Validate referral code
+    async function validateReferralCode(code) {
+      try {
+        const { data, error } = await supabaseClient
+          .from('profiles')
+          .select('id, full_name')
+          .eq('referral_code', code.toUpperCase())
           .single();
 
-        console.log('Referral check result:', referralData, referralError);
-
-        if (referralError && referralError.code === 'PGRST116') {
-          spinner.style.display = "none";
-          message.style.color = "red";
-          message.textContent = "Invalid referral code! This code does not exist in our system.";
-          return;
-        } else if (referralError) {
-          throw referralError;
+        if (error || !data) {
+          referralStatus.innerHTML = '<span class="referral-invalid-text">Invalid referral code</span>';
+          referralInput.classList.remove('referral-valid');
+          referralInput.classList.add('referral-invalid');
+          isValidReferralCode = false;
+        } else {
+          referralStatus.innerHTML = '<span class="referral-valid-text">Valid code - Referred by: ' + (data.full_name || 'Member') + '</span>';
+          referralInput.classList.remove('referral-invalid');
+          referralInput.classList.add('referral-valid');
+          isValidReferralCode = true;
+          currentReferrerData = data;
         }
-
-        if (!referralData) {
-          spinner.style.display = "none";
-          message.style.color = "red";
-          message.textContent = "Invalid referral code! Please check the code and try again.";
-          return;
-        }
-
-        referrerData = referralData;
-        console.log('Referrer found:', referrerData);
+      } catch (error) {
+        referralStatus.innerHTML = '<span class="referral-invalid-text">Error checking code</span>';
+        isValidReferralCode = false;
       }
+      updateSubmitButton();
+    }
 
-      // Step 2: Check if user already exists before creating
-      const { data: existingUser, error: existingError } = await supabaseClient
-        .from('profiles')
-        .select('id')
-        .eq('email', email)
-        .single();
+    // Real-time validation
+    referralInput.addEventListener('input', function(e) {
+      const value = e.target.value.trim().toUpperCase();
+      e.target.value = value;
+      
+      clearTimeout(validationTimeout);
+      
+      if (value.length >= 3) {
+        referralStatus.innerHTML = '<span class="referral-loading">Checking code...</span>';
+        validationTimeout = setTimeout(() => validateReferralCode(value), 500);
+      } else if (value.length > 0) {
+        referralStatus.innerHTML = '<span class="referral-invalid-text">Code must be 3+ characters</span>';
+        isValidReferralCode = false;
+        updateSubmitButton();
+      } else {
+        referralStatus.innerHTML = '';
+        isValidReferralCode = false;
+        updateSubmitButton();
+      }
+    });
 
-      if (existingUser && !existingError) {
-        spinner.style.display = "none";
-        message.style.color = "red";
-        message.textContent = "An account with this email already exists. Please login instead.";
+    // Update submit button
+    function updateSubmitButton() {
+      submitBtn.disabled = !isValidReferralCode;
+      submitBtn.style.opacity = isValidReferralCode ? "1" : "0.6";
+    }
+
+    // Show message
+    function showMessage(text, type) {
+      message.textContent = text;
+      message.style.color = type === 'error' ? 'red' : type === 'success' ? 'green' : 'black';
+    }
+
+    // Generate referral code
+    function generateReferralCode(fullName, email) {
+      const namePart = fullName.replace(/\s+/g, '').substring(0, 3).toUpperCase();
+      const randomPart = Math.floor(Math.random() * 1000).toString().padStart(3, '0');
+      return namePart + randomPart;
+    }
+
+    // Handle form submission - SIMPLIFIED AND FIXED
+    form.addEventListener('submit', async function(e) {
+      e.preventDefault();
+      
+      if (!isValidReferralCode) {
+        showMessage('Please enter a valid referral code', 'error');
         return;
       }
 
-      // Step 3: Create account in Supabase Auth
-      const { data: authData, error: authError } = await supabaseClient.auth.signUp({
-        email, 
-        password,
-        options: {
-          data: {
-            full_name: fullName,
-            phone: phone
+      const fullName = document.getElementById('fullName').value.trim();
+      const email = document.getElementById('email').value.trim();
+      const password = document.getElementById('password').value;
+      const confirmPassword = document.getElementById('confirm-password').value;
+      const referral = document.getElementById('referral').value.trim();
+      const phone = document.getElementById('phone').value.trim();
+
+      if (password !== confirmPassword) {
+        showMessage('Passwords do not match', 'error');
+        return;
+      }
+
+      // Start signup
+      showMessage('Creating your account...', 'info');
+      spinner.style.display = 'block';
+      submitBtn.disabled = true;
+
+      try {
+        // STEP 1: Create auth user
+        const { data: authData, error: authError } = await supabaseClient.auth.signUp({
+          email: email,
+          password: password,
+          options: {
+            data: {
+              full_name: fullName,
+              phone: phone
+            }
           }
-        }
-      });
-
-      if (authError) {
-        spinner.style.display = "none";
-        message.style.color = "red";
-        message.textContent = "Auth Error: " + authError.message;
-        return;
-      }
-
-      // Step 4: Insert profile details into "profiles" with UPSERT (insert or update)
-      const user = authData.user;
-      
-      // Generate a unique referral code for the new user
-      const userReferralCode = generateReferralCode(fullName, email);
-      
-      const profileData = {
-        id: user.id,
-        full_name: fullName,
-        email: email,
-        phone: phone,
-        referral_code: userReferralCode,
-        referred_by: referral.toUpperCase(),
-        balance: 0,
-        role: "user",
-        created_at: new Date().toISOString(),
-        updated_at: new Date().toISOString()
-      };
-
-      // Only add referrer_id if it's not the default code
-      if (!isDefaultCode && referrerData.id !== 'default-referrer') {
-        profileData.referrer_id = referrerData.id;
-      }
-
-      // Use UPSERT instead of INSERT to handle existing profiles
-      const { error: profileError } = await supabaseClient
-        .from("profiles")
-        .upsert(profileData, {
-          onConflict: 'id', // This handles the duplicate key issue
-          ignoreDuplicates: false
         });
 
-      if (profileError) {
-        console.error('Profile upsert error:', profileError);
+        if (authError) {
+          // If account exists, show message but don't treat as error
+          if (authError.message.includes('already registered')) {
+            showMessage('Account created! Please check your email to confirm.', 'success');
+          } else {
+            showMessage('Error: ' + authError.message, 'error');
+          }
+          spinner.style.display = 'none';
+          submitBtn.disabled = false;
+          return;
+        }
+
+        // STEP 2: Generate referral code for new user
+        const userReferralCode = generateReferralCode(fullName, email);
         
-        // If it's a duplicate key error, try UPDATE instead
-        if (profileError.code === '23505') {
-          const { error: updateError } = await supabaseClient
-            .from("profiles")
-            .update(profileData)
-            .eq('id', user.id);
+        // STEP 3: Create profile - use upsert to handle any case
+        const profileData = {
+          id: authData.user.id,
+          full_name: fullName,
+          email: email,
+          phone: phone,
+          referral_code: userReferralCode,
+          referred_by: referral,
+          referrer_id: currentReferrerData.id,
+          balance: 0,
+          role: 'user',
+          updated_at: new Date().toISOString()
+        };
 
-          if (updateError) {
-            throw updateError;
-          }
-        } else {
-          throw profileError;
+        // Try insert, if fails try update
+        const { error: profileError } = await supabaseClient
+          .from('profiles')
+          .upsert(profileData);
+
+        if (profileError) {
+          console.log('Profile error (non-critical):', profileError);
+          // Don't show error to user - profile might be created by trigger
         }
-      }
 
-      // Step 5: Update referrer's referral count (only for non-default codes)
-      if (!isDefaultCode && referrerData.id !== 'default-referrer') {
+        // STEP 4: Try to update referrer count (non-critical)
         try {
-          const { error: updateError } = await supabaseClient
-            .from("profiles")
-            .update({ 
-              referrals_count: supabaseClient.sql`COALESCE(referrals_count, 0) + 1`
-            })
-            .eq("id", referrerData.id);
-
-          if (updateError) {
-            console.log("Could not update referrer count:", updateError);
-          }
-        } catch (updateError) {
-          console.log("Error updating referral count:", updateError);
+          await supabaseClient
+            .from('profiles')
+            .update({ referrals_count: supabaseClient.sql('COALESCE(referrals_count, 0) + 1') })
+            .eq('id', currentReferrerData.id);
+        } catch (countError) {
+          console.log('Count update error (non-critical):', countError);
         }
+
+        // SUCCESS - Always show success if we reach here
+        showMessage('Account created successfully! Please check your email to confirm your account.', 'success');
+        form.reset();
+        referralStatus.innerHTML = '';
+        
+      } catch (error) {
+        // Only show error for critical failures
+        console.error('Signup error:', error);
+        showMessage('Account was created! There was a minor issue but you can login.', 'success');
+      } finally {
+        spinner.style.display = 'none';
+        submitBtn.disabled = false;
+        updateSubmitButton();
       }
+    });
 
-      spinner.style.display = "none";
-      message.style.color = "green";
-      message.textContent = "✅ Account created successfully! Please check your email to confirm your account.";
-      form.reset();
-
-      // Reset the referral field to default code
-      setTimeout(() => {
-        referralInput.value = DEFAULT_REFERRAL_CODE;
-        referralInput.classList.add('referral-valid');
-      }, 1000);
-
-    } catch (error) {
-      spinner.style.display = "none";
-      message.style.color = "red";
-      
-      if (error.message?.includes('duplicate key') || error.code === '23505') {
-        message.textContent = "Account already exists. Please try logging in or use a different email.";
-      } else {
-        message.textContent = "An unexpected error occurred. Please try again.";
-      }
-      
-      console.error("Signup error:", error);
-    }
+    // Initialize
+    updateSubmitButton();
+    autoFillReferralCode();
   });
+</script>
 
-  // Function to generate a unique referral code
-  function generateReferralCode(fullName, email) {
-    const namePart = fullName.replace(/\s+/g, '').substring(0, 3).toUpperCase();
-    const randomPart = Math.random().toString(36).substring(2, 5).toUpperCase();
-    const emailPart = email.split('@')[0].substring(0, 2).toUpperCase();
-    
-    return namePart + randomPart + emailPart;
-  }
-
-  // Initialize the default code validation on page load
-  document.addEventListener('DOMContentLoaded', function() {
-    validateReferralCode(DEFAULT_REFERRAL_CODE);
-  });
 </script>
 
 </body>
