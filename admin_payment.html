@@ -144,7 +144,7 @@
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script>
+<script>
     // Supabase configuration
     const SUPABASE_URL = "https://lfrjtklkbppihaaiuxef.supabase.co";
     const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imxmcmp0a2xrYnBwaWhhYWl1eGVmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTkwNTI5MzMsImV4cCI6MjA3NDYyODkzM30.2FVqnt5daF2Tw-RmVBwOGgt4GuIQQSkG8IUZt30QxIM";
@@ -160,6 +160,108 @@
 
     let currentAdmin = null;
     let allUsers = {};
+
+    // AUTOMATIC REFERRAL BONUS PAYMENT FUNCTION
+    async function payReferralBonuses(userId, packageType) {
+      try {
+        console.log('Starting referral bonus payment for user ' + userId + ', package: ' + packageType);
+        
+        // Get the user who was referred
+        const { data: referredUser, error: userError } = await supabaseClient
+          .from('profiles')
+          .select('referred_by')
+          .eq('id', userId)
+          .single();
+        
+        if (userError || !referredUser || !referredUser.referred_by) {
+          console.log('No referrer found for this user');
+          return { success: false, message: 'No referrer found' };
+        }
+
+        console.log('User was referred by code: ' + referredUser.referred_by);
+
+        // Get referrer's profile using the referral code
+        const { data: referrer, error: refError } = await supabaseClient
+          .from('profiles')
+          .select('id, balance, email, full_name, referral_code')
+          .eq('referral_code', referredUser.referred_by)
+          .single();
+        
+        if (refError || !referrer) {
+          console.log('Referrer not found with code: ' + referredUser.referred_by);
+          return { success: false, message: 'Referrer not found' };
+        }
+
+        console.log('Found referrer: ' + referrer.email + ' (' + referrer.full_name + ')');
+
+        // Calculate bonus amount based on package
+        let bonusAmount = 0;
+        if (packageType === 'starter') bonusAmount = 1000;
+        else if (packageType === 'pro') bonusAmount = 1800;
+        else if (packageType === 'premium') bonusAmount = 3000;
+
+        if (bonusAmount === 0) {
+          console.log('No bonus for package type: ' + packageType);
+          return { success: false, message: 'No bonus for this package' };
+        }
+
+        console.log('Calculated bonus: KSh ' + bonusAmount + ' for ' + packageType + ' package');
+
+        // Update referrer's balance
+        const currentBalance = parseFloat(referrer.balance) || 0;
+        const newBalance = currentBalance + bonusAmount;
+        
+        console.log('Updating balance: ' + referrer.email + ' from KSh ' + currentBalance + ' to KSh ' + newBalance);
+        
+        const { error: updateError } = await supabaseClient
+          .from('profiles')
+          .update({ balance: newBalance })
+          .eq('id', referrer.id);
+
+        if (updateError) {
+          console.error('Balance update error:', updateError);
+          throw updateError;
+        }
+
+        // Record the bonus payment in referral_bonus table
+        const { error: recordError } = await supabaseClient
+          .from('referral_bonus')
+          .insert([
+            {
+              referrer_id: referrer.id,
+              referred_user_id: userId,
+              amount: bonusAmount,
+              package: packageType,
+              level: 1,
+              status: 'paid',
+              paid_at: new Date().toISOString(),
+              paid_by: currentAdmin.email
+            }
+          ]);
+
+        if (recordError) {
+          console.error('Bonus record error:', recordError);
+          // Don't throw error - bonus is paid even if record fails
+        }
+
+        console.log('SUCCESS: Paid KSh ' + bonusAmount + ' referral bonus to ' + referrer.email);
+        console.log('New balance for ' + referrer.email + ': KSh ' + newBalance);
+
+        return { 
+          success: true, 
+          message: 'Paid KSh ' + bonusAmount + ' to ' + referrer.email,
+          referrer: referrer,
+          bonusAmount: bonusAmount
+        };
+
+      } catch (error) {
+        console.error('Referral bonus payment error:', error);
+        return { 
+          success: false, 
+          message: 'Bonus payment failed: ' + error.message 
+        };
+      }
+    }
 
     // Check admin authentication
     async function checkAuth() {
@@ -177,7 +279,7 @@
         }
 
         currentAdmin = session.user;
-        console.log('Admin authenticated:', currentAdmin.email);
+        console.log('Admin authenticated: ' + currentAdmin.email);
         await loadAllData();
 
       } catch (error) {
@@ -334,7 +436,7 @@
       if (!payments || payments.length === 0) {
         container.innerHTML = 
           '<div class="no-payments">' +
-            '<h3>🎉 No Payments Found</h3>' +
+            '<h3>No Payments Found</h3>' +
             '<p>No payment requests match your current filters.</p>' +
           '</div>';
         return;
@@ -369,6 +471,11 @@
                   payment.status.toUpperCase() +
                 '</span>' +
               '</div>' +
+              // Show referral info if available
+              (user && user.referred_by ? 
+                '<div class="user-info" style="color: var(--primary);">' +
+                  '<strong>Referred by:</strong> ' + user.referred_by +
+                '</div>' : '') +
             '</div>' +
             '<div class="amount">' +
               'KSh ' + (payment.amount || 0).toLocaleString() +
@@ -378,10 +485,10 @@
           (payment.status === 'pending' ? 
             '<div class="admin-actions">' +
               '<button class="btn btn-success" onclick="approvePayment(\'' + payment.id + '\', \'' + payment.user_id + '\', \'' + payment.package + '\', ' + payment.amount + ')">' +
-                '✅ Approve & Upgrade' +
+                'Approve & Pay Bonus' +
               '</button>' +
               '<button class="btn btn-danger" onclick="showRejectForm(\'' + payment.id + '\')">' +
-                '❌ Reject' +
+                'Reject' +
               '</button>' +
             '</div>' +
             '<div class="reject-form" id="reject-form-' + payment.id + '">' +
@@ -403,7 +510,7 @@
       }).join('');
     }
 
-    // Approve payment and upgrade user membership
+    // Approve payment and upgrade user membership + PAY REFERRAL BONUS
     async function approvePayment(paymentId, userId, packageType, amount) {
       if (!supabaseClient) {
         showMessage('Error: Database connection failed', 'error');
@@ -441,7 +548,20 @@
 
         if (profileError) throw profileError;
 
-        // 3. Create transaction record (optional - for tracking)
+        // 3. PAY REFERRAL BONUS AUTOMATICALLY
+        console.log('Starting automatic referral bonus payment...');
+        const bonusResult = await payReferralBonuses(userId, packageType);
+        
+        let bonusMessage = '';
+        if (bonusResult.success) {
+          bonusMessage = ' Referral bonus paid: KSh ' + bonusResult.bonusAmount + ' to ' + bonusResult.referrer.email;
+          console.log('Referral bonus paid successfully');
+        } else {
+          bonusMessage = ' No referral bonus paid (no referrer found)';
+          console.log('No referral bonus paid');
+        }
+
+        // 4. Create transaction record (optional - for tracking)
         try {
           const { error: transactionError } = await supabaseClient
             .from('transactions')
@@ -464,7 +584,8 @@
         // Remove the payment card from view
         document.getElementById('payment-' + paymentId).remove();
 
-        showMessage('✅ Payment approved! User upgraded to ' + packageType + ' package.', 'success');
+        // Show success message with bonus info
+        showMessage('Payment approved! User upgraded to ' + packageType + ' package.' + bonusMessage, 'success');
 
         // Reload stats
         await loadStats();
@@ -474,18 +595,18 @@
         if (remainingPayments === 0) {
           document.getElementById('paymentsContainer').innerHTML = 
             '<div class="no-payments">' +
-              '<h3>🎉 All Caught Up!</h3>' +
+              '<h3>All Caught Up!</h3>' +
               '<p>No more payments to verify.</p>' +
             '</div>';
         }
 
       } catch (error) {
         console.error('Approval error:', error);
-        showMessage('❌ Failed to approve payment: ' + error.message, 'error');
+        showMessage('Failed to approve payment: ' + error.message, 'error');
         
         // Reset button
         const button = document.querySelector('#payment-' + paymentId + ' .btn-success');
-        button.innerHTML = '✅ Approve & Upgrade';
+        button.innerHTML = 'Approve & Pay Bonus';
         button.disabled = false;
       }
     }
@@ -527,7 +648,7 @@
         // Remove the payment card from view
         document.getElementById('payment-' + paymentId).remove();
 
-        showMessage('✅ Payment rejected with reason provided.', 'success');
+        showMessage('Payment rejected with reason provided.', 'success');
 
         // Reload stats
         await loadStats();
@@ -537,14 +658,14 @@
         if (remainingPayments === 0) {
           document.getElementById('paymentsContainer').innerHTML = 
             '<div class="no-payments">' +
-              '<h3>🎉 All Caught Up!</h3>' +
+              '<h3>All Caught Up!</h3>' +
               '<p>No more payments to verify.</p>' +
             '</div>';
         }
 
       } catch (error) {
         console.error('Rejection error:', error);
-        showMessage('❌ Failed to reject payment: ' + error.message, 'error');
+        showMessage('Failed to reject payment: ' + error.message, 'error');
       }
     }
 
@@ -556,7 +677,7 @@
       if (type === 'success') {
         setTimeout(function() {
           container.innerHTML = '';
-        }, 5000);
+        }, 7000); // Longer timeout to read bonus info
       }
     }
 
@@ -583,6 +704,7 @@
 
     // Start the application
     checkAuth();
+
   </script>
 </body>
 </html>
