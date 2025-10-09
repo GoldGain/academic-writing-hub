@@ -645,442 +645,486 @@
     &copy; 2025 Academic Writing Hub | All Rights Reserved
   </footer>
 
-  <!-- Supabase Scripts -->
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script>
-    // Supabase configuration
-    const SUPABASE_URL = "https://lfrjtklkbppihaaiuxef.supabase.co";
-    const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imxmcmp0a2xrYnBwaWhhYWl1eGVmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTkwNTI5MzMsImV4cCI6MjA3NDYyODkzM30.2FVqnt5daF2Tw-RmVBwOGgt4GuIQQSkG8IUZt30QxIM";
+<!-- Supabase Scripts -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+  // Supabase configuration
+  const SUPABASE_URL = "https://lfrjtklkbppihaaiuxef.supabase.co";
+  const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imxmcmp0a2xrYnBwaWhhYWl1eGVmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTkwNTI5MzMsImV4cCI6MjA3NDYyODkzM30.2FVqnt5daF2Tw-RmVBwOGgt4GuIQQSkG8IUZt30QxIM";
 
-    // Initialize Supabase client
-    let supabaseClient;
+  // Initialize Supabase client
+  let supabaseClient;
+  try {
+    supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+  } catch (error) {
+    console.error('Failed to initialize Supabase client:', error);
+  }
+
+  // Global variables
+  let currentUser = null;
+  let userProfile = null;
+
+  // DOM Elements
+  const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+  const sidebar = document.getElementById('sidebar');
+  const logoutBtn = document.getElementById('logoutBtn');
+  const userAvatar = document.getElementById('userAvatar');
+  const userName = document.getElementById('userName');
+  const welcomeMessage = document.getElementById('welcomeMessage');
+  const messageContainer = document.getElementById('messageContainer');
+
+  // Mobile menu toggle
+  mobileMenuBtn.addEventListener('click', function(e) {
+    e.stopPropagation();
+    sidebar.classList.toggle('active');
+  });
+
+  // Close mobile menu when clicking outside
+  document.addEventListener('click', function(e) {
+    if (!sidebar.contains(e.target) && !mobileMenuBtn.contains(e.target)) {
+      sidebar.classList.remove('active');
+    }
+  });
+
+  // Authentication check
+  async function checkAuth() {
+    if (!supabaseClient) {
+      showMessage('Error: Application not initialized', 'error');
+      return;
+    }
+
     try {
-      supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+      const { data: { session }, error } = await supabaseClient.auth.getSession();
+      
+      if (error) {
+        console.error('Session error:', error);
+        window.location.href = "login.html";
+        return;
+      }
+
+      if (!session) {
+        window.location.href = "login.html";
+        return;
+      }
+
+      currentUser = session.user;
+      await loadUserData();
+
     } catch (error) {
-      console.error('Failed to initialize Supabase client:', error);
+      console.error('Auth check error:', error);
+      window.location.href = "login.html";
     }
+  }
 
-    // Global variables
-    let currentUser = null;
-    let userProfile = null;
+  // Load user data from profiles table
+  async function loadUserData() {
+    if (!supabaseClient || !currentUser) return;
 
-    // DOM Elements
-    const mobileMenuBtn = document.getElementById('mobileMenuBtn');
-    const sidebar = document.getElementById('sidebar');
-    const logoutBtn = document.getElementById('logoutBtn');
-    const userAvatar = document.getElementById('userAvatar');
-    const userName = document.getElementById('userName');
-    const welcomeMessage = document.getElementById('welcomeMessage');
-    const messageContainer = document.getElementById('messageContainer');
-
-    // Mobile menu toggle
-    mobileMenuBtn.addEventListener('click', function(e) {
-      e.stopPropagation();
-      sidebar.classList.toggle('active');
-    });
-
-    // Close mobile menu when clicking outside
-    document.addEventListener('click', function(e) {
-      if (!sidebar.contains(e.target) && !mobileMenuBtn.contains(e.target)) {
-        sidebar.classList.remove('active');
-      }
-    });
-
-    // Authentication check
-    async function checkAuth() {
-      if (!supabaseClient) {
-        showMessage('Error: Application not initialized', 'error');
-        return;
-      }
-
-      try {
-        const { data: { session }, error } = await supabaseClient.auth.getSession();
-        
-        if (error) {
-          console.error('Session error:', error);
-          window.location.href = "login.html";
-          return;
-        }
-
-        if (!session) {
-          window.location.href = "login.html";
-          return;
-        }
-
-        currentUser = session.user;
-        await loadUserData();
-
-      } catch (error) {
-        console.error('Auth check error:', error);
-        window.location.href = "login.html";
-      }
-    }
-
-    // Load user data from profiles table
-    async function loadUserData() {
-      if (!supabaseClient || !currentUser) return;
-
-      try {
-        // Show loading states
-        document.querySelectorAll('.stat-value').forEach(function(el) {
-          if (!el.innerHTML.includes('loading')) {
-            el.innerHTML = '<span class="loading"></span>';
-          }
-        });
-
-        // Load user profile
-        const { data: profile, error } = await supabaseClient
-          .from('profiles')
-          .select('*')
-          .eq('id', currentUser.id)
-          .single();
-
-        if (error) {
-          console.error('Profile load error:', error);
-          // Create default profile if doesn't exist
-          await createDefaultProfile();
-          return;
-        }
-
-        userProfile = profile;
-        console.log('Loaded user profile:', profile); // Debug log
-        updateDashboard(profile);
-        updateMembershipButtons(profile);
-
-      } catch (error) {
-        console.error('User data load error:', error);
-        showMessage('Failed to load user data', 'error');
-      }
-    }
-
-    // Create default profile if doesn't exist
-    async function createDefaultProfile() {
-      if (!supabaseClient || !currentUser) return;
-
-      try {
-        const defaultProfile = {
-          id: currentUser.id,
-          full_name: currentUser.user_metadata?.full_name || currentUser.email?.split('@')[0] || 'User',
-          balance: 0,
-          role: 'none', // Explicitly set to 'none' for new users
-          referrals: 0,
-          tasks_completed: 0,
-          total_earnings: 0
-        };
-
-        const { data, error } = await supabaseClient
-          .from('profiles')
-          .insert([defaultProfile])
-          .select()
-          .single();
-
-        if (error) throw error;
-
-        userProfile = data;
-        updateDashboard(data);
-        updateMembershipButtons(data);
-
-      } catch (error) {
-        console.error('Create profile error:', error);
-        // Use temporary profile
-        userProfile = {
-          full_name: currentUser.email?.split('@')[0] || 'User',
-          balance: 0,
-          role: 'none',
-          referrals: 0,
-          tasks_completed: 0
-        };
-        updateDashboard(userProfile);
-      }
-    }
-
-    // Update dashboard with user data
-    function updateDashboard(profile) {
-      // Update welcome message and user info
-      welcomeMessage.textContent = 'Welcome back, ' + (profile.full_name || 'User') + '!';
-      userName.textContent = profile.full_name || 'User';
-      userAvatar.textContent = (profile.full_name || 'U').charAt(0).toUpperCase();
-
-      // Update stats
-      document.getElementById('balanceAmount').textContent = 'Ksh ' + ((parseFloat(profile.balance) || 0).toLocaleString());
-      
-      // Format membership type display - FIXED: Check for actual membership
-      let membershipDisplay = 'No Package';
-      if (profile.role === 'starter' && (parseFloat(profile.balance) || 0) >= 0) {
-        membershipDisplay = 'Starter';
-      } else if (profile.role === 'pro') {
-        membershipDisplay = 'Pro';
-      } else if (profile.role === 'premium') {
-        membershipDisplay = 'Premium';
-      } else {
-        membershipDisplay = 'No Package'; // Force 'none' to show as 'No Package'
-      }
-      
-      document.getElementById('membershipType').textContent = membershipDisplay;
-      document.getElementById('referralsCount').textContent = profile.referrals || 0;
-      document.getElementById('tasksCompleted').textContent = profile.tasks_completed || 0;
-
-      // Update recent activities
-      updateRecentActivities(profile);
-    }
-
-    // Update membership upgrade buttons based on balance and current membership
-    function updateMembershipButtons(profile) {
-      const starterBtn = document.getElementById('starterUpgradeBtn');
-      const proBtn = document.getElementById('proUpgradeBtn');
-      const premiumBtn = document.getElementById('premiumUpgradeBtn');
-      const currentBalance = parseFloat(profile.balance) || 0;
-      const currentRole = profile.role || 'none';
-
-      console.log('Updating buttons - Role:', currentRole, 'Balance:', currentBalance); // Debug log
-
-      // Reset all buttons first
-      starterBtn.disabled = false;
-      proBtn.disabled = false;
-      premiumBtn.disabled = false;
-
-      // Starter Package Logic - FIXED: Only show as current if actually purchased
-      if (currentRole === 'none') {
-        // User has no package - can buy starter
-        if (currentBalance >= 3500) {
-          starterBtn.textContent = 'Get Starter Package (Ksh 3,500)';
-          starterBtn.disabled = false;
-        } else {
-          starterBtn.textContent = 'Insufficient Balance - Ksh 3,500';
-          starterBtn.disabled = true;
-        }
-      } else if (currentRole === 'starter') {
-        // User already has starter package
-        starterBtn.textContent = 'Current Package';
-        starterBtn.disabled = true;
-      } else if (currentRole === 'pro' || currentRole === 'premium') {
-        // User has higher package
-        starterBtn.textContent = 'Already Upgraded';
-        starterBtn.disabled = true;
-      } else {
-        // Default case - should not happen
-        starterBtn.textContent = 'Get Starter Package (Ksh 3,500)';
-        starterBtn.disabled = currentBalance < 3500;
-      }
-
-      // Pro Package Logic
-      if (currentRole === 'none' || currentRole === 'starter') {
-        // User can upgrade to pro
-        if (currentBalance >= 5500) {
-          proBtn.textContent = currentRole === 'none' ? 'Get Pro Package (Ksh 5,500)' : 'Upgrade to Pro (Ksh 5,500)';
-          proBtn.disabled = false;
-        } else {
-          proBtn.textContent = 'Insufficient Balance - Ksh 5,500';
-          proBtn.disabled = true;
-        }
-      } else if (currentRole === 'pro') {
-        // User already has pro package
-        proBtn.textContent = 'Current Package';
-        proBtn.disabled = true;
-      } else if (currentRole === 'premium') {
-        // User has premium package
-        proBtn.textContent = 'Already Upgraded';
-        proBtn.disabled = true;
-      } else {
-        // Default case
-        proBtn.textContent = 'Get Pro Package (Ksh 5,500)';
-        proBtn.disabled = currentBalance < 5500;
-      }
-
-      // Premium Package Logic
-      if (currentRole === 'none' || currentRole === 'starter' || currentRole === 'pro') {
-        // User can upgrade to premium
-        if (currentBalance >= 8000) {
-          let buttonText = 'Get Premium Package (Ksh 8,000)';
-          if (currentRole === 'starter') buttonText = 'Upgrade to Premium (Ksh 8,000)';
-          if (currentRole === 'pro') buttonText = 'Upgrade to Premium (Ksh 8,000)';
-          
-          premiumBtn.textContent = buttonText;
-          premiumBtn.disabled = false;
-        } else {
-          premiumBtn.textContent = 'Insufficient Balance - Ksh 8,000';
-          premiumBtn.disabled = true;
-        }
-      } else if (currentRole === 'premium') {
-        // User already has premium package
-        premiumBtn.textContent = 'Current Package';
-        premiumBtn.disabled = true;
-      } else {
-        // Default case
-        premiumBtn.textContent = 'Get Premium Package (Ksh 8,000)';
-        premiumBtn.disabled = currentBalance < 8000;
-      }
-    }
-
-    // Upgrade membership function - attached to window for global access
-    window.upgradeMembership = async function(newRole) {
-      if (!supabaseClient || !userProfile) return;
-
-      const membershipPrices = {
-        'starter': 3500,
-        'pro': 5500,
-        'premium': 8000
-      };
-
-      const price = membershipPrices[newRole];
-      const currentBalance = parseFloat(userProfile.balance) || 0;
-      const currentMembership = userProfile.role || 'none';
-
-      console.log('Upgrade attempt - Current:', currentMembership, 'New:', newRole, 'Balance:', currentBalance); // Debug log
-
-      // Check if user can afford the package
-      if (currentBalance < price) {
-        showMessage('Insufficient balance. You need Ksh ' + price + ' to get the ' + newRole + ' package.', 'error');
-        return;
-      }
-
-      // Check if user already has this package or higher
-      const membershipLevels = { 'none': 0, 'starter': 1, 'pro': 2, 'premium': 3 };
-      const currentLevel = membershipLevels[currentMembership] || 0;
-      const newLevel = membershipLevels[newRole];
-      
-      // User already has this package
-      if (currentMembership === newRole) {
-        showMessage('You already have the ' + newRole + ' package.', 'info');
-        return;
-      }
-      
-      // User has a higher package
-      if (newLevel < currentLevel) {
-        showMessage('You already have a higher package (' + currentMembership + ').', 'info');
-        return;
-      }
-
-      try {
-        showMessage('Processing ' + newRole + ' package upgrade...', 'info');
-
-        // Update user profile with new role and deduct balance
-        const newBalance = currentBalance - price;
-        
-        const { data, error } = await supabaseClient
-          .from('profiles')
-          .update({
-            role: newRole,
-            balance: newBalance,
-            updated_at: new Date().toISOString()
-          })
-          .eq('id', currentUser.id)
-          .select()
-          .single();
-
-        if (error) throw error;
-
-        // Update local profile
-        userProfile = data;
-        updateDashboard(data);
-        updateMembershipButtons(data);
-        
-        showMessage('🎉 Successfully upgraded to ' + newRole + ' package! Ksh ' + price + ' deducted from your balance.', 'success');
-
-        // Add to recent activities
-        addActivity('Upgraded to ' + newRole + ' package', '-Ksh ' + price);
-
-      } catch (error) {
-        console.error('Upgrade error:', error);
-        showMessage('Failed to upgrade: ' + error.message, 'error');
-      }
-    };
-
-    // Update recent activities
-    function updateRecentActivities(profile) {
-      const activityList = document.getElementById('activityList');
-      const activities = [
-        { icon: '📥', text: 'Account created successfully', time: 'Today' },
-        { icon: '💰', text: 'Account balance: Ksh ' + ((profile.balance || 0).toLocaleString()), time: 'Current' },
-        { icon: '👥', text: 'You have ' + (profile.referrals || 0) + ' referrals', time: 'Current' },
-        { icon: '✅', text: 'Completed ' + (profile.tasks_completed || 0) + ' tasks', time: 'Current' }
-      ];
-
-      activityList.innerHTML = activities.map(function(activity) {
-        return '<li class="activity-item">' +
-          '<div class="activity-icon">' + activity.icon + '</div>' +
-          '<div class="activity-content">' +
-            '<div class="activity-text">' + activity.text + '</div>' +
-            '<div class="activity-time">' + activity.time + '</div>' +
-          '</div>' +
-        '</li>';
-      }).join('');
-    }
-
-    // Add new activity
-    function addActivity(text, extra) {
-      const activityList = document.getElementById('activityList');
-      const now = new Date().toLocaleTimeString();
-      
-      const activityItem = document.createElement('li');
-      activityItem.className = 'activity-item';
-      activityItem.innerHTML = 
-        '<div class="activity-icon">📈</div>' +
-        '<div class="activity-content">' +
-          '<div class="activity-text">' + text + ' ' + (extra || '') + '</div>' +
-          '<div class="activity-time">' + now + '</div>' +
-        '</div>';
-      
-      activityList.insertBefore(activityItem, activityList.firstChild);
-      
-      // Keep only last 5 activities
-      while (activityList.children.length > 5) {
-        activityList.removeChild(activityList.lastChild);
-      }
-    }
-
-    // Show message function
-    function showMessage(message, type) {
-      messageContainer.innerHTML = '<div class="message ' + type + '">' + message + '</div>';
-      
-      if (type === 'success' || type === 'info') {
-        setTimeout(function() {
-          messageContainer.innerHTML = '';
-        }, 5000);
-      }
-    }
-
-    // Logout handler
-    async function handleLogout(e) {
-      if (e) e.preventDefault();
-      
-      try {
-        // Show loading state
-        logoutBtn.innerHTML = '<span class="logout-loading"></span> Logging out...';
-        logoutBtn.style.pointerEvents = 'none';
-
-        if (supabaseClient) {
-          const { error } = await supabaseClient.auth.signOut();
-          if (error) console.error('Logout error:', error);
-        }
-
-        // Clear local storage
-        localStorage.clear();
-        sessionStorage.clear();
-
-        // Redirect to login
-        window.location.href = "login.html";
-
-      } catch (error) {
-        console.error('Logout error:', error);
-        window.location.href = "login.html";
-      }
-    }
-
-    // Event listeners
-    logoutBtn.addEventListener('click', handleLogout);
-
-    // Auth state listener
-    if (supabaseClient) {
-      supabaseClient.auth.onAuthStateChange(function(event, session) {
-        if (event === 'SIGNED_OUT') {
-          window.location.href = "login.html";
+    try {
+      // Show loading states
+      document.querySelectorAll('.stat-value').forEach(function(el) {
+        if (!el.innerHTML.includes('loading')) {
+          el.innerHTML = '<span class="loading"></span>';
         }
       });
+
+      // Load user profile
+      const { data: profile, error } = await supabaseClient
+        .from('profiles')
+        .select('*')
+        .eq('id', currentUser.id)
+        .single();
+
+      if (error) {
+        console.error('Profile load error:', error);
+        // Create default profile if doesn't exist
+        await createDefaultProfile();
+        return;
+      }
+
+      userProfile = profile;
+      updateDashboard(profile);
+      updateMembershipButtons(profile);
+
+      // Load actual referral count from database
+      await loadActualReferralsCount();
+
+    } catch (error) {
+      console.error('User data load error:', error);
+      showMessage('Failed to load user data', 'error');
+    }
+  }
+
+  // FIXED: Count actual referrals from database
+  async function loadActualReferralsCount() {
+    if (!supabaseClient || !currentUser || !userProfile) return;
+
+    try {
+      // Generate referral code if doesn't exist
+      if (!userProfile.referral_code) {
+        await generateReferralCode();
+      }
+
+      // Count referrals using the same logic as referrals.html
+      const { data: referrals, error } = await supabaseClient
+        .from('profiles')
+        .select('id')
+        .eq('referred_by', userProfile.referral_code);
+
+      if (error) {
+        console.error('Referrals count error:', error);
+        return;
+      }
+
+      const actualCount = referrals ? referrals.length : 0;
+      
+      // Update the display
+      document.getElementById('referralsCount').textContent = actualCount;
+      
+      // Update the profile to keep it consistent
+      if (userProfile.referrals !== actualCount) {
+        await supabaseClient
+          .from('profiles')
+          .update({ referrals: actualCount })
+          .eq('id', currentUser.id);
+      }
+
+    } catch (error) {
+      console.error('Referrals load error:', error);
+    }
+  }
+
+  // Generate referral code
+  async function generateReferralCode() {
+    try {
+      const baseCode = currentUser.email.split('@')[0].substring(0, 4).toUpperCase();
+      const randomNum = Math.floor(Math.random() * 1000);
+      const referralCode = baseCode + randomNum;
+
+      const { error } = await supabaseClient
+        .from('profiles')
+        .update({ referral_code: referralCode })
+        .eq('id', currentUser.id);
+
+      if (error) throw error;
+
+      userProfile.referral_code = referralCode;
+      
+    } catch (err) {
+      console.error("Referral code generation error:", err);
+      userProfile.referral_code = 'REF' + currentUser.id.substring(0, 8);
+    }
+  }
+
+  // Create default profile if doesn't exist
+  async function createDefaultProfile() {
+    if (!supabaseClient || !currentUser) return;
+
+    try {
+      const defaultProfile = {
+        id: currentUser.id,
+        full_name: currentUser.user_metadata?.full_name || currentUser.email?.split('@')[0] || 'User',
+        balance: 0,
+        role: 'none',
+        referrals: 0,
+        tasks_completed: 0,
+        total_earnings: 0
+      };
+
+      const { data, error } = await supabaseClient
+        .from('profiles')
+        .insert([defaultProfile])
+        .select()
+        .single();
+
+      if (error) throw error;
+
+      userProfile = data;
+      updateDashboard(data);
+      updateMembershipButtons(data);
+
+    } catch (error) {
+      console.error('Create profile error:', error);
+      userProfile = {
+        full_name: currentUser.email?.split('@')[0] || 'User',
+        balance: 0,
+        role: 'none',
+        referrals: 0,
+        tasks_completed: 0
+      };
+      updateDashboard(userProfile);
+    }
+  }
+
+  // Update dashboard with user data
+  function updateDashboard(profile) {
+    // Update welcome message and user info
+    welcomeMessage.textContent = 'Welcome back, ' + (profile.full_name || 'User') + '!';
+    userName.textContent = profile.full_name || 'User';
+    userAvatar.textContent = (profile.full_name || 'U').charAt(0).toUpperCase();
+
+    // Update stats
+    document.getElementById('balanceAmount').textContent = 'Ksh ' + ((parseFloat(profile.balance) || 0).toLocaleString());
+    
+    // Format membership type display
+    let membershipDisplay = 'No Package';
+    if (profile.role === 'starter') {
+      membershipDisplay = 'Starter';
+    } else if (profile.role === 'pro') {
+      membershipDisplay = 'Pro';
+    } else if (profile.role === 'premium') {
+      membershipDisplay = 'Premium';
+    }
+    
+    document.getElementById('membershipType').textContent = membershipDisplay;
+    document.getElementById('tasksCompleted').textContent = profile.tasks_completed || 0;
+
+    // Update recent activities
+    updateRecentActivities(profile);
+  }
+
+  // Update membership upgrade buttons based on balance and current membership
+  function updateMembershipButtons(profile) {
+    const starterBtn = document.getElementById('starterUpgradeBtn');
+    const proBtn = document.getElementById('proUpgradeBtn');
+    const premiumBtn = document.getElementById('premiumUpgradeBtn');
+    const currentBalance = parseFloat(profile.balance) || 0;
+    const currentRole = profile.role || 'none';
+
+    // Reset all buttons first
+    starterBtn.disabled = false;
+    proBtn.disabled = false;
+    premiumBtn.disabled = false;
+
+    // Starter Package Logic
+    if (currentRole === 'none') {
+      if (currentBalance >= 3500) {
+        starterBtn.textContent = 'Get Starter Package (Ksh 3,500)';
+        starterBtn.disabled = false;
+      } else {
+        starterBtn.textContent = 'Insufficient Balance - Ksh 3,500';
+        starterBtn.disabled = true;
+      }
+    } else if (currentRole === 'starter') {
+      starterBtn.textContent = 'Current Package';
+      starterBtn.disabled = true;
+    } else if (currentRole === 'pro' || currentRole === 'premium') {
+      starterBtn.textContent = 'Already Upgraded';
+      starterBtn.disabled = true;
+    } else {
+      starterBtn.textContent = 'Get Starter Package (Ksh 3,500)';
+      starterBtn.disabled = currentBalance < 3500;
     }
 
-    // Initialize app
-    checkAuth();
-  </script>
+    // Pro Package Logic
+    if (currentRole === 'none' || currentRole === 'starter') {
+      if (currentBalance >= 5500) {
+        proBtn.textContent = currentRole === 'none' ? 'Get Pro Package (Ksh 5,500)' : 'Upgrade to Pro (Ksh 5,500)';
+        proBtn.disabled = false;
+      } else {
+        proBtn.textContent = 'Insufficient Balance - Ksh 5,500';
+        proBtn.disabled = true;
+      }
+    } else if (currentRole === 'pro') {
+      proBtn.textContent = 'Current Package';
+      proBtn.disabled = true;
+    } else if (currentRole === 'premium') {
+      proBtn.textContent = 'Already Upgraded';
+      proBtn.disabled = true;
+    } else {
+      proBtn.textContent = 'Get Pro Package (Ksh 5,500)';
+      proBtn.disabled = currentBalance < 5500;
+    }
+
+    // Premium Package Logic
+    if (currentRole === 'none' || currentRole === 'starter' || currentRole === 'pro') {
+      if (currentBalance >= 8000) {
+        let buttonText = 'Get Premium Package (Ksh 8,000)';
+        if (currentRole === 'starter') buttonText = 'Upgrade to Premium (Ksh 8,000)';
+        if (currentRole === 'pro') buttonText = 'Upgrade to Premium (Ksh 8,000)';
+        
+        premiumBtn.textContent = buttonText;
+        premiumBtn.disabled = false;
+      } else {
+        premiumBtn.textContent = 'Insufficient Balance - Ksh 8,000';
+        premiumBtn.disabled = true;
+      }
+    } else if (currentRole === 'premium') {
+      premiumBtn.textContent = 'Current Package';
+      premiumBtn.disabled = true;
+    } else {
+      premiumBtn.textContent = 'Get Premium Package (Ksh 8,000)';
+      premiumBtn.disabled = currentBalance < 8000;
+    }
+  }
+
+  // FIXED: Changed from window.upgradeMembership to just upgradeMembership
+  async function upgradeMembership(newRole) {
+    if (!supabaseClient || !userProfile) return;
+
+    const membershipPrices = {
+      'starter': 3500,
+      'pro': 5500,
+      'premium': 8000
+    };
+
+    const price = membershipPrices[newRole];
+    const currentBalance = parseFloat(userProfile.balance) || 0;
+    const currentMembership = userProfile.role || 'none';
+
+    // Check if user can afford the package
+    if (currentBalance < price) {
+      showMessage('Insufficient balance. You need Ksh ' + price + ' to get the ' + newRole + ' package.', 'error');
+      return;
+    }
+
+    // Check if user already has this package or higher
+    const membershipLevels = { 'none': 0, 'starter': 1, 'pro': 2, 'premium': 3 };
+    const currentLevel = membershipLevels[currentMembership] || 0;
+    const newLevel = membershipLevels[newRole];
+    
+    if (currentMembership === newRole) {
+      showMessage('You already have the ' + newRole + ' package.', 'info');
+      return;
+    }
+    
+    if (newLevel < currentLevel) {
+      showMessage('You already have a higher package (' + currentMembership + ').', 'info');
+      return;
+    }
+
+    try {
+      showMessage('Processing ' + newRole + ' package upgrade...', 'info');
+
+      // Update user profile with new role and deduct balance
+      const newBalance = currentBalance - price;
+      
+      const { data, error } = await supabaseClient
+        .from('profiles')
+        .update({
+          role: newRole,
+          balance: newBalance,
+          updated_at: new Date().toISOString()
+        })
+        .eq('id', currentUser.id)
+        .select()
+        .single();
+
+      if (error) throw error;
+
+      // Update local profile
+      userProfile = data;
+      updateDashboard(data);
+      updateMembershipButtons(data);
+      
+      showMessage('🎉 Successfully upgraded to ' + newRole + ' package! Ksh ' + price + ' deducted from your balance.', 'success');
+
+      // Add to recent activities
+      addActivity('Upgraded to ' + newRole + ' package', '-Ksh ' + price);
+
+    } catch (error) {
+      console.error('Upgrade error:', error);
+      showMessage('Failed to upgrade: ' + error.message, 'error');
+    }
+  }
+
+  // Update recent activities
+  function updateRecentActivities(profile) {
+    const activityList = document.getElementById('activityList');
+    const activities = [
+      { icon: '📥', text: 'Account created successfully', time: 'Today' },
+      { icon: '💰', text: 'Account balance: Ksh ' + ((profile.balance || 0).toLocaleString()), time: 'Current' },
+      { icon: '👥', text: 'You have ' + (profile.referrals || 0) + ' referrals', time: 'Current' },
+      { icon: '✅', text: 'Completed ' + (profile.tasks_completed || 0) + ' tasks', time: 'Current' }
+    ];
+
+    activityList.innerHTML = activities.map(function(activity) {
+      return '<li class="activity-item">' +
+        '<div class="activity-icon">' + activity.icon + '</div>' +
+        '<div class="activity-content">' +
+          '<div class="activity-text">' + activity.text + '</div>' +
+          '<div class="activity-time">' + activity.time + '</div>' +
+        '</div>' +
+      '</li>';
+    }).join('');
+  }
+
+  // Add new activity
+  function addActivity(text, extra) {
+    const activityList = document.getElementById('activityList');
+    const now = new Date().toLocaleTimeString();
+    
+    const activityItem = document.createElement('li');
+    activityItem.className = 'activity-item';
+    activityItem.innerHTML = 
+      '<div class="activity-icon">📈</div>' +
+      '<div class="activity-content">' +
+        '<div class="activity-text">' + text + ' ' + (extra || '') + '</div>' +
+        '<div class="activity-time">' + now + '</div>' +
+      '</div>';
+    
+    activityList.insertBefore(activityItem, activityList.firstChild);
+    
+    // Keep only last 5 activities
+    while (activityList.children.length > 5) {
+      activityList.removeChild(activityList.lastChild);
+    }
+  }
+
+  // Show message function
+  function showMessage(message, type) {
+    messageContainer.innerHTML = '<div class="message ' + type + '">' + message + '</div>';
+    
+    if (type === 'success' || type === 'info') {
+      setTimeout(function() {
+        messageContainer.innerHTML = '';
+      }, 5000);
+    }
+  }
+
+  // Logout handler
+  async function handleLogout(e) {
+    if (e) e.preventDefault();
+    
+    try {
+      // Show loading state
+      logoutBtn.innerHTML = '<span class="logout-loading"></span> Logging out...';
+      logoutBtn.style.pointerEvents = 'none';
+
+      if (supabaseClient) {
+        const { error } = await supabaseClient.auth.signOut();
+        if (error) console.error('Logout error:', error);
+      }
+
+      // Clear local storage
+      localStorage.clear();
+      sessionStorage.clear();
+
+      // Redirect to login
+      window.location.href = "login.html";
+
+    } catch (error) {
+      console.error('Logout error:', error);
+      window.location.href = "login.html";
+    }
+  }
+
+  // Event listeners
+  logoutBtn.addEventListener('click', handleLogout);
+
+  // Auth state listener
+  if (supabaseClient) {
+    supabaseClient.auth.onAuthStateChange(function(event, session) {
+      if (event === 'SIGNED_OUT') {
+        window.location.href = "login.html";
+      }
+    });
+  }
+
+  // Initialize app
+  checkAuth();
+</script>
+
 </body>
 </html>
+
