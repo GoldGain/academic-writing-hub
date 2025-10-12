@@ -56,6 +56,38 @@
       margin-top: 2px;
     }
 
+    .header-right {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .user-menu {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      cursor: pointer;
+      padding: 8px 12px;
+      border-radius: 8px;
+      transition: background 0.3s;
+    }
+
+    .user-menu:hover {
+      background: var(--primary-light);
+    }
+
+    .user-avatar {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: var(--secondary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      color: white;
+    }
+
     .mobile-menu-btn {
       display: none;
       background: none;
@@ -159,6 +191,45 @@
       color: var(--gray);
       font-size: 14px;
       font-weight: 500;
+    }
+
+    .refresh-indicator {
+      background: white;
+      padding: 15px 20px;
+      border-radius: 12px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+      margin-bottom: 25px;
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      border-left: 4px solid var(--success);
+    }
+
+    .refresh-indicator .icon {
+      font-size: 24px;
+    }
+
+    .refresh-indicator .info {
+      flex: 1;
+    }
+
+    .refresh-indicator .info h4 {
+      color: var(--primary);
+      margin-bottom: 5px;
+    }
+
+    .refresh-indicator .info p {
+      color: var(--gray);
+      font-size: 14px;
+    }
+
+    .refresh-countdown {
+      background: var(--primary);
+      color: white;
+      padding: 8px 15px;
+      border-radius: 20px;
+      font-weight: 600;
+      font-size: 14px;
     }
 
     .filters-section {
@@ -480,7 +551,6 @@
       100% { transform: rotate(360deg); }
     }
 
-    /* Task Status Section */
     .my-tasks-section {
       background: white;
       padding: 25px;
@@ -518,8 +588,116 @@
       gap: 20px;
     }
 
-    /* Mobile Responsive */
+    .table-tools {
+      background: var(--light);
+      padding: 15px;
+      border-radius: 8px;
+      margin-bottom: 15px;
+    }
+
+    .table-controls {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 10px;
+      flex-wrap: wrap;
+    }
+
+    .table-controls button {
+      padding: 8px 15px;
+      background: var(--primary);
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 14px;
+    }
+
+    .table-preview {
+      border: 2px solid var(--border);
+      border-radius: 8px;
+      padding: 15px;
+      background: white;
+      min-height: 100px;
+      overflow-x: auto;
+    }
+
+    .table-preview table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    .table-preview th,
+    .table-preview td {
+      border: 1px solid var(--border);
+      padding: 8px;
+      text-align: left;
+    }
+
+    .table-preview th {
+      background: var(--light);
+      font-weight: 600;
+    }
+
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.7);
+      z-index: 1000;
+      justify-content: center;
+      align-items: flex-start;
+      padding: 20px 10px;
+      overflow-y: auto;
+    }
+
+    .modal-content {
+      background: white;
+      border-radius: 16px;
+      width: 95%;
+      max-width: 800px;
+      max-height: 90vh;
+      padding: 30px;
+      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+      position: relative;
+      animation: modalFade 0.3s;
+      overflow-y: auto;
+      margin: 20px auto;
+    }
+
+    @keyframes modalFade {
+      from {opacity: 0; transform: translateY(-20px);}
+      to {opacity: 1; transform: translateY(0);}
+    }
+
+    .close-modal {
+      position: absolute;
+      top: 15px;
+      right: 20px;
+      font-size: 1.5rem;
+      cursor: pointer;
+      color: var(--gray);
+      background: rgba(255,255,255,0.9);
+      border-radius: 50%;
+      width: 30px;
+      height: 30px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1001;
+    }
+
+    .close-modal:hover {
+      color: var(--danger);
+    }
+
     @media (max-width: 768px) {
+      .header-right .user-name {
+        display: none;
+      }
+
       .mobile-menu-btn {
         display: block;
       }
@@ -562,6 +740,16 @@
       .tasks-tabs {
         flex-wrap: wrap;
       }
+
+      .refresh-indicator {
+        flex-direction: column;
+        text-align: center;
+        gap: 10px;
+      }
+
+      .modal-content {
+        padding: 20px 15px;
+      }
     }
   </style>
 </head>
@@ -572,7 +760,13 @@
       <h1>Academic Writing Hub</h1>
       <div class="slogan">Empowering Your Potential Through Academic Writing</div>
     </div>
-    <button class="mobile-menu-btn" id="mobileMenuBtn">☰</button>
+    <div class="header-right">
+      <div class="user-menu" id="userMenu">
+        <div class="user-avatar" id="userAvatar">U</div>
+        <span class="user-name" id="userName">Loading...</span>
+      </div>
+      <button class="mobile-menu-btn" id="mobileMenuBtn">☰</button>
+    </div>
   </header>
 
   <div class="container">
@@ -593,6 +787,15 @@
         <p>Complete tasks to earn money. Filter by type or difficulty to find tasks that match your skills.</p>
       </div>
 
+      <div class="refresh-indicator">
+        <div class="icon">🔄</div>
+        <div class="info">
+          <h4>Auto-Refresh System</h4>
+          <p>Tasks automatically refresh daily at 12:00 AM. New tasks will appear automatically.</p>
+        </div>
+        <div class="refresh-countdown" id="refreshCountdown">Next: 00:00:00</div>
+      </div>
+
       <div class="stats-cards">
         <div class="stat-card balance">
           <div class="stat-value" id="balanceAmount">KSh 0.00</div>
@@ -608,17 +811,15 @@
         </div>
       </div>
 
-      <!-- My Tasks Status Section -->
       <div class="my-tasks-section">
         <h3 style="color: var(--primary); margin-bottom: 20px;">📊 My Tasks Status</h3>
         <div class="tasks-tabs">
-          <button class="tab-btn active" onclick="showTab('all-tasks')">All Tasks</button>
-          <button class="tab-btn" onclick="showTab('in-progress')">In Progress</button>
-          <button class="tab-btn" onclick="showTab('submitted')">Submitted</button>
-          <button class="tab-btn" onclick="showTab('completed')">Completed</button>
+          <button class="tab-btn active" data-tab="all-tasks">All Tasks</button>
+          <button class="tab-btn" data-tab="in-progress">In Progress</button>
+          <button class="tab-btn" data-tab="submitted">Submitted</button>
+          <button class="tab-btn" data-tab="completed">Completed</button>
         </div>
         <div class="my-tasks-grid" id="myTasksContainer">
-          <!-- User's tasks will be loaded here -->
           <div class="no-tasks">
             <h3>📭 No Tasks Started</h3>
             <p>Start working on tasks to see your progress here!</p>
@@ -640,6 +841,10 @@
               <option value="affiliate_marketing">Affiliate Marketing</option>
               <option value="network_marketing">Network Marketing</option>
               <option value="online_gaming">Online Gaming</option>
+              <option value="content_writing">Content Writing</option>
+              <option value="proofreading">Proofreading</option>
+              <option value="research">Research</option>
+              <option value="social_media">Social Media</option>
             </select>
           </div>
           <div class="filter-group">
@@ -671,7 +876,6 @@
       <div id="messageContainer"></div>
 
       <div class="tasks-grid" id="tasksContainer">
-        <!-- Tasks will be loaded here dynamically -->
         <div class="no-tasks" id="noTasks">
           <h3>📭 No Tasks Available</h3>
           <p>Tasks will appear here once they're available. Check back later!</p>
@@ -680,13 +884,10 @@
     </main>
   </div>
 
-  <!-- Task Modal -->
-  <div class="modal" id="taskModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 1000; justify-content: center; align-items: center;">
-    <div class="modal-content" style="background: white; border-radius: 16px; width: 90%; max-width: 600px; padding: 30px; box-shadow: 0 15px 40px rgba(0,0,0,0.2); position: relative; max-height: 90vh; overflow-y: auto;">
-      <span class="close-modal" onclick="closeTaskModal()" style="position: absolute; top: 15px; right: 20px; font-size: 1.5rem; cursor: pointer; color: var(--gray);">&times;</span>
-      <div id="modalContent">
-        <!-- Modal content will be loaded here -->
-      </div>
+  <div class="modal" id="taskModal">
+    <div class="modal-content">
+      <span class="close-modal" id="closeTaskModal">&times;</span>
+      <div id="modalContent"></div>
     </div>
   </div>
 
@@ -719,6 +920,9 @@
     const noTasks = document.getElementById('noTasks');
     const messageContainer = document.getElementById('messageContainer');
     const myTasksContainer = document.getElementById('myTasksContainer');
+    const refreshCountdown = document.getElementById('refreshCountdown');
+    const taskModal = document.getElementById('taskModal');
+    const closeTaskModalBtn = document.getElementById('closeTaskModal');
 
     // Filter elements
     const taskTypeFilter = document.getElementById('taskType');
@@ -726,17 +930,59 @@
     const membershipFilter = document.getElementById('membership');
     const searchFilter = document.getElementById('search');
 
-    // Mobile menu toggle
-    mobileMenuBtn.addEventListener('click', function() {
-      sidebar.classList.toggle('active');
+    // Initialize the application
+    document.addEventListener('DOMContentLoaded', function() {
+      initializeApp();
     });
 
-    // Close mobile menu when clicking outside
-    document.addEventListener('click', function(e) {
-      if (!sidebar.contains(e.target) && !mobileMenuBtn.contains(e.target)) {
-        sidebar.classList.remove('active');
-      }
-    });
+    async function initializeApp() {
+      setupEventListeners();
+      await checkAuth();
+      startAutoRefreshTimer();
+    }
+
+    function setupEventListeners() {
+      // Mobile menu toggle
+      mobileMenuBtn.addEventListener('click', function() {
+        sidebar.classList.toggle('active');
+      });
+
+      // Close mobile menu when clicking outside
+      document.addEventListener('click', function(e) {
+        if (!sidebar.contains(e.target) && !mobileMenuBtn.contains(e.target)) {
+          sidebar.classList.remove('active');
+        }
+      });
+
+      // Logout
+      logoutBtn.addEventListener('click', function(e) {
+        e.preventDefault();
+        handleLogout();
+      });
+
+      // Filter event listeners
+      taskTypeFilter.addEventListener('change', renderTasks);
+      difficultyFilter.addEventListener('change', renderTasks);
+      membershipFilter.addEventListener('change', renderTasks);
+      searchFilter.addEventListener('input', renderTasks);
+
+      // Tab buttons
+      document.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+          showTab(this.getAttribute('data-tab'));
+        });
+      });
+
+      // Close modal
+      closeTaskModalBtn.addEventListener('click', closeTaskModal);
+      
+      // Close modal when clicking outside
+      window.addEventListener('click', function(e) {
+        if (e.target === taskModal) {
+          closeTaskModal();
+        }
+      });
+    }
 
     // Authentication check
     async function checkAuth() {
@@ -833,6 +1079,10 @@
       document.getElementById('balanceAmount').textContent = 'KSh ' + ((profile.balance || 0).toLocaleString());
       document.getElementById('completedTasks').textContent = profile.tasks_completed || 0;
       document.getElementById('totalEarnings').textContent = 'KSh ' + ((profile.total_earnings || 0).toLocaleString());
+      
+      // Update user info in header
+      document.getElementById('userName').textContent = profile.full_name || 'User';
+      document.getElementById('userAvatar').textContent = (profile.full_name || 'U').charAt(0).toUpperCase();
     }
 
     // Render tasks based on filters
@@ -881,7 +1131,7 @@
           actionButton = '<button class="btn btn-danger" onclick="viewTaskDetails(\'' + task.id + '\')">📝 View Details</button>';
         } else if (isSubmitted) {
           statusBadge = '<div class="task-status submitted">🟡 Submitted - Awaiting Review</div>';
-          actionButton = '<button class="btn btn-warning" onclick="viewTaskDetails(\'' + task.id + '\')">📝 View Submission</button>';
+          actionButton = '<button class="btn btn-warning" onclick="viewTaskDetails(\'' + task.id + '\')">📝 View Details</button>';
         } else if (isAssigned) {
           statusBadge = '<div class="task-status in-progress">🟡 In Progress</div>';
           actionButton = '<button class="btn btn-warning" onclick="viewTaskDetails(\'' + task.id + '\')">📝 Continue Task</button>';
@@ -932,11 +1182,17 @@
 
       // Filter based on current tab
       if (currentTab === 'in-progress') {
-        filteredTasks = userTasks.filter(task => ['assigned', 'in_progress'].includes(task.status));
+        filteredTasks = userTasks.filter(function(task) { 
+          return ['assigned', 'in_progress'].includes(task.status); 
+        });
       } else if (currentTab === 'submitted') {
-        filteredTasks = userTasks.filter(task => task.status === 'submitted');
+        filteredTasks = userTasks.filter(function(task) { 
+          return task.status === 'submitted'; 
+        });
       } else if (currentTab === 'completed') {
-        filteredTasks = userTasks.filter(task => task.status === 'approved');
+        filteredTasks = userTasks.filter(function(task) { 
+          return task.status === 'approved'; 
+        });
       }
 
       if (filteredTasks.length === 0) {
@@ -1003,8 +1259,10 @@
       currentTab = tabName;
       
       // Update active tab button
-      document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
-      event.target.classList.add('active');
+      document.querySelectorAll('.tab-btn').forEach(function(btn) {
+        btn.classList.remove('active');
+      });
+      document.querySelector('[data-tab="' + tabName + '"]').classList.add('active');
       
       renderMyTasks();
     }
@@ -1029,7 +1287,11 @@
         'web_design': 'Web Design',
         'affiliate_marketing': 'Affiliate Marketing',
         'network_marketing': 'Network Marketing',
-        'online_gaming': 'Online Gaming'
+        'online_gaming': 'Online Gaming',
+        'content_writing': 'Content Writing',
+        'proofreading': 'Proofreading',
+        'research': 'Research',
+        'social_media': 'Social Media'
       };
       return types[type] || type;
     }
@@ -1049,15 +1311,43 @@
       return membership.charAt(0).toUpperCase() + membership.slice(1);
     }
 
-    // Assign task
+    // Assign task - FIXED: Prevents duplicate assignments
     async function assignTask(taskId) {
       try {
         if (!supabaseClient || !currentUser) {
           throw new Error('Not authenticated');
         }
 
+        // FIRST: Check if user already has this task
+        const { data: existingTask, error: checkError } = await supabaseClient
+          .from('user_tasks')
+          .select('*')
+          .eq('user_id', currentUser.id)
+          .eq('task_id', taskId)
+          .single();
+
+        if (checkError && checkError.code !== 'PGRST116') {
+          // PGRST116 means "no rows returned" - which is fine
+          throw checkError;
+        }
+
+        // If task already exists, show appropriate message
+        if (existingTask) {
+          if (existingTask.status === 'approved') {
+            showMessage('✅ You have already completed this task!', 'info');
+          } else if (existingTask.status === 'rejected') {
+            showMessage('❌ This task was rejected. You cannot redo it.', 'error');
+          } else if (existingTask.status === 'submitted') {
+            showMessage('🟡 This task is already submitted and awaiting review.', 'info');
+          } else {
+            showMessage('🟡 You have already started this task! Continue working on it.', 'info');
+          }
+          return;
+        }
+
         showMessage('Assigning task...', 'info');
 
+        // Only create new record if it doesn't exist
         const { error } = await supabaseClient
           .from('user_tasks')
           .insert([{
@@ -1082,8 +1372,8 @@
 
     // View task details
     async function viewTaskDetails(taskId) {
-      const task = allTasks.find(t => t.id === taskId);
-      const userTask = userTasks.find(ut => ut.task_id === taskId);
+      const task = allTasks.find(function(t) { return t.id === taskId; });
+      const userTask = userTasks.find(function(ut) { return ut.task_id === taskId; });
       
       if (!task) {
         showMessage('Task not found', 'error');
@@ -1093,62 +1383,111 @@
       let modalContent = '';
       let submissionForm = '';
 
-      if (userTask && userTask.status === 'assigned') {
-        submissionForm = `
-          <div style="margin-bottom: 20px;">
-            <h3 style="color: var(--primary); margin-bottom: 10px;">Submit Your Work</h3>
-            <textarea id="submissionText" placeholder="Paste your completed work here..." style="width: 100%; height: 150px; padding: 12px; border: 2px solid var(--border); border-radius: 8px; font-size: 14px; resize: vertical;"></textarea>
-            <button onclick="submitTask('${taskId}')" class="btn btn-primary" style="width: 100%; margin-top: 10px;">Submit Work</button>
-          </div>
-        `;
-      } else if (userTask && userTask.status === 'rejected') {
-        submissionForm = `
-          <div style="margin-bottom: 20px;">
-            <h3 style="color: var(--primary); margin-bottom: 10px;">Resubmit Your Work</h3>
-            <textarea id="submissionText" placeholder="Update your work based on the feedback..." style="width: 100%; height: 150px; padding: 12px; border: 2px solid var(--border); border-radius: 8px; font-size: 14px; resize: vertical;"></textarea>
-            <button onclick="resubmitTask('${taskId}')" class="btn btn-primary" style="width: 100%; margin-top: 10px;">Resubmit Work</button>
-          </div>
-        `;
+      // Only show submission form for tasks that are assigned or rejected
+      if (userTask && (userTask.status === 'assigned' || userTask.status === 'rejected')) {
+        submissionForm = 
+          '<div class="table-tools">' +
+            '<h4 style="color: var(--primary); margin-bottom: 15px;">📊 Table Builder (For Data Tasks)</h4>' +
+            '<div class="table-controls">' +
+              '<button onclick="addTableRow()">➕ Add Row</button>' +
+              '<button onclick="addTableColumn()">➕ Add Column</button>' +
+              '<button onclick="clearTable()">🗑 Clear Table</button>' +
+            '</div>' +
+            '<div class="table-preview" id="tablePreview">' +
+              '<table id="editableTable">' +
+                '<thead>' +
+                  '<tr>' +
+                    '<th contenteditable="true">Column 1</th>' +
+                    '<th contenteditable="true">Column 2</th>' +
+                  '</tr>' +
+                '</thead>' +
+                '<tbody>' +
+                  '<tr>' +
+                    '<td contenteditable="true">Data 1</td>' +
+                    '<td contenteditable="true">Data 2</td>' +
+                  '</tr>' +
+                '</tbody>' +
+              '</table>' +
+            '</div>' +
+          '</div>' +
+          '<div style="margin-bottom: 20px;">' +
+            '<h3 style="color: var(--primary); margin-bottom: 10px;">Submit Your Work</h3>' +
+            '<textarea id="submissionText" placeholder="Paste your completed work here... You can also use the table builder above for data tasks." style="width: 100%; height: 200px; padding: 12px; border: 2px solid var(--border); border-radius: 8px; font-size: 14px; resize: vertical;">' +
+              (userTask.submission_text || '') +
+            '</textarea>' +
+            '<button onclick="submitTask(\'' + taskId + '\')" class="btn btn-primary" style="width: 100%; margin-top: 10px;">' +
+              (userTask.status === 'rejected' ? 'Resubmit Work' : 'Submit Work') +
+            '</button>' +
+          '</div>';
       }
 
-      modalContent = `
-        <h2 style="color: var(--primary); margin-bottom: 20px;">${task.title}</h2>
-        
-        <div style="margin-bottom: 20px;">
-          <strong>Task Type:</strong> ${formatTaskType(task.task_type)}<br>
-          <strong>Difficulty:</strong> <span class="difficulty-${task.difficulty}">${formatDifficulty(task.difficulty)}</span><br>
-          <strong>Reward:</strong> KSh ${task.reward_amount}<br>
-          <strong>Status:</strong> ${userTask ? formatTaskStatus(userTask.status) : 'Not Started'}
-        </div>
-        
-        <div style="margin-bottom: 20px;">
-          <h3 style="color: var(--primary); margin-bottom: 10px;">Description</h3>
-          <p>${task.description || 'No description provided.'}</p>
-        </div>
-
-        ${userTask && userTask.submission_text ? `
-          <div style="margin-bottom: 20px;">
-            <h3 style="color: var(--primary); margin-bottom: 10px;">Your Submission</h3>
-            <div style="background: var(--light); padding: 15px; border-radius: 8px; font-size: 14px; white-space: pre-wrap;">
-              ${userTask.submission_text}
-            </div>
-          </div>
-        ` : ''}
-
-        ${userTask && userTask.admin_feedback ? `
-          <div style="margin-bottom: 20px;">
-            <h3 style="color: var(--primary); margin-bottom: 10px;">Admin Feedback</h3>
-            <div style="background: #f8d7da; padding: 15px; border-radius: 8px; font-size: 14px; color: #721c24;">
-              ${userTask.admin_feedback}
-            </div>
-          </div>
-        ` : ''}
-
-        ${submissionForm}
-      `;
+      modalContent = 
+        '<h2 style="color: var(--primary); margin-bottom: 20px;">' + task.title + '</h2>' +
+        '<div style="margin-bottom: 20px;">' +
+          '<strong>Task Type:</strong> ' + formatTaskType(task.task_type) + '<br>' +
+          '<strong>Difficulty:</strong> <span class="difficulty-' + task.difficulty + '">' + formatDifficulty(task.difficulty) + '</span><br>' +
+          '<strong>Reward:</strong> KSh ' + task.reward_amount + '<br>' +
+          '<strong>Status:</strong> ' + (userTask ? formatTaskStatus(userTask.status) : 'Not Started') +
+        '</div>' +
+        '<div style="margin-bottom: 20px;">' +
+          '<h3 style="color: var(--primary); margin-bottom: 10px;">Task Description</h3>' +
+          '<p>' + (task.description || 'No description provided.') + '</p>' +
+        '</div>' +
+        (userTask && userTask.admin_feedback ? 
+          '<div style="margin-bottom: 20px;">' +
+            '<h3 style="color: var(--primary); margin-bottom: 10px;">Admin Feedback</h3>' +
+            '<div style="background: #f8d7da; padding: 15px; border-radius: 8px; font-size: 14px; color: #721c24;">' +
+              userTask.admin_feedback +
+            '</div>' +
+          '</div>' 
+        : '') +
+        submissionForm;
 
       document.getElementById('modalContent').innerHTML = modalContent;
-      document.getElementById('taskModal').style.display = 'flex';
+      taskModal.style.display = 'flex';
+    }
+
+    // Table builder functions
+    function addTableRow() {
+      const table = document.getElementById('editableTable');
+      if (!table) return;
+      
+      const rowCount = table.rows.length;
+      const colCount = table.rows[0].cells.length;
+      
+      const newRow = table.insertRow(rowCount);
+      for (let i = 0; i < colCount; i++) {
+        const cell = newRow.insertCell(i);
+        cell.contentEditable = true;
+        cell.innerHTML = 'New Data';
+      }
+    }
+
+    function addTableColumn() {
+      const table = document.getElementById('editableTable');
+      if (!table) return;
+      
+      const rowCount = table.rows.length;
+      
+      for (let i = 0; i < rowCount; i++) {
+        const cell = table.rows[i].insertCell(-1);
+        cell.contentEditable = true;
+        cell.innerHTML = i === 0 ? 'New Column' : 'New Data';
+      }
+    }
+
+    function clearTable() {
+      const table = document.getElementById('editableTable');
+      if (!table) return;
+      
+      const rowCount = table.rows.length;
+      const colCount = table.rows[0].cells.length;
+      
+      for (let i = 0; i < rowCount; i++) {
+        for (let j = 0; j < colCount; j++) {
+          table.rows[i].cells[j].innerHTML = i === 0 ? 'Column ' + (j + 1) : 'Data';
+        }
+      }
     }
 
     // Format task status
@@ -1165,7 +1504,16 @@
     // Submit task work
     async function submitTask(taskId) {
       try {
-        const submissionText = document.getElementById('submissionText').value.trim();
+        let submissionText = document.getElementById('submissionText').value.trim();
+        
+        // Include table data if available
+        const table = document.getElementById('editableTable');
+        if (table) {
+          const tableHTML = table.outerHTML;
+          if (tableHTML) {
+            submissionText += '\n\n=== TABLE DATA ===\n' + tableHTML;
+          }
+        }
         
         if (!submissionText) {
           showMessage('Please enter your completed work', 'error');
@@ -1198,51 +1546,43 @@
       }
     }
 
-    // Resubmit task after rejection
-    async function resubmitTask(taskId) {
-      try {
-        const submissionText = document.getElementById('submissionText').value.trim();
-        
-        if (!submissionText) {
-          showMessage('Please enter your updated work', 'error');
-          return;
-        }
-
-        showMessage('Resubmitting your work...', 'info');
-
-        const { error } = await supabaseClient
-          .from('user_tasks')
-          .update({
-            status: 'submitted',
-            submission_text: submissionText,
-            submitted_at: new Date().toISOString(),
-            admin_feedback: null
-          })
-          .eq('user_id', currentUser.id)
-          .eq('task_id', taskId);
-
-        if (error) throw error;
-
-        showMessage('✅ Work resubmitted successfully! Waiting for admin review.', 'success');
-        closeTaskModal();
-        await loadUserTasks();
-        renderTasks();
-        renderMyTasks();
-
-      } catch (error) {
-        console.error('Task resubmission error:', error);
-        showMessage('❌ Failed to resubmit work: ' + error.message, 'error');
-      }
-    }
-
     // Close task modal
     function closeTaskModal() {
-      document.getElementById('taskModal').style.display = 'none';
+      taskModal.style.display = 'none';
+    }
+
+    // Auto-refresh system
+    function startAutoRefreshTimer() {
+      function updateCountdown() {
+        const now = new Date();
+        const tomorrow = new Date(now);
+        tomorrow.setDate(tomorrow.getDate() + 1);
+        tomorrow.setHours(0, 0, 0, 0);
+        
+        const diff = tomorrow - now;
+        const hours = Math.floor(diff / (1000 * 60 * 60));
+        const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+        
+        refreshCountdown.textContent = 'Next: ' + 
+          hours.toString().padStart(2, '0') + ':' + 
+          minutes.toString().padStart(2, '0') + ':' + 
+          seconds.toString().padStart(2, '0');
+        
+        // Check if it's midnight (for auto-refresh)
+        if (hours === 0 && minutes === 0 && seconds === 0) {
+          loadTasks();
+          showMessage('🔄 Tasks have been refreshed for the new day!', 'info');
+        }
+      }
+      
+      updateCountdown();
+      setInterval(updateCountdown, 1000);
     }
 
     function showMessage(message, type) {
       messageContainer.innerHTML = '<div class="message ' + type + '">' + message + '</div>';
-      if (type === 'success') {
+      if (type === 'success' || type === 'info') {
         setTimeout(function() { 
           messageContainer.innerHTML = ''; 
         }, 5000);
@@ -1261,17 +1601,6 @@
       }
     }
 
-    // Event listeners
-    logoutBtn.addEventListener('click', function(e) {
-      e.preventDefault();
-      handleLogout();
-    });
-
-    taskTypeFilter.addEventListener('change', renderTasks);
-    difficultyFilter.addEventListener('change', renderTasks);
-    membershipFilter.addEventListener('change', renderTasks);
-    searchFilter.addEventListener('input', renderTasks);
-
     // Auth state listener
     if (supabaseClient) {
       supabaseClient.auth.onAuthStateChange(function(event, session) {
@@ -1281,8 +1610,17 @@
       });
     }
 
-    // Start
-    checkAuth();
+    // Make functions globally available
+    window.showTab = showTab;
+    window.viewTaskDetails = viewTaskDetails;
+    window.assignTask = assignTask;
+    window.submitTask = submitTask;
+    window.closeTaskModal = closeTaskModal;
+    window.addTableRow = addTableRow;
+    window.addTableColumn = addTableColumn;
+    window.clearTable = clearTable;
   </script>
 </body>
 </html>
+
+
