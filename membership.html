@@ -58,6 +58,38 @@
       margin-top: 2px;
     }
 
+    .header-right {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .user-menu {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      cursor: pointer;
+      padding: 8px 12px;
+      border-radius: 8px;
+      transition: background 0.3s;
+    }
+
+    .user-menu:hover {
+      background: var(--primary-light);
+    }
+
+    .user-avatar {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: var(--secondary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      color: white;
+    }
+
     .mobile-menu-btn {
       display: none;
       background: none;
@@ -261,7 +293,7 @@
       transform: none;
     }
 
-    /* Payment Modal Styles */
+    /* Payment Modal Styles - MOBILE FIXED */
     .modal {
       display: none;
       position: fixed;
@@ -272,22 +304,27 @@
       background: rgba(0, 0, 0, 0.7);
       z-index: 1000;
       justify-content: center;
-      align-items: center;
+      align-items: flex-start;
+      padding: 20px 10px;
+      overflow-y: auto;
     }
 
     .modal-content {
       background: white;
       border-radius: 16px;
-      width: 90%;
-      max-width: 600px;
-      padding: 30px;
+      width: 95%;
+      max-width: 500px;
+      max-height: 85vh;
+      padding: 20px;
       box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
       position: relative;
       animation: modalFade 0.3s;
+      overflow-y: auto;
+      margin: 20px auto;
     }
 
     @keyframes modalFade {
-      from {opacity: 0; transform: translateY(-50px);}
+      from {opacity: 0; transform: translateY(-20px);}
       to {opacity: 1; transform: translateY(0);}
     }
 
@@ -298,6 +335,14 @@
       font-size: 1.5rem;
       cursor: pointer;
       color: var(--gray);
+      background: rgba(255,255,255,0.9);
+      border-radius: 50%;
+      width: 30px;
+      height: 30px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1001;
     }
 
     .close-modal:hover {
@@ -305,8 +350,8 @@
     }
 
     .payment-step {
-      margin-bottom: 25px;
-      padding: 20px;
+      margin-bottom: 20px;
+      padding: 15px;
       border-radius: 10px;
       background: var(--light);
     }
@@ -327,7 +372,7 @@
       background: white;
       border: 1px solid var(--border);
       border-radius: 8px;
-      padding: 15px;
+      padding: 12px;
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -336,9 +381,10 @@
 
     .copy-box span {
       font-family: monospace;
-      font-size: 1.2rem;
+      font-size: 1.1rem;
       color: var(--dark);
       font-weight: 600;
+      word-break: break-all;
     }
 
     .copy-btn {
@@ -349,6 +395,8 @@
       padding: 8px 15px;
       cursor: pointer;
       transition: background 0.3s;
+      white-space: nowrap;
+      margin-left: 10px;
     }
 
     .copy-btn:hover {
@@ -377,8 +425,8 @@
     .note {
       background: var(--gold-light);
       border-left: 4px solid var(--gold);
-      padding: 15px;
-      margin: 20px 0;
+      padding: 12px;
+      margin: 15px 0;
       border-radius: 0 8px 8px 0;
       font-size: 0.9rem;
     }
@@ -494,6 +542,10 @@
 
     /* Mobile Responsive */
     @media (max-width: 768px) {
+      .header-right .user-name {
+        display: none;
+      }
+
       .mobile-menu-btn {
         display: block;
       }
@@ -525,8 +577,54 @@
       }
 
       .modal-content {
-        padding: 20px;
+        padding: 15px;
         width: 95%;
+        margin: 10px auto;
+      }
+
+      .payment-step {
+        padding: 12px;
+      }
+
+      .copy-box {
+        flex-direction: column;
+        gap: 10px;
+        text-align: center;
+      }
+
+      .copy-box span {
+        font-size: 1rem;
+      }
+
+      .team-table {
+        font-size: 14px;
+      }
+
+      .team-table th,
+      .team-table td {
+        padding: 8px 6px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      main {
+        padding: 15px;
+      }
+
+      .page-header {
+        padding: 20px 15px;
+      }
+
+      .package-card {
+        padding: 20px;
+      }
+
+      .package-price {
+        font-size: 28px;
+      }
+
+      .modal-content {
+        padding: 15px 10px;
       }
     }
   </style>
@@ -538,7 +636,13 @@
       <h1>Academic Writing Hub</h1>
       <div class="slogan">Empowering Your Potential Through Academic Writing</div>
     </div>
-    <button class="mobile-menu-btn" id="mobileMenuBtn">☰</button>
+    <div class="header-right">
+      <div class="user-menu" id="userMenu">
+        <div class="user-avatar" id="userAvatar">U</div>
+        <span class="user-name" id="userName">Loading...</span>
+      </div>
+      <button class="mobile-menu-btn" id="mobileMenuBtn">☰</button>
+    </div>
   </header>
 
   <div class="container">
@@ -633,7 +737,7 @@
             <h3><i>1</i> Copy Business Number</h3>
             <p>Send the exact amount to the following business number:</p>
             <div class="copy-box">
-              <span id="businessNumber">0762353880</span>
+              <span id="businessNumber">0754651240</span>
               <button class="copy-btn" id="copyBusinessBtn">Copy</button>
             </div>
             <div class="note">
@@ -720,6 +824,8 @@
     const copyBusinessBtn = document.getElementById('copyBusinessBtn');
     const copyReferralBtn = document.getElementById('copyReferralBtn');
     const transactionId = document.getElementById('transactionId');
+    const userAvatar = document.getElementById('userAvatar');
+    const userName = document.getElementById('userName');
 
     // Initialize the application
     document.addEventListener('DOMContentLoaded', function() {
@@ -826,13 +932,17 @@
       const currentMembership = document.getElementById('currentMembership');
       const membershipDetails = document.getElementById('membershipDetails');
       
-      let membershipText = 'No Package';
+      let membershipText = 'Free';
       if (profile.role === 'starter') membershipText = 'Starter';
       if (profile.role === 'pro') membershipText = 'Pro';
       if (profile.role === 'premium') membershipText = 'Premium';
       
       currentMembership.textContent = membershipText;
       membershipDetails.textContent = 'You are currently on the ' + membershipText + ' plan. Upgrade to access more features and earning opportunities.';
+
+      // Update user info in header
+      userName.textContent = profile.full_name || 'User';
+      userAvatar.textContent = (profile.full_name || 'U').charAt(0).toUpperCase();
 
       // Update referral link with proper URL
       const referralLink = document.getElementById('referralLink');
@@ -933,7 +1043,7 @@
       }
     }
 
-    // Load team members
+    // Load team members - FIXED: Show "Free" for members without packages
     async function loadTeamMembers(referralCode) {
       try {
         const { data: team, error } = await supabaseClient
@@ -957,13 +1067,18 @@
         }
 
         teamTableBody.innerHTML = team.map(function(member) {
-          let statusColor = '#e2e3e5';
-          let statusText = 'Starter';
-          if (member.role === 'pro') {
+          let statusColor = '#e9ecef';
+          let statusText = 'Free';
+          
+          // Determine status based on role
+          if (member.role === 'starter') {
+            statusColor = '#d4edda';
+            statusText = 'Starter';
+          } else if (member.role === 'pro') {
             statusColor = '#fff3cd';
             statusText = 'Pro';
           } else if (member.role === 'premium') {
-            statusColor = '#d4edda';
+            statusColor = '#d1ecf1';
             statusText = 'Premium';
           }
           
@@ -972,7 +1087,7 @@
             '<td>' + (member.phone || '-') + '</td>' +
             '<td>' + new Date(member.created_at).toLocaleDateString() + '</td>' +
             '<td>' +
-              '<span style="padding: 4px 8px; border-radius: 12px; font-size: 12px; font-weight: 600; background: ' + statusColor + ';">' +
+              '<span style="padding: 4px 8px; border-radius: 12px; font-size: 12px; font-weight: 600; background: ' + statusColor + '; color: #000;">' +
                 statusText +
               '</span>' +
             '</td>' +
@@ -1029,3 +1144,5 @@
   </script>
 </body>
 </html>
+
+
