@@ -3,155 +3,427 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Gold Gain - Sign Up</title>
+  <title>Sign Up - Gold Gain</title>
   <style>
-    body { 
-      font-family: 'Segoe UI', Arial, sans-serif; 
-      text-align: center; 
+    :root {
+      --primary: #004aad;
+      --primary-light: #3a6fc8;
+      --secondary: #ff6b35;
+      --success: #28a745;
+      --warning: #ffc107;
+      --danger: #dc3545;
+      --light: #f8f9fa;
+      --dark: #343a40;
+      --gray: #6c757d;
+      --border: #e9ecef;
+    }
+
+    * {
       margin: 0;
-      height: 100vh;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #f4f6f9 0%, #e9ecef 100%);
+      color: #333;
+      line-height: 1.6;
+      min-height: 100vh;
       display: flex;
       align-items: center;
       justify-content: center;
-      background: linear-gradient(135deg, #f9d976, #f39f86);
+      padding: 20px;
     }
-    .container { 
+
+    .container {
       width: 100%;
-      max-width: 420px; 
-      padding: 30px; 
-      background: #fff; 
-      border-radius: 20px; 
-      box-shadow: 0 10px 25px rgba(0,0,0,0.15);
-      animation: fadeIn 1s ease-in-out;
+      max-width: 500px;
+      background: #fff;
+      border-radius: 20px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+      overflow: hidden;
+      animation: fadeInUp 0.8s ease-out;
     }
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(-20px); }
-      to { opacity: 1; transform: translateY(0); }
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
     }
-    input { 
-      width: 90%; 
-      padding: 12px; 
-      margin: 10px 0; 
-      border-radius: 10px; 
-      border: 1px solid #ccc; 
-      font-size: 14px;
+
+    .header {
+      background: linear-gradient(135deg, var(--primary), var(--primary-light));
+      color: white;
+      padding: 40px 30px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
     }
-    button { 
-      padding: 12px 25px; 
-      background: gold; 
-      border: none; 
-      border-radius: 10px; 
-      cursor: pointer; 
+
+    .header::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      right: -50%;
+      width: 100%;
+      height: 200%;
+      background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+      transform: rotate(45deg);
+    }
+
+    .logo {
+      width: 90px;
+      height: 90px;
+      margin: 0 auto 20px;
+      background: linear-gradient(135deg, #ffd700, #ff6b35);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 36px;
       font-weight: bold;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+      border: 4px solid white;
+    }
+
+    .header h1 {
+      font-size: 32px;
+      margin-bottom: 10px;
+      font-weight: 800;
+      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    }
+
+    .header p {
+      opacity: 0.95;
+      font-size: 16px;
+      font-weight: 500;
+    }
+
+    .form-container {
+      padding: 40px;
+    }
+
+    .form-group {
+      margin-bottom: 25px;
+      text-align: left;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 10px;
+      font-weight: 600;
+      color: var(--dark);
       font-size: 15px;
+    }
+
+    .required-field::after {
+      content: " *";
+      color: var(--danger);
+    }
+
+    .form-input {
+      width: 100%;
+      padding: 16px 18px;
+      border: 2px solid var(--border);
+      border-radius: 12px;
+      font-size: 16px;
       transition: all 0.3s ease;
+      background: #fff;
+      font-family: inherit;
     }
-    button:hover { 
-      background: darkgoldenrod; 
-      color: #fff; 
-      transform: scale(1.05);
-      box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+
+    .form-input:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 4px rgba(0, 74, 173, 0.15);
+      transform: translateY(-2px);
     }
-    img { 
-      max-width: 100%; 
-      border-radius: 12px; 
-      margin-bottom: 20px; 
+
+    .referral-valid {
+      border-color: var(--success) !important;
+      background-color: #f8fff9;
     }
-    p#message { 
-      font-weight: bold; 
-      margin-top: 10px; 
+
+    .referral-invalid {
+      border-color: var(--danger) !important;
+      background-color: #fff8f8;
     }
+
+    .referral-status {
+      font-size: 14px;
+      margin: 10px 0;
+      font-weight: 600;
+      min-height: 20px;
+    }
+
+    .referral-valid-text {
+      color: var(--success);
+    }
+
+    .referral-invalid-text {
+      color: var(--danger);
+    }
+
+    .referral-loading {
+      color: var(--warning);
+    }
+
+    .referral-note {
+      font-size: 13px;
+      color: var(--gray);
+      margin-top: 8px;
+      line-height: 1.5;
+    }
+
+    .submit-btn {
+      width: 100%;
+      padding: 18px;
+      background: linear-gradient(135deg, var(--primary), var(--primary-light));
+      color: white;
+      border: none;
+      border-radius: 12px;
+      font-size: 17px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      margin-top: 15px;
+      letter-spacing: 0.5px;
+    }
+
+    .submit-btn:hover:not(:disabled) {
+      transform: translateY(-3px);
+      box-shadow: 0 12px 25px rgba(0, 74, 173, 0.4);
+    }
+
+    .submit-btn:active {
+      transform: translateY(-1px);
+    }
+
+    .submit-btn:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      transform: none !important;
+      box-shadow: none !important;
+    }
+
     .spinner {
       display: none;
-      margin: 10px auto;
+      margin: 20px auto;
       border: 4px solid #f3f3f3;
-      border-top: 4px solid gold;
+      border-top: 4px solid var(--primary);
       border-radius: 50%;
-      width: 28px;
-      height: 28px;
+      width: 30px;
+      height: 30px;
       animation: spin 1s linear infinite;
     }
+
     @keyframes spin {
       0% { transform: rotate(0deg); }
       100% { transform: rotate(360deg); }
     }
-    .required-field::after {
-      content: " *";
-      color: red;
+
+    .message {
+      padding: 16px 20px;
+      border-radius: 12px;
+      margin: 20px 0;
+      text-align: center;
+      font-weight: 600;
+      font-size: 15px;
     }
-    .referral-note {
-      font-size: 12px;
-      color: #666;
-      margin: -5px 0 10px 0;
-      text-align: left;
-      width: 90%;
-      margin-left: auto;
-      margin-right: auto;
+
+    .message.success {
+      background: #e8f5e9;
+      color: var(--success);
+      border: 2px solid #c8e6c9;
     }
-    .referral-valid {
-      border-color: #28a745 !important;
-      background-color: #f8fff9;
+
+    .message.error {
+      background: #ffebee;
+      color: var(--danger);
+      border: 2px solid #ffcdd2;
     }
-    .referral-invalid {
-      border-color: #dc3545 !important;
-      background-color: #fff8f8;
+
+    .message.info {
+      background: #e3f2fd;
+      color: var(--primary);
+      border: 2px solid #bbdefb;
     }
-    .referral-status {
-      font-size: 12px;
-      margin: -8px 0 10px 0;
-      text-align: left;
-      width: 90%;
-      margin-left: auto;
-      margin-right: auto;
-      font-weight: bold;
-      min-height: 16px;
+
+    .login-link {
+      text-align: center;
+      margin-top: 30px;
+      color: var(--gray);
+      font-size: 15px;
     }
-    .referral-valid-text {
-      color: #28a745;
+
+    .login-link a {
+      color: var(--primary);
+      text-decoration: none;
+      font-weight: 700;
+      transition: all 0.3s ease;
     }
-    .referral-invalid-text {
-      color: #dc3545;
+
+    .login-link a:hover {
+      color: var(--primary-light);
+      text-decoration: underline;
     }
-    .referral-loading {
-      color: #ffc107;
+
+    .verification-note {
+      background: linear-gradient(135deg, #fff3cd, #ffeaa7);
+      border: 2px solid #ffd54f;
+      border-radius: 12px;
+      padding: 20px;
+      margin: 25px 0;
+      text-align: center;
+      font-size: 14px;
+      color: #856404;
+      font-weight: 600;
+    }
+
+    .verification-note strong {
+      color: var(--primary);
+      font-size: 15px;
+    }
+
+    /* Mobile Responsive */
+    @media (max-width: 768px) {
+      body {
+        padding: 15px;
+        align-items: flex-start;
+      }
+
+      .container {
+        max-width: 100%;
+        margin-top: 20px;
+      }
+
+      .header {
+        padding: 30px 20px;
+      }
+
+      .header h1 {
+        font-size: 28px;
+      }
+
+      .logo {
+        width: 80px;
+        height: 80px;
+        font-size: 32px;
+      }
+
+      .form-container {
+        padding: 30px 25px;
+      }
+
+      .form-input {
+        padding: 14px 16px;
+      }
+
+      .submit-btn {
+        padding: 16px;
+        font-size: 16px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .header {
+        padding: 25px 15px;
+      }
+
+      .header h1 {
+        font-size: 26px;
+      }
+
+      .logo {
+        width: 70px;
+        height: 70px;
+        font-size: 28px;
+      }
+
+      .form-container {
+        padding: 25px 20px;
+      }
+
+      .header p {
+        font-size: 15px;
+      }
     }
   </style>
 </head>
 <body>
 
 <div class="container">
-  <img src="https://images.unsplash.com/photo-1581092795367-6d0b7d1b2c68?auto=format&fit=crop&w=400&q=80" alt="Gold Gain Welcome">
-  <h2>Sign Up for Gold Gain</h2>
-  <form id="signup-form">
-    <input type="text" id="fullName" placeholder="Full Name" required><br>
-    <input type="email" id="email" placeholder="Email" required><br>
-    <input type="password" id="password" placeholder="Password" required><br>
-    <input type="password" id="confirm-password" placeholder="Confirm Password" required><br>
-    
-    <label for="referral" class="required-field" style="display: block; text-align: left; width: 90%; margin: 10px auto 5px; font-weight: bold;">Referral Code</label>
-    <input type="text" id="referral" placeholder="Enter referral code" required><br>
-    <div class="referral-status" id="referralStatus"></div>
-    <div class="referral-note">Referral code is required to create an account</div>
-    
-    <input type="text" id="phone" placeholder="Phone Number" required><br>
-    <button type="submit" id="submitBtn">Sign Up</button>
-  </form>
-  <div class="spinner" id="spinner"></div>
-  <p id="message"></p>
-  <p>Already a member? <a href="login.html">Login</a></p>
+  <div class="header">
+    <div class="logo">💰</div>
+    <h1>Join Gold Gain</h1>
+    <p>Start Your Journey to Financial Freedom</p>
+  </div>
+
+  <div class="form-container">
+    <div class="verification-note">
+      <strong>📧 Email Verification Required</strong><br>
+      Verify your email to activate your account and start earning
+    </div>
+
+    <form id="signup-form">
+      <div class="form-group">
+        <label for="fullName" class="required-field">Full Name</label>
+        <input type="text" id="fullName" class="form-input" placeholder="Your full name" required>
+      </div>
+
+      <div class="form-group">
+        <label for="email" class="required-field">Email Address</label>
+        <input type="email" id="email" class="form-input" placeholder="Your email address" required>
+      </div>
+
+      <div class="form-group">
+        <label for="password" class="required-field">Password</label>
+        <input type="password" id="password" class="form-input" placeholder="Your password" required>
+      </div>
+
+      <div class="form-group">
+        <label for="confirm-password" class="required-field">Confirm Password</label>
+        <input type="password" id="confirm-password" class="form-input" placeholder="Confirm your password" required>
+      </div>
+
+      <div class="form-group">
+        <label for="referral" class="required-field">Referral Code</label>
+        <input type="text" id="referral" class="form-input" placeholder="Referral code" required>
+        <div class="referral-status" id="referralStatus"></div>
+        <div class="referral-note">Enter the referral code provided by your inviter</div>
+      </div>
+
+      <div class="form-group">
+        <label for="phone" class="required-field">Phone Number</label>
+        <input type="text" id="phone" class="form-input" placeholder="Your phone number" required>
+      </div>
+
+      <button type="submit" class="submit-btn" id="submitBtn">Create Account</button>
+    </form>
+
+    <div class="spinner" id="spinner"></div>
+    <div id="message"></div>
+
+    <div class="login-link">
+      Already have an account? <a href="login.html">Sign In Here</a>
+    </div>
+  </div>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-  // Wait for everything to load
   document.addEventListener('DOMContentLoaded', function() {
-    // Initialize Supabase
     const supabaseClient = supabase.createClient(
       "https://lfrjtklkbppihaaiuxef.supabase.co",
       "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imxmcmp0a2xrYnBwaWhhYWl1eGVmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTkwNTI5MzMsImV4cCI6MjA3NDYyODkzM30.2FVqnt5daF2Tw-RmVBwOGgt4GuIQQSkG8IUZt30QxIM"
     );
 
-    // Get elements
     const form = document.getElementById('signup-form');
     const message = document.getElementById('message');
     const spinner = document.getElementById('spinner');
@@ -163,7 +435,7 @@
     let currentReferrerData = null;
     let validationTimeout;
 
-    // Auto-fill referral code from URL
+    // Auto-fill referral code from URL - IMPROVED VERSION
     function autoFillReferralCode() {
       const urlParams = new URLSearchParams(window.location.search);
       const referralCode = urlParams.get('ref');
@@ -171,6 +443,13 @@
       if (referralCode) {
         referralInput.value = referralCode.toUpperCase();
         validateReferralCode(referralCode);
+        
+        // Show success message for auto-filled code
+        setTimeout(() => {
+          if (isValidReferralCode) {
+            showMessage('✅ Referral code auto-filled successfully!', 'success');
+          }
+        }, 1000);
       }
     }
 
@@ -184,19 +463,19 @@
           .single();
 
         if (error || !data) {
-          referralStatus.innerHTML = '<span class="referral-invalid-text">Invalid referral code</span>';
+          referralStatus.innerHTML = '<span class="referral-invalid-text">❌ Invalid referral code</span>';
           referralInput.classList.remove('referral-valid');
           referralInput.classList.add('referral-invalid');
           isValidReferralCode = false;
         } else {
-          referralStatus.innerHTML = '<span class="referral-valid-text">Valid code - Referred by: ' + (data.full_name || 'Member') + '</span>';
+          referralStatus.innerHTML = '<span class="referral-valid-text">✅ Valid code - Referred by: ' + (data.full_name || 'Member') + '</span>';
           referralInput.classList.remove('referral-invalid');
           referralInput.classList.add('referral-valid');
           isValidReferralCode = true;
           currentReferrerData = data;
         }
       } catch (error) {
-        referralStatus.innerHTML = '<span class="referral-invalid-text">Error checking code</span>';
+        referralStatus.innerHTML = '<span class="referral-invalid-text">❌ Error checking code</span>';
         isValidReferralCode = false;
       }
       updateSubmitButton();
@@ -210,10 +489,10 @@
       clearTimeout(validationTimeout);
       
       if (value.length >= 3) {
-        referralStatus.innerHTML = '<span class="referral-loading">Checking code...</span>';
+        referralStatus.innerHTML = '<span class="referral-loading">⏳ Checking code...</span>';
         validationTimeout = setTimeout(() => validateReferralCode(value), 500);
       } else if (value.length > 0) {
-        referralStatus.innerHTML = '<span class="referral-invalid-text">Code must be 3+ characters</span>';
+        referralStatus.innerHTML = '<span class="referral-invalid-text">❌ Code must be 3+ characters</span>';
         isValidReferralCode = false;
         updateSubmitButton();
       } else {
@@ -226,13 +505,11 @@
     // Update submit button
     function updateSubmitButton() {
       submitBtn.disabled = !isValidReferralCode;
-      submitBtn.style.opacity = isValidReferralCode ? "1" : "0.6";
     }
 
     // Show message
     function showMessage(text, type) {
-      message.textContent = text;
-      message.style.color = type === 'error' ? 'red' : type === 'success' ? 'green' : 'black';
+      message.innerHTML = '<div class="message ' + type + '">' + text + '</div>';
     }
 
     // Generate referral code
@@ -242,7 +519,7 @@
       return namePart + randomPart;
     }
 
-    // Handle form submission - SIMPLIFIED AND FIXED
+    // Handle form submission
     form.addEventListener('submit', async function(e) {
       e.preventDefault();
       
@@ -258,8 +535,18 @@
       const referral = document.getElementById('referral').value.trim();
       const phone = document.getElementById('phone').value.trim();
 
+      if (!fullName || !email || !password || !confirmPassword || !referral || !phone) {
+        showMessage('Please fill in all required fields', 'error');
+        return;
+      }
+
       if (password !== confirmPassword) {
         showMessage('Passwords do not match', 'error');
+        return;
+      }
+
+      if (password.length < 6) {
+        showMessage('Password must be at least 6 characters long', 'error');
         return;
       }
 
@@ -269,7 +556,7 @@
       submitBtn.disabled = true;
 
       try {
-        // STEP 1: Create auth user
+        // Create auth user with email confirmation
         const { data: authData, error: authError } = await supabaseClient.auth.signUp({
           email: email,
           password: password,
@@ -282,9 +569,8 @@
         });
 
         if (authError) {
-          // If account exists, show message but don't treat as error
           if (authError.message.includes('already registered')) {
-            showMessage('Account created! Please check your email to confirm.', 'success');
+            showMessage('This email is already registered. Please sign in instead.', 'error');
           } else {
             showMessage('Error: ' + authError.message, 'error');
           }
@@ -293,10 +579,10 @@
           return;
         }
 
-        // STEP 2: Generate referral code for new user
+        // Generate referral code for new user
         const userReferralCode = generateReferralCode(fullName, email);
         
-        // STEP 3: Create profile - use upsert to handle any case
+        // Create profile
         const profileData = {
           id: authData.user.id,
           full_name: fullName,
@@ -310,35 +596,29 @@
           updated_at: new Date().toISOString()
         };
 
-        // Try insert, if fails try update
         const { error: profileError } = await supabaseClient
           .from('profiles')
           .upsert(profileData);
 
         if (profileError) {
-          console.log('Profile error (non-critical):', profileError);
-          // Don't show error to user - profile might be created by trigger
+          console.log('Profile error:', profileError);
         }
 
-        // STEP 4: Try to update referrer count (non-critical)
+        // Update referrer count
         try {
-          await supabaseClient
-            .from('profiles')
-            .update({ referrals_count: supabaseClient.sql('COALESCE(referrals_count, 0) + 1') })
-            .eq('id', currentReferrerData.id);
+          await supabaseClient.rpc('increment_referral_count', { referrer_id: currentReferrerData.id });
         } catch (countError) {
-          console.log('Count update error (non-critical):', countError);
+          console.log('Count update error:', countError);
         }
 
-        // SUCCESS - Always show success if we reach here
-        showMessage('Account created successfully! Please check your email to confirm your account.', 'success');
+        // SUCCESS
+        showMessage('🎉 Account created successfully! Please check your email to verify your account before signing in.', 'success');
         form.reset();
         referralStatus.innerHTML = '';
         
       } catch (error) {
-        // Only show error for critical failures
         console.error('Signup error:', error);
-        showMessage('Account was created! There was a minor issue but you can login.', 'success');
+        showMessage('An error occurred during signup. Please try again.', 'error');
       } finally {
         spinner.style.display = 'none';
         submitBtn.disabled = false;
@@ -350,8 +630,6 @@
     updateSubmitButton();
     autoFillReferralCode();
   });
-</script>
-
 </script>
 
 </body>
