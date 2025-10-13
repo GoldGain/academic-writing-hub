@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Referrals - Academic Writing Hub</title>
+  <title>Referrals - Gold Gain</title>
   <style>
     :root {
       --primary: #004aad;
@@ -16,6 +16,9 @@
       --dark: #343a40;
       --gray: #6c757d;
       --border: #e9ecef;
+      --gold: #ffd700;
+      --silver: #c0c0c0;
+      --bronze: #cd7f32;
     }
 
     * {
@@ -26,9 +29,10 @@
     }
 
     body {
-      background-color: #f5f7fa;
+      background: linear-gradient(135deg, #f4f6f9 0%, #e9ecef 100%);
       color: #333;
       line-height: 1.6;
+      min-height: 100vh;
     }
 
     header {
@@ -38,17 +42,51 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      box-shadow: 0 2px 20px rgba(0, 0, 0, 0.15);
     }
 
     .header-left h1 {
       font-size: 1.8rem;
       margin-bottom: 0.2rem;
+      font-weight: 800;
     }
 
     .slogan {
       font-size: 0.9rem;
       opacity: 0.9;
+    }
+
+    .header-right {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .user-menu {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      cursor: pointer;
+      padding: 8px 12px;
+      border-radius: 8px;
+      transition: background 0.3s;
+    }
+
+    .user-menu:hover {
+      background: var(--primary-light);
+    }
+
+    .user-avatar {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--gold), var(--secondary));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      color: white;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
     }
 
     .mobile-menu-btn {
@@ -69,7 +107,7 @@
       width: 250px;
       background: white;
       padding: 1.5rem 0;
-      box-shadow: 2px 0 10px rgba(0, 0, 0, 0.05);
+      box-shadow: 2px 0 15px rgba(0, 0, 0, 0.08);
       height: calc(100vh - 80px);
       position: sticky;
       top: 0;
@@ -83,15 +121,17 @@
       color: var(--dark);
       transition: all 0.3s;
       border-left: 3px solid transparent;
+      font-weight: 500;
     }
 
     nav a:hover {
       background: #f8f9fa;
       color: var(--primary);
+      transform: translateX(5px);
     }
 
     nav a.active {
-      background: #f0f5ff;
+      background: linear-gradient(135deg, #f0f5ff, #e3f2fd);
       color: var(--primary);
       border-left: 3px solid var(--primary);
       font-weight: 600;
@@ -103,121 +143,168 @@
     }
 
     .page-title {
-      font-size: 1.8rem;
+      font-size: 2rem;
       margin-bottom: 1.5rem;
       color: var(--primary);
       display: flex;
       align-items: center;
       gap: 0.5rem;
+      font-weight: 800;
+    }
+
+    .page-title::after {
+      content: "💰";
+      font-size: 1.5rem;
     }
 
     .stats-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
       gap: 1.5rem;
       margin-bottom: 2rem;
     }
 
     .stat-card {
       background: white;
-      border-radius: 10px;
-      padding: 1.5rem;
-      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+      border-radius: 15px;
+      padding: 2rem;
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
       text-align: center;
-      border-top: 4px solid var(--primary);
+      border-top: 5px solid var(--primary);
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .stat-card::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      right: -50%;
+      width: 100%;
+      height: 200%;
+      background: linear-gradient(45deg, transparent, rgba(0, 74, 173, 0.03), transparent);
+      transform: rotate(45deg);
+    }
+
+    .stat-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
     }
 
     .stat-card h3 {
-      font-size: 0.9rem;
+      font-size: 0.95rem;
       color: var(--gray);
-      margin-bottom: 0.5rem;
+      margin-bottom: 0.8rem;
+      font-weight: 600;
     }
 
     .stat-value {
-      font-size: 2rem;
-      font-weight: 700;
+      font-size: 2.5rem;
+      font-weight: 800;
       color: var(--primary);
+      margin-bottom: 0.5rem;
+    }
+
+    .stat-subtitle {
+      font-size: 0.85rem;
+      color: var(--gray);
+      font-weight: 500;
     }
 
     .card {
       background: white;
-      border-radius: 10px;
-      padding: 1.5rem;
-      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+      border-radius: 15px;
+      padding: 2rem;
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
       margin-bottom: 2rem;
+      transition: all 0.3s ease;
+    }
+
+    .card:hover {
+      box-shadow: 0 12px 35px rgba(0, 0, 0, 0.15);
     }
 
     .card h2 {
-      font-size: 1.3rem;
-      margin-bottom: 1rem;
+      font-size: 1.5rem;
+      margin-bottom: 1.2rem;
       color: var(--primary);
       display: flex;
       align-items: center;
       gap: 0.5rem;
+      font-weight: 700;
     }
 
     .referral-link-container {
       display: flex;
-      margin-bottom: 1rem;
+      margin-bottom: 1.5rem;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
     }
 
     .referral-link-container input {
       flex: 1;
-      padding: 0.8rem 1rem;
-      border: 1px solid var(--border);
-      border-radius: 5px 0 0 5px;
+      padding: 1rem 1.2rem;
+      border: none;
+      background: #f8f9fa;
       font-size: 1rem;
+      font-weight: 500;
     }
 
     .referral-link-container button {
-      background: var(--primary);
+      background: linear-gradient(135deg, var(--primary), var(--primary-light));
       color: white;
       border: none;
-      padding: 0 1.5rem;
-      border-radius: 0 5px 5px 0;
+      padding: 0 2rem;
       cursor: pointer;
-      transition: background 0.3s;
+      transition: all 0.3s;
+      font-weight: 600;
+      min-width: 120px;
     }
 
     .referral-link-container button:hover {
-      background: var(--primary-light);
+      background: linear-gradient(135deg, var(--primary-light), var(--primary));
+      transform: scale(1.05);
     }
 
     .share-buttons {
-      display: flex;
-      gap: 0.8rem;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+      gap: 1rem;
       margin-bottom: 1.5rem;
     }
 
     .share-btn {
-      flex: 1;
-      padding: 0.8rem;
+      padding: 1rem;
       border: none;
-      border-radius: 5px;
+      border-radius: 10px;
       color: white;
       font-weight: 600;
       cursor: pointer;
-      transition: opacity 0.3s;
+      transition: all 0.3s;
       display: flex;
       align-items: center;
       justify-content: center;
       gap: 0.5rem;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
     }
 
     .share-btn:hover {
-      opacity: 0.9;
+      transform: translateY(-3px);
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
     }
 
     .whatsapp {
-      background: #25D366;
+      background: linear-gradient(135deg, #25D366, #128C7E);
     }
 
     .facebook {
-      background: #3b5998;
+      background: linear-gradient(135deg, #3b5998, #2d4373);
     }
 
     .twitter {
-      background: #1DA1F2;
+      background: linear-gradient(135deg, #1DA1F2, #0d8bd9);
     }
 
     .bonus-structure {
@@ -228,95 +315,293 @@
       width: 100%;
       border-collapse: collapse;
       margin-top: 1rem;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
     }
 
     .bonus-table th,
     .bonus-table td {
-      padding: 0.8rem;
-      text-align: left;
+      padding: 1.2rem;
+      text-align: center;
       border-bottom: 1px solid var(--border);
     }
 
     .bonus-table th {
-      background: #f8f9fa;
+      background: linear-gradient(135deg, var(--primary), var(--primary-light));
+      color: white;
       font-weight: 600;
+      font-size: 1rem;
     }
 
     .bonus-table tr:last-child td {
       border-bottom: none;
     }
 
+    .bonus-table tr:hover {
+      background: #f8f9fa;
+    }
+
     .highlight {
-      background: #fff9e6;
-      font-weight: 600;
+      background: linear-gradient(135deg, #fff9e6, #fff3cd) !important;
+      font-weight: 700;
+      color: var(--primary);
+      font-size: 1.1rem;
     }
 
     .team-table {
       width: 100%;
       border-collapse: collapse;
       margin-top: 1rem;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
     }
 
     .team-table th,
     .team-table td {
-      padding: 0.8rem;
+      padding: 1.2rem;
       text-align: left;
       border-bottom: 1px solid var(--border);
     }
 
     .team-table th {
-      background: #f8f9fa;
+      background: linear-gradient(135deg, var(--primary), var(--primary-light));
+      color: white;
       font-weight: 600;
+      font-size: 0.95rem;
     }
 
     .status-badge {
-      padding: 0.3rem 0.8rem;
+      padding: 0.5rem 1rem;
       border-radius: 20px;
       font-size: 0.8rem;
-      font-weight: 600;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
     }
 
     .status-active {
-      background: #e8f5e9;
+      background: linear-gradient(135deg, #e8f5e9, #c8e6c9);
       color: #2e7d32;
     }
 
     .status-pending {
-      background: #fff3e0;
+      background: linear-gradient(135deg, #fff3e0, #ffe0b2);
       color: #ef6c00;
     }
 
     .status-upgraded {
-      background: #e3f2fd;
+      background: linear-gradient(135deg, #e3f2fd, #bbdefb);
       color: #1565c0;
     }
 
     .message {
-      padding: 0.8rem 1rem;
-      border-radius: 5px;
-      margin-bottom: 1rem;
-      font-weight: 500;
+      padding: 1.2rem 1.5rem;
+      border-radius: 12px;
+      margin-bottom: 1.5rem;
+      font-weight: 600;
+      font-size: 1rem;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
     }
 
     .message.success {
-      background: #e8f5e9;
+      background: linear-gradient(135deg, #e8f5e9, #c8e6c9);
       color: #2e7d32;
-      border-left: 4px solid #4caf50;
+      border-left: 5px solid #4caf50;
     }
 
     .message.error {
-      background: #ffebee;
+      background: linear-gradient(135deg, #ffebee, #ffcdd2);
       color: #c62828;
-      border-left: 4px solid #f44336;
+      border-left: 5px solid #f44336;
     }
 
     .message.info {
-      background: #e3f2fd;
+      background: linear-gradient(135deg, #e3f2fd, #bbdefb);
       color: #1565c0;
-      border-left: 4px solid #2196f3;
+      border-left: 5px solid #2196f3;
+    }
+
+    .loading {
+      display: inline-block;
+      width: 20px;
+      height: 20px;
+      border: 3px solid #f3f3f3;
+      border-top: 3px solid var(--primary);
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+
+    /* Enhanced Milestones */
+    .milestones-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 2rem;
+      margin-top: 1.5rem;
+    }
+
+    .milestone-card {
+      background: white;
+      border-radius: 15px;
+      padding: 2rem;
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+      border-left: 5px solid var(--primary);
+      position: relative;
+      transition: all 0.3s ease;
+      overflow: hidden;
+    }
+
+    .milestone-card::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      right: -50%;
+      width: 100%;
+      height: 200%;
+      background: linear-gradient(45deg, transparent, rgba(0, 74, 173, 0.05), transparent);
+      transform: rotate(45deg);
+    }
+
+    .milestone-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+    }
+
+    .milestone-card.achieved {
+      border-left-color: var(--gold);
+      background: linear-gradient(135deg, #fff9e6, white);
+    }
+
+    .milestone-card.achieved::after {
+      content: '🏆';
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      font-size: 1.5rem;
+    }
+
+    .milestone-card h3 {
+      font-size: 1.3rem;
+      margin-bottom: 0.8rem;
+      color: var(--primary);
+      font-weight: 700;
+    }
+
+    .milestone-reward {
+      font-size: 1.3rem;
+      font-weight: 800;
+      color: var(--secondary);
+      margin-bottom: 0.8rem;
+    }
+
+    .milestone-count {
+      font-size: 1rem;
+      color: var(--gray);
+      margin-bottom: 1rem;
+      line-height: 1.5;
+    }
+
+    .milestone-status {
+      display: inline-block;
+      padding: 0.8rem 1.5rem;
+      border-radius: 25px;
+      font-size: 0.9rem;
+      font-weight: 700;
+      margin-top: 1rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .milestone-achieved {
+      background: linear-gradient(135deg, var(--success), #4caf50);
+      color: white;
+    }
+
+    .milestone-pending {
+      background: linear-gradient(135deg, var(--warning), #ffb300);
+      color: white;
+    }
+
+    .progress-container {
+      margin-top: 1rem;
+      background: #f0f0f0;
+      border-radius: 10px;
+      overflow: hidden;
+      height: 12px;
+      box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+    
+    .progress-bar {
+      height: 100%;
+      background: linear-gradient(90deg, var(--primary), var(--secondary));
+      border-radius: 10px;
+      transition: width 0.8s ease;
+      position: relative;
+    }
+
+    .progress-bar::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+      animation: shimmer 2s infinite;
+    }
+
+    @keyframes shimmer {
+      0% { transform: translateX(-100%); }
+      100% { transform: translateX(100%); }
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    /* Motivational Elements */
+    .motivation-banner {
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      color: white;
+      padding: 2rem;
+      border-radius: 15px;
+      text-align: center;
+      margin-bottom: 2rem;
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+    }
+
+    .motivation-banner h3 {
+      font-size: 1.5rem;
+      margin-bottom: 0.5rem;
+      font-weight: 700;
+    }
+
+    .motivation-banner p {
+      opacity: 0.9;
+      font-size: 1.1rem;
+    }
+
+    .earnings-preview {
+      background: linear-gradient(135deg, #f0f7ff, #e3f2fd);
+      padding: 1.5rem;
+      border-radius: 12px;
+      margin-top: 1.5rem;
+      border-left: 4px solid var(--primary);
+    }
+
+    .earnings-preview h4 {
+      color: var(--primary);
+      margin-bottom: 0.8rem;
+      font-weight: 600;
     }
 
     @media (max-width: 768px) {
+      .header-right .user-name {
+        display: none;
+      }
+
       .mobile-menu-btn {
         display: block;
       }
@@ -347,7 +632,7 @@
       }
 
       .share-buttons {
-        flex-direction: column;
+        grid-template-columns: 1fr;
       }
 
       .referral-link-container {
@@ -355,12 +640,25 @@
       }
 
       .referral-link-container input {
-        border-radius: 5px;
-        margin-bottom: 0.5rem;
+        border-radius: 10px 10px 0 0;
+        margin-bottom: 0;
       }
 
       .referral-link-container button {
-        border-radius: 5px;
+        border-radius: 0 0 10px 10px;
+        padding: 1rem;
+      }
+
+      .milestones-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .bonus-table, .team-table {
+        font-size: 0.9rem;
+      }
+
+      .bonus-table th, .bonus-table td,
+      .team-table th, .team-table td {
         padding: 0.8rem;
       }
     }
@@ -370,10 +668,16 @@
 
   <header>
     <div class="header-left">
-      <h1>Academic Writing Hub</h1>
-      <div class="slogan">Empowering Your Potential Through Academic Writing</div>
+      <h1>Gold Gain</h1>
+      <div class="slogan">Empowering Your Financial Freedom</div>
     </div>
-    <button class="mobile-menu-btn" id="mobileMenuBtn">☰</button>
+    <div class="header-right">
+      <div class="user-menu" id="userMenu">
+        <div class="user-avatar" id="userAvatar">U</div>
+        <span class="user-name" id="userName">Loading...</span>
+      </div>
+      <button class="mobile-menu-btn" id="mobileMenuBtn">☰</button>
+    </div>
   </header>
 
   <div class="container">
@@ -389,28 +693,45 @@
     </nav>
 
     <main>
-      <h1 class="page-title">👥 Referral Program</h1>
+      <h1 class="page-title">Referral Program</h1>
       
       <div id="messageContainer"></div>
 
+      <!-- Motivational Banner -->
+      <div class="motivation-banner">
+        <h3>🚀 Unlock Unlimited Earnings!</h3>
+        <p>Earn KSh 1,000 to KSh 3,000 for every friend who upgrades their membership</p>
+      </div>
+
       <div class="stats-grid">
         <div class="stat-card">
-          <h3>Total Referrals</h3>
-          <div class="stat-value" id="totalReferrals">0</div>
+          <h3>Upgraded Referrals</h3>
+          <div class="stat-value" id="upgradedReferrals">0</div>
+          <div class="stat-subtitle">Active earning members</div>
         </div>
         <div class="stat-card">
-          <h3>Total Earnings</h3>
+          <h3>Total Referral Earnings</h3>
           <div class="stat-value" id="totalEarnings">KSh 0</div>
+          <div class="stat-subtitle">Lifetime earnings from referrals</div>
         </div>
         <div class="stat-card">
           <h3>Pending Earnings</h3>
           <div class="stat-value" id="pendingEarnings">KSh 0</div>
+          <div class="stat-subtitle">Awaiting payment</div>
+        </div>
+        <div class="stat-card">
+          <h3>Next Milestone</h3>
+          <div class="stat-value" id="nextMilestoneCount">0/5</div>
+          <div class="progress-container">
+            <div class="progress-bar" id="milestoneProgress" style="width: 0%"></div>
+          </div>
+          <div class="stat-subtitle" id="nextMilestoneReward">KSh 1,500 Bonus</div>
         </div>
       </div>
 
       <div class="card">
         <h2>🔗 Your Referral Link</h2>
-        <p>Share your unique referral link with friends and earn bonuses when they upgrade!</p>
+        <p>Share your unique link and earn instant bonuses when friends upgrade!</p>
         
         <div class="referral-link-container">
           <input type="text" id="referralLink" readonly>
@@ -428,37 +749,45 @@
             <span>Twitter</span>
           </button>
         </div>
+
+        <!-- Earnings Preview -->
+        <div class="earnings-preview">
+          <h4>💡 Quick Earnings Calculator</h4>
+          <p><strong>5 upgraded referrals:</strong> KSh 5,000 - KSh 15,000</p>
+          <p><strong>10 upgraded referrals:</strong> KSh 10,000 - KSh 30,000</p>
+          <p><strong>20 upgraded referrals:</strong> KSh 20,000 - KSh 60,000</p>
+        </div>
       </div>
 
       <div class="card">
-        <h2>💰 Bonus Structure</h2>
-        <p>Earn commissions when your referrals upgrade their membership:</p>
+        <h2>💰 Instant Bonus Structure</h2>
+        <p>Get paid immediately when your referrals upgrade - bonuses are automatic!</p>
         
         <div class="bonus-structure">
           <table class="bonus-table">
             <thead>
               <tr>
                 <th>Membership</th>
-                <th>Direct Bonus (Level 1)</th>
+                <th>Your Instant Bonus</th>
                 <th>Level 2 Bonus</th>
                 <th>Level 3 Bonus</th>
               </tr>
             </thead>
             <tbody>
               <tr>
-                <td>Starter</td>
+                <td><strong>Starter</strong></td>
                 <td class="highlight">KSh 1,000</td>
                 <td>KSh 100</td>
                 <td>KSh 50</td>
               </tr>
               <tr>
-                <td>Pro</td>
+                <td><strong>Pro</strong></td>
                 <td class="highlight">KSh 1,800</td>
                 <td>KSh 150</td>
                 <td>KSh 75</td>
               </tr>
               <tr>
-                <td>Premium</td>
+                <td><strong>Premium</strong></td>
                 <td class="highlight">KSh 3,000</td>
                 <td>KSh 200</td>
                 <td>KSh 100</td>
@@ -467,18 +796,27 @@
           </table>
         </div>
         
-        <div style="margin-top: 1.5rem; padding: 1rem; background: #f0f7ff; border-radius: 5px;">
-          <h3 style="color: var(--primary); margin-bottom: 0.5rem;">💡 How It Works</h3>
-          <p><strong>Step 1:</strong> Share your referral link with friends</p>
-          <p><strong>Step 2:</strong> They sign up using your link</p>
-          <p><strong>Step 3:</strong> When they upgrade their membership and admin confirms payment</p>
-          <p><strong>Step 4:</strong> You automatically receive the bonus in your balance!</p>
+        <div style="margin-top: 1.5rem; padding: 1.5rem; background: linear-gradient(135deg, #f0f7ff, #e3f2fd); border-radius: 10px; border-left: 4px solid var(--primary);">
+          <h3 style="color: var(--primary); margin-bottom: 0.8rem; font-weight: 600;">⚡ How It Works</h3>
+          <p style="margin-bottom: 0.5rem;"><strong>Step 1:</strong> Share your referral link with friends</p>
+          <p style="margin-bottom: 0.5rem;"><strong>Step 2:</strong> They sign up using your link</p>
+          <p style="margin-bottom: 0.5rem;"><strong>Step 3:</strong> When they upgrade membership</p>
+          <p style="margin-bottom: 0;"><strong>Step 4:</strong> 💰 <strong>INSTANT BONUS</strong> paid to your account automatically!</p>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>🏆 Achievement Milestones</h2>
+        <p>Reach these goals with <strong>upgraded referrals only</strong> to unlock special rewards:</p>
+        
+        <div class="milestones-grid" id="milestonesContainer">
+          <!-- Milestones will be loaded here -->
         </div>
       </div>
 
       <div class="card">
         <h2>👥 Your Referral Team</h2>
-        <p>Track your referrals and their upgrade status:</p>
+        <p>Track your referrals - <strong>only upgraded members count toward your earnings!</strong></p>
         
         <div style="overflow-x: auto;">
           <table class="team-table">
@@ -494,7 +832,10 @@
             </thead>
             <tbody id="teamTableBody">
               <tr>
-                <td colspan="6" style="text-align:center;color:gray;">Loading your referral team...</td>
+                <td colspan="6" style="text-align:center;color:gray;padding: 2rem;">
+                  <div style="font-size: 1.1rem; margin-bottom: 0.5rem;">No upgraded referrals yet</div>
+                  <div style="color: var(--gray); font-size: 0.9rem;">Share your link to start earning!</div>
+                </td>
               </tr>
             </tbody>
           </table>
@@ -503,7 +844,7 @@
     </main>
   </div>
 
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
     // Supabase configuration
     const SUPABASE_URL = "https://lfrjtklkbppihaaiuxef.supabase.co";
@@ -515,7 +856,6 @@
     // Global variables
     let currentUser = null;
     let userProfile = null;
-    let referralStats = { totalReferrals: 0, totalEarnings: 0, pendingEarnings: 0 };
 
     // DOM Elements
     const mobileMenuBtn = document.getElementById('mobileMenuBtn');
@@ -526,6 +866,15 @@
     const whatsappBtn = document.getElementById('whatsappBtn');
     const facebookBtn = document.getElementById('facebookBtn');
     const twitterBtn = document.getElementById('twitterBtn');
+
+    // Enhanced Milestones data
+    const milestones = [
+      { count: 5, reward: "KSh 1,500 Bonus", description: "Instant cash bonus for reaching 5 upgraded referrals", bonusAmount: 1500 },
+      { count: 10, reward: "KSh 3,000 Bonus", description: "Special achievement bonus for 10 active referrals", bonusAmount: 3000 },
+      { count: 20, reward: "Executive Dinner", description: "Company-sponsored dinner + KSh 2,000", bonusAmount: 2000 },
+      { count: 30, reward: "KSh 8,000 Monthly", description: "Guaranteed monthly salary for 3 months", bonusAmount: 8000 },
+      { count: 50, reward: "Regional Manager", description: "Promotion to Regional Manager position", bonusAmount: 15000 }
+    ];
 
     // Initialize the page
     document.addEventListener('DOMContentLoaded', function() {
@@ -612,13 +961,17 @@
 
         userProfile = profile;
 
+        // Update user info in header
+        document.getElementById('userName').textContent = profile.full_name || 'User';
+        document.getElementById('userAvatar').textContent = (profile.full_name || 'U').charAt(0).toUpperCase();
+
         if (!profile.referral_code) {
           await generateReferralCode();
-        } else {
-          updateReferralLink();
-          await loadReferralStats();
-          await loadReferralTeam();
         }
+        
+        updateReferralLink();
+        await refreshAllData();
+
       } catch (err) {
         console.error("Profile load error:", err);
         showMessage("Failed to load referral data", "error");
@@ -640,10 +993,7 @@
         if (error) throw error;
 
         userProfile.referral_code = referralCode;
-        updateReferralLink();
-        await loadReferralStats();
-        await loadReferralTeam();
-        showMessage("✅ Referral code generated successfully!", "success");
+        showMessage("Referral code generated successfully!", "success");
       } catch (err) {
         console.error("Referral code generation error:", err);
         showMessage("Failed to generate referral code", "error");
@@ -658,136 +1008,364 @@
       }
     }
 
-    // Load referral statistics
-    async function loadReferralStats() {
+    // Refresh all data
+    async function refreshAllData() {
       try {
-        // Get all referrals
-        const { data: referrals, error: refError } = await supabaseClient
+        // First, reload the user profile to get latest balance
+        const { data: freshProfile, error: profileError } = await supabaseClient
           .from('profiles')
-          .select('id')
-          .eq('referred_by', userProfile.referral_code);
-
-        if (refError) throw refError;
-
-        // Get actual paid bonuses from referral_bonus table
-        let totalEarnings = 0;
-        let pendingEarnings = 0;
+          .select('*')
+          .eq('id', currentUser.id)
+          .single();
         
-        try {
-          const { data: bonusData, error: bonusError } = await supabaseClient
-            .from('referral_bonus')
-            .select('amount, status')
-            .eq('referrer_id', currentUser.id);
-
-          if (!bonusError && bonusData) {
-            bonusData.forEach(function(b) {
-              if (b.status === "paid") totalEarnings += parseFloat(b.amount);
-              if (b.status === "pending") pendingEarnings += parseFloat(b.amount);
-            });
-          }
-        } catch (e) {
-          console.log("Referral bonus table not available yet");
+        if (!profileError && freshProfile) {
+          userProfile = freshProfile;
         }
 
-        referralStats.totalReferrals = referrals ? referrals.length : 0;
-        referralStats.totalEarnings = totalEarnings;
-        referralStats.pendingEarnings = pendingEarnings;
+        // Load referral counts and earnings - ONLY COUNT UPGRADED MEMBERS
+        await loadReferralStats();
+        
+        // Load referral team table - ONLY SHOW UPGRADED MEMBERS
+        await loadReferralTeam();
 
-        document.getElementById("totalReferrals").textContent = referralStats.totalReferrals;
-        document.getElementById("totalEarnings").textContent = "KSh " + referralStats.totalEarnings.toLocaleString();
-        document.getElementById("pendingEarnings").textContent = "KSh " + referralStats.pendingEarnings.toLocaleString();
+        // Load and update milestones - ONLY COUNT UPGRADED MEMBERS
+        await loadMilestones();
+
       } catch (err) {
-        console.error("Stats error:", err);
+        console.error("Error refreshing data:", err);
       }
     }
 
-    // Load referral team table - FIXED VERSION
+    // Load referral statistics - UPDATED: Only count upgraded referrals
+    async function loadReferralStats() {
+      try {
+        // Get ONLY upgraded referrals count
+        const { data: referrals, error: refError } = await supabaseClient
+          .from('profiles')
+          .select('id, role')
+          .eq('referred_by', userProfile.referral_code);
+
+        let upgradedReferrals = 0;
+        if (!refError && referrals) {
+          // Count ONLY upgraded referrals (starter, pro, premium)
+          upgradedReferrals = referrals.filter(function(ref) {
+            return ref.role === "starter" || ref.role === "pro" || ref.role === "premium";
+          }).length;
+        }
+
+        // Update the upgraded referrals count
+        document.getElementById("upgradedReferrals").textContent = upgradedReferrals;
+
+        // Calculate earnings from referral_bonus table
+        let totalEarnings = 0;
+        let pendingEarnings = 0;
+
+        // Get referral bonuses
+        const { data: bonuses, error: bonusError } = await supabaseClient
+          .from('referral_bonus')
+          .select('*')
+          .eq('referrer_id', currentUser.id);
+
+        if (!bonusError && bonuses) {
+          bonuses.forEach(function(bonus) {
+            const amount = parseFloat(bonus.amount) || 0;
+            // Check if bonus is paid
+            if (bonus.paid_at || bonus.status === 'paid' || bonus.status === 'completed') {
+              totalEarnings += amount;
+            } else {
+              pendingEarnings += amount;
+            }
+          });
+        }
+
+        // Check milestone bonuses
+        try {
+          const { data: milestoneBonuses, error: milestoneError } = await supabaseClient
+            .from('milestone_bonus')
+            .select('amount')
+            .eq('user_id', currentUser.id);
+
+          if (!milestoneError && milestoneBonuses) {
+            milestoneBonuses.forEach(function(bonus) {
+              const amount = parseFloat(bonus.amount) || 0;
+              totalEarnings += amount;
+            });
+          }
+        } catch (milestoneErr) {
+          console.log("No milestone bonuses found");
+        }
+
+        // Update the display
+        document.getElementById("totalEarnings").textContent = "KSh " + totalEarnings.toLocaleString();
+        document.getElementById("pendingEarnings").textContent = "KSh " + pendingEarnings.toLocaleString();
+
+      } catch (err) {
+        console.error("Stats error:", err);
+        document.getElementById("totalEarnings").textContent = "KSh 0";
+        document.getElementById("pendingEarnings").textContent = "KSh 0";
+      }
+    }
+
+    // Load referral team table - UPDATED: Only show upgraded members
     async function loadReferralTeam() {
       try {
-        // First get all referrals
+        // Get all referrals but we'll filter to show only upgraded ones prominently
         const { data: members, error } = await supabaseClient
           .from('profiles')
           .select('id, full_name, email, created_at, role')
-          .eq('referred_by', userProfile.referral_code);
+          .eq('referred_by', userProfile.referral_code)
+          .order('created_at', { ascending: false });
 
-        if (error) throw error;
+        if (error) {
+          console.error("Error loading team members:", error);
+          throw error;
+        }
 
         const body = document.getElementById("teamTableBody");
-        if (!members || members.length === 0) {
-          body.innerHTML = '<tr><td colspan="6" style="text-align:center;color:gray;">No referrals yet. Share your link to start earning!</td></tr>';
+        
+        // Filter to get only upgraded members for the main display
+        const upgradedMembers = members ? members.filter(function(member) {
+          return member.role === "starter" || member.role === "pro" || member.role === "premium";
+        }) : [];
+
+        if (upgradedMembers.length === 0) {
+          body.innerHTML = '<tr><td colspan="6" style="text-align:center;color:gray;padding: 2rem;">' +
+            '<div style="font-size: 1.1rem; margin-bottom: 0.5rem;">No upgraded referrals yet</div>' +
+            '<div style="color: var(--gray); font-size: 0.9rem;">Share your link and encourage friends to upgrade!</div>' +
+            '</td></tr>';
           return;
         }
 
-        // Get bonus data separately to avoid join errors
+        // Get bonus data for upgraded members
         let bonusData = [];
         try {
           const { data: bonuses, error: bonusError } = await supabaseClient
             .from('referral_bonus')
-            .select('referred_user_id, amount, status')
+            .select('referred_user_id, amount, paid_at, status, package')
             .eq('referrer_id', currentUser.id);
 
           if (!bonusError && bonuses) {
             bonusData = bonuses;
           }
         } catch (bonusErr) {
-          console.log("Could not load bonus data:", bonusErr);
+          console.log("Could not load bonus data");
         }
 
         let html = '';
-        members.forEach(function(member) {
+        upgradedMembers.forEach(function(member) {
           const date = new Date(member.created_at).toLocaleDateString();
           let membership = "Free";
           let bonus = 0;
-          let status = "Pending Upgrade";
+          let status = "Bonus Pending";
           let statusClass = "status-pending";
           
-          // Determine membership and potential bonus
+          // Determine membership and bonus amount
           if (member.role === "premium") {
             membership = "Premium";
             bonus = 3000;
-            status = "Upgraded";
-            statusClass = "status-upgraded";
           } else if (member.role === "pro") {
             membership = "Pro";
             bonus = 1800;
-            status = "Upgraded";
-            statusClass = "status-upgraded";
           } else if (member.role === "starter") {
             membership = "Starter";
             bonus = 1000;
-            status = "Upgraded";
-            statusClass = "status-upgraded";
           }
 
           // Check if bonus was already paid for this member
-          const memberBonus = bonusData.find(b => b.referred_user_id === member.id);
+          const memberBonus = bonusData.find(function(b) {
+            return b.referred_user_id === member.id;
+          });
+          
           if (memberBonus) {
-            if (memberBonus.status === "paid") {
+            if (memberBonus.paid_at || memberBonus.status === 'paid' || memberBonus.status === 'completed') {
               status = "Bonus Paid";
               statusClass = "status-active";
-              bonus = memberBonus.amount; // Use actual paid amount
-            } else if (memberBonus.status === "pending") {
-              status = "Bonus Pending";
-              statusClass = "status-pending";
+              bonus = memberBonus.amount;
             }
+          } else {
+            status = "Upgraded - Bonus Pending";
+            statusClass = "status-upgraded";
           }
           
-          html += `
-            <tr>
-              <td>${member.full_name || "User"}</td>
-              <td>${member.email}</td>
-              <td>${date}</td>
-              <td>${membership}</td>
-              <td><span class="status-badge ${statusClass}">${status}</span></td>
-              <td>KSh ${bonus.toLocaleString()}</td>
-            </tr>`;
+          html += '<tr>' +
+            '<td><strong>' + (member.full_name || "User") + '</strong></td>' +
+            '<td>' + member.email + '</td>' +
+            '<td>' + date + '</td>' +
+            '<td><span style="font-weight: 600; color: var(--primary);">' + membership + '</span></td>' +
+            '<td><span class="status-badge ' + statusClass + '">' + status + '</span></td>' +
+            '<td><strong>KSh ' + bonus.toLocaleString() + '</strong></td>' +
+          '</tr>';
         });
         
         body.innerHTML = html;
+
       } catch (err) {
         console.error("Team error:", err);
         const body = document.getElementById("teamTableBody");
-        body.innerHTML = '<tr><td colspan="6" style="text-align:center;color:var(--danger);">Error loading referral team: ' + err.message + '</td></tr>';
+        body.innerHTML = '<tr><td colspan="6" style="text-align:center;color:var(--danger);padding: 2rem;">Error loading referral team</td></tr>';
+      }
+    }
+
+    // Load and display milestones - UPDATED: Only count upgraded referrals
+    async function loadMilestones() {
+      try {
+        // Get ONLY upgraded referrals count
+        const { data: referrals, error } = await supabaseClient
+          .from('profiles')
+          .select('id, role')
+          .eq('referred_by', userProfile.referral_code);
+
+        // Count ONLY upgraded referrals
+        const upgradedReferrals = referrals ? referrals.filter(function(ref) {
+          return ref.role === "starter" || ref.role === "pro" || ref.role === "premium";
+        }).length : 0;
+        
+        // Update milestone progress elements
+        const milestoneProgress = document.getElementById("milestoneProgress");
+        const nextMilestoneCount = document.getElementById("nextMilestoneCount");
+        const nextMilestoneReward = document.getElementById("nextMilestoneReward");
+        
+        if (milestoneProgress && nextMilestoneCount) {
+          // Calculate progress for next milestone
+          const nextMilestone = milestones.find(function(m) {
+            return m.count > upgradedReferrals;
+          }) || milestones[milestones.length - 1];
+          
+          let progress = 0;
+          if (upgradedReferrals > 0 && nextMilestone.count > 0) {
+            const prevMilestone = milestones.filter(function(m) {
+              return m.count < nextMilestone.count;
+            }).pop();
+            
+            const prevCount = prevMilestone ? prevMilestone.count : 0;
+            progress = Math.min(100, ((upgradedReferrals - prevCount) / (nextMilestone.count - prevCount)) * 100);
+          }
+          
+          milestoneProgress.style.width = progress + "%";
+          nextMilestoneCount.textContent = upgradedReferrals + "/" + nextMilestone.count;
+          nextMilestoneReward.textContent = nextMilestone.reward;
+        }
+        
+        // Check for milestone bonuses that should be awarded
+        await checkAndAwardMilestoneBonuses(upgradedReferrals);
+        
+        // Render milestones
+        const container = document.getElementById("milestonesContainer");
+        if (container) {
+          let html = '';
+          
+          milestones.forEach(function(milestone) {
+            const isAchieved = upgradedReferrals >= milestone.count;
+            const progress = Math.min(100, (upgradedReferrals / milestone.count) * 100);
+            
+            html += '<div class="milestone-card ' + (isAchieved ? 'achieved' : '') + '">';
+            html += '<h3>' + milestone.count + ' Upgraded Referrals</h3>';
+            html += '<div class="milestone-reward">' + milestone.reward + '</div>';
+            html += '<div class="milestone-count">' + milestone.description + '</div>';
+            html += '<div class="progress-container">';
+            html += '<div class="progress-bar" style="width: ' + progress + '%"></div>';
+            html += '</div>';
+            html += '<div class="milestone-status ' + (isAchieved ? 'milestone-achieved' : 'milestone-pending') + '">';
+            html += (isAchieved ? '🎉 Achieved!' : upgradedReferrals + '/' + milestone.count + ' Upgraded');
+            html += '</div>';
+            html += '</div>';
+          });
+          
+          container.innerHTML = html;
+        }
+        
+      } catch (err) {
+        console.error("Error loading milestones:", err);
+      }
+    }
+
+    // Check and award milestone bonuses
+    async function checkAndAwardMilestoneBonuses(upgradedReferrals) {
+      try {
+        // Check if user has reached any new milestones
+        const reachedMilestones = milestones.filter(function(milestone) {
+          return upgradedReferrals >= milestone.count;
+        });
+        
+        if (reachedMilestones.length === 0) return;
+        
+        // Check which milestones haven't been awarded yet
+        const { data: awardedMilestones, error } = await supabaseClient
+          .from('milestone_bonus')
+          .select('milestone_count')
+          .eq('user_id', currentUser.id);
+        
+        if (error) {
+          console.error("Error checking awarded milestones:", error);
+          return;
+        }
+        
+        const awardedCounts = awardedMilestones ? awardedMilestones.map(function(m) {
+          return m.milestone_count;
+        }) : [];
+        
+        // Award bonuses for newly reached milestones
+        for (let i = 0; i < reachedMilestones.length; i++) {
+          const milestone = reachedMilestones[i];
+          
+          if (!awardedCounts.includes(milestone.count)) {
+            await awardMilestoneBonus(milestone);
+          }
+        }
+        
+      } catch (err) {
+        console.error("Error checking milestone bonuses:", err);
+      }
+    }
+
+    // Award a milestone bonus to user
+    async function awardMilestoneBonus(milestone) {
+      try {
+        console.log("Awarding milestone bonus:", milestone);
+        
+        // Add bonus to user's balance
+        const currentBalance = parseFloat(userProfile.balance) || 0;
+        const newBalance = currentBalance + milestone.bonusAmount;
+        
+        // Also update total_earnings
+        const currentEarnings = parseFloat(userProfile.total_earnings) || 0;
+        const newEarnings = currentEarnings + milestone.bonusAmount;
+        
+        const { error: updateError } = await supabaseClient
+          .from('profiles')
+          .update({ 
+            balance: newBalance,
+            total_earnings: newEarnings
+          })
+          .eq('id', currentUser.id);
+        
+        if (updateError) throw updateError;
+        
+        // Record the milestone bonus
+        const { error: recordError } = await supabaseClient
+          .from('milestone_bonus')
+          .insert({
+            user_id: currentUser.id,
+            milestone_count: milestone.count,
+            amount: milestone.bonusAmount,
+            awarded_at: new Date().toISOString()
+          });
+        
+        if (recordError) throw recordError;
+        
+        // Update local profile
+        userProfile.balance = newBalance;
+        userProfile.total_earnings = newEarnings;
+        
+        // Show success message
+        showMessage("🎉 Congratulations! You've reached " + milestone.count + " upgraded referrals and earned " + milestone.reward + "!", "success");
+        
+        // Refresh data to show updated balance
+        await refreshAllData();
+        
+      } catch (err) {
+        console.error("Error awarding milestone bonus:", err);
+        showMessage("Error awarding milestone bonus", "error");
       }
     }
 
@@ -798,7 +1376,7 @@
         
         // Select the text
         referralLink.select();
-        referralLink.setSelectionRange(0, 99999); // For mobile devices
+        referralLink.setSelectionRange(0, 99999);
         
         // Copy using modern Clipboard API
         if (navigator.clipboard && window.isSecureContext) {
@@ -813,7 +1391,7 @@
         // Visual feedback
         const originalText = copyLinkBtn.innerHTML;
         copyLinkBtn.innerHTML = "✅ Copied!";
-        copyLinkBtn.style.background = "var(--success)";
+        copyLinkBtn.style.background = "linear-gradient(135deg, var(--success), #4caf50)";
         
         setTimeout(function() {
           copyLinkBtn.innerHTML = originalText;
@@ -829,20 +1407,20 @@
     // Share on WhatsApp
     function shareOnWhatsApp() {
       const link = document.getElementById("referralLink").value;
-      const msg = "Join Academic Writing Hub! Use my referral link to sign up. I'll earn bonuses when you upgrade: " + link;
+      const msg = "🚀 Join Gold Gain and start earning money! Use my referral link to sign up. I'll earn instant bonuses when you upgrade your membership: " + link + " 💰 Don't miss out on this opportunity!";
       window.open("https://wa.me/?text=" + encodeURIComponent(msg), "_blank");
     }
 
     // Share on Facebook
     function shareOnFacebook() {
       const link = document.getElementById("referralLink").value;
-      window.open("https://www.facebook.com/sharer/sharer.php?u=" + encodeURIComponent(link), "_blank");
+      window.open("https://www.facebook.com/sharer/sharer.php?u=" + encodeURIComponent(link) + "&quote=Join%20Gold%20Gain%20and%20start%20earning%20money!%20💰", "_blank");
     }
 
     // Share on Twitter
     function shareOnTwitter() {
       const link = document.getElementById("referralLink").value;
-      const msg = "Join Academic Writing Hub and start earning! Use my referral link.";
+      const msg = "Join Gold Gain and start earning! Use my referral link to get started. Instant bonuses when you upgrade! 💰";
       window.open("https://twitter.com/intent/tweet?text=" + encodeURIComponent(msg) + "&url=" + encodeURIComponent(link), "_blank");
     }
 
@@ -853,7 +1431,7 @@
       if (type === "success") {
         setTimeout(function() {
           messageContainer.innerHTML = "";
-        }, 4000);
+        }, 5000);
       }
     }
 
@@ -867,14 +1445,20 @@
       }
     }
 
-    // Auto-refresh data every 30 seconds
+    // Make functions globally available
+    window.copyReferralLink = copyReferralLink;
+    window.shareOnWhatsApp = shareOnWhatsApp;
+    window.shareOnFacebook = shareOnFacebook;
+    window.shareOnTwitter = shareOnTwitter;
+
+    // Auto-refresh data every 20 seconds to keep stats updated
     setInterval(function() {
       if (currentUser && userProfile) {
-        loadReferralStats();
-        loadReferralTeam();
+        refreshAllData();
       }
-    }, 30000);
-</script>
+    }, 20000);
+
+  </script>
 
 </body>
 </html>
