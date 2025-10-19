@@ -3,11 +3,26 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Profile - Academic Writing Hub</title>
+  <title>Profile Settings - Academic Writing Hub</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- PWA Meta Tags -->
+<meta name="theme-color" content="#b8860b">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Gold Gain">
+<meta name="mobile-web-app-capable" content="yes">
+
+<!-- PWA Manifest -->
+<link rel="manifest" href="manifest.json">
+
+<!-- Icons -->
+<link rel="icon" href="icons/icon-192x192.png">
+<link rel="apple-touch-icon" href="icons/icon-192x192.png">
   <style>
     :root {
       --primary: #004aad;
       --primary-light: #3a6fc8;
+      --primary-dark: #003580;
       --secondary: #ff6b35;
       --success: #28a745;
       --warning: #ffc107;
@@ -16,6 +31,10 @@
       --dark: #343a40;
       --gray: #6c757d;
       --border: #e9ecef;
+      --gradient: linear-gradient(135deg, #004aad 0%, #3a6fc8 100%);
+      --glass: rgba(255, 255, 255, 0.1);
+      --shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+      --card-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
     }
 
     * {
@@ -29,19 +48,21 @@
       background: linear-gradient(135deg, #f4f6f9 0%, #e9ecef 100%);
       color: #333;
       line-height: 1.6;
+      min-height: 100vh;
     }
 
     header {
-      background: var(--primary);
+      background: var(--gradient);
       color: #fff;
       padding: 15px 20px;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      box-shadow: 0 2px 15px rgba(0,0,0,0.1);
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
       position: sticky;
       top: 0;
       z-index: 100;
+      backdrop-filter: blur(10px);
     }
 
     .header-left h1 {
@@ -76,7 +97,7 @@
       border-right: 1px solid var(--border);
       padding: 20px 0;
       transition: transform 0.3s ease;
-      box-shadow: 2px 0 10px rgba(0,0,0,0.05);
+      box-shadow: 2px 0 10px rgba(0, 0, 0, 0.05);
     }
 
     nav a {
@@ -110,30 +131,50 @@
     }
 
     .page-header {
-      background: linear-gradient(135deg, var(--primary), var(--primary-light));
+      background: var(--gradient);
       color: white;
       padding: 25px;
       border-radius: 16px;
-      box-shadow: 0 8px 25px rgba(0,74,173,0.15);
+      box-shadow: var(--shadow);
       margin-bottom: 30px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .page-header::before {
+      content: "";
+      position: absolute;
+      top: -50%;
+      right: -50%;
+      width: 100%;
+      height: 200%;
+      background: var(--glass);
+      transform: rotate(30deg);
     }
 
     .page-header h1 {
       font-size: 28px;
       margin-bottom: 8px;
+      position: relative;
     }
 
     .page-header p {
       opacity: 0.9;
       font-size: 16px;
+      position: relative;
     }
 
     .profile-card {
       background: white;
       padding: 30px;
       border-radius: 16px;
-      box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+      box-shadow: var(--card-shadow);
       margin-bottom: 30px;
+      transition: transform 0.3s ease;
+    }
+
+    .profile-card:hover {
+      transform: translateY(-5px);
     }
 
     .profile-header {
@@ -149,13 +190,14 @@
       width: 80px;
       height: 80px;
       border-radius: 50%;
-      background: linear-gradient(135deg, var(--primary), var(--primary-light));
+      background: var(--gradient);
       display: flex;
       align-items: center;
       justify-content: center;
       font-size: 32px;
       font-weight: bold;
       color: white;
+      box-shadow: 0 4px 15px rgba(0, 74, 173, 0.3);
     }
 
     .profile-info h2 {
@@ -181,6 +223,16 @@
 
     .form-section {
       margin-bottom: 30px;
+      padding: 20px;
+      border-radius: 12px;
+      background: #f8fafc;
+      border: 1px solid #e9ecef;
+      transition: all 0.3s ease;
+    }
+
+    .form-section:hover {
+      background: #fff;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
     }
 
     .section-title {
@@ -193,6 +245,10 @@
       gap: 10px;
     }
 
+    .section-title i {
+      color: var(--primary);
+    }
+
     .form-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
@@ -201,6 +257,7 @@
 
     .form-group {
       margin-bottom: 20px;
+      position: relative;
     }
 
     .form-group label {
@@ -216,12 +273,20 @@
       border: 2px solid var(--border);
       border-radius: 8px;
       font-size: 16px;
-      transition: border-color 0.3s;
+      transition: all 0.3s;
+      background: white;
     }
 
     .form-group input:focus {
       border-color: var(--primary);
       outline: none;
+      box-shadow: 0 0 0 3px rgba(0, 74, 173, 0.1);
+    }
+
+    .form-group input:disabled {
+      background: #f8f9fa;
+      color: var(--gray);
+      cursor: not-allowed;
     }
 
     .form-group input.error {
@@ -233,6 +298,13 @@
       font-size: 12px;
       margin-top: 5px;
       display: none;
+    }
+
+    .input-icon {
+      position: absolute;
+      right: 12px;
+      top: 40px;
+      color: var(--gray);
     }
 
     .btn {
@@ -256,7 +328,7 @@
     .btn-primary:hover:not(:disabled) {
       background: var(--primary-light);
       transform: translateY(-2px);
-      box-shadow: 0 5px 15px rgba(0,74,173,0.3);
+      box-shadow: 0 5px 15px rgba(0, 74, 173, 0.3);
     }
 
     .btn:disabled {
@@ -271,6 +343,7 @@
       margin: 15px 0;
       text-align: center;
       font-weight: 600;
+      backdrop-filter: blur(10px);
     }
 
     .message.success {
@@ -304,6 +377,37 @@
     @keyframes spin {
       0% { transform: rotate(0deg); }
       100% { transform: rotate(360deg); }
+    }
+
+    .password-strength {
+      height: 5px;
+      border-radius: 5px;
+      margin-top: 8px;
+      transition: all 0.3s ease;
+    }
+
+    .strength-weak {
+      background: var(--danger);
+      width: 25%;
+    }
+
+    .strength-medium {
+      background: var(--warning);
+      width: 50%;
+    }
+
+    .strength-strong {
+      background: var(--success);
+      width: 100%;
+    }
+
+    .security-note {
+      background: #fff3cd;
+      border: 1px solid #ffeaa7;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 15px 0;
+      font-size: 14px;
     }
 
     /* Mobile Responsive */
@@ -349,19 +453,19 @@
 
   <div class="container">
     <nav id="sidebar">
-      <a href="dashboard.html">🏠 Dashboard</a>
-      <a href="membership.html">💳 Membership</a>
-      <a href="tasks.html">📋 Tasks</a>
-      <a href="withdraw.html">💵 Withdraw</a>
-      <a href="referrals.html">👥 Referrals</a>
-      <a href="profile.html" class="active">🙍 Profile</a>
-      <a href="support.html">📩 Support</a>
-      <a href="#" id="logoutBtn">🚪 Logout</a>
+      <a href="dashboard.html"><i class="fas fa-home"></i> Dashboard</a>
+      <a href="membership.html"><i class="fas fa-credit-card"></i> Membership</a>
+      <a href="tasks.html"><i class="fas fa-tasks"></i> Tasks</a>
+      <a href="withdraw.html"><i class="fas fa-money-bill-wave"></i> Withdraw</a>
+      <a href="referrals.html"><i class="fas fa-users"></i> Referrals</a>
+      <a href="profile.html" class="active"><i class="fas fa-user"></i> Profile</a>
+      <a href="support.html"><i class="fas fa-envelope"></i> Support</a>
+      <a href="#" id="logoutBtn"><i class="fas fa-sign-out-alt"></i> Logout</a>
     </nav>
 
     <main>
       <div class="page-header">
-        <h1>🙍 My Profile</h1>
+        <h1><i class="fas fa-user-cog"></i> Profile Settings</h1>
         <p>Manage your personal information and security settings</p>
       </div>
 
@@ -378,322 +482,508 @@
         </div>
 
         <div class="form-section">
-          <h3 class="section-title">👤 Personal Information</h3>
+          <h3 class="section-title"><i class="fas fa-user-circle"></i> Personal Information</h3>
+          <div class="security-note">
+            <i class="fas fa-info-circle"></i> <strong>Note:</strong> Name and email can only be changed by admin for security reasons.
+          </div>
           <div class="form-grid">
             <div class="form-group">
               <label for="fullName">Full Name</label>
-              <input type="text" id="fullName" placeholder="Enter your full name">
-              <div class="error-text" id="fullNameError">Please enter your full name</div>
+              <input type="text" id="fullName" placeholder="Your full name" disabled>
+              <i class="fas fa-lock input-icon"></i>
             </div>
             <div class="form-group">
               <label for="email">Email Address</label>
-              <input type="email" id="email" placeholder="Enter your email">
-              <div class="error-text" id="emailError">Please enter a valid email</div>
+              <input type="email" id="email" placeholder="Your email address" disabled>
+              <i class="fas fa-lock input-icon"></i>
             </div>
             <div class="form-group">
               <label for="phone">Phone Number</label>
               <input type="text" id="phone" placeholder="Enter your phone number">
+              <i class="fas fa-mobile-alt input-icon"></i>
               <div class="error-text" id="phoneError">Please enter a valid phone number</div>
             </div>
           </div>
         </div>
 
         <div class="form-section">
-          <h3 class="section-title">🔐 Login Password</h3>
+          <h3 class="section-title"><i class="fas fa-lock"></i> Login Password</h3>
           <div class="form-grid">
             <div class="form-group">
               <label for="oldLoginPassword">Current Password</label>
               <input type="password" id="oldLoginPassword" placeholder="Enter current password">
+              <i class="fas fa-key input-icon"></i>
               <div class="error-text" id="oldLoginError">Current password is required</div>
             </div>
             <div class="form-group">
               <label for="newLoginPassword">New Password</label>
               <input type="password" id="newLoginPassword" placeholder="Enter new password">
+              <i class="fas fa-key input-icon"></i>
               <div class="error-text" id="newLoginError">Password must be at least 6 characters</div>
+              <div class="password-strength" id="loginStrength"></div>
             </div>
             <div class="form-group">
               <label for="confirmLoginPassword">Confirm New Password</label>
               <input type="password" id="confirmLoginPassword" placeholder="Confirm new password">
+              <i class="fas fa-key input-icon"></i>
               <div class="error-text" id="confirmLoginError">Passwords do not match</div>
             </div>
           </div>
         </div>
 
         <div class="form-section">
-          <h3 class="section-title">💰 Withdrawal Password</h3>
+          <h3 class="section-title"><i class="fas fa-wallet"></i> Withdrawal Password</h3>
+          <div class="security-note">
+            <i class="fas fa-info-circle"></i> <strong>Note:</strong> Default withdrawal password is <strong>123456</strong> for first-time users.
+          </div>
           <div class="form-grid">
             <div class="form-group">
               <label for="oldWithdrawPassword">Current Password</label>
-              <input type="password" id="oldWithdrawPassword" placeholder="Enter current password">
+              <input type="password" id="oldWithdrawPassword" placeholder="Enter current password" maxlength="6">
+              <i class="fas fa-key input-icon"></i>
               <div class="error-text" id="oldWithdrawError">Current password is required</div>
             </div>
             <div class="form-group">
               <label for="newWithdrawPassword">New Password (6 characters)</label>
               <input type="password" id="newWithdrawPassword" placeholder="Enter new password" maxlength="6">
+              <i class="fas fa-key input-icon"></i>
               <div class="error-text" id="newWithdrawError">Password must be exactly 6 characters</div>
             </div>
             <div class="form-group">
               <label for="confirmWithdrawPassword">Confirm New Password</label>
               <input type="password" id="confirmWithdrawPassword" placeholder="Confirm new password" maxlength="6">
+              <i class="fas fa-key input-icon"></i>
               <div class="error-text" id="confirmWithdrawError">Passwords do not match</div>
             </div>
           </div>
         </div>
 
         <button class="btn btn-primary" onclick="updateProfile()" id="updateBtn">
-          💾 Update Profile
+          <i class="fas fa-save"></i> Save Changes
         </button>
       </div>
     </main>
   </div>
 
-  <!-- Supabase CDN (keep this one) -->
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script>
+    // Supabase configuration
+    const SUPABASE_URL = "https://lfrjtklkbppihaaiuxef.supabase.co";
+    const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imxmcmp0a2xrYnBwaWhhYWl1eGVmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTkwNTI5MzMsImV4cCI6MjA3NDYyODkzM30.2FVqnt5daF2Tw-RmVBwOGgt4GuIQQSkG8IUZt30QxIM";
 
-<script>
-(function () {
-  // ====== CONFIG - put your real anon key here ======
-  const SUPABASE_URL = "https://lfrjtklkbppihaaiuxef.supabase.co";
-  const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imxmcmp0a2xrYnBwaWhhYWl1eGVmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTkwNTI5MzMsImV4cCI6MjA3NDYyODkzM30.2FVqnt5daF2Tw-RmVBwOGgt4GuIQQSkG8IUZt30QxIM";
+    // Initialize Supabase client
+    const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-  // Create client (safe check in case the CDN didn't load)
-  const supabase = (window.supabase && typeof window.supabase.createClient === 'function')
-    ? window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY)
-    : null;
+    let currentUser = null;
+    let userProfile = null;
 
-  // tiny helper
-  const $ = id => document.getElementById(id);
+    // DOM Elements
+    const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+    const sidebar = document.getElementById('sidebar');
+    const logoutBtn = document.getElementById('logoutBtn');
+    const messageContainer = document.getElementById('messageContainer');
+    const updateBtn = document.getElementById('updateBtn');
 
-  // message UI helper
-  function showMessage(msg, type = "info") {
-    const container = $("messageContainer");
-    if (!container) { console.log(msg); return; }
-    container.innerHTML = '<div class="message ' + type + '">' + msg + '</div>';
-    if (type === "success" || type === "info") {
-      setTimeout(() => { if (container) container.innerHTML = ""; }, 5000);
-    }
-  }
-
-  // simple show/hide error helper for small form messages
-  function showError(el, text) { if (!el) return; el.textContent = text; el.style.display = "block"; }
-  function hideError(el) { if (!el) return; el.style.display = "none"; }
-
-  // Form validation functions (same ids as your HTML)
-  function validateEmail() {
-    const emailEl = $("email");
-    const err = $("emailError");
-    if (!emailEl) return true;
-    const value = (emailEl.value || "").trim();
-    if (!value) { showError(err, "Email is required"); return false; }
-    const rx = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!rx.test(value)) { showError(err, "Please enter a valid email"); return false; }
-    hideError(err);
-    return true;
-  }
-  function validateLoginPassword() {
-    const pw = $("newLoginPassword");
-    const err = $("newLoginError");
-    if (!pw) return true;
-    const v = pw.value || "";
-    if (v && v.length < 6) { showError(err, "Password must be at least 6 characters"); return false; }
-    hideError(err);
-    return true;
-  }
-  function validateLoginPasswordMatch() {
-    const a = $("newLoginPassword"), b = $("confirmLoginPassword"), err = $("confirmLoginError");
-    if (!a || !b) return true;
-    if (a.value && b.value && a.value !== b.value) { showError(err, "Passwords do not match"); return false; }
-    hideError(err);
-    return true;
-  }
-  function validateWithdrawPassword() {
-    const pw = $("newWithdrawPassword"), err = $("newWithdrawError");
-    if (!pw) return true;
-    const v = pw.value || "";
-    if (v && v.length !== 6) { showError(err, "Withdrawal password must be exactly 6 characters"); return false; }
-    hideError(err);
-    return true;
-  }
-  function validateWithdrawPasswordMatch() {
-    const a = $("newWithdrawPassword"), b = $("confirmWithdrawPassword"), err = $("confirmWithdrawError");
-    if (!a || !b) return true;
-    if (a.value && b.value && a.value !== b.value) { showError(err, "Passwords do not match"); return false; }
-    hideError(err);
-    return true;
-  }
-
-  function setupFormValidation() {
-    $("email")?.addEventListener("blur", validateEmail);
-    $("newLoginPassword")?.addEventListener("input", validateLoginPassword);
-    $("confirmLoginPassword")?.addEventListener("input", validateLoginPasswordMatch);
-    $("newWithdrawPassword")?.addEventListener("input", validateWithdrawPassword);
-    $("confirmWithdrawPassword")?.addEventListener("input", validateWithdrawPasswordMatch);
-  }
-
-  // state
-  let currentUser = null;
-  let userProfile = null;
-
-  // Load profile from Supabase
-  async function loadProfile() {
-    if (!supabase) { showMessage("Supabase not initialized", "error"); return; }
-    try {
-      showMessage("Loading your profile...", "info");
-      const { data: profile, error } = await supabase
-        .from("profiles")
-        .select("*")
-        .eq("id", currentUser.id)
-        .single();
-
-      if (error) throw error;
-      userProfile = profile;
-      updateProfileUI(profile);
-      showMessage("Profile loaded", "success");
-    } catch (err) {
-      console.error("Profile load error:", err);
-      showMessage("Failed to load profile", "error");
-    }
-  }
-
-  // Render profile values into the page (keeps your CSS/HTML unchanged)
-  function updateProfileUI(profile) {
-    if (!profile) return;
-    $("userFullName").textContent = profile.full_name || "User";
-    $("userEmail").textContent = profile.email || "No email";
-    $("userMembership").textContent = profile.role === "premium" ? "Premium" : (profile.role === "pro" ? "Pro" : "Starter");
-    $("userAvatar").textContent = (profile.full_name || "U").charAt(0).toUpperCase();
-
-    $("fullName").value = profile.full_name || "";
-    $("email").value = profile.email || "";
-    $("phone").value = profile.phone || "";
-
-    // Masked placeholders for current passwords
-    $("oldLoginPassword").value = "••••••••";
-    $("oldWithdrawPassword").value = "••••••";
-
-    $("newLoginPassword").value = "";
-    $("confirmLoginPassword").value = "";
-    $("newWithdrawPassword").value = "";
-    $("confirmWithdrawPassword").value = "";
-
-    setupFormValidation();
-  }
-
-  // The function called by your button: make it global so onclick="updateProfile()" finds it
-  async function updateProfile() {
-    if (!supabase) { showMessage("Supabase not initialized", "error"); return; }
-
-    const fullName = ($("fullName").value || "").trim();
-    const email = ($("email").value || "").trim();
-    const phone = ($("phone").value || "").trim();
-
-    // Basic required validation
-    if (!fullName || !email) {
-      showMessage("Please fill in the required fields (name & email)", "error");
-      return;
-    }
-    if (!validateEmail()) return;
-    if (!validateLoginPassword() || !validateLoginPasswordMatch()) return;
-    if (!validateWithdrawPassword() || !validateWithdrawPasswordMatch()) return;
-
-    // prepare updates
-    const updates = {
-      full_name: fullName,
-      email: email,
-      phone: phone,
-      updated_at: new Date().toISOString()
-    };
-
-    // login password change
-    const oldLogin = ($("oldLoginPassword").value || "");
-    const newLogin = ($("newLoginPassword").value || "");
-    if (newLogin && newLogin !== "••••••••") {
-      // if user entered an old password (not the mask) verify against stored (if available)
-      if (oldLogin !== "••••••••" && userProfile && userProfile.login_password && oldLogin !== userProfile.login_password) {
-        showMessage("Current login password is incorrect", "error");
-        return;
-      }
-      updates.login_password = newLogin;
-    }
-
-    // withdraw password change
-    const oldWithdraw = ($("oldWithdrawPassword").value || "");
-    const newWithdraw = ($("newWithdrawPassword").value || "");
-    if (newWithdraw && newWithdraw !== "••••••") {
-      if (oldWithdraw !== "••••••" && userProfile && userProfile.withdraw_password && oldWithdraw !== userProfile.withdraw_password) {
-        showMessage("Current withdrawal password is incorrect", "error");
-        return;
-      }
-      updates.withdraw_password = newWithdraw;
-    }
-
-    try {
-      $("updateBtn").disabled = true;
-      $("updateBtn").innerHTML = '<span class="loading"></span> Updating...';
-
-      const { error } = await supabase
-        .from("profiles")
-        .update(updates)
-        .eq("id", currentUser.id);
-
-      if (error) throw error;
-
-      // merge local profile state
-      userProfile = Object.assign({}, userProfile, updates);
-      updateProfileUI(userProfile);
-
-      showMessage("Profile updated successfully", "success");
-    } catch (err) {
-      console.error("Profile update error:", err);
-      showMessage("Failed to update profile: " + (err.message || err), "error");
-    } finally {
-      $("updateBtn").disabled = false;
-      $("updateBtn").innerHTML = '💾 Update Profile';
-    }
-  }
-
-  // Expose the function so inline onclick finds it
-  window.updateProfile = updateProfile;
-
-  // Auth check and initialization
-  async function checkAuth() {
-    if (!supabase) { showMessage("Supabase not initialized", "error"); return; }
-    try {
-      const { data: { session }, error } = await supabase.auth.getSession();
-      if (error) { console.error(error); }
-      if (!session) {
-        // user not logged in -> redirect to login
-        window.location.href = "login.html";
-        return;
-      }
-      currentUser = session.user;
-      await loadProfile();
-    } catch (err) {
-      console.error("Auth check failed:", err);
-      showMessage("Auth error", "error");
-    }
-  }
-
-  // Hook logout and button click in case your HTML doesn't rely on inline onclick
-  document.addEventListener("DOMContentLoaded", function () {
-    $("updateBtn")?.addEventListener("click", updateProfile);
-    $("logoutBtn")?.addEventListener("click", async function (e) {
-      e.preventDefault();
-      if (!supabase) return;
-      await supabase.auth.signOut();
-      window.location.href = "login.html";
+    // Initialize the application
+    document.addEventListener('DOMContentLoaded', function() {
+      initializeApp();
     });
 
-    // Start auth check (works even if DOMContentLoaded already fired)
-    checkAuth();
+    async function initializeApp() {
+      setupEventListeners();
+      await checkAuth();
+    }
+
+    function setupEventListeners() {
+      // Mobile menu toggle
+      if (mobileMenuBtn) {
+        mobileMenuBtn.addEventListener('click', function() {
+          sidebar.classList.toggle('active');
+        });
+      }
+
+      // Close mobile menu when clicking outside
+      document.addEventListener('click', function(e) {
+        if (sidebar && mobileMenuBtn && !sidebar.contains(e.target) && !mobileMenuBtn.contains(e.target)) {
+          sidebar.classList.remove('active');
+        }
+      });
+
+      // Logout
+      if (logoutBtn) {
+        logoutBtn.addEventListener('click', function(e) {
+          e.preventDefault();
+          handleLogout();
+        });
+      }
+
+      // Password strength indicator
+      const newLoginPassword = document.getElementById('newLoginPassword');
+      if (newLoginPassword) {
+        newLoginPassword.addEventListener('input', checkPasswordStrength);
+      }
+
+      // Form validation
+      setupFormValidation();
+    }
+
+    function setupFormValidation() {
+      // Phone validation
+      const phoneInput = document.getElementById('phone');
+      if (phoneInput) {
+        phoneInput.addEventListener('blur', validatePhone);
+      }
+
+      // Login password validation
+      const newLoginPassword = document.getElementById('newLoginPassword');
+      const confirmLoginPassword = document.getElementById('confirmLoginPassword');
+      
+      if (newLoginPassword) {
+        newLoginPassword.addEventListener('input', validateLoginPassword);
+      }
+      
+      if (confirmLoginPassword) {
+        confirmLoginPassword.addEventListener('input', validateLoginPasswordMatch);
+      }
+
+      // Withdrawal password validation
+      const newWithdrawPassword = document.getElementById('newWithdrawPassword');
+      const confirmWithdrawPassword = document.getElementById('confirmWithdrawPassword');
+      
+      if (newWithdrawPassword) {
+        newWithdrawPassword.addEventListener('input', validateWithdrawPassword);
+      }
+      
+      if (confirmWithdrawPassword) {
+        confirmWithdrawPassword.addEventListener('input', validateWithdrawPasswordMatch);
+      }
+    }
+
+    function validatePhone() {
+      const phone = document.getElementById('phone');
+      const error = document.getElementById('phoneError');
+      const value = phone.value.trim();
+      
+      if (value && !/^\d{10,15}$/.test(value)) {
+        showError(error, 'Please enter a valid phone number (10-15 digits)');
+        return false;
+      }
+      
+      hideError(error);
+      return true;
+    }
+
+    function validateLoginPassword() {
+      const password = document.getElementById('newLoginPassword');
+      const error = document.getElementById('newLoginError');
+      const value = password.value;
+      
+      if (value && value.length < 6) {
+        showError(error, 'Password must be at least 6 characters');
+        return false;
+      }
+      
+      hideError(error);
+      return true;
+    }
+
+    function validateLoginPasswordMatch() {
+      const password = document.getElementById('newLoginPassword');
+      const confirm = document.getElementById('confirmLoginPassword');
+      const error = document.getElementById('confirmLoginError');
+      
+      if (password.value && confirm.value && password.value !== confirm.value) {
+        showError(error, 'Passwords do not match');
+        return false;
+      }
+      
+      hideError(error);
+      return true;
+    }
+
+    function validateWithdrawPassword() {
+      const password = document.getElementById('newWithdrawPassword');
+      const error = document.getElementById('newWithdrawError');
+      const value = password.value;
+      
+      if (value && value.length !== 6) {
+        showError(error, 'Withdrawal password must be exactly 6 characters');
+        return false;
+      }
+      
+      hideError(error);
+      return true;
+    }
+
+    function validateWithdrawPasswordMatch() {
+      const password = document.getElementById('newWithdrawPassword');
+      const confirm = document.getElementById('confirmWithdrawPassword');
+      const error = document.getElementById('confirmWithdrawError');
+      
+      if (password.value && confirm.value && password.value !== confirm.value) {
+        showError(error, 'Passwords do not match');
+        return false;
+      }
+      
+      hideError(error);
+      return true;
+    }
+
+    function checkPasswordStrength() {
+      const password = document.getElementById('newLoginPassword').value;
+      const strengthBar = document.getElementById('loginStrength');
+      
+      if (!password) {
+        strengthBar.className = 'password-strength';
+        strengthBar.style.width = '0%';
+        return;
+      }
+      
+      let strength = 0;
+      
+      // Length check
+      if (password.length >= 6) strength += 1;
+      if (password.length >= 8) strength += 1;
+      
+      // Character variety checks
+      if (/[a-z]/.test(password)) strength += 1;
+      if (/[A-Z]/.test(password)) strength += 1;
+      if (/[0-9]/.test(password)) strength += 1;
+      if (/[^a-zA-Z0-9]/.test(password)) strength += 1;
+      
+      // Update strength bar
+      if (strength <= 2) {
+        strengthBar.className = 'password-strength strength-weak';
+      } else if (strength <= 4) {
+        strengthBar.className = 'password-strength strength-medium';
+      } else {
+        strengthBar.className = 'password-strength strength-strong';
+      }
+    }
+
+    function showError(element, message) {
+      if (element) {
+        element.textContent = message;
+        element.style.display = 'block';
+      }
+    }
+
+    function hideError(element) {
+      if (element) {
+        element.style.display = 'none';
+      }
+    }
+
+    // Authentication check
+    async function checkAuth() {
+      try {
+        const { data: { session }, error } = await supabaseClient.auth.getSession();
+        
+        if (error || !session) {
+          window.location.href = "login.html";
+          return;
+        }
+
+        currentUser = session.user;
+        await loadUserData();
+
+      } catch (error) {
+        console.error('Auth check error:', error);
+        window.location.href = "login.html";
+      }
+    }
+
+    // Load user data from profiles table
+    async function loadUserData() {
+      try {
+        const { data: profile, error } = await supabaseClient
+          .from('profiles')
+          .select('*')
+          .eq('id', currentUser.id)
+          .single();
+
+        if (error) throw error;
+
+        userProfile = profile;
+        updateUI(profile);
+
+      } catch (error) {
+        console.error('User data load error:', error);
+        showMessage('Failed to load user data: ' + error.message, 'error');
+      }
+    }
+
+    // Update UI with user data
+    function updateUI(profile) {
+      // Update profile header
+      document.getElementById('userFullName').textContent = profile.full_name || 'User';
+      document.getElementById('userEmail').textContent = profile.email || 'No email';
+      document.getElementById('userMembership').textContent = profile.role === 'premium' ? 'Premium' : (profile.role === 'pro' ? 'Pro' : 'Starter');
+      document.getElementById('userAvatar').textContent = (profile.full_name || 'U').charAt(0).toUpperCase();
+
+      // Update form fields
+      document.getElementById('fullName').value = profile.full_name || '';
+      document.getElementById('email').value = profile.email || '';
+      document.getElementById('phone').value = profile.phone || '';
+
+      // Set masked placeholders for passwords
+      document.getElementById('oldLoginPassword').value = '';
+      document.getElementById('oldWithdrawPassword').value = '';
+      document.getElementById('newLoginPassword').value = '';
+      document.getElementById('confirmLoginPassword').value = '';
+      document.getElementById('newWithdrawPassword').value = '';
+      document.getElementById('confirmWithdrawPassword').value = '';
+    }
+
+    // Update profile function
+    async function updateProfile() {
+      if (!supabaseClient || !userProfile) {
+        showMessage('System not ready. Please refresh the page.', 'error');
+        return;
+      }
+
+      // Validate all fields
+      if (!validatePhone() || !validateLoginPassword() || !validateLoginPasswordMatch() || 
+          !validateWithdrawPassword() || !validateWithdrawPasswordMatch()) {
+        return;
+      }
+
+      const phone = document.getElementById('phone').value.trim();
+      const oldLoginPassword = document.getElementById('oldLoginPassword').value;
+      const newLoginPassword = document.getElementById('newLoginPassword').value;
+      const oldWithdrawPassword = document.getElementById('oldWithdrawPassword').value;
+      const newWithdrawPassword = document.getElementById('newWithdrawPassword').value;
+
+      try {
+        // Show loading state
+        updateBtn.innerHTML = '<span class="loading"></span> Saving...';
+        updateBtn.disabled = true;
+
+        const updates = {
+          phone: phone,
+          updated_at: new Date().toISOString()
+        };
+
+        // Update login password if provided
+        if (newLoginPassword) {
+          // Verify old password if user has one
+          if (userProfile.login_password && oldLoginPassword !== userProfile.login_password) {
+            throw new Error('Current login password is incorrect');
+          }
+          updates.login_password = newLoginPassword;
+        }
+
+        // Update withdrawal password if provided
+        if (newWithdrawPassword) {
+          // Use default 123456 if no password set, otherwise verify old password
+          const currentWithdrawPassword = userProfile.withdraw_password || '123456';
+          if (oldWithdrawPassword !== currentWithdrawPassword) {
+            throw new Error('Current withdrawal password is incorrect');
+          }
+          updates.withdraw_password = newWithdrawPassword;
+        }
+
+        // Update profile in database
+        const { error } = await supabaseClient
+          .from('profiles')
+          .update(updates)
+          .eq('id', currentUser.id);
+
+        if (error) throw error;
+
+        // Update local profile
+        userProfile = { ...userProfile, ...updates };
+        
+        // Clear password fields
+        document.getElementById('oldLoginPassword').value = '';
+        document.getElementById('newLoginPassword').value = '';
+        document.getElementById('confirmLoginPassword').value = '';
+        document.getElementById('oldWithdrawPassword').value = '';
+        document.getElementById('newWithdrawPassword').value = '';
+        document.getElementById('confirmWithdrawPassword').value = '';
+        document.getElementById('loginStrength').className = 'password-strength';
+        document.getElementById('loginStrength').style.width = '0%';
+
+        showMessage('Profile updated successfully!', 'success');
+
+      } catch (error) {
+        console.error('Profile update error:', error);
+        showMessage('Failed to update profile: ' + error.message, 'error');
+      } finally {
+        // Reset button state
+        updateBtn.innerHTML = '<i class="fas fa-save"></i> Save Changes';
+        updateBtn.disabled = false;
+      }
+    }
+
+    // Make function globally available
+    window.updateProfile = updateProfile;
+
+    // Show message
+    function showMessage(message, type) {
+      if (!messageContainer) return;
+      
+      messageContainer.innerHTML = 
+        '<div class="message ' + type + '">' +
+          message +
+        '</div>';
+      
+      // Auto-hide success messages after 5 seconds
+      if (type === 'success') {
+        setTimeout(function() {
+          if (messageContainer) {
+            messageContainer.innerHTML = '';
+          }
+        }, 5000);
+      }
+    }
+
+    // Logout function
+    async function handleLogout() {
+      try {
+        const { error } = await supabaseClient.auth.signOut();
+        if (error) throw error;
+        window.location.href = "login.html";
+      } catch (error) {
+        console.error("Logout error:", error);
+        showMessage('Failed to logout', 'error');
+      }
+    }
+
+    // Auth state listener
+    supabaseClient.auth.onAuthStateChange(function(event, session) {
+      if (event === 'SIGNED_OUT') {
+        window.location.href = "login.html";
+      }
+    });
+  </script>
+  <script>
+// PWA Installation
+let deferredPrompt;
+const installBtn = document.getElementById('installBtn');
+
+window.addEventListener('beforeinstallprompt', (e) => {
+  e.preventDefault();
+  deferredPrompt = e;
+  if (installBtn) installBtn.style.display = 'block';
+});
+
+if (installBtn) {
+  installBtn.addEventListener('click', async () => {
+    installBtn.style.display = 'none';
+    deferredPrompt.prompt();
+    await deferredPrompt.userChoice;
+    deferredPrompt = null;
   });
+}
 
-  // Also attempt immediate init if DOM already ready (avoids timing issues)
-  if (document.readyState !== "loading") {
-    checkAuth();
-  }
-
-})(); // end IIFE
+// Service Worker
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('/service-worker.js');
+  });
+}
 </script>
+
 </body>
 </html>

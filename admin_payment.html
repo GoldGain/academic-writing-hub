@@ -3,7 +3,20 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Admin - Payment Verification</title>
+  <title>Admin - Payment Verification | Academic Writing Hub</title>
+  <!-- PWA Meta Tags -->
+<meta name="theme-color" content="#b8860b">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Gold Gain">
+<meta name="mobile-web-app-capable" content="yes">
+
+<!-- PWA Manifest -->
+<link rel="manifest" href="manifest.json">
+
+<!-- Icons -->
+<link rel="icon" href="icons/icon-192x192.png">
+<link rel="apple-touch-icon" href="icons/icon-192x192.png">
   <style>
     :root {
       --primary: #004aad;
@@ -17,52 +30,399 @@
       --gray: #6c757d;
       --border: #e9ecef;
     }
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif; background: linear-gradient(135deg, #f4f6f9 0%, #e9ecef 100%); color: #333; line-height: 1.6; }
-    header { background: var(--primary); color: #fff; padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 15px rgba(0,0,0,0.1); position: sticky; top: 0; z-index: 100; }
-    .header-left h1 { margin: 0; font-size: 22px; font-weight: 700; }
-    .container { display: flex; min-height: calc(100vh - 70px); }
-    nav { width: 260px; background: #fff; border-right: 1px solid var(--border); padding: 20px 0; }
-    nav a { padding: 15px 25px; text-decoration: none; color: var(--dark); display: flex; align-items: center; gap: 12px; transition: all 0.3s; border-left: 3px solid transparent; }
-    nav a:hover { background: var(--primary); color: #fff; }
-    nav a.active { background: var(--light); color: var(--primary); border-left-color: var(--primary); font-weight: 600; }
-    main { flex: 1; padding: 25px; overflow-y: auto; }
-    .page-header { background: linear-gradient(135deg, var(--primary), var(--primary-light)); color: white; padding: 25px; border-radius: 16px; box-shadow: 0 8px 25px rgba(0,74,173,0.15); margin-bottom: 30px; }
-    .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-bottom: 30px; }
-    .stats-card { background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.08); text-align: center; }
-    .stats-value { font-size: 32px; font-weight: 800; margin-bottom: 5px; }
-    .stats-label { color: var(--gray); font-size: 14px; }
-    .payment-card { background: white; border-radius: 12px; padding: 25px; box-shadow: 0 4px 15px rgba(0,0,0,0.08); margin-bottom: 20px; border-left: 4px solid var(--warning); }
-    .payment-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 15px; }
-    .user-info { color: var(--gray); font-size: 14px; margin-bottom: 8px; }
-    .amount { font-size: 24px; font-weight: 800; color: var(--success); text-align: right; }
-    .admin-actions { display: flex; gap: 10px; margin-top: 20px; }
-    .btn { padding: 12px 24px; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; transition: all 0.3s ease; }
-    .btn-success { background: var(--success); color: white; }
-    .btn-success:hover { background: #218838; }
-    .btn-danger { background: var(--danger); color: white; }
-    .btn-danger:hover { background: #c82333; }
-    .btn-warning { background: var(--warning); color: var(--dark); }
-    .reject-form { margin-top: 15px; padding: 15px; background: #fff3cd; border-radius: 8px; display: none; }
-    .reject-form textarea { width: 100%; height: 100px; padding: 12px; border: 2px solid var(--border); border-radius: 8px; font-size: 14px; resize: vertical; margin-bottom: 10px; }
-    .message { padding: 15px; border-radius: 8px; margin: 15px 0; text-align: center; font-weight: 600; }
-    .message.success { background: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
-    .message.error { background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
-    .loading { display: inline-block; width: 20px; height: 20px; border: 3px solid #f3f3f3; border-top: 3px solid var(--primary); border-radius: 50%; animation: spin 1s linear infinite; }
-    @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-    .no-payments { text-align: center; padding: 60px 20px; color: var(--gray); }
-    .filter-section { background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.08); margin-bottom: 20px; }
-    .filter-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; }
-    .filter-group { display: flex; flex-direction: column; }
-    .filter-label { font-weight: 600; margin-bottom: 8px; color: var(--dark); }
-    .filter-select { padding: 10px; border: 2px solid var(--border); border-radius: 8px; font-size: 14px; }
+    
+    * { 
+      margin: 0; 
+      padding: 0; 
+      box-sizing: border-box; 
+    }
+    
+    body { 
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif; 
+      background: linear-gradient(135deg, #f4f6f9 0%, #e9ecef 100%); 
+      color: #333; 
+      line-height: 1.6; 
+      min-height: 100vh;
+    }
+    
+    header { 
+      background: var(--primary); 
+      color: #fff; 
+      padding: 15px 20px; 
+      display: flex; 
+      justify-content: space-between; 
+      align-items: center; 
+      box-shadow: 0 2px 15px rgba(0,0,0,0.1); 
+      position: sticky; 
+      top: 0; 
+      z-index: 100; 
+    }
+    
+    .header-left h1 { 
+      margin: 0; 
+      font-size: 22px; 
+      font-weight: 700; 
+    }
+    
+    .slogan {
+      font-size: 14px;
+      opacity: 0.9;
+      margin-top: 4px;
+    }
+    
+    .container { 
+      display: flex; 
+      min-height: calc(100vh - 70px); 
+    }
+    
+    nav { 
+      width: 260px; 
+      background: #fff; 
+      border-right: 1px solid var(--border); 
+      padding: 20px 0; 
+      box-shadow: 2px 0 10px rgba(0,0,0,0.05);
+    }
+    
+    nav a { 
+      padding: 15px 25px; 
+      text-decoration: none; 
+      color: var(--dark); 
+      display: flex; 
+      align-items: center; 
+      gap: 12px; 
+      transition: all 0.3s; 
+      border-left: 3px solid transparent; 
+      font-weight: 500;
+    }
+    
+    nav a:hover { 
+      background: var(--primary-light); 
+      color: #fff; 
+    }
+    
+    nav a.active { 
+      background: var(--light); 
+      color: var(--primary); 
+      border-left-color: var(--primary); 
+      font-weight: 600; 
+    }
+    
+    main { 
+      flex: 1; 
+      padding: 25px; 
+      overflow-y: auto; 
+    }
+    
+    .page-header { 
+      background: linear-gradient(135deg, var(--primary), var(--primary-light)); 
+      color: white; 
+      padding: 25px; 
+      border-radius: 16px; 
+      box-shadow: 0 8px 25px rgba(0,74,173,0.15); 
+      margin-bottom: 30px; 
+    }
+    
+    .page-header h1 {
+      font-size: 28px;
+      margin-bottom: 8px;
+    }
+    
+    .page-header p {
+      opacity: 0.9;
+      font-size: 16px;
+    }
+    
+    .stats-grid { 
+      display: grid; 
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); 
+      gap: 20px; 
+      margin-bottom: 30px; 
+    }
+    
+    .stats-card { 
+      background: white; 
+      padding: 20px; 
+      border-radius: 12px; 
+      box-shadow: 0 4px 15px rgba(0,0,0,0.08); 
+      text-align: center; 
+      border-top: 4px solid var(--primary);
+      transition: transform 0.3s ease;
+    }
+    
+    .stats-card:hover {
+      transform: translateY(-5px);
+    }
+    
+    .stats-value { 
+      font-size: 32px; 
+      font-weight: 800; 
+      margin-bottom: 5px; 
+      color: var(--primary);
+    }
+    
+    .stats-label { 
+      color: var(--gray); 
+      font-size: 14px; 
+      font-weight: 500;
+    }
+    
+    .payment-card { 
+      background: white; 
+      border-radius: 12px; 
+      padding: 25px; 
+      box-shadow: 0 4px 15px rgba(0,0,0,0.08); 
+      margin-bottom: 20px; 
+      border-left: 4px solid var(--warning);
+      transition: all 0.3s ease;
+    }
+    
+    .payment-card:hover {
+      box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+    }
+    
+    .payment-header { 
+      display: flex; 
+      justify-content: space-between; 
+      align-items: flex-start; 
+      margin-bottom: 15px; 
+    }
+    
+    .user-info { 
+      color: var(--gray); 
+      font-size: 14px; 
+      margin-bottom: 8px; 
+      line-height: 1.5;
+    }
+    
+    .amount { 
+      font-size: 24px; 
+      font-weight: 800; 
+      color: var(--success); 
+      text-align: right; 
+    }
+    
+    .admin-actions { 
+      display: flex; 
+      gap: 10px; 
+      margin-top: 20px; 
+    }
+    
+    .btn { 
+      padding: 12px 24px; 
+      border: none; 
+      border-radius: 8px; 
+      font-weight: 600; 
+      cursor: pointer; 
+      transition: all 0.3s ease; 
+      font-size: 14px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    
+    .btn-success { 
+      background: var(--success); 
+      color: white; 
+    }
+    
+    .btn-success:hover { 
+      background: #218838; 
+      transform: translateY(-2px);
+    }
+    
+    .btn-danger { 
+      background: var(--danger); 
+      color: white; 
+    }
+    
+    .btn-danger:hover { 
+      background: #c82333; 
+      transform: translateY(-2px);
+    }
+    
+    .btn-warning { 
+      background: var(--warning); 
+      color: var(--dark); 
+    }
+    
+    .btn-warning:hover {
+      background: #e0a800;
+      transform: translateY(-2px);
+    }
+    
+    .reject-form { 
+      margin-top: 15px; 
+      padding: 15px; 
+      background: #fff3cd; 
+      border-radius: 8px; 
+      display: none; 
+      border: 1px solid #ffeaa7;
+    }
+    
+    .reject-form textarea { 
+      width: 100%; 
+      height: 100px; 
+      padding: 12px; 
+      border: 2px solid var(--border); 
+      border-radius: 8px; 
+      font-size: 14px; 
+      resize: vertical; 
+      margin-bottom: 10px; 
+      font-family: inherit;
+    }
+    
+    .message { 
+      padding: 15px; 
+      border-radius: 8px; 
+      margin: 15px 0; 
+      text-align: center; 
+      font-weight: 600; 
+      border-left: 4px solid transparent;
+    }
+    
+    .message.success { 
+      background: #d4edda; 
+      color: #155724; 
+      border-left-color: #4caf50;
+    }
+    
+    .message.error { 
+      background: #f8d7da; 
+      color: #721c24; 
+      border-left-color: #f44336;
+    }
+    
+    .message.info {
+      background: #e3f2fd;
+      color: #1565c0;
+      border-left-color: #2196f3;
+    }
+    
+    .loading { 
+      display: inline-block; 
+      width: 20px; 
+      height: 20px; 
+      border: 3px solid #f3f3f3; 
+      border-top: 3px solid var(--primary); 
+      border-radius: 50%; 
+      animation: spin 1s linear infinite; 
+    }
+    
+    @keyframes spin { 
+      0% { transform: rotate(0deg); } 
+      100% { transform: rotate(360deg); } 
+    }
+    
+    .no-payments { 
+      text-align: center; 
+      padding: 60px 20px; 
+      color: var(--gray); 
+    }
+    
+    .no-payments h3 {
+      margin-bottom: 10px;
+      font-size: 24px;
+    }
+    
+    .filter-section { 
+      background: white; 
+      padding: 20px; 
+      border-radius: 12px; 
+      box-shadow: 0 4px 15px rgba(0,0,0,0.08); 
+      margin-bottom: 20px; 
+    }
+    
+    .filter-grid { 
+      display: grid; 
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); 
+      gap: 15px; 
+    }
+    
+    .filter-group { 
+      display: flex; 
+      flex-direction: column; 
+    }
+    
+    .filter-label { 
+      font-weight: 600; 
+      margin-bottom: 8px; 
+      color: var(--dark); 
+    }
+    
+    .filter-select { 
+      padding: 10px; 
+      border: 2px solid var(--border); 
+      border-radius: 8px; 
+      font-size: 14px; 
+      background: white;
+      cursor: pointer;
+      transition: border-color 0.3s;
+    }
+    
+    .filter-select:focus {
+      outline: none;
+      border-color: var(--primary);
+    }
+    
+    .payment-status {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 600;
+    }
+    
+    .status-pending {
+      background: #fff3cd;
+      color: #856404;
+    }
+    
+    .status-approved {
+      background: #d4edda;
+      color: #155724;
+    }
+    
+    .status-rejected {
+      background: #f8d7da;
+      color: #721c24;
+    }
+    
+    @media (max-width: 768px) {
+      .container {
+        flex-direction: column;
+      }
+      
+      nav {
+        width: 100%;
+        height: auto;
+      }
+      
+      .payment-header {
+        flex-direction: column;
+        gap: 15px;
+      }
+      
+      .amount {
+        text-align: left;
+      }
+      
+      .admin-actions {
+        flex-direction: column;
+      }
+      
+      .filter-grid {
+        grid-template-columns: 1fr;
+      }
+    }
   </style>
 </head>
 <body>
   <header>
     <div class="header-left">
-      <h1>Academic Writing Hub - Admin</h1>
-      <div class="slogan">Payment Verification Panel</div>
+      <h1>Academic Writing Hub</h1>
+      <div class="slogan">Admin Payment Verification Panel</div>
     </div>
   </header>
 
@@ -78,7 +438,7 @@
     <main>
       <div class="page-header">
         <h1>💳 Payment Verification</h1>
-        <p>Verify and approve membership payment requests from users</p>
+        <p>Verify payment deposits and add funds to user accounts</p>
       </div>
 
       <div class="stats-grid">
@@ -137,14 +497,14 @@
       <div id="paymentsContainer">
         <div class="no-payments">
           <h3>📭 Loading payments...</h3>
-          <p><span class="loading"></span> Please wait</p>
+          <p><span class="loading"></span> Please wait while we load payment requests</p>
         </div>
       </div>
     </main>
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script>
+  <script>
     // Supabase configuration
     const SUPABASE_URL = "https://lfrjtklkbppihaaiuxef.supabase.co";
     const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imxmcmp0a2xrYnBwaWhhYWl1eGVmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTkwNTI5MzMsImV4cCI6MjA3NDYyODkzM30.2FVqnt5daF2Tw-RmVBwOGgt4GuIQQSkG8IUZt30QxIM";
@@ -153,115 +513,14 @@
     let supabaseClient;
     try {
       supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-      console.log('Supabase client initialized successfully');
+      console.log('✅ Supabase client initialized successfully');
     } catch (error) {
-      console.error('Failed to initialize Supabase client:', error);
+      console.error('❌ Failed to initialize Supabase client:', error);
+      showMessage('Database connection failed. Please refresh the page.', 'error');
     }
 
     let currentAdmin = null;
     let allUsers = {};
-
-    // AUTOMATIC REFERRAL BONUS PAYMENT FUNCTION
-    async function payReferralBonuses(userId, packageType) {
-      try {
-        console.log('Starting referral bonus payment for user ' + userId + ', package: ' + packageType);
-        
-        // Get the user who was referred
-        const { data: referredUser, error: userError } = await supabaseClient
-          .from('profiles')
-          .select('referred_by')
-          .eq('id', userId)
-          .single();
-        
-        if (userError || !referredUser || !referredUser.referred_by) {
-          console.log('No referrer found for this user');
-          return { success: false, message: 'No referrer found' };
-        }
-
-        console.log('User was referred by code: ' + referredUser.referred_by);
-
-        // Get referrer's profile using the referral code
-        const { data: referrer, error: refError } = await supabaseClient
-          .from('profiles')
-          .select('id, balance, email, full_name, referral_code')
-          .eq('referral_code', referredUser.referred_by)
-          .single();
-        
-        if (refError || !referrer) {
-          console.log('Referrer not found with code: ' + referredUser.referred_by);
-          return { success: false, message: 'Referrer not found' };
-        }
-
-        console.log('Found referrer: ' + referrer.email + ' (' + referrer.full_name + ')');
-
-        // Calculate bonus amount based on package
-        let bonusAmount = 0;
-        if (packageType === 'starter') bonusAmount = 1000;
-        else if (packageType === 'pro') bonusAmount = 1800;
-        else if (packageType === 'premium') bonusAmount = 3000;
-
-        if (bonusAmount === 0) {
-          console.log('No bonus for package type: ' + packageType);
-          return { success: false, message: 'No bonus for this package' };
-        }
-
-        console.log('Calculated bonus: KSh ' + bonusAmount + ' for ' + packageType + ' package');
-
-        // Update referrer's balance
-        const currentBalance = parseFloat(referrer.balance) || 0;
-        const newBalance = currentBalance + bonusAmount;
-        
-        console.log('Updating balance: ' + referrer.email + ' from KSh ' + currentBalance + ' to KSh ' + newBalance);
-        
-        const { error: updateError } = await supabaseClient
-          .from('profiles')
-          .update({ balance: newBalance })
-          .eq('id', referrer.id);
-
-        if (updateError) {
-          console.error('Balance update error:', updateError);
-          throw updateError;
-        }
-
-        // Record the bonus payment in referral_bonus table
-        const { error: recordError } = await supabaseClient
-          .from('referral_bonus')
-          .insert([
-            {
-              referrer_id: referrer.id,
-              referred_user_id: userId,
-              amount: bonusAmount,
-              package: packageType,
-              level: 1,
-              status: 'paid',
-              paid_at: new Date().toISOString(),
-              paid_by: currentAdmin.email
-            }
-          ]);
-
-        if (recordError) {
-          console.error('Bonus record error:', recordError);
-          // Don't throw error - bonus is paid even if record fails
-        }
-
-        console.log('SUCCESS: Paid KSh ' + bonusAmount + ' referral bonus to ' + referrer.email);
-        console.log('New balance for ' + referrer.email + ': KSh ' + newBalance);
-
-        return { 
-          success: true, 
-          message: 'Paid KSh ' + bonusAmount + ' to ' + referrer.email,
-          referrer: referrer,
-          bonusAmount: bonusAmount
-        };
-
-      } catch (error) {
-        console.error('Referral bonus payment error:', error);
-        return { 
-          success: false, 
-          message: 'Bonus payment failed: ' + error.message 
-        };
-      }
-    }
 
     // Check admin authentication
     async function checkAuth() {
@@ -279,11 +538,11 @@
         }
 
         currentAdmin = session.user;
-        console.log('Admin authenticated: ' + currentAdmin.email);
+        console.log('✅ Admin authenticated: ' + currentAdmin.email);
         await loadAllData();
 
       } catch (error) {
-        console.error('Auth error:', error);
+        console.error('❌ Auth error:', error);
         window.location.href = "login.html";
       }
     }
@@ -335,7 +594,6 @@
         const { data: payments, error: paymentsError } = await query;
 
         if (paymentsError) {
-          // If table doesn't exist, create sample data for demo
           if (paymentsError.message.includes('does not exist')) {
             showMessage('Payment requests table not found. Please create the table in Supabase.', 'error');
             return;
@@ -363,7 +621,7 @@
         renderPayments(payments);
 
       } catch (error) {
-        console.error('Error loading data:', error);
+        console.error('❌ Error loading data:', error);
         showMessage('Failed to load payments: ' + error.message, 'error');
       }
     }
@@ -425,7 +683,7 @@
         }
 
       } catch (error) {
-        console.error('Error loading stats:', error);
+        console.error('❌ Error loading stats:', error);
       }
     }
 
@@ -445,37 +703,36 @@
       container.innerHTML = payments.map(function(payment) {
         const user = allUsers[payment.user_id];
         const statusColors = {
-          'pending': 'var(--warning)',
-          'approved': 'var(--success)',
-          'rejected': 'var(--danger)'
+          'pending': 'status-pending',
+          'approved': 'status-approved',
+          'rejected': 'status-rejected'
         };
 
         return '<div class="payment-card" id="payment-' + payment.id + '">' +
           '<div class="payment-header">' +
             '<div style="flex: 1;">' +
-              '<div style="font-size: 20px; font-weight: 700; color: var(--primary); margin-bottom: 5px;">' +
-                payment.package.toUpperCase() + ' Package Payment' +
-              '</div>' +
-              '<div class="user-info">' +
-                '<strong>User:</strong> ' + (user ? (user.full_name || user.email) : 'Unknown User') + ' | ' +
-                '<strong>Email:</strong> ' + (user?.email || 'Not available') + ' | ' +
-                '<strong>Phone:</strong> ' + (user?.phone || 'Not provided') +
-              '</div>' +
-              '<div class="user-info">' +
-                '<strong>Transaction ID:</strong> ' + payment.transaction_id + ' | ' +
-                '<strong>Submitted:</strong> ' + new Date(payment.created_at).toLocaleString() +
-              '</div>' +
-              '<div class="user-info">' +
-                '<strong>Status:</strong> ' +
-                '<span style="padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 600; background: ' + statusColors[payment.status] + '; color: white;">' +
+              '<div style="font-size: 20px; font-weight: 700; color: var(--primary); margin-bottom: 5px; display: flex; align-items: center; gap: 10px;">' +
+                '<span>' + payment.package.toUpperCase() + ' Package Deposit</span>' +
+                '<span class="payment-status ' + statusColors[payment.status] + '">' +
                   payment.status.toUpperCase() +
                 '</span>' +
               '</div>' +
-              // Show referral info if available
+              '<div class="user-info">' +
+                '<strong>👤 User:</strong> ' + (user ? (user.full_name || user.email) : 'Unknown User') + ' | ' +
+                '<strong>📧 Email:</strong> ' + (user?.email || 'Not available') + ' | ' +
+                '<strong>📞 Phone:</strong> ' + (user?.phone || 'Not provided') +
+              '</div>' +
+              '<div class="user-info">' +
+                '<strong>🔗 Transaction ID:</strong> ' + payment.transaction_id + ' | ' +
+                '<strong>📅 Submitted:</strong> ' + new Date(payment.created_at).toLocaleString() +
+              '</div>' +
               (user && user.referred_by ? 
                 '<div class="user-info" style="color: var(--primary);">' +
-                  '<strong>Referred by:</strong> ' + user.referred_by +
+                  '<strong>👥 Referred by:</strong> ' + user.referred_by +
                 '</div>' : '') +
+              '<div class="user-info">' +
+                '<strong>💡 Note:</strong> Funds will be added to user\'s account balance. User can upgrade package when they have sufficient balance. Referral bonuses are paid when user actually upgrades.' +
+              '</div>' +
             '</div>' +
             '<div class="amount">' +
               'KSh ' + (payment.amount || 0).toLocaleString() +
@@ -484,11 +741,11 @@
 
           (payment.status === 'pending' ? 
             '<div class="admin-actions">' +
-              '<button class="btn btn-success" onclick="approvePayment(\'' + payment.id + '\', \'' + payment.user_id + '\', \'' + payment.package + '\', ' + payment.amount + ')">' +
-                'Approve & Pay Bonus' +
+              '<button class="btn btn-success" onclick="approvePayment(\'' + payment.id + '\', \'' + payment.user_id + '\', ' + payment.amount + ')">' +
+                '✅ Approve & Add Funds' +
               '</button>' +
               '<button class="btn btn-danger" onclick="showRejectForm(\'' + payment.id + '\')">' +
-                'Reject' +
+                '❌ Reject' +
               '</button>' +
             '</div>' +
             '<div class="reject-form" id="reject-form-' + payment.id + '">' +
@@ -497,21 +754,21 @@
             '</div>' :
             payment.status === 'approved' ?
             '<div class="user-info" style="color: var(--success);">' +
-              '<strong>Approved by:</strong> ' + (payment.approved_by || 'Admin') + ' | ' +
-              '<strong>Approved at:</strong> ' + (payment.approved_at ? new Date(payment.approved_at).toLocaleString() : 'N/A') +
+              '<strong>✅ Approved by:</strong> ' + (payment.approved_by || 'Admin') + ' | ' +
+              '<strong>⏰ Approved at:</strong> ' + (payment.approved_at ? new Date(payment.approved_at).toLocaleString() : 'N/A') +
             '</div>' :
             '<div class="user-info" style="color: var(--danger);">' +
-              '<strong>Rejected by:</strong> ' + (payment.rejected_by || 'Admin') + ' | ' +
-              '<strong>Rejected at:</strong> ' + (payment.rejected_at ? new Date(payment.rejected_at).toLocaleString() : 'N/A') +
-              (payment.rejection_reason ? ' | <strong>Reason:</strong> ' + payment.rejection_reason : '') +
+              '<strong>❌ Rejected by:</strong> ' + (payment.rejected_by || 'Admin') + ' | ' +
+              '<strong>⏰ Rejected at:</strong> ' + (payment.rejected_at ? new Date(payment.rejected_at).toLocaleString() : 'N/A') +
+              (payment.rejection_reason ? ' | <strong>📝 Reason:</strong> ' + payment.rejection_reason : '') +
             '</div>'
           ) +
         '</div>';
       }).join('');
     }
 
-    // Approve payment and upgrade user membership + PAY REFERRAL BONUS
-    async function approvePayment(paymentId, userId, packageType, amount) {
+    // Approve payment and add funds to user account (CORRECTED VERSION)
+    async function approvePayment(paymentId, userId, amount) {
       if (!supabaseClient) {
         showMessage('Error: Database connection failed', 'error');
         return;
@@ -524,7 +781,35 @@
         button.innerHTML = '<span class="loading"></span> Processing...';
         button.disabled = true;
 
-        // 1. Update payment request status to approved
+        console.log('🔄 Starting payment approval process...');
+
+        // 1. Get current user balance
+        const { data: userProfile, error: userError } = await supabaseClient
+          .from('profiles')
+          .select('balance')
+          .eq('id', userId)
+          .single();
+
+        if (userError) throw userError;
+
+        // 2. Calculate new balance (just add the deposited amount)
+        const currentBalance = parseFloat(userProfile.balance) || 0;
+        const newBalance = currentBalance + parseFloat(amount);
+        
+        console.log('💰 Adding funds to user balance: KSh ' + currentBalance + ' → KSh ' + newBalance);
+
+        // 3. Update user's balance ONLY
+        const { error: balanceError } = await supabaseClient
+          .from('profiles')
+          .update({ 
+            balance: newBalance,
+            updated_at: new Date().toISOString()
+          })
+          .eq('id', userId);
+
+        if (balanceError) throw balanceError;
+
+        // 4. Update payment request status to approved
         const { error: paymentError } = await supabaseClient
           .from('payment_requests')
           .update({
@@ -537,55 +822,34 @@
 
         if (paymentError) throw paymentError;
 
-        // 2. Update user's profile with new membership
-        const { error: profileError } = await supabaseClient
-          .from('profiles')
-          .update({
-            role: packageType,
-            updated_at: new Date().toISOString()
-          })
-          .eq('id', userId);
+        console.log('✅ Payment approved! Funds added to user account balance.');
 
-        if (profileError) throw profileError;
-
-        // 3. PAY REFERRAL BONUS AUTOMATICALLY
-        console.log('Starting automatic referral bonus payment...');
-        const bonusResult = await payReferralBonuses(userId, packageType);
-        
-        let bonusMessage = '';
-        if (bonusResult.success) {
-          bonusMessage = ' Referral bonus paid: KSh ' + bonusResult.bonusAmount + ' to ' + bonusResult.referrer.email;
-          console.log('Referral bonus paid successfully');
-        } else {
-          bonusMessage = ' No referral bonus paid (no referrer found)';
-          console.log('No referral bonus paid');
-        }
-
-        // 4. Create transaction record (optional - for tracking)
+        // 5. Create transaction record
         try {
+          const transactionData = {
+            user_id: userId,
+            type: 'deposit',
+            amount: amount,
+            description: 'Payment deposit approved by admin',
+            created_at: new Date().toISOString()
+          };
+
           const { error: transactionError } = await supabaseClient
             .from('transactions')
-            .insert([
-              {
-                user_id: userId,
-                type: 'membership_upgrade',
-                amount: amount,
-                package: packageType,
-                status: 'completed',
-                created_at: new Date().toISOString()
-              }
-            ]);
+            .insert([transactionData]);
 
-          if (transactionError) console.log('Transaction record not created:', transactionError);
+          if (transactionError) {
+            console.log('ℹ Transaction record not created:', transactionError);
+          }
         } catch (transactionError) {
-          console.log('Could not create transaction record:', transactionError);
+          console.log('ℹ Could not create transaction record:', transactionError);
         }
 
         // Remove the payment card from view
         document.getElementById('payment-' + paymentId).remove();
 
-        // Show success message with bonus info
-        showMessage('Payment approved! User upgraded to ' + packageType + ' package.' + bonusMessage, 'success');
+        // Show success message (UPDATED)
+        showMessage('✅ Payment approved! KSh ' + amount.toLocaleString() + ' has been added to user\'s account balance. User can now upgrade their package using their balance.', 'success');
 
         // Reload stats
         await loadStats();
@@ -595,18 +859,18 @@
         if (remainingPayments === 0) {
           document.getElementById('paymentsContainer').innerHTML = 
             '<div class="no-payments">' +
-              '<h3>All Caught Up!</h3>' +
+              '<h3>All Caught Up! 🎉</h3>' +
               '<p>No more payments to verify.</p>' +
             '</div>';
         }
 
       } catch (error) {
-        console.error('Approval error:', error);
+        console.error('❌ Approval error:', error);
         showMessage('Failed to approve payment: ' + error.message, 'error');
         
         // Reset button
         const button = document.querySelector('#payment-' + paymentId + ' .btn-success');
-        button.innerHTML = 'Approve & Pay Bonus';
+        button.innerHTML = '✅ Approve & Add Funds';
         button.disabled = false;
       }
     }
@@ -648,7 +912,7 @@
         // Remove the payment card from view
         document.getElementById('payment-' + paymentId).remove();
 
-        showMessage('Payment rejected with reason provided.', 'success');
+        showMessage('❌ Payment rejected with reason provided.', 'success');
 
         // Reload stats
         await loadStats();
@@ -658,13 +922,13 @@
         if (remainingPayments === 0) {
           document.getElementById('paymentsContainer').innerHTML = 
             '<div class="no-payments">' +
-              '<h3>All Caught Up!</h3>' +
+              '<h3>All Caught Up! 🎉</h3>' +
               '<p>No more payments to verify.</p>' +
             '</div>';
         }
 
       } catch (error) {
-        console.error('Rejection error:', error);
+        console.error('❌ Rejection error:', error);
         showMessage('Failed to reject payment: ' + error.message, 'error');
       }
     }
@@ -677,7 +941,7 @@
       if (type === 'success') {
         setTimeout(function() {
           container.innerHTML = '';
-        }, 7000); // Longer timeout to read bonus info
+        }, 5000);
       }
     }
 
@@ -693,7 +957,7 @@
         if (error) throw error;
         window.location.href = "login.html";
       } catch (error) {
-        console.error("Logout error:", error);
+        console.error("❌ Logout error:", error);
       }
     }
 
@@ -706,5 +970,33 @@
     checkAuth();
 
   </script>
+  <script>
+// PWA Installation
+let deferredPrompt;
+const installBtn = document.getElementById('installBtn');
+
+window.addEventListener('beforeinstallprompt', (e) => {
+  e.preventDefault();
+  deferredPrompt = e;
+  if (installBtn) installBtn.style.display = 'block';
+});
+
+if (installBtn) {
+  installBtn.addEventListener('click', async () => {
+    installBtn.style.display = 'none';
+    deferredPrompt.prompt();
+    await deferredPrompt.userChoice;
+    deferredPrompt = null;
+  });
+}
+
+// Service Worker
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('/service-worker.js');
+  });
+}
+</script>
+
 </body>
 </html>

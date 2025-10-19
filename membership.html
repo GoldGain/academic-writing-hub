@@ -4,6 +4,19 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Membership - Academic Writing Hub</title>
+  <!-- PWA Meta Tags -->
+<meta name="theme-color" content="#b8860b">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Gold Gain">
+<meta name="mobile-web-app-capable" content="yes">
+
+<!-- PWA Manifest -->
+<link rel="manifest" href="manifest.json">
+
+<!-- Icons -->
+<link rel="icon" href="icons/icon-192x192.png">
+<link rel="apple-touch-icon" href="icons/icon-192x192.png">
   <style>
     :root {
       --primary: #004aad;
@@ -737,7 +750,7 @@
             <h3><i>1</i> Copy Business Number</h3>
             <p>Send the exact amount to the following business number:</p>
             <div class="copy-box">
-              <span id="businessNumber">0754651240</span>
+              <span id="businessNumber">0762353880</span>
               <button class="copy-btn" id="copyBusinessBtn">Copy</button>
             </div>
             <div class="note">
@@ -867,7 +880,7 @@
 
       // Copy business number
       copyBusinessBtn.addEventListener('click', function() {
-        copyToClipboard('0754651240', copyBusinessBtn);
+        copyToClipboard('0762353880', copyBusinessBtn);
       });
 
       // Copy referral link
@@ -1142,8 +1155,33 @@
     // Make functions globally available
     window.selectPackage = selectPackage;
   </script>
+  <script>
+// PWA Installation
+let deferredPrompt;
+const installBtn = document.getElementById('installBtn');
+
+window.addEventListener('beforeinstallprompt', (e) => {
+  e.preventDefault();
+  deferredPrompt = e;
+  if (installBtn) installBtn.style.display = 'block';
+});
+
+if (installBtn) {
+  installBtn.addEventListener('click', async () => {
+    installBtn.style.display = 'none';
+    deferredPrompt.prompt();
+    await deferredPrompt.userChoice;
+    deferredPrompt = null;
+  });
+}
+
+// Service Worker
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('/service-worker.js');
+  });
+}
+</script>
+
 </body>
 </html>
-
-
-

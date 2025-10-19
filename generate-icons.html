@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Generate Gold Gain Icons</title>
+    <style>
+        body { font-family: Arial; padding: 20px; }
+        .icon-preview { display: inline-block; margin: 10px; text-align: center; }
+        canvas { border: 1px solid #ccc; }
+    </style>
+</head>
+<body>
+    <h1>Gold Gain App Icons Generator</h1>
+    <p>Click each "Save" button to download the icons, then save them in your icons folder</p>
+    
+    <div id="icons-container"></div>
+    
+    <script>
+        const sizes = [72, 96, 128, 144, 152, 192, 384, 512];
+        const container = document.getElementById('icons-container');
+        
+        sizes.forEach(function(size) {
+            const div = document.createElement('div');
+            div.className = 'icon-preview';
+            
+            const canvas = document.createElement('canvas');
+            canvas.width = size;
+            canvas.height = size;
+            canvas.style.border = '2px solid gold';
+            
+            const ctx = canvas.getContext('2d');
+            
+            // Gold background
+            ctx.fillStyle = '#b8860b';
+            ctx.fillRect(0, 0, size, size);
+            
+            // Inner circle
+            ctx.fillStyle = '#daa520';
+            ctx.beginPath();
+            ctx.arc(size/2, size/2, size/2.5, 0, 2 * Math.PI);
+            ctx.fill();
+            
+            // "G" text
+            ctx.fillStyle = 'white';
+            ctx.font = 'bold ' + (size/3) + 'px Arial';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText('G', size/2, size/2);
+            
+            const label = document.createElement('div');
+            label.textContent = 'icon-' + size + 'x' + size + '.png';
+            label.style.marginTop = '5px';
+            label.style.fontSize = '12px';
+            
+            const downloadBtn = document.createElement('button');
+            downloadBtn.textContent = 'Save';
+            downloadBtn.onclick = function() {
+                const link = document.createElement('a');
+                link.download = 'icon-' + size + 'x' + size + '.png';
+                link.href = canvas.toDataURL();
+                link.click();
+            };
+            
+            div.appendChild(canvas);
+            div.appendChild(label);
+            div.appendChild(downloadBtn);
+            container.appendChild(div);
+        });
+    </script>
+</body>
+</html>

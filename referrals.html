@@ -4,7 +4,22 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Referrals - Gold Gain</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- PWA Meta Tags -->
+<meta name="theme-color" content="#b8860b">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Gold Gain">
+<meta name="mobile-web-app-capable" content="yes">
+
+<!-- PWA Manifest -->
+<link rel="manifest" href="manifest.json">
+
+<!-- Icons -->
+<link rel="icon" href="icons/icon-192x192.png">
+<link rel="apple-touch-icon" href="icons/icon-192x192.png">
   <style>
+    /* All your CSS styles remain exactly the same */
     :root {
       --primary: #004aad;
       --primary-light: #3a6fc8;
@@ -19,6 +34,8 @@
       --gold: #ffd700;
       --silver: #c0c0c0;
       --bronze: #cd7f32;
+      --purple: #8a2be2;
+      --teal: #20c997;
     }
 
     * {
@@ -33,6 +50,7 @@
       color: #333;
       line-height: 1.6;
       min-height: 100vh;
+      overflow-x: hidden;
     }
 
     header {
@@ -43,23 +61,42 @@
       justify-content: space-between;
       align-items: center;
       box-shadow: 0 2px 20px rgba(0, 0, 0, 0.15);
+      position: relative;
+      overflow: hidden;
+    }
+
+    header::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+      animation: pulse 8s infinite linear;
     }
 
     .header-left h1 {
       font-size: 1.8rem;
       margin-bottom: 0.2rem;
       font-weight: 800;
+      position: relative;
+      z-index: 1;
     }
 
     .slogan {
       font-size: 0.9rem;
       opacity: 0.9;
+      position: relative;
+      z-index: 1;
     }
 
     .header-right {
       display: flex;
       align-items: center;
       gap: 15px;
+      position: relative;
+      z-index: 1;
     }
 
     .user-menu {
@@ -69,11 +106,12 @@
       cursor: pointer;
       padding: 8px 12px;
       border-radius: 8px;
-      transition: background 0.3s;
+      transition: all 0.3s;
     }
 
     .user-menu:hover {
       background: var(--primary-light);
+      transform: translateY(-2px);
     }
 
     .user-avatar {
@@ -87,6 +125,11 @@
       font-weight: bold;
       color: white;
       box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+      transition: all 0.3s;
+    }
+
+    .user-menu:hover .user-avatar {
+      transform: scale(1.1);
     }
 
     .mobile-menu-btn {
@@ -96,6 +139,11 @@
       color: white;
       font-size: 1.5rem;
       cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    .mobile-menu-btn:hover {
+      transform: scale(1.1);
     }
 
     .container {
@@ -112,6 +160,8 @@
       position: sticky;
       top: 0;
       overflow-y: auto;
+      z-index: 100;
+      transition: transform 0.3s ease;
     }
 
     nav a {
@@ -122,6 +172,23 @@
       transition: all 0.3s;
       border-left: 3px solid transparent;
       font-weight: 500;
+      position: relative;
+      overflow: hidden;
+    }
+
+    nav a::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(0, 74, 173, 0.1), transparent);
+      transition: left 0.5s;
+    }
+
+    nav a:hover::before {
+      left: 100%;
     }
 
     nav a:hover {
@@ -140,6 +207,7 @@
     main {
       flex: 1;
       padding: 2rem;
+      animation: fadeIn 0.8s ease;
     }
 
     .page-title {
@@ -150,11 +218,13 @@
       align-items: center;
       gap: 0.5rem;
       font-weight: 800;
+      position: relative;
     }
 
     .page-title::after {
       content: "💰";
       font-size: 1.5rem;
+      animation: bounce 2s infinite;
     }
 
     .stats-grid {
@@ -174,6 +244,22 @@
       transition: all 0.3s ease;
       position: relative;
       overflow: hidden;
+      animation: slideUp 0.5s ease;
+    }
+
+    .stat-card:nth-child(2) {
+      border-top-color: var(--secondary);
+      animation-delay: 0.1s;
+    }
+
+    .stat-card:nth-child(3) {
+      border-top-color: var(--success);
+      animation-delay: 0.2s;
+    }
+
+    .stat-card:nth-child(4) {
+      border-top-color: var(--purple);
+      animation-delay: 0.3s;
     }
 
     .stat-card::before {
@@ -204,6 +290,19 @@
       font-weight: 800;
       color: var(--primary);
       margin-bottom: 0.5rem;
+      position: relative;
+    }
+
+    .stat-card:nth-child(2) .stat-value {
+      color: var(--secondary);
+    }
+
+    .stat-card:nth-child(3) .stat-value {
+      color: var(--success);
+    }
+
+    .stat-card:nth-child(4) .stat-value {
+      color: var(--purple);
     }
 
     .stat-subtitle {
@@ -219,6 +318,7 @@
       box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
       margin-bottom: 2rem;
       transition: all 0.3s ease;
+      animation: fadeIn 0.8s ease;
     }
 
     .card:hover {
@@ -241,6 +341,7 @@
       border-radius: 12px;
       overflow: hidden;
       box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+      animation: slideIn 0.5s ease;
     }
 
     .referral-link-container input {
@@ -261,6 +362,23 @@
       transition: all 0.3s;
       font-weight: 600;
       min-width: 120px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .referral-link-container button::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+      transition: left 0.5s;
+    }
+
+    .referral-link-container button:hover::before {
+      left: 100%;
     }
 
     .referral-link-container button:hover {
@@ -288,6 +406,23 @@
       justify-content: center;
       gap: 0.5rem;
       box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .share-btn::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+      transition: left 0.5s;
+    }
+
+    .share-btn:hover::before {
+      left: 100%;
     }
 
     .share-btn:hover {
@@ -318,6 +453,7 @@
       border-radius: 10px;
       overflow: hidden;
       box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+      animation: fadeIn 1s ease;
     }
 
     .bonus-table th,
@@ -338,8 +474,13 @@
       border-bottom: none;
     }
 
+    .bonus-table tr {
+      transition: all 0.3s;
+    }
+
     .bonus-table tr:hover {
       background: #f8f9fa;
+      transform: scale(1.01);
     }
 
     .highlight {
@@ -356,6 +497,7 @@
       border-radius: 10px;
       overflow: hidden;
       box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+      animation: fadeIn 1s ease;
     }
 
     .team-table th,
@@ -372,6 +514,15 @@
       font-size: 0.95rem;
     }
 
+    .team-table tr {
+      transition: all 0.3s;
+    }
+
+    .team-table tr:hover {
+      background: #f8f9fa;
+      transform: scale(1.01);
+    }
+
     .status-badge {
       padding: 0.5rem 1rem;
       border-radius: 20px;
@@ -379,6 +530,11 @@
       font-weight: 700;
       text-transform: uppercase;
       letter-spacing: 0.5px;
+      transition: all 0.3s;
+    }
+
+    .status-badge:hover {
+      transform: scale(1.05);
     }
 
     .status-active {
@@ -403,6 +559,7 @@
       font-weight: 600;
       font-size: 1rem;
       box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+      animation: slideIn 0.5s ease;
     }
 
     .message.success {
@@ -450,6 +607,23 @@
       position: relative;
       transition: all 0.3s ease;
       overflow: hidden;
+      animation: slideUp 0.5s ease;
+    }
+
+    .milestone-card:nth-child(2) {
+      animation-delay: 0.1s;
+    }
+
+    .milestone-card:nth-child(3) {
+      animation-delay: 0.2s;
+    }
+
+    .milestone-card:nth-child(4) {
+      animation-delay: 0.3s;
+    }
+
+    .milestone-card:nth-child(5) {
+      animation-delay: 0.4s;
     }
 
     .milestone-card::before {
@@ -479,6 +653,7 @@
       top: 1rem;
       right: 1rem;
       font-size: 1.5rem;
+      animation: bounce 2s infinite;
     }
 
     .milestone-card h3 {
@@ -511,6 +686,11 @@
       margin-top: 1rem;
       text-transform: uppercase;
       letter-spacing: 0.5px;
+      transition: all 0.3s;
+    }
+
+    .milestone-status:hover {
+      transform: scale(1.05);
     }
 
     .milestone-achieved {
@@ -551,16 +731,6 @@
       animation: shimmer 2s infinite;
     }
 
-    @keyframes shimmer {
-      0% { transform: translateX(-100%); }
-      100% { transform: translateX(100%); }
-    }
-
-    @keyframes spin {
-      0% { transform: rotate(0deg); }
-      100% { transform: rotate(360deg); }
-    }
-
     /* Motivational Elements */
     .motivation-banner {
       background: linear-gradient(135deg, var(--primary), var(--secondary));
@@ -570,17 +740,35 @@
       text-align: center;
       margin-bottom: 2rem;
       box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+      position: relative;
+      overflow: hidden;
+      animation: fadeIn 0.8s ease;
+    }
+
+    .motivation-banner::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+      animation: pulse 8s infinite linear;
     }
 
     .motivation-banner h3 {
       font-size: 1.5rem;
       margin-bottom: 0.5rem;
       font-weight: 700;
+      position: relative;
+      z-index: 1;
     }
 
     .motivation-banner p {
       opacity: 0.9;
       font-size: 1.1rem;
+      position: relative;
+      z-index: 1;
     }
 
     .earnings-preview {
@@ -589,6 +777,7 @@
       border-radius: 12px;
       margin-top: 1.5rem;
       border-left: 4px solid var(--primary);
+      animation: slideIn 0.5s ease;
     }
 
     .earnings-preview h4 {
@@ -597,6 +786,54 @@
       font-weight: 600;
     }
 
+    /* Floating Animation */
+    .floating {
+      animation: floating 3s ease-in-out infinite;
+    }
+
+    /* Animations */
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    @keyframes slideUp {
+      from { transform: translateY(20px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+
+    @keyframes slideIn {
+      from { transform: translateX(-20px); opacity: 0; }
+      to { transform: translateX(0); opacity: 1; }
+    }
+
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    @keyframes shimmer {
+      0% { transform: translateX(-100%); }
+      100% { transform: translateX(100%); }
+    }
+
+    @keyframes pulse {
+      0% { transform: translate(0, 0); }
+      100% { transform: translate(50%, 50%); }
+    }
+
+    @keyframes floating {
+      0% { transform: translateY(0px); }
+      50% { transform: translateY(-10px); }
+      100% { transform: translateY(0px); }
+    }
+
+    /* Responsive Design */
     @media (max-width: 768px) {
       .header-right .user-name {
         display: none;
@@ -740,12 +977,15 @@
         
         <div class="share-buttons">
           <button class="share-btn whatsapp" id="whatsappBtn">
+            <i class="fab fa-whatsapp"></i>
             <span>WhatsApp</span>
           </button>
           <button class="share-btn facebook" id="facebookBtn">
+            <i class="fab fa-facebook-f"></i>
             <span>Facebook</span>
           </button>
           <button class="share-btn twitter" id="twitterBtn">
+            <i class="fab fa-twitter"></i>
             <span>Twitter</span>
           </button>
         </div>
@@ -869,580 +1109,503 @@
 
     // Enhanced Milestones data
     const milestones = [
-      { count: 5, reward: "KSh 1,500 Bonus", description: "Instant cash bonus for reaching 5 upgraded referrals", bonusAmount: 1500 },
-      { count: 10, reward: "KSh 3,000 Bonus", description: "Special achievement bonus for 10 active referrals", bonusAmount: 3000 },
-      { count: 20, reward: "Executive Dinner", description: "Company-sponsored dinner + KSh 2,000", bonusAmount: 2000 },
-      { count: 30, reward: "KSh 8,000 Monthly", description: "Guaranteed monthly salary for 3 months", bonusAmount: 8000 },
-      { count: 50, reward: "Regional Manager", description: "Promotion to Regional Manager position", bonusAmount: 15000 }
+        { count: 5, reward: "KSh 1,500 Bonus", description: "Instant cash bonus for reaching 5 upgraded referrals", bonusAmount: 1500 },
+        { count: 10, reward: "KSh 3,000 Bonus", description: "Special achievement bonus for 10 active referrals", bonusAmount: 3000 },
+        { count: 20, reward: "Executive Dinner", description: "Company-sponsored dinner + KSh 2,000", bonusAmount: 2000 },
+        { count: 30, reward: "KSh 8,000 Monthly", description: "Guaranteed monthly salary for 3 months", bonusAmount: 8000 },
+        { count: 50, reward: "Regional Manager", description: "Promotion to Regional Manager position", bonusAmount: 15000 }
     ];
 
     // Initialize the page
     document.addEventListener('DOMContentLoaded', function() {
-      initializePage();
+        initializePage();
     });
 
     // Page initialization
     async function initializePage() {
-      setupEventListeners();
-      await checkAuth();
+        setupEventListeners();
+        await checkAuth();
     }
 
     // Setup all event listeners
     function setupEventListeners() {
-      // Mobile menu toggle
-      if (mobileMenuBtn) {
-        mobileMenuBtn.addEventListener('click', function() {
-          sidebar.classList.toggle('active');
-        });
-      }
-
-      // Close sidebar when clicking outside
-      document.addEventListener('click', function(e) {
-        if (sidebar && mobileMenuBtn) {
-          if (!sidebar.contains(e.target) && !mobileMenuBtn.contains(e.target)) {
-            sidebar.classList.remove('active');
-          }
+        // Mobile menu toggle
+        if (mobileMenuBtn) {
+            mobileMenuBtn.addEventListener('click', function() {
+                sidebar.classList.toggle('active');
+            });
         }
-      });
 
-      // Logout button
-      if (logoutBtn) {
-        logoutBtn.addEventListener('click', function(e) {
-          e.preventDefault();
-          handleLogout();
+        // Close sidebar when clicking outside
+        document.addEventListener('click', function(e) {
+            if (sidebar && mobileMenuBtn) {
+                if (!sidebar.contains(e.target) && !mobileMenuBtn.contains(e.target)) {
+                    sidebar.classList.remove('active');
+                }
+            }
         });
-      }
 
-      // Copy link button
-      if (copyLinkBtn) {
-        copyLinkBtn.addEventListener('click', copyReferralLink);
-      }
+        // Logout button
+        if (logoutBtn) {
+            logoutBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                handleLogout();
+            });
+        }
 
-      // Share buttons
-      if (whatsappBtn) {
-        whatsappBtn.addEventListener('click', shareOnWhatsApp);
-      }
-      
-      if (facebookBtn) {
-        facebookBtn.addEventListener('click', shareOnFacebook);
-      }
-      
-      if (twitterBtn) {
-        twitterBtn.addEventListener('click', shareOnTwitter);
-      }
+        // Copy link button
+        if (copyLinkBtn) {
+            copyLinkBtn.addEventListener('click', copyReferralLink);
+        }
+
+        // Share buttons
+        if (whatsappBtn) {
+            whatsappBtn.addEventListener('click', shareOnWhatsApp);
+        }
+        
+        if (facebookBtn) {
+            facebookBtn.addEventListener('click', shareOnFacebook);
+        }
+        
+        if (twitterBtn) {
+            twitterBtn.addEventListener('click', shareOnTwitter);
+        }
     }
 
     // Authentication check
     async function checkAuth() {
-      try {
-        const { data: { session }, error } = await supabaseClient.auth.getSession();
-        if (error || !session) {
-          window.location.href = "login.html";
-          return;
+        try {
+            const { data: { session }, error } = await supabaseClient.auth.getSession();
+            if (error || !session) {
+                window.location.href = "login.html";
+                return;
+            }
+            currentUser = session.user;
+            await loadUserData();
+        } catch (err) {
+            console.error("Auth error:", err);
+            window.location.href = "login.html";
         }
-        currentUser = session.user;
-        await loadUserData();
-      } catch (err) {
-        console.error("Auth error:", err);
-        window.location.href = "login.html";
-      }
     }
 
     // Load user data
     async function loadUserData() {
-      try {
-        const { data: profile, error } = await supabaseClient
-          .from('profiles')
-          .select('*')
-          .eq('id', currentUser.id)
-          .single();
+        try {
+            const { data: profile, error } = await supabaseClient
+                .from('profiles')
+                .select('*')
+                .eq('id', currentUser.id)
+                .single();
 
-        if (error) throw error;
+            if (error) throw error;
 
-        userProfile = profile;
+            userProfile = profile;
 
-        // Update user info in header
-        document.getElementById('userName').textContent = profile.full_name || 'User';
-        document.getElementById('userAvatar').textContent = (profile.full_name || 'U').charAt(0).toUpperCase();
+            // Update user info in header
+            document.getElementById('userName').textContent = profile.full_name || 'User';
+            document.getElementById('userAvatar').textContent = (profile.full_name || 'U').charAt(0).toUpperCase();
 
-        if (!profile.referral_code) {
-          await generateReferralCode();
+            if (!profile.referral_code) {
+                await generateReferralCode();
+            }
+            
+            updateReferralLink();
+            await refreshAllData();
+
+        } catch (err) {
+            console.error("Profile load error:", err);
+            showMessage("Failed to load referral data", "error");
         }
-        
-        updateReferralLink();
-        await refreshAllData();
-
-      } catch (err) {
-        console.error("Profile load error:", err);
-        showMessage("Failed to load referral data", "error");
-      }
     }
 
     // Generate referral code
     async function generateReferralCode() {
-      try {
-        const baseCode = userProfile.email.split('@')[0].substring(0, 4).toUpperCase();
-        const randomNum = Math.floor(Math.random() * 1000);
-        const referralCode = baseCode + randomNum;
+        try {
+            const baseCode = userProfile.email.split('@')[0].substring(0, 4).toUpperCase();
+            const randomNum = Math.floor(Math.random() * 1000);
+            const referralCode = baseCode + randomNum;
 
-        const { error } = await supabaseClient
-          .from('profiles')
-          .update({ referral_code: referralCode })
-          .eq('id', currentUser.id);
+            const { error } = await supabaseClient
+                .from('profiles')
+                .update({ referral_code: referralCode })
+                .eq('id', currentUser.id);
 
-        if (error) throw error;
+            if (error) throw error;
 
-        userProfile.referral_code = referralCode;
-        showMessage("Referral code generated successfully!", "success");
-      } catch (err) {
-        console.error("Referral code generation error:", err);
-        showMessage("Failed to generate referral code", "error");
-      }
+            userProfile.referral_code = referralCode;
+            showMessage("Referral code generated successfully!", "success");
+        } catch (err) {
+            console.error("Referral code generation error:", err);
+            showMessage("Failed to generate referral code", "error");
+        }
     }
 
     // Update referral link in the input field
     function updateReferralLink() {
-      if (userProfile && userProfile.referral_code) {
-        const link = window.location.origin + "/signup.html?ref=" + userProfile.referral_code;
-        document.getElementById("referralLink").value = link;
-      }
+        if (userProfile && userProfile.referral_code) {
+            const link = window.location.origin + "/signup.html?ref=" + userProfile.referral_code;
+            document.getElementById("referralLink").value = link;
+        }
     }
 
     // Refresh all data
     async function refreshAllData() {
-      try {
-        // First, reload the user profile to get latest balance
-        const { data: freshProfile, error: profileError } = await supabaseClient
-          .from('profiles')
-          .select('*')
-          .eq('id', currentUser.id)
-          .single();
-        
-        if (!profileError && freshProfile) {
-          userProfile = freshProfile;
+        try {
+            // First, reload the user profile to get latest balance
+            const { data: freshProfile, error: profileError } = await supabaseClient
+                .from('profiles')
+                .select('*')
+                .eq('id', currentUser.id)
+                .single();
+            
+            if (!profileError && freshProfile) {
+                userProfile = freshProfile;
+            }
+
+            // Load referral counts and earnings
+            await loadReferralStats();
+            
+            // Load referral team table
+            await loadReferralTeam();
+
+            // Load and update milestones (DISPLAY ONLY - no payments)
+            await loadMilestones();
+
+        } catch (err) {
+            console.error("Error refreshing data:", err);
         }
-
-        // Load referral counts and earnings - ONLY COUNT UPGRADED MEMBERS
-        await loadReferralStats();
-        
-        // Load referral team table - ONLY SHOW UPGRADED MEMBERS
-        await loadReferralTeam();
-
-        // Load and update milestones - ONLY COUNT UPGRADED MEMBERS
-        await loadMilestones();
-
-      } catch (err) {
-        console.error("Error refreshing data:", err);
-      }
     }
 
-    // Load referral statistics - UPDATED: Only count upgraded referrals
+    // Load referral statistics
     async function loadReferralStats() {
-      try {
-        // Get ONLY upgraded referrals count
-        const { data: referrals, error: refError } = await supabaseClient
-          .from('profiles')
-          .select('id, role')
-          .eq('referred_by', userProfile.referral_code);
-
-        let upgradedReferrals = 0;
-        if (!refError && referrals) {
-          // Count ONLY upgraded referrals (starter, pro, premium)
-          upgradedReferrals = referrals.filter(function(ref) {
-            return ref.role === "starter" || ref.role === "pro" || ref.role === "premium";
-          }).length;
-        }
-
-        // Update the upgraded referrals count
-        document.getElementById("upgradedReferrals").textContent = upgradedReferrals;
-
-        // Calculate earnings from referral_bonus table
-        let totalEarnings = 0;
-        let pendingEarnings = 0;
-
-        // Get referral bonuses
-        const { data: bonuses, error: bonusError } = await supabaseClient
-          .from('referral_bonus')
-          .select('*')
-          .eq('referrer_id', currentUser.id);
-
-        if (!bonusError && bonuses) {
-          bonuses.forEach(function(bonus) {
-            const amount = parseFloat(bonus.amount) || 0;
-            // Check if bonus is paid
-            if (bonus.paid_at || bonus.status === 'paid' || bonus.status === 'completed') {
-              totalEarnings += amount;
-            } else {
-              pendingEarnings += amount;
-            }
-          });
-        }
-
-        // Check milestone bonuses
         try {
-          const { data: milestoneBonuses, error: milestoneError } = await supabaseClient
-            .from('milestone_bonus')
-            .select('amount')
-            .eq('user_id', currentUser.id);
+            // Get upgraded referrals count
+            const { data: referrals, error: refError } = await supabaseClient
+                .from('profiles')
+                .select('id, role')
+                .eq('referred_by', userProfile.referral_code);
 
-          if (!milestoneError && milestoneBonuses) {
-            milestoneBonuses.forEach(function(bonus) {
-              const amount = parseFloat(bonus.amount) || 0;
-              totalEarnings += amount;
-            });
-          }
-        } catch (milestoneErr) {
-          console.log("No milestone bonuses found");
+            let upgradedReferrals = 0;
+            let proReferrals = 0;
+            
+            if (!refError && referrals) {
+                // Count upgraded referrals
+                upgradedReferrals = referrals.filter(function(ref) {
+                    return ref.role === "starter" || ref.role === "pro" || ref.role === "premium";
+                }).length;
+                
+                // Count Pro and Premium referrals
+                proReferrals = referrals.filter(function(ref) {
+                    return ref.role === "pro" || ref.role === "premium";
+                }).length;
+            }
+
+            // Store for milestone checking
+            window.upgradedReferralsCount = upgradedReferrals;
+            window.proReferralsCount = proReferrals;
+
+            // Update the upgraded referrals count
+            document.getElementById("upgradedReferrals").textContent = upgradedReferrals;
+
+            // Calculate earnings
+            let totalEarnings = 0;
+            let pendingEarnings = 0;
+
+            // Get referral bonuses
+            const { data: bonuses, error: bonusError } = await supabaseClient
+                .from('referral_bonus')
+                .select('*')
+                .eq('referrer_id', currentUser.id);
+
+            if (!bonusError && bonuses) {
+                bonuses.forEach(function(bonus) {
+                    const amount = parseFloat(bonus.amount) || 0;
+                    if (bonus.paid_at || bonus.status === 'paid' || bonus.status === 'completed') {
+                        totalEarnings += amount;
+                    } else {
+                        pendingEarnings += amount;
+                    }
+                });
+            }
+
+            // Check milestone bonuses (for display only)
+            try {
+                const { data: milestoneBonuses, error: milestoneError } = await supabaseClient
+                    .from('milestone_bonus')
+                    .select('amount, paid_at, status')
+                    .eq('user_id', currentUser.id);
+
+                if (!milestoneError && milestoneBonuses) {
+                    milestoneBonuses.forEach(function(bonus) {
+                        if (bonus.paid_at || bonus.status === 'paid' || bonus.status === 'completed') {
+                            const amount = parseFloat(bonus.amount) || 0;
+                            totalEarnings += amount;
+                        }
+                    });
+                }
+            } catch (milestoneErr) {
+                console.log("No milestone bonuses found");
+            }
+
+            // Update the display
+            document.getElementById("totalEarnings").textContent = "KSh " + totalEarnings.toLocaleString();
+            document.getElementById("pendingEarnings").textContent = "KSh " + pendingEarnings.toLocaleString();
+
+        } catch (err) {
+            console.error("Stats error:", err);
+            document.getElementById("totalEarnings").textContent = "KSh 0";
+            document.getElementById("pendingEarnings").textContent = "KSh 0";
         }
-
-        // Update the display
-        document.getElementById("totalEarnings").textContent = "KSh " + totalEarnings.toLocaleString();
-        document.getElementById("pendingEarnings").textContent = "KSh " + pendingEarnings.toLocaleString();
-
-      } catch (err) {
-        console.error("Stats error:", err);
-        document.getElementById("totalEarnings").textContent = "KSh 0";
-        document.getElementById("pendingEarnings").textContent = "KSh 0";
-      }
     }
 
-    // Load referral team table - UPDATED: Only show upgraded members
+    // Load referral team table
     async function loadReferralTeam() {
-      try {
-        // Get all referrals but we'll filter to show only upgraded ones prominently
-        const { data: members, error } = await supabaseClient
-          .from('profiles')
-          .select('id, full_name, email, created_at, role')
-          .eq('referred_by', userProfile.referral_code)
-          .order('created_at', { ascending: false });
-
-        if (error) {
-          console.error("Error loading team members:", error);
-          throw error;
-        }
-
-        const body = document.getElementById("teamTableBody");
-        
-        // Filter to get only upgraded members for the main display
-        const upgradedMembers = members ? members.filter(function(member) {
-          return member.role === "starter" || member.role === "pro" || member.role === "premium";
-        }) : [];
-
-        if (upgradedMembers.length === 0) {
-          body.innerHTML = '<tr><td colspan="6" style="text-align:center;color:gray;padding: 2rem;">' +
-            '<div style="font-size: 1.1rem; margin-bottom: 0.5rem;">No upgraded referrals yet</div>' +
-            '<div style="color: var(--gray); font-size: 0.9rem;">Share your link and encourage friends to upgrade!</div>' +
-            '</td></tr>';
-          return;
-        }
-
-        // Get bonus data for upgraded members
-        let bonusData = [];
         try {
-          const { data: bonuses, error: bonusError } = await supabaseClient
-            .from('referral_bonus')
-            .select('referred_user_id, amount, paid_at, status, package')
-            .eq('referrer_id', currentUser.id);
+            const { data: members, error } = await supabaseClient
+                .from('profiles')
+                .select('id, full_name, email, created_at, role')
+                .eq('referred_by', userProfile.referral_code)
+                .order('created_at', { ascending: false });
 
-          if (!bonusError && bonuses) {
-            bonusData = bonuses;
-          }
-        } catch (bonusErr) {
-          console.log("Could not load bonus data");
-        }
-
-        let html = '';
-        upgradedMembers.forEach(function(member) {
-          const date = new Date(member.created_at).toLocaleDateString();
-          let membership = "Free";
-          let bonus = 0;
-          let status = "Bonus Pending";
-          let statusClass = "status-pending";
-          
-          // Determine membership and bonus amount
-          if (member.role === "premium") {
-            membership = "Premium";
-            bonus = 3000;
-          } else if (member.role === "pro") {
-            membership = "Pro";
-            bonus = 1800;
-          } else if (member.role === "starter") {
-            membership = "Starter";
-            bonus = 1000;
-          }
-
-          // Check if bonus was already paid for this member
-          const memberBonus = bonusData.find(function(b) {
-            return b.referred_user_id === member.id;
-          });
-          
-          if (memberBonus) {
-            if (memberBonus.paid_at || memberBonus.status === 'paid' || memberBonus.status === 'completed') {
-              status = "Bonus Paid";
-              statusClass = "status-active";
-              bonus = memberBonus.amount;
+            if (error) {
+                console.error("Error loading team members:", error);
+                throw error;
             }
-          } else {
-            status = "Upgraded - Bonus Pending";
-            statusClass = "status-upgraded";
-          }
-          
-          html += '<tr>' +
-            '<td><strong>' + (member.full_name || "User") + '</strong></td>' +
-            '<td>' + member.email + '</td>' +
-            '<td>' + date + '</td>' +
-            '<td><span style="font-weight: 600; color: var(--primary);">' + membership + '</span></td>' +
-            '<td><span class="status-badge ' + statusClass + '">' + status + '</span></td>' +
-            '<td><strong>KSh ' + bonus.toLocaleString() + '</strong></td>' +
-          '</tr>';
-        });
-        
-        body.innerHTML = html;
 
-      } catch (err) {
-        console.error("Team error:", err);
-        const body = document.getElementById("teamTableBody");
-        body.innerHTML = '<tr><td colspan="6" style="text-align:center;color:var(--danger);padding: 2rem;">Error loading referral team</td></tr>';
-      }
+            const body = document.getElementById("teamTableBody");
+            
+            const upgradedMembers = members ? members.filter(function(member) {
+                return member.role === "starter" || member.role === "pro" || member.role === "premium";
+            }) : [];
+
+            if (upgradedMembers.length === 0) {
+                body.innerHTML = '<tr><td colspan="6" style="text-align:center;color:gray;padding: 2rem;"><div style="font-size: 1.1rem; margin-bottom: 0.5rem;">No upgraded referrals yet</div><div style="color: var(--gray); font-size: 0.9rem;">Share your link and encourage friends to upgrade!</div></td></tr>';
+                return;
+            }
+
+            let bonusData = [];
+            try {
+                const { data: bonuses, error: bonusError } = await supabaseClient
+                    .from('referral_bonus')
+                    .select('referred_user_id, amount, paid_at, status, package')
+                    .eq('referrer_id', currentUser.id);
+
+                if (!bonusError && bonuses) {
+                    bonusData = bonuses;
+                }
+            } catch (bonusErr) {
+                console.log("Could not load bonus data");
+            }
+
+            let html = '';
+            upgradedMembers.forEach(function(member) {
+                const date = new Date(member.created_at).toLocaleDateString();
+                let membership = "Free";
+                let bonus = 0;
+                let status = "Bonus Pending";
+                let statusClass = "status-pending";
+                
+                if (member.role === "premium") {
+                    membership = "Premium";
+                    bonus = 3000;
+                } else if (member.role === "pro") {
+                    membership = "Pro";
+                    bonus = 1800;
+                } else if (member.role === "starter") {
+                    membership = "Starter";
+                    bonus = 1000;
+                }
+
+                const memberBonus = bonusData.find(function(b) {
+                    return b.referred_user_id === member.id;
+                });
+                
+                if (memberBonus) {
+                    if (memberBonus.paid_at || memberBonus.status === 'paid' || memberBonus.status === 'completed') {
+                        status = "Bonus Paid";
+                        statusClass = "status-active";
+                        bonus = memberBonus.amount;
+                    }
+                } else {
+                    status = "Upgraded - Bonus Pending";
+                    statusClass = "status-upgraded";
+                }
+                
+                html += '<tr><td><strong>' + (member.full_name || "User") + '</strong></td><td>' + member.email + '</td><td>' + date + '</td><td><span style="font-weight: 600; color: var(--primary);">' + membership + '</span></td><td><span class="status-badge ' + statusClass + '">' + status + '</span></td><td><strong>KSh ' + bonus.toLocaleString() + '</strong></td></tr>';
+            });
+            
+            body.innerHTML = html;
+
+        } catch (err) {
+            console.error("Team error:", err);
+            const body = document.getElementById("teamTableBody");
+            body.innerHTML = '<tr><td colspan="6" style="text-align:center;color:var(--danger);padding: 2rem;">Error loading referral team</td></tr>';
+        }
     }
 
-    // Load and display milestones - UPDATED: Only count upgraded referrals
+    // Load and display milestones (DISPLAY ONLY - no payments)
     async function loadMilestones() {
-      try {
-        // Get ONLY upgraded referrals count
-        const { data: referrals, error } = await supabaseClient
-          .from('profiles')
-          .select('id, role')
-          .eq('referred_by', userProfile.referral_code);
+        try {
+            const { data: referrals, error } = await supabaseClient
+                .from('profiles')
+                .select('id, role')
+                .eq('referred_by', userProfile.referral_code);
 
-        // Count ONLY upgraded referrals
-        const upgradedReferrals = referrals ? referrals.filter(function(ref) {
-          return ref.role === "starter" || ref.role === "pro" || ref.role === "premium";
-        }).length : 0;
-        
-        // Update milestone progress elements
-        const milestoneProgress = document.getElementById("milestoneProgress");
-        const nextMilestoneCount = document.getElementById("nextMilestoneCount");
-        const nextMilestoneReward = document.getElementById("nextMilestoneReward");
-        
-        if (milestoneProgress && nextMilestoneCount) {
-          // Calculate progress for next milestone
-          const nextMilestone = milestones.find(function(m) {
-            return m.count > upgradedReferrals;
-          }) || milestones[milestones.length - 1];
-          
-          let progress = 0;
-          if (upgradedReferrals > 0 && nextMilestone.count > 0) {
-            const prevMilestone = milestones.filter(function(m) {
-              return m.count < nextMilestone.count;
-            }).pop();
+            const upgradedReferrals = referrals ? referrals.filter(function(ref) {
+                return ref.role === "starter" || ref.role === "pro" || ref.role === "premium";
+            }).length : 0;
             
-            const prevCount = prevMilestone ? prevMilestone.count : 0;
-            progress = Math.min(100, ((upgradedReferrals - prevCount) / (nextMilestone.count - prevCount)) * 100);
-          }
-          
-          milestoneProgress.style.width = progress + "%";
-          nextMilestoneCount.textContent = upgradedReferrals + "/" + nextMilestone.count;
-          nextMilestoneReward.textContent = nextMilestone.reward;
-        }
-        
-        // Check for milestone bonuses that should be awarded
-        await checkAndAwardMilestoneBonuses(upgradedReferrals);
-        
-        // Render milestones
-        const container = document.getElementById("milestonesContainer");
-        if (container) {
-          let html = '';
-          
-          milestones.forEach(function(milestone) {
-            const isAchieved = upgradedReferrals >= milestone.count;
-            const progress = Math.min(100, (upgradedReferrals / milestone.count) * 100);
+            const proReferrals = referrals ? referrals.filter(function(ref) {
+                return ref.role === "pro" || ref.role === "premium";
+            }).length : 0;
             
-            html += '<div class="milestone-card ' + (isAchieved ? 'achieved' : '') + '">';
-            html += '<h3>' + milestone.count + ' Upgraded Referrals</h3>';
-            html += '<div class="milestone-reward">' + milestone.reward + '</div>';
-            html += '<div class="milestone-count">' + milestone.description + '</div>';
-            html += '<div class="progress-container">';
-            html += '<div class="progress-bar" style="width: ' + progress + '%"></div>';
-            html += '</div>';
-            html += '<div class="milestone-status ' + (isAchieved ? 'milestone-achieved' : 'milestone-pending') + '">';
-            html += (isAchieved ? '🎉 Achieved!' : upgradedReferrals + '/' + milestone.count + ' Upgraded');
-            html += '</div>';
-            html += '</div>';
-          });
-          
-          container.innerHTML = html;
+            window.upgradedReferralsCount = upgradedReferrals;
+            window.proReferralsCount = proReferrals;
+            
+            const milestoneProgress = document.getElementById("milestoneProgress");
+            const nextMilestoneCount = document.getElementById("nextMilestoneCount");
+            const nextMilestoneReward = document.getElementById("nextMilestoneReward");
+            
+            if (milestoneProgress && nextMilestoneCount) {
+                const nextMilestone = milestones.find(function(m) {
+                    return m.count > upgradedReferrals;
+                }) || milestones[milestones.length - 1];
+                
+                let progress = 0;
+                if (upgradedReferrals > 0 && nextMilestone.count > 0) {
+                    const prevMilestone = milestones.filter(function(m) {
+                        return m.count < nextMilestone.count;
+                    }).pop();
+                    
+                    const prevCount = prevMilestone ? prevMilestone.count : 0;
+                    progress = Math.min(100, ((upgradedReferrals - prevCount) / (nextMilestone.count - prevCount)) * 100);
+                }
+                
+                milestoneProgress.style.width = progress + "%";
+                nextMilestoneCount.textContent = upgradedReferrals + "/" + nextMilestone.count;
+                nextMilestoneReward.textContent = nextMilestone.reward;
+            }
+            
+            // CRITICAL FIX: Removed bonus payment calls to prevent duplicates
+            // Milestone bonuses are now handled ONLY in dashboard.html
+            console.log("Milestone progress updated - bonuses handled by dashboard");
+            
+            const container = document.getElementById("milestonesContainer");
+            if (container) {
+                let html = '';
+                
+                milestones.forEach(function(milestone) {
+                    const isAchieved = upgradedReferrals >= milestone.count;
+                    const hasEnoughPro = proReferrals >= Math.ceil(milestone.count / 2);
+                    const isEligible = isAchieved && hasEnoughPro;
+                    const progress = Math.min(100, (upgradedReferrals / milestone.count) * 100);
+                    
+                    html += '<div class="milestone-card ' + (isEligible ? 'achieved' : '') + '">';
+                    html += '<h3>' + milestone.count + ' Upgraded Referrals</h3>';
+                    html += '<div class="milestone-reward">' + milestone.reward + '</div>';
+                    html += '<div class="milestone-count">' + milestone.description + '</div>';
+                    
+                    if (!hasEnoughPro && isAchieved) {
+                        html += '<div style="color: var(--warning); font-size: 0.9rem; margin: 0.5rem 0; padding: 0.5rem; background: #fff3cd; border-radius: 5px;">';
+                        html += '⚠ Need ' + Math.ceil(milestone.count / 2) + ' Pro/Premium members (' + proReferrals + '/' + Math.ceil(milestone.count / 2) + ')';
+                        html += '</div>';
+                    }
+                    
+                    html += '<div class="progress-container">';
+                    html += '<div class="progress-bar" style="width: ' + progress + '%"></div>';
+                    html += '</div>';
+                    html += '<div class="milestone-status ' + (isEligible ? 'milestone-achieved' : 'milestone-pending') + '">';
+                    
+                    if (isEligible) {
+                        html += '🎉 Achieved!';
+                    } else if (isAchieved && !hasEnoughPro) {
+                        html += '⏳ Need More Pro Members';
+                    } else {
+                        html += upgradedReferrals + '/' + milestone.count + ' Upgraded';
+                    }
+                    
+                    html += '</div>';
+                    html += '</div>';
+                });
+                
+                container.innerHTML = html;
+            }
+            
+        } catch (err) {
+            console.error("Error loading milestones:", err);
         }
-        
-      } catch (err) {
-        console.error("Error loading milestones:", err);
-      }
-    }
-
-    // Check and award milestone bonuses
-    async function checkAndAwardMilestoneBonuses(upgradedReferrals) {
-      try {
-        // Check if user has reached any new milestones
-        const reachedMilestones = milestones.filter(function(milestone) {
-          return upgradedReferrals >= milestone.count;
-        });
-        
-        if (reachedMilestones.length === 0) return;
-        
-        // Check which milestones haven't been awarded yet
-        const { data: awardedMilestones, error } = await supabaseClient
-          .from('milestone_bonus')
-          .select('milestone_count')
-          .eq('user_id', currentUser.id);
-        
-        if (error) {
-          console.error("Error checking awarded milestones:", error);
-          return;
-        }
-        
-        const awardedCounts = awardedMilestones ? awardedMilestones.map(function(m) {
-          return m.milestone_count;
-        }) : [];
-        
-        // Award bonuses for newly reached milestones
-        for (let i = 0; i < reachedMilestones.length; i++) {
-          const milestone = reachedMilestones[i];
-          
-          if (!awardedCounts.includes(milestone.count)) {
-            await awardMilestoneBonus(milestone);
-          }
-        }
-        
-      } catch (err) {
-        console.error("Error checking milestone bonuses:", err);
-      }
-    }
-
-    // Award a milestone bonus to user
-    async function awardMilestoneBonus(milestone) {
-      try {
-        console.log("Awarding milestone bonus:", milestone);
-        
-        // Add bonus to user's balance
-        const currentBalance = parseFloat(userProfile.balance) || 0;
-        const newBalance = currentBalance + milestone.bonusAmount;
-        
-        // Also update total_earnings
-        const currentEarnings = parseFloat(userProfile.total_earnings) || 0;
-        const newEarnings = currentEarnings + milestone.bonusAmount;
-        
-        const { error: updateError } = await supabaseClient
-          .from('profiles')
-          .update({ 
-            balance: newBalance,
-            total_earnings: newEarnings
-          })
-          .eq('id', currentUser.id);
-        
-        if (updateError) throw updateError;
-        
-        // Record the milestone bonus
-        const { error: recordError } = await supabaseClient
-          .from('milestone_bonus')
-          .insert({
-            user_id: currentUser.id,
-            milestone_count: milestone.count,
-            amount: milestone.bonusAmount,
-            awarded_at: new Date().toISOString()
-          });
-        
-        if (recordError) throw recordError;
-        
-        // Update local profile
-        userProfile.balance = newBalance;
-        userProfile.total_earnings = newEarnings;
-        
-        // Show success message
-        showMessage("🎉 Congratulations! You've reached " + milestone.count + " upgraded referrals and earned " + milestone.reward + "!", "success");
-        
-        // Refresh data to show updated balance
-        await refreshAllData();
-        
-      } catch (err) {
-        console.error("Error awarding milestone bonus:", err);
-        showMessage("Error awarding milestone bonus", "error");
-      }
     }
 
     // Copy referral link to clipboard
     async function copyReferralLink() {
-      try {
-        const referralLink = document.getElementById("referralLink");
-        
-        // Select the text
-        referralLink.select();
-        referralLink.setSelectionRange(0, 99999);
-        
-        // Copy using modern Clipboard API
-        if (navigator.clipboard && window.isSecureContext) {
-          await navigator.clipboard.writeText(referralLink.value);
-        } else {
-          // Fallback for older browsers
-          document.execCommand("copy");
+        try {
+            const referralLink = document.getElementById("referralLink");
+            
+            referralLink.select();
+            referralLink.setSelectionRange(0, 99999);
+            
+            if (navigator.clipboard && window.isSecureContext) {
+                await navigator.clipboard.writeText(referralLink.value);
+            } else {
+                document.execCommand("copy");
+            }
+            
+            showMessage("✅ Referral link copied to clipboard!", "success");
+            
+            const originalText = copyLinkBtn.innerHTML;
+            copyLinkBtn.innerHTML = "✅ Copied!";
+            copyLinkBtn.style.background = "linear-gradient(135deg, var(--success), #4caf50)";
+            
+            setTimeout(function() {
+                copyLinkBtn.innerHTML = originalText;
+                copyLinkBtn.style.background = "";
+            }, 2000);
+            
+        } catch (err) {
+            console.error("Copy failed:", err);
+            showMessage("❌ Failed to copy link", "error");
         }
-        
-        showMessage("✅ Referral link copied to clipboard!", "success");
-        
-        // Visual feedback
-        const originalText = copyLinkBtn.innerHTML;
-        copyLinkBtn.innerHTML = "✅ Copied!";
-        copyLinkBtn.style.background = "linear-gradient(135deg, var(--success), #4caf50)";
-        
-        setTimeout(function() {
-          copyLinkBtn.innerHTML = originalText;
-          copyLinkBtn.style.background = "";
-        }, 2000);
-        
-      } catch (err) {
-        console.error("Copy failed:", err);
-        showMessage("❌ Failed to copy link", "error");
-      }
     }
 
     // Share on WhatsApp
     function shareOnWhatsApp() {
-      const link = document.getElementById("referralLink").value;
-      const msg = "🚀 Join Gold Gain and start earning money! Use my referral link to sign up. I'll earn instant bonuses when you upgrade your membership: " + link + " 💰 Don't miss out on this opportunity!";
-      window.open("https://wa.me/?text=" + encodeURIComponent(msg), "_blank");
+        const link = document.getElementById("referralLink").value;
+        const msg = "🚀 Join Gold Gain and start earning money! Use my referral link to sign up. I'll earn instant bonuses when you upgrade your membership: " + link + " 💰 Don't miss out on this opportunity!";
+        window.open("https://wa.me/?text=" + encodeURIComponent(msg), "_blank");
     }
 
     // Share on Facebook
     function shareOnFacebook() {
-      const link = document.getElementById("referralLink").value;
-      window.open("https://www.facebook.com/sharer/sharer.php?u=" + encodeURIComponent(link) + "&quote=Join%20Gold%20Gain%20and%20start%20earning%20money!%20💰", "_blank");
+        const link = document.getElementById("referralLink").value;
+        window.open("https://www.facebook.com/sharer/sharer.php?u=" + encodeURIComponent(link) + "&quote=Join%20Gold%20Gain%20and%20start%20earning%20money!%20💰", "_blank");
     }
 
     // Share on Twitter
     function shareOnTwitter() {
-      const link = document.getElementById("referralLink").value;
-      const msg = "Join Gold Gain and start earning! Use my referral link to get started. Instant bonuses when you upgrade! 💰";
-      window.open("https://twitter.com/intent/tweet?text=" + encodeURIComponent(msg) + "&url=" + encodeURIComponent(link), "_blank");
+        const link = document.getElementById("referralLink").value;
+        const msg = "Join Gold Gain and start earning! Use my referral link to get started. Instant bonuses when you upgrade! 💰";
+        window.open("https://twitter.com/intent/tweet?text=" + encodeURIComponent(msg) + "&url=" + encodeURIComponent(link), "_blank");
     }
 
     // Show message to user
     function showMessage(msg, type) {
-      if (!type) type = "info";
-      messageContainer.innerHTML = '<div class="message ' + type + '">' + msg + '</div>';
-      if (type === "success") {
-        setTimeout(function() {
-          messageContainer.innerHTML = "";
-        }, 5000);
-      }
+        if (!type) type = "info";
+        messageContainer.innerHTML = '<div class="message ' + type + '">' + msg + '</div>';
+        if (type === "success") {
+            setTimeout(function() {
+                messageContainer.innerHTML = "";
+            }, 5000);
+        }
     }
 
     // Handle user logout
     async function handleLogout() {
-      try {
-        await supabaseClient.auth.signOut();
-        window.location.href = "login.html";
-      } catch (err) {
-        console.error("Logout error:", err);
-      }
+        try {
+            await supabaseClient.auth.signOut();
+            window.location.href = "login.html";
+        } catch (err) {
+            console.error("Logout error:", err);
+        }
     }
 
     // Make functions globally available
@@ -1451,14 +1614,40 @@
     window.shareOnFacebook = shareOnFacebook;
     window.shareOnTwitter = shareOnTwitter;
 
-    // Auto-refresh data every 20 seconds to keep stats updated
+    // Auto-refresh data every 20 seconds
     setInterval(function() {
-      if (currentUser && userProfile) {
-        refreshAllData();
-      }
+        if (currentUser && userProfile) {
+            refreshAllData();
+        }
     }, 20000);
+</script>
+<script>
+// PWA Installation
+let deferredPrompt;
+const installBtn = document.getElementById('installBtn');
 
-  </script>
+window.addEventListener('beforeinstallprompt', (e) => {
+  e.preventDefault();
+  deferredPrompt = e;
+  if (installBtn) installBtn.style.display = 'block';
+});
+
+if (installBtn) {
+  installBtn.addEventListener('click', async () => {
+    installBtn.style.display = 'none';
+    deferredPrompt.prompt();
+    await deferredPrompt.userChoice;
+    deferredPrompt = null;
+  });
+}
+
+// Service Worker
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('/service-worker.js');
+  });
+}
+</script>
 
 </body>
 </html>
