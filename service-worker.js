@@ -13,8 +13,8 @@ const urlsToCache = [
   '/support.html',
   '/css/styles.css',
   '/js/app.js',
-  '/icons/icon-192x192.png',
-  '/icons/icon-512x512.png',
+  '/icon-192x192.png',
+  '/icon-512x512.png',
   'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2'
 ];
 
