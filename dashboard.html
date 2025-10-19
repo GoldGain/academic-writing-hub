@@ -4,6 +4,19 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Dashboard - Academic Writing Hub</title>
+  <!-- PWA Meta Tags -->
+  <meta name="theme-color" content="#b8860b">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="Gold Gain">
+  <meta name="mobile-web-app-capable" content="yes">
+
+  <!-- PWA Manifest -->
+  <link rel="manifest" href="manifest.json">
+
+  <!-- Icons -->
+  <link rel="icon" href="icons/icon-192x192.png">
+  <link rel="apple-touch-icon" href="icons/icon-192x192.png">
   <style>
     :root {
       --primary: #004aad;
@@ -537,6 +550,37 @@
         <p>Here is a quick overview of your account. Navigate using the sidebar to explore Membership, Tasks, Referrals, and more.</p>
       </div>
 
+      <!-- Install App Button -->
+      <div style="
+        background: linear-gradient(135deg, #b8860b, #daa520);
+        color: white;
+        padding: 20px;
+        border-radius: 15px;
+        margin: 20px 0;
+        text-align: center;
+        box-shadow: 0 4px 15px rgba(184, 134, 11, 0.3);
+      ">
+        <div style="font-size: 48px; margin-bottom: 10px;">📱</div>
+        <h3 style="margin: 10px 0;">Get the Gold Gain App!</h3>
+        <p style="margin-bottom: 20px; opacity: 0.9;">
+          Install our app for faster access and better experience
+        </p>
+        
+        <button id="installBtn" style="
+          background: white;
+          color: #b8860b;
+          border: none;
+          padding: 12px 30px;
+          border-radius: 25px;
+          font-weight: bold;
+          font-size: 16px;
+          cursor: pointer;
+          display: none;
+        ">
+          📲 Install App
+        </button>
+      </div>
+
       <div class="stats-grid">
         <div class="stat-card balance">
           <div class="stat-value" id="balanceAmount">Ksh 0.00</div>
@@ -573,7 +617,7 @@
               <li>10 tasks per day limit</li>
               <li>Standard withdrawal processing</li>
             </ul>
-            <button class="upgrade-btn" onclick="window.upgradeMembership('starter')" id="starterUpgradeBtn">Get Starter Package</button>
+            <button class="upgrade-btn" onclick="upgradeMembership('starter')" id="starterUpgradeBtn">Get Starter Package</button>
           </div>
           
           <div class="membership-card pro">
@@ -587,7 +631,7 @@
               <li>Faster withdrawal processing</li>
               <li>Higher reward rates</li>
             </ul>
-            <button class="upgrade-btn" onclick="window.upgradeMembership('pro')" id="proUpgradeBtn">Get Pro Package</button>
+            <button class="upgrade-btn" onclick="upgradeMembership('pro')" id="proUpgradeBtn">Get Pro Package</button>
           </div>
           
           <div class="membership-card premium">
@@ -602,7 +646,7 @@
               <li>Highest reward rates</li>
               <li>Early access to new features</li>
             </ul>
-            <button class="upgrade-btn" onclick="window.upgradeMembership('premium')" id="premiumUpgradeBtn">Get Premium Package</button>
+            <button class="upgrade-btn" onclick="upgradeMembership('premium')" id="premiumUpgradeBtn">Get Premium Package</button>
           </div>
         </div>
       </div>
@@ -645,51 +689,108 @@
     &copy; 2025 Academic Writing Hub | All Rights Reserved
   </footer>
 
-<!-- Supabase Scripts -->
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-  // Supabase configuration
-  const SUPABASE_URL = "https://lfrjtklkbppihaaiuxef.supabase.co";
-  const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imxmcmp0a2xrYnBwaWhhYWl1eGVmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTkwNTI5MzMsImV4cCI6MjA3NDYyODkzM30.2FVqnt5daF2Tw-RmVBwOGgt4GuIQQSkG8IUZt30QxIM";
-
-  // Initialize Supabase client
-  let supabaseClient;
-  try {
-    supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-  } catch (error) {
-    console.error('Failed to initialize Supabase client:', error);
-  }
+  // Wait for the page to fully load before initializing
+  document.addEventListener('DOMContentLoaded', function() {
+    initializeApp();
+  });
 
   // Global variables
   let currentUser = null;
   let userProfile = null;
+  let supabaseClient = null;
 
-  // DOM Elements
-  const mobileMenuBtn = document.getElementById('mobileMenuBtn');
-  const sidebar = document.getElementById('sidebar');
-  const logoutBtn = document.getElementById('logoutBtn');
-  const userAvatar = document.getElementById('userAvatar');
-  const userName = document.getElementById('userName');
-  const welcomeMessage = document.getElementById('welcomeMessage');
-  const messageContainer = document.getElementById('messageContainer');
-
-  // Mobile menu toggle
-  mobileMenuBtn.addEventListener('click', function(e) {
-    e.stopPropagation();
-    sidebar.classList.toggle('active');
-  });
-
-  // Close mobile menu when clicking outside
-  document.addEventListener('click', function(e) {
-    if (!sidebar.contains(e.target) && !mobileMenuBtn.contains(e.target)) {
-      sidebar.classList.remove('active');
+  async function initializeApp() {
+    // Check if Supabase is loaded
+    if (typeof supabase === 'undefined') {
+      console.error('Supabase library not loaded. Retrying...');
+      // Try to load Supabase manually
+      await loadSupabase();
+      return;
     }
-  });
+
+    // Supabase configuration
+    const SUPABASE_URL = "https://lfrjtklkbppihaaiuxef.supabase.co";
+    const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imxmcmp0a2xrYnBwaWhhYWl1eGVmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTkwNTI5MzMsImV4cCI6MjA3NDYyODkzM30.2FVqnt5daF2Tw-RmVBwOGgt4GuIQQSkG8IUZt30QxIM";
+
+    // Initialize Supabase client with error handling
+    try {
+      supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+      console.log('✅ Supabase client initialized successfully');
+    } catch (error) {
+      console.error('❌ Failed to initialize Supabase client:', error);
+      showMessage('Database connection failed. Please refresh the page.', 'error');
+      return;
+    }
+
+    // Set up the rest of your application
+    setupApplication();
+  }
+
+  // Function to load Supabase if it fails to load automatically
+  function loadSupabase() {
+    return new Promise((resolve, reject) => {
+      // Check if already loaded
+      if (typeof supabase !== 'undefined') {
+        resolve();
+        return;
+      }
+
+      // Create and load the script
+      const script = document.createElement('script');
+      script.src = 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2';
+      script.onload = function() {
+        console.log('✅ Supabase library loaded manually');
+        setTimeout(() => {
+          initializeApp();
+          resolve();
+        }, 1000);
+      };
+      script.onerror = function() {
+        console.error('❌ Failed to load Supabase library');
+        showMessage('Failed to load required resources. Please check your internet connection and refresh the page.', 'error');
+        reject();
+      };
+      document.head.appendChild(script);
+    });
+  }
+
+  function setupApplication() {
+    // DOM Elements
+    const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+    const sidebar = document.getElementById('sidebar');
+    const logoutBtn = document.getElementById('logoutBtn');
+
+    // Mobile menu toggle
+    if (mobileMenuBtn) {
+      mobileMenuBtn.addEventListener('click', function(e) {
+        e.stopPropagation();
+        sidebar.classList.toggle('active');
+      });
+    }
+
+    // Close mobile menu when clicking outside
+    document.addEventListener('click', function(e) {
+      if (sidebar && mobileMenuBtn) {
+        if (!sidebar.contains(e.target) && !mobileMenuBtn.contains(e.target)) {
+          sidebar.classList.remove('active');
+        }
+      }
+    });
+
+    // Authentication check
+    checkAuth();
+
+    // Logout handler
+    if (logoutBtn) {
+      logoutBtn.addEventListener('click', handleLogout);
+    }
+  }
 
   // Authentication check
   async function checkAuth() {
     if (!supabaseClient) {
-      showMessage('Error: Application not initialized', 'error');
+      showMessage('Error: Application not initialized properly', 'error');
       return;
     }
 
@@ -708,11 +809,55 @@
       }
 
       currentUser = session.user;
+      console.log('✅ User authenticated:', currentUser.email);
       await loadUserData();
+
+      // Start auto-refresh for balance updates
+      startAutoRefresh();
 
     } catch (error) {
       console.error('Auth check error:', error);
       window.location.href = "login.html";
+    }
+  }
+
+  // Auto-refresh balance every 10 seconds
+  function startAutoRefresh() {
+    setInterval(async () => {
+      if (currentUser && userProfile) {
+        await refreshUserBalance();
+      }
+    }, 10000);
+  }
+
+  // Refresh only user balance (lightweight)
+  async function refreshUserBalance() {
+    try {
+      const { data: profile, error } = await supabaseClient
+        .from('profiles')
+        .select('balance')
+        .eq('id', currentUser.id)
+        .single();
+
+      if (!error && profile) {
+        const oldBalance = parseFloat(userProfile.balance) || 0;
+        const newBalance = parseFloat(profile.balance) || 0;
+        
+        // Update if balance changed
+        if (oldBalance !== newBalance) {
+          userProfile.balance = newBalance;
+          document.getElementById('balanceAmount').textContent = 'Ksh ' + newBalance.toLocaleString();
+          updateMembershipButtons(userProfile);
+          
+          // Show notification if balance increased
+          if (newBalance > oldBalance) {
+            const increase = newBalance - oldBalance;
+            showMessage('💰 Balance updated! +Ksh ' + increase.toLocaleString(), 'success');
+          }
+        }
+      }
+    } catch (error) {
+      console.error('Balance refresh error:', error);
     }
   }
 
@@ -828,7 +973,8 @@
         role: 'none',
         referrals: 0,
         tasks_completed: 0,
-        total_earnings: 0
+        total_earnings: 0,
+        created_at: new Date().toISOString()
       };
 
       const { data, error } = await supabaseClient
@@ -850,7 +996,8 @@
         balance: 0,
         role: 'none',
         referrals: 0,
-        tasks_completed: 0
+        tasks_completed: 0,
+        created_at: new Date().toISOString()
       };
       updateDashboard(userProfile);
     }
@@ -859,12 +1006,20 @@
   // Update dashboard with user data
   function updateDashboard(profile) {
     // Update welcome message and user info
-    welcomeMessage.textContent = 'Welcome back, ' + (profile.full_name || 'User') + '!';
-    userName.textContent = profile.full_name || 'User';
-    userAvatar.textContent = (profile.full_name || 'U').charAt(0).toUpperCase();
+    const welcomeMessage = document.getElementById('welcomeMessage');
+    const userName = document.getElementById('userName');
+    const userAvatar = document.getElementById('userAvatar');
+    
+    if (welcomeMessage) welcomeMessage.textContent = 'Welcome back, ' + (profile.full_name || 'User') + '!';
+    if (userName) userName.textContent = profile.full_name || 'User';
+    if (userAvatar) userAvatar.textContent = (profile.full_name || 'U').charAt(0).toUpperCase();
 
     // Update stats
-    document.getElementById('balanceAmount').textContent = 'Ksh ' + ((parseFloat(profile.balance) || 0).toLocaleString());
+    const balanceAmount = document.getElementById('balanceAmount');
+    const membershipType = document.getElementById('membershipType');
+    const tasksCompleted = document.getElementById('tasksCompleted');
+    
+    if (balanceAmount) balanceAmount.textContent = 'Ksh ' + ((parseFloat(profile.balance) || 0).toLocaleString());
     
     // Format membership type display
     let membershipDisplay = 'No Package';
@@ -876,10 +1031,10 @@
       membershipDisplay = 'Premium';
     }
     
-    document.getElementById('membershipType').textContent = membershipDisplay;
-    document.getElementById('tasksCompleted').textContent = profile.tasks_completed || 0;
+    if (membershipType) membershipType.textContent = membershipDisplay;
+    if (tasksCompleted) tasksCompleted.textContent = profile.tasks_completed || 0;
 
-    // Update recent activities
+    // Update recent activities with enhanced information
     updateRecentActivities(profile);
   }
 
@@ -888,8 +1043,18 @@
     const starterBtn = document.getElementById('starterUpgradeBtn');
     const proBtn = document.getElementById('proUpgradeBtn');
     const premiumBtn = document.getElementById('premiumUpgradeBtn');
+    
+    if (!starterBtn || !proBtn || !premiumBtn) return;
+
     const currentBalance = parseFloat(profile.balance) || 0;
     const currentRole = profile.role || 'none';
+
+    // CORRECTED: Use consistent package prices (3500/5500/8000)
+    const packagePrices = {
+      'starter': 3500,
+      'pro': 5500,
+      'premium': 8000
+    };
 
     // Reset all buttons first
     starterBtn.disabled = false;
@@ -898,11 +1063,11 @@
 
     // Starter Package Logic
     if (currentRole === 'none') {
-      if (currentBalance >= 3500) {
-        starterBtn.textContent = 'Get Starter Package (Ksh 3,500)';
+      if (currentBalance >= packagePrices.starter) {
+        starterBtn.textContent = 'Get Starter Package (Ksh ' + packagePrices.starter.toLocaleString() + ')';
         starterBtn.disabled = false;
       } else {
-        starterBtn.textContent = 'Insufficient Balance - Ksh 3,500';
+        starterBtn.textContent = 'Insufficient Balance - Ksh ' + packagePrices.starter.toLocaleString();
         starterBtn.disabled = true;
       }
     } else if (currentRole === 'starter') {
@@ -912,17 +1077,17 @@
       starterBtn.textContent = 'Already Upgraded';
       starterBtn.disabled = true;
     } else {
-      starterBtn.textContent = 'Get Starter Package (Ksh 3,500)';
-      starterBtn.disabled = currentBalance < 3500;
+      starterBtn.textContent = 'Get Starter Package (Ksh ' + packagePrices.starter.toLocaleString() + ')';
+      starterBtn.disabled = currentBalance < packagePrices.starter;
     }
 
     // Pro Package Logic
     if (currentRole === 'none' || currentRole === 'starter') {
-      if (currentBalance >= 5500) {
-        proBtn.textContent = currentRole === 'none' ? 'Get Pro Package (Ksh 5,500)' : 'Upgrade to Pro (Ksh 5,500)';
+      if (currentBalance >= packagePrices.pro) {
+        proBtn.textContent = currentRole === 'none' ? 'Get Pro Package (Ksh ' + packagePrices.pro.toLocaleString() + ')' : 'Upgrade to Pro (Ksh ' + packagePrices.pro.toLocaleString() + ')';
         proBtn.disabled = false;
       } else {
-        proBtn.textContent = 'Insufficient Balance - Ksh 5,500';
+        proBtn.textContent = 'Insufficient Balance - Ksh ' + packagePrices.pro.toLocaleString();
         proBtn.disabled = true;
       }
     } else if (currentRole === 'pro') {
@@ -932,43 +1097,47 @@
       proBtn.textContent = 'Already Upgraded';
       proBtn.disabled = true;
     } else {
-      proBtn.textContent = 'Get Pro Package (Ksh 5,500)';
-      proBtn.disabled = currentBalance < 5500;
+      proBtn.textContent = 'Get Pro Package (Ksh ' + packagePrices.pro.toLocaleString() + ')';
+      proBtn.disabled = currentBalance < packagePrices.pro;
     }
 
     // Premium Package Logic
     if (currentRole === 'none' || currentRole === 'starter' || currentRole === 'pro') {
-      if (currentBalance >= 8000) {
-        let buttonText = 'Get Premium Package (Ksh 8,000)';
-        if (currentRole === 'starter') buttonText = 'Upgrade to Premium (Ksh 8,000)';
-        if (currentRole === 'pro') buttonText = 'Upgrade to Premium (Ksh 8,000)';
+      if (currentBalance >= packagePrices.premium) {
+        let buttonText = 'Get Premium Package (Ksh ' + packagePrices.premium.toLocaleString() + ')';
+        if (currentRole === 'starter') buttonText = 'Upgrade to Premium (Ksh ' + packagePrices.premium.toLocaleString() + ')';
+        if (currentRole === 'pro') buttonText = 'Upgrade to Premium (Ksh ' + packagePrices.premium.toLocaleString() + ')';
         
         premiumBtn.textContent = buttonText;
         premiumBtn.disabled = false;
       } else {
-        premiumBtn.textContent = 'Insufficient Balance - Ksh 8,000';
+        premiumBtn.textContent = 'Insufficient Balance - Ksh ' + packagePrices.premium.toLocaleString();
         premiumBtn.disabled = true;
       }
     } else if (currentRole === 'premium') {
       premiumBtn.textContent = 'Current Package';
       premiumBtn.disabled = true;
     } else {
-      premiumBtn.textContent = 'Get Premium Package (Ksh 8,000)';
-      premiumBtn.disabled = currentBalance < 8000;
+      premiumBtn.textContent = 'Get Premium Package (Ksh ' + packagePrices.premium.toLocaleString() + ')';
+      premiumBtn.disabled = currentBalance < packagePrices.premium;
     }
   }
 
-  // FIXED: Changed from window.upgradeMembership to just upgradeMembership
+  // FIXED: Upgrade membership function with CORRECT prices
   async function upgradeMembership(newRole) {
-    if (!supabaseClient || !userProfile) return;
+    if (!supabaseClient || !userProfile) {
+      showMessage('Application not ready. Please wait...', 'error');
+      return;
+    }
 
-    const membershipPrices = {
+    // CORRECTED: Use consistent package prices (3500/5500/8000)
+    const packagePrices = {
       'starter': 3500,
       'pro': 5500,
       'premium': 8000
     };
 
-    const price = membershipPrices[newRole];
+    const price = packagePrices[newRole];
     const currentBalance = parseFloat(userProfile.balance) || 0;
     const currentMembership = userProfile.role || 'none';
 
@@ -1017,6 +1186,11 @@
       updateDashboard(data);
       updateMembershipButtons(data);
       
+      // PAY REFERRAL BONUS HERE (if user was referred) - FIXED VERSION
+      if (userProfile.referred_by) {
+        await payReferralBonus(userProfile.referred_by, currentUser.id, newRole);
+      }
+      
       showMessage('🎉 Successfully upgraded to ' + newRole + ' package! Ksh ' + price + ' deducted from your balance.', 'success');
 
       // Add to recent activities
@@ -1028,30 +1202,253 @@
     }
   }
 
-  // Update recent activities
-  function updateRecentActivities(profile) {
-    const activityList = document.getElementById('activityList');
-    const activities = [
-      { icon: '📥', text: 'Account created successfully', time: 'Today' },
-      { icon: '💰', text: 'Account balance: Ksh ' + ((profile.balance || 0).toLocaleString()), time: 'Current' },
-      { icon: '👥', text: 'You have ' + (profile.referrals || 0) + ' referrals', time: 'Current' },
-      { icon: '✅', text: 'Completed ' + (profile.tasks_completed || 0) + ' tasks', time: 'Current' }
-    ];
+  // FIXED: Referral bonus payment function - PREVENTS DUPLICATE PAYMENTS
+  async function payReferralBonus(referrerCode, referredUserId, packageType) {
+    try {
+      console.log('💰 Processing referral bonus for referrer:', referrerCode, 'Package:', packageType);
+      
+      // 1. Get referrer's profile using their referral code
+      const { data: referrer, error: refError } = await supabaseClient
+        .from('profiles')
+        .select('id, balance, total_earnings, referral_code')
+        .eq('referral_code', referrerCode)
+        .single();
+      
+      if (refError || !referrer) {
+        console.error('❌ Referrer not found with code:', referrerCode, refError);
+        return;
+      }
 
-    activityList.innerHTML = activities.map(function(activity) {
-      return '<li class="activity-item">' +
-        '<div class="activity-icon">' + activity.icon + '</div>' +
-        '<div class="activity-content">' +
-          '<div class="activity-text">' + activity.text + '</div>' +
-          '<div class="activity-time">' + activity.time + '</div>' +
-        '</div>' +
-      '</li>';
-    }).join('');
+      console.log('✅ Referrer found:', referrer.id);
+
+      // 2. CORRECTED: Use proper referral bonus amounts (NOT package prices)
+      const bonusAmount = calculateReferralBonus(packageType);
+      console.log('💵 Referral bonus amount:', bonusAmount, 'for package:', packageType);
+
+      // 3. Check if bonus was already paid for this referral
+      const { data: existingBonus, error: checkError } = await supabaseClient
+        .from('referral_bonus')
+        .select('id')
+        .eq('referrer_id', referrer.id)
+        .eq('referred_user_id', referredUserId)
+        .eq('package', packageType)
+        .single();
+
+      if (existingBonus && !checkError) {
+        console.log('⚠ Bonus already paid for this referral. Skipping...');
+        return;
+      }
+
+      // 4. Update referrer's balance
+      const currentBalance = parseFloat(referrer.balance) || 0;
+      const currentEarnings = parseFloat(referrer.total_earnings) || 0;
+      const newBalance = currentBalance + bonusAmount;
+      const newEarnings = currentEarnings + bonusAmount;
+
+      console.log('💰 Updating balance:', currentBalance, '→', newBalance);
+
+      const { error: updateError } = await supabaseClient
+        .from('profiles')
+        .update({
+          balance: newBalance,
+          total_earnings: newEarnings,
+          updated_at: new Date().toISOString()
+        })
+        .eq('id', referrer.id);
+
+      if (updateError) throw updateError;
+
+      // 5. Record the bonus transaction in referral_bonus table
+      const { error: recordError } = await supabaseClient
+        .from('referral_bonus')
+        .insert({
+          referrer_id: referrer.id,
+          referred_user_id: referredUserId,
+          amount: bonusAmount,
+          package: packageType,
+          status: 'paid',
+          paid_at: new Date().toISOString(),
+          created_at: new Date().toISOString()
+        });
+
+      if (recordError) {
+        console.error('❌ Error recording referral bonus:', recordError);
+        // Don't throw here - the payment already went through
+      }
+
+      console.log('✅ Referral bonus paid: KSh ' + bonusAmount + ' to ' + referrer.id);
+      
+      // 6. Also create a transaction record for the referrer
+      try {
+        const bonusTransaction = {
+          user_id: referrer.id,
+          type: 'referral_bonus',
+          amount: bonusAmount,
+          description: 'Referral bonus for ' + packageType + ' package upgrade',
+          created_at: new Date().toISOString()
+        };
+
+        await supabaseClient
+          .from('transactions')
+          .insert([bonusTransaction]);
+          
+        console.log('✅ Transaction record created');
+      } catch (txError) {
+        console.log('ℹ Could not create bonus transaction record:', txError);
+      }
+
+    } catch (error) {
+      console.error('❌ Error paying referral bonus:', error);
+    }
+  }
+
+  // FIXED: Calculate referral bonus amounts (NOT package prices)
+  function calculateReferralBonus(packageType) {
+    // CORRECT: These are referral BONUS amounts, NOT package prices
+    const referralBonuses = {
+      'starter': 1000,    // Bonus for Starter package referral
+      'pro': 1800,        // Bonus for Pro package referral  
+      'premium': 3000     // Bonus for Premium package referral
+    };
+    return referralBonuses[packageType] || 0;
+  }
+
+  // ENHANCED: Update recent activities with real data
+  async function updateRecentActivities(profile) {
+    const activityList = document.getElementById('activityList');
+    if (!activityList) return;
+
+    try {
+      // Get user's transaction history
+      const { data: transactions, error } = await supabaseClient
+        .from('transactions')
+        .select('*')
+        .eq('user_id', currentUser.id)
+        .order('created_at', { ascending: false })
+        .limit(10);
+
+      if (error) throw error;
+
+      let activities = [];
+
+      // Add account creation activity
+      if (profile.created_at) {
+        activities.push({
+          icon: '🎉',
+          text: 'Account created successfully',
+          time: formatTimeAgo(profile.created_at)
+        });
+      }
+
+      // Add current balance activity
+      activities.push({
+        icon: '💰',
+        text: 'Current balance: Ksh ' + ((profile.balance || 0).toLocaleString()),
+        time: 'Just now'
+      });
+
+      // Add referral count activity
+      activities.push({
+        icon: '👥',
+        text: 'You have ' + (profile.referrals || 0) + ' referrals',
+        time: 'Current'
+      });
+
+      // Add tasks completed activity
+      activities.push({
+        icon: '✅',
+        text: 'Completed ' + (profile.tasks_completed || 0) + ' tasks',
+        time: 'Current'
+      });
+
+      // Add membership status
+      let membershipText = 'No Package';
+      if (profile.role === 'starter') membershipText = 'Starter Package';
+      if (profile.role === 'pro') membershipText = 'Pro Package';
+      if (profile.role === 'premium') membershipText = 'Premium Package';
+      
+      activities.push({
+        icon: '💳',
+        text: membershipText + ' membership',
+        time: 'Current'
+      });
+
+      // Add recent transactions
+      if (transactions && transactions.length > 0) {
+        transactions.forEach(function(transaction) {
+          const amount = parseFloat(transaction.amount) || 0;
+          const sign = amount >= 0 ? '+' : '';
+          const type = transaction.type || 'transaction';
+          
+          let icon = '💸';
+          if (type.includes('bonus')) icon = '💰';
+          if (type.includes('withdrawal')) icon = '🏦';
+          if (type.includes('task')) icon = '📝';
+          if (type.includes('deposit')) icon = '📥';
+          
+          activities.push({
+            icon: icon,
+            text: (transaction.description || type) + ': ' + sign + 'Ksh ' + Math.abs(amount).toLocaleString(),
+            time: formatTimeAgo(transaction.created_at)
+          });
+        });
+      }
+
+      // Render activities
+      activityList.innerHTML = activities.map(function(activity) {
+        return '<li class="activity-item">' +
+          '<div class="activity-icon">' + activity.icon + '</div>' +
+          '<div class="activity-content">' +
+            '<div class="activity-text">' + activity.text + '</div>' +
+            '<div class="activity-time">' + activity.time + '</div>' +
+          '</div>' +
+        '</li>';
+      }).join('');
+
+    } catch (error) {
+      console.error('Error loading activities:', error);
+      // Fallback to basic activities
+      const basicActivities = [
+        { icon: '🎉', text: 'Account created successfully', time: 'Today' },
+        { icon: '💰', text: 'Account balance: Ksh ' + ((profile.balance || 0).toLocaleString()), time: 'Current' },
+        { icon: '👥', text: 'You have ' + (profile.referrals || 0) + ' referrals', time: 'Current' },
+        { icon: '✅', text: 'Completed ' + (profile.tasks_completed || 0) + ' tasks', time: 'Current' }
+      ];
+
+      activityList.innerHTML = basicActivities.map(function(activity) {
+        return '<li class="activity-item">' +
+          '<div class="activity-icon">' + activity.icon + '</div>' +
+          '<div class="activity-content">' +
+            '<div class="activity-text">' + activity.text + '</div>' +
+            '<div class="activity-time">' + activity.time + '</div>' +
+          '</div>' +
+        '</li>';
+      }).join('');
+    }
+  }
+
+  // Helper function to format time ago
+  function formatTimeAgo(dateString) {
+    const date = new Date(dateString);
+    const now = new Date();
+    const diffMs = now - date;
+    const diffMins = Math.floor(diffMs / 60000);
+    const diffHours = Math.floor(diffMs / 3600000);
+    const diffDays = Math.floor(diffMs / 86400000);
+
+    if (diffMins < 1) return 'Just now';
+    if (diffMins < 60) return diffMins + ' min ago';
+    if (diffHours < 24) return diffHours + ' hour' + (diffHours > 1 ? 's' : '') + ' ago';
+    if (diffDays < 7) return diffDays + ' day' + (diffDays > 1 ? 's' : '') + ' ago';
+    
+    return date.toLocaleDateString();
   }
 
   // Add new activity
   function addActivity(text, extra) {
     const activityList = document.getElementById('activityList');
+    if (!activityList) return;
+
     const now = new Date().toLocaleTimeString();
     
     const activityItem = document.createElement('li');
@@ -1065,19 +1462,24 @@
     
     activityList.insertBefore(activityItem, activityList.firstChild);
     
-    // Keep only last 5 activities
-    while (activityList.children.length > 5) {
+    // Keep only last 10 activities
+    while (activityList.children.length > 10) {
       activityList.removeChild(activityList.lastChild);
     }
   }
 
   // Show message function
   function showMessage(message, type) {
+    const messageContainer = document.getElementById('messageContainer');
+    if (!messageContainer) return;
+
     messageContainer.innerHTML = '<div class="message ' + type + '">' + message + '</div>';
     
     if (type === 'success' || type === 'info') {
       setTimeout(function() {
-        messageContainer.innerHTML = '';
+        if (messageContainer) {
+          messageContainer.innerHTML = '';
+        }
       }, 5000);
     }
   }
@@ -1087,9 +1489,12 @@
     if (e) e.preventDefault();
     
     try {
-      // Show loading state
-      logoutBtn.innerHTML = '<span class="logout-loading"></span> Logging out...';
-      logoutBtn.style.pointerEvents = 'none';
+      const logoutBtn = document.getElementById('logoutBtn');
+      if (logoutBtn) {
+        // Show loading state
+        logoutBtn.innerHTML = '<span class="logout-loading"></span> Logging out...';
+        logoutBtn.style.pointerEvents = 'none';
+      }
 
       if (supabaseClient) {
         const { error } = await supabaseClient.auth.signOut();
@@ -1109,22 +1514,40 @@
     }
   }
 
-  // Event listeners
-  logoutBtn.addEventListener('click', handleLogout);
+  // Make functions globally available
+  window.upgradeMembership = upgradeMembership;
+</script>
 
-  // Auth state listener
-  if (supabaseClient) {
-    supabaseClient.auth.onAuthStateChange(function(event, session) {
-      if (event === 'SIGNED_OUT') {
-        window.location.href = "login.html";
-      }
-    });
-  }
+<script>
+// PWA Installation
+let deferredPrompt;
+const installBtn = document.getElementById('installBtn');
 
-  // Initialize app
-  checkAuth();
+window.addEventListener('beforeinstallprompt', (e) => {
+  e.preventDefault();
+  deferredPrompt = e;
+  if (installBtn) installBtn.style.display = 'block';
+});
+
+if (installBtn) {
+  installBtn.addEventListener('click', async () => {
+    installBtn.style.display = 'none';
+    deferredPrompt.prompt();
+    await deferredPrompt.userChoice;
+    deferredPrompt = null;
+  });
+}
+
+// Service Worker
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('/service-worker.js');
+  });
+}
 </script>
 
 </body>
 </html>
+
+
 
