@@ -5,20 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Withdraw Earnings - Academic Writing Hub</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <!-- PWA Meta Tags -->
-<meta name="theme-color" content="#b8860b">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="default">
-<meta name="apple-mobile-web-app-title" content="Gold Gain">
-<meta name="mobile-web-app-capable" content="yes">
-
-<!-- PWA Manifest -->
-<link rel="manifest" href="manifest.json">
-
-<!-- Icons -->
-<link rel="icon" href="icons/icon-192x192.png">
-<link rel="apple-touch-icon" href="icons/icon-192x192.png">
   <style>
+    /* All your CSS styles remain exactly the same */
     :root { 
       --primary: #004aad; 
       --primary-light: #3a6fc8; 
@@ -246,23 +234,6 @@
       box-shadow: 0 0 0 3px rgba(0, 74, 173, 0.1);
     }
     
-    .amount-input {
-      position: relative;
-    }
-    
-    .currency-symbol {
-      position: absolute;
-      left: 12px;
-      top: 50%;
-      transform: translateY(-50%);
-      color: var(--gray);
-      font-weight: 600;
-    }
-    
-    .amount-input input {
-      padding-left: 30px;
-    }
-    
     .btn {
       padding: 15px 25px;
       border: none;
@@ -439,6 +410,50 @@
       margin-top: 5px;
     }
     
+    /* New styles for amount buttons */
+    .amount-options {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+      gap: 12px;
+      margin-top: 10px;
+    }
+    
+    .amount-btn {
+      background: white;
+      border: 2px solid var(--border);
+      border-radius: 8px;
+      padding: 12px 8px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-align: center;
+    }
+    
+    .amount-btn:hover {
+      border-color: var(--primary);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+    
+    .amount-btn.selected {
+      background: var(--primary);
+      color: white;
+      border-color: var(--primary);
+      box-shadow: 0 4px 12px rgba(0, 74, 173, 0.3);
+    }
+    
+    .selected-amount-display {
+      background: var(--light);
+      border-radius: 8px;
+      padding: 15px;
+      margin: 15px 0;
+      text-align: center;
+      font-weight: 600;
+      font-size: 18px;
+      color: var(--primary);
+    }
+    
     @media (max-width: 768px) {
       .mobile-menu-btn { display: block; }
       
@@ -463,6 +478,12 @@
       .balance-amount { font-size: 32px; }
       
       .tax-breakdown { flex-direction: column; gap: 10px; }
+      
+      .amount-options { grid-template-columns: repeat(3, 1fr); }
+    }
+    
+    @media (max-width: 480px) {
+      .amount-options { grid-template-columns: repeat(2, 1fr); }
     }
   </style>
 </head>
@@ -497,19 +518,18 @@
       <div class="balance-card">
         <div class="balance-label">Available Balance</div>
         <div class="balance-amount" id="balanceAmount">KSh 0.00</div>
-        <div class="balance-label" id="withdrawableInfo">Minimum withdrawal: KSh 500</div>
+        <div class="balance-label" id="withdrawableInfo">Select an amount to withdraw</div>
       </div>
 
       <div class="withdrawal-rules">
         <h3 style="color: #856404; margin-bottom: 15px;"><i class="fas fa-info-circle"></i> Withdrawal Rules</h3>
         <ul class="rules-list">
-          <li>Minimum withdrawal amount: <strong>KSh 500</strong></li>
-          <li>Maximum withdrawal amount: <strong>KSh 50,000</strong> per transaction</li>
           <li>10% transaction tax applies to all withdrawals</li>
           <li>Withdrawals processed on <strong>Wednesdays and Fridays</strong> only</li>
           <li>Processing time: 24-48 hours after approval</li>
           <li>Ensure your M-Pesa number is registered in your name</li>
           <li>Withdrawal password required for security</li>
+          <li><strong>Maximum one withdrawal per withdrawal day</strong></li>
         </ul>
       </div>
 
@@ -517,12 +537,30 @@
 
       <div class="withdraw-form">
         <h3 class="section-title"><i class="fas fa-wallet"></i> Request Withdrawal</h3>
+        
         <div class="form-group">
-          <label for="withdrawAmount">Amount (KSh)</label>
-          <div class="amount-input">
-            <span class="currency-symbol">KSh</span>
-            <input type="number" id="withdrawAmount" placeholder="500" min="500" max="50000" step="100">
+          <label>Select Amount (KSh)</label>
+          <div class="amount-options" id="amountOptions">
+            <button type="button" class="amount-btn" data-amount="500">KSh 500</button>
+            <button type="button" class="amount-btn" data-amount="1500">KSh 1,500</button>
+            <button type="button" class="amount-btn" data-amount="2000">KSh 2,000</button>
+            <button type="button" class="amount-btn" data-amount="2500">KSh 2,500</button>
+            <button type="button" class="amount-btn" data-amount="3000">KSh 3,000</button>
+            <button type="button" class="amount-btn" data-amount="3500">KSh 3,500</button>
+            <button type="button" class="amount-btn" data-amount="4000">KSh 4,000</button>
+            <button type="button" class="amount-btn" data-amount="4500">KSh 4,500</button>
+            <button type="button" class="amount-btn" data-amount="8000">KSh 8,000</button>
+            <button type="button" class="amount-btn" data-amount="12000">KSh 12,000</button>
+            <button type="button" class="amount-btn" data-amount="15000">KSh 15,000</button>
+            <button type="button" class="amount-btn" data-amount="20000">KSh 20,000</button>
+            <button type="button" class="amount-btn" data-amount="30000">KSh 30,000</button>
+            <button type="button" class="amount-btn" data-amount="40000">KSh 40,000</button>
+            <button type="button" class="amount-btn" data-amount="50000">KSh 50,000</button>
           </div>
+        </div>
+        
+        <div class="selected-amount-display" id="selectedAmountDisplay" style="display: none;">
+          Selected Amount: <span id="selectedAmount">KSh 0</span>
         </div>
         
         <div id="taxCalculation" style="display: none;">
@@ -620,459 +658,520 @@
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script>
-// Supabase configuration
-const SUPABASE_URL = "https://lfrjtklkbppihaaiuxef.supabase.co";
-const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imxmcmp0a2xrYnBwaWhhYWl1eGVmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTkwNTI5MzMsImV4cCI6MjA3NDYyODkzM30.2FVqnt5daF2Tw-RmVBwOGgt4GuIQQSkG8IUZt30QxIM";
+  <script>
+    // Supabase configuration
+    const SUPABASE_URL = "https://lfrjtklkbppihaaiuxef.supabase.co";
+    const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imxmcmp0a2xrYnBwaWhhYWl1eGVmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTkwNTI5MzMsImV4cCI6MjA3NDYyODkzM30.2FVqnt5daF2Tw-RmVBwOGgt4GuIQQSkG8IUZt30QxIM";
 
-// Initialize Supabase client
-const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    // Initialize Supabase client
+    const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-let currentUser = null;
-let userProfile = null;
+    let currentUser = null;
+    let userProfile = null;
+    let selectedAmount = 0;
 
-// Initialize the application
-document.addEventListener('DOMContentLoaded', function() {
-    initializeApp();
-});
-
-async function initializeApp() {
-    setupEventListeners();
-    await checkAuth();
-}
-
-function setupEventListeners() {
-    // Mobile menu
-    const mobileMenuBtn = document.getElementById('mobileMenuBtn');
-    const sidebar = document.getElementById('sidebar');
-    
-    if (mobileMenuBtn) {
-        mobileMenuBtn.addEventListener('click', function() {
-            sidebar.classList.toggle('active');
-        });
-    }
-
-    // Close mobile menu when clicking outside
-    document.addEventListener('click', function(e) {
-        if (sidebar && mobileMenuBtn && !sidebar.contains(e.target) && !mobileMenuBtn.contains(e.target)) {
-            sidebar.classList.remove('active');
-        }
+    // Initialize the application
+    document.addEventListener('DOMContentLoaded', function() {
+        initializeApp();
     });
 
-    // Withdraw button
-    const withdrawBtn = document.getElementById('withdrawBtn');
-    if (withdrawBtn) {
-        withdrawBtn.addEventListener('click', handleWithdrawal);
+    async function initializeApp() {
+        setupEventListeners();
+        await checkAuth();
     }
 
-    // Change password button
-    const passwordBtn = document.getElementById('passwordBtn');
-    if (passwordBtn) {
-        passwordBtn.addEventListener('click', changeWithdrawPassword);
-    }
+    function setupEventListeners() {
+        // Mobile menu
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const sidebar = document.getElementById('sidebar');
+        
+        if (mobileMenuBtn) {
+            mobileMenuBtn.addEventListener('click', function() {
+                sidebar.classList.toggle('active');
+            });
+        }
 
-    // Amount input for tax calculation
-    const withdrawAmountInput = document.getElementById('withdrawAmount');
-    if (withdrawAmountInput) {
-        withdrawAmountInput.addEventListener('input', calculateTax);
-    }
-
-    // Logout
-    const logoutBtn = document.getElementById('logoutBtn');
-    if (logoutBtn) {
-        logoutBtn.addEventListener('click', function(e) {
-            e.preventDefault();
-            handleLogout();
+        // Close mobile menu when clicking outside
+        document.addEventListener('click', function(e) {
+            if (sidebar && mobileMenuBtn && !sidebar.contains(e.target) && !mobileMenuBtn.contains(e.target)) {
+                sidebar.classList.remove('active');
+            }
         });
-    }
-}
 
-function calculateTax() {
-    const amountInput = document.getElementById('withdrawAmount');
-    const amount = parseFloat(amountInput.value) || 0;
-    const taxCalculation = document.getElementById('taxCalculation');
-    
-    if (amount >= 500) {
-        const tax = amount * 0.10;
-        const netAmount = amount - tax;
-        
-        document.getElementById('requestedAmount').textContent = 'KSh ' + amount.toLocaleString();
-        document.getElementById('taxAmount').textContent = 'KSh ' + tax.toLocaleString();
-        document.getElementById('netAmount').textContent = 'KSh ' + netAmount.toLocaleString();
-        
-        taxCalculation.style.display = 'block';
-    } else {
-        taxCalculation.style.display = 'none';
-    }
-}
-
-async function checkAuth() {
-    try {
-        const { data: { session }, error } = await supabaseClient.auth.getSession();
-        
-        if (error || !session) {
-            window.location.href = "login.html";
-            return;
-        }
-
-        currentUser = session.user;
-        await loadUserData();
-
-    } catch (error) {
-        console.error('Auth check error:', error);
-        window.location.href = "login.html";
-    }
-}
-
-async function loadUserData() {
-    try {
-        const { data: profile, error } = await supabaseClient
-            .from('profiles')
-            .select('*')
-            .eq('id', currentUser.id)
-            .single();
-
-        if (error) throw error;
-
-        userProfile = profile;
-        updateUI(profile);
-        await loadWithdrawalHistory();
-        await subscribeToWithdrawalUpdates();
-
-    } catch (error) {
-        console.error('User data load error:', error);
-        showMessage('Failed to load user data: ' + error.message, 'error');
-    }
-}
-
-function updateUI(profile) {
-    const balanceAmount = document.getElementById('balanceAmount');
-    if (balanceAmount) {
-        const balance = parseFloat(profile.balance) || 0;
-        balanceAmount.textContent = 'KSh ' + balance.toLocaleString();
-    }
-    
-    const infoElement = document.getElementById('withdrawableInfo');
-    if (infoElement) {
-        const minWithdrawal = 500;
-        const currentBalance = parseFloat(profile.balance) || 0;
-        const canWithdraw = currentBalance >= minWithdrawal;
-        
-        if (canWithdraw) {
-            infoElement.innerHTML = 'You can withdraw up to: KSh ' + Math.min(currentBalance, 50000).toLocaleString();
-            infoElement.style.color = 'var(--success)';
-        } else {
-            infoElement.innerHTML = 'Need KSh ' + (minWithdrawal - currentBalance).toLocaleString() + ' more to withdraw';
-            infoElement.style.color = 'var(--danger)';
-        }
-    }
-    
-    const mpesaField = document.getElementById('withdrawMpesa');
-    if (mpesaField && profile.phone) {
-        mpesaField.value = profile.phone;
-    }
-}
-
-async function handleWithdrawal() {
-    const amountInput = document.getElementById('withdrawAmount');
-    const mpesaInput = document.getElementById('withdrawMpesa');
-    const passwordInput = document.getElementById('withdrawPassword');
-    const withdrawBtn = document.getElementById('withdrawBtn');
-
-    const amount = parseFloat(amountInput.value);
-    const mpesaNumber = mpesaInput.value.trim().replace(/\s/g, '');
-    const password = passwordInput.value.trim();
-    const currentBalance = parseFloat(userProfile.balance) || 0;
-
-    // Validation
-    if (!amount || amount < 500) {
-        showMessage('Minimum withdrawal amount is KSh 500', 'error');
-        return;
-    }
-
-    if (amount > 50000) {
-        showMessage('Maximum withdrawal amount is KSh 50,000 per transaction', 'error');
-        return;
-    }
-
-    if (!mpesaNumber || mpesaNumber.length !== 10 || isNaN(mpesaNumber)) {
-        showMessage('Please enter a valid 10-digit M-Pesa number', 'error');
-        return;
-    }
-
-    if (!password || password.length !== 6) {
-        showMessage('Please enter your 6-digit withdrawal password', 'error');
-        return;
-    }
-
-    const tax = amount * 0.10;
-    const totalDeduction = amount + tax;
-    
-    if (totalDeduction > currentBalance) {
-        showMessage('Insufficient balance. Required (including 10% tax): KSh ' + totalDeduction.toLocaleString(), 'error');
-        return;
-    }
-
-    const userPassword = userProfile.withdraw_password || '123456';
-    if (password !== userPassword) {
-        showMessage('Invalid withdrawal password', 'error');
-        return;
-    }
-
-    try {
-        withdrawBtn.innerHTML = '<span class="loading"></span> Processing...';
-        withdrawBtn.disabled = true;
-
-        const taxAmount = amount * 0.10;
-        const netAmount = amount - taxAmount;
-
-        // Create withdrawal request
-        const { error } = await supabaseClient
-            .from('withdrawals')
-            .insert([
-                {
-                    user_id: currentUser.id,
-                    user_email: currentUser.email,
-                    amount: netAmount,
-                    original_amount: amount,
-                    tax_amount: taxAmount,
-                    mpesa_number: mpesaNumber,
-                    status: 'pending',
-                    created_at: new Date().toISOString()
-                }
-            ]);
-
-        if (error) throw error;
-
-        // Update user balance
-        const newBalance = currentBalance - amount - taxAmount;
-        const { error: updateError } = await supabaseClient
-            .from('profiles')
-            .update({ balance: newBalance })
-            .eq('id', currentUser.id);
-
-        if (updateError) throw updateError;
-
-        userProfile.balance = newBalance;
-        updateUI(userProfile);
-
-        // Clear form
-        amountInput.value = '';
-        passwordInput.value = '';
-        document.getElementById('taxCalculation').style.display = 'none';
-
-        showMessage('Withdrawal request submitted successfully! KSh ' + taxAmount.toLocaleString() + ' tax deducted. Net amount: KSh ' + netAmount.toLocaleString(), 'success');
-        
-        await loadWithdrawalHistory();
-
-    } catch (error) {
-        console.error('Withdrawal error:', error);
-        showMessage('Failed to process withdrawal: ' + error.message, 'error');
-    } finally {
+        // Withdraw button
+        const withdrawBtn = document.getElementById('withdrawBtn');
         if (withdrawBtn) {
-            withdrawBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Submit Withdrawal Request';
-            withdrawBtn.disabled = false;
+            withdrawBtn.addEventListener('click', handleWithdrawal);
         }
-    }
-}
 
-async function changeWithdrawPassword() {
-    const oldPasswordInput = document.getElementById('oldWithdrawPassword');
-    const newPasswordInput = document.getElementById('newWithdrawPassword');
-    const confirmPasswordInput = document.getElementById('confirmWithdrawPassword');
-    const passwordBtn = document.getElementById('passwordBtn');
-
-    const oldPassword = oldPasswordInput.value.trim();
-    const newPassword = newPasswordInput.value.trim();
-    const confirmPassword = confirmPasswordInput.value.trim();
-
-    if (!oldPassword) {
-        showMessage('Please enter your current password', 'error');
-        return;
-    }
-
-    if (!newPassword || newPassword.length !== 6) {
-        showMessage('New password must be exactly 6 digits', 'error');
-        return;
-    }
-
-    if (newPassword !== confirmPassword) {
-        showMessage('New passwords do not match', 'error');
-        return;
-    }
-
-    const userPassword = userProfile.withdraw_password || '123456';
-    if (oldPassword !== userPassword) {
-        showMessage('Current password is incorrect', 'error');
-        return;
-    }
-
-    try {
-        passwordBtn.innerHTML = '<span class="loading"></span> Updating...';
-        passwordBtn.disabled = true;
-
-        const { error } = await supabaseClient
-            .from('profiles')
-            .update({ withdraw_password: newPassword })
-            .eq('id', currentUser.id);
-
-        if (error) throw error;
-
-        userProfile.withdraw_password = newPassword;
-
-        oldPasswordInput.value = '';
-        newPasswordInput.value = '';
-        confirmPasswordInput.value = '';
-
-        showMessage('Withdrawal password updated successfully!', 'success');
-
-    } catch (error) {
-        console.error('Password change error:', error);
-        showMessage('Failed to update password: ' + error.message, 'error');
-    } finally {
+        // Change password button
+        const passwordBtn = document.getElementById('passwordBtn');
         if (passwordBtn) {
-            passwordBtn.innerHTML = '<i class="fas fa-sync-alt"></i> Update Password';
-            passwordBtn.disabled = false;
+            passwordBtn.addEventListener('click', changeWithdrawPassword);
+        }
+
+        // Amount buttons
+        const amountButtons = document.querySelectorAll('.amount-btn');
+        amountButtons.forEach(function(button) {
+            button.addEventListener('click', function() {
+                // Remove selected class from all buttons
+                amountButtons.forEach(function(btn) {
+                    btn.classList.remove('selected');
+                });
+                
+                // Add selected class to clicked button
+                this.classList.add('selected');
+                
+                // Set selected amount
+                selectedAmount = parseInt(this.getAttribute('data-amount'));
+                
+                // Update UI
+                updateSelectedAmountDisplay();
+                calculateTax();
+            });
+        });
+
+        // Logout
+        const logoutBtn = document.getElementById('logoutBtn');
+        if (logoutBtn) {
+            logoutBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                handleLogout();
+            });
         }
     }
-}
 
-async function loadWithdrawalHistory() {
-    try {
-        const { data: withdrawals, error } = await supabaseClient
-            .from('withdrawals')
-            .select('*')
-            .eq('user_id', currentUser.id)
-            .order('created_at', { ascending: false })
-            .limit(10);
-
-        if (error) throw error;
-
-        const historyBody = document.getElementById('withdrawalHistory');
-        if (!historyBody) return;
+    function updateSelectedAmountDisplay() {
+        const selectedAmountDisplay = document.getElementById('selectedAmountDisplay');
+        const selectedAmountSpan = document.getElementById('selectedAmount');
         
-        if (!withdrawals || withdrawals.length === 0) {
-            historyBody.innerHTML = '<tr><td colspan="4" style="text-align:center;padding:30px;color:var(--gray);">No withdrawal history found</td></tr>';
+        if (selectedAmountDisplay && selectedAmountSpan) {
+            selectedAmountSpan.textContent = 'KSh ' + selectedAmount.toLocaleString();
+            selectedAmountDisplay.style.display = 'block';
+        }
+    }
+
+    function calculateTax() {
+        const amount = selectedAmount || 0;
+        const taxCalculation = document.getElementById('taxCalculation');
+        
+        if (amount > 0) {
+            const tax = amount * 0.10;
+            const netAmount = amount - tax;
+            
+            document.getElementById('requestedAmount').textContent = 'KSh ' + amount.toLocaleString();
+            document.getElementById('taxAmount').textContent = 'KSh ' + tax.toLocaleString();
+            document.getElementById('netAmount').textContent = 'KSh ' + netAmount.toLocaleString();
+            
+            taxCalculation.style.display = 'block';
+        } else {
+            taxCalculation.style.display = 'none';
+        }
+    }
+
+    // Function to check if today is a withdrawal day (Wednesday or Friday)
+    function isWithdrawalDay() {
+        const today = new Date();
+        const dayOfWeek = today.getDay();
+        return dayOfWeek === 3 || dayOfWeek === 5;
+    }
+
+    // Function to get today's date string in YYYY-MM-DD format
+    function getTodayDateString() {
+        const today = new Date();
+        return today.toISOString().split('T')[0];
+    }
+
+    // Function to check if user has already withdrawn today
+    async function hasWithdrawnToday() {
+        try {
+            const today = getTodayDateString();
+            
+            const { data: withdrawals, error } = await supabaseClient
+                .from('withdrawals')
+                .select('created_at')
+                .eq('user_id', currentUser.id)
+                .gte('created_at', today + 'T00:00:00')
+                .lte('created_at', today + 'T23:59:59');
+
+            if (error) throw error;
+            
+            return withdrawals && withdrawals.length > 0;
+        } catch (error) {
+            console.error('Error checking today withdrawals:', error);
+            return false;
+        }
+    }
+
+    async function checkAuth() {
+        try {
+            const { data: { session }, error } = await supabaseClient.auth.getSession();
+            
+            if (error || !session) {
+                window.location.href = "login.html";
+                return;
+            }
+
+            currentUser = session.user;
+            await loadUserData();
+
+        } catch (error) {
+            console.error('Auth check error:', error);
+            window.location.href = "login.html";
+        }
+    }
+
+    async function loadUserData() {
+        try {
+            const { data: profile, error } = await supabaseClient
+                .from('profiles')
+                .select('*')
+                .eq('id', currentUser.id)
+                .single();
+
+            if (error) throw error;
+
+            userProfile = profile;
+            updateUI(profile);
+            await loadWithdrawalHistory();
+            await subscribeToWithdrawalUpdates();
+
+        } catch (error) {
+            console.error('User data load error:', error);
+            showMessage('Failed to load user data: ' + error.message, 'error');
+        }
+    }
+
+    function updateUI(profile) {
+        const balanceAmount = document.getElementById('balanceAmount');
+        if (balanceAmount) {
+            const balance = parseFloat(profile.balance) || 0;
+            balanceAmount.textContent = 'KSh ' + balance.toLocaleString();
+        }
+        
+        const infoElement = document.getElementById('withdrawableInfo');
+        if (infoElement) {
+            const currentBalance = parseFloat(profile.balance) || 0;
+            const isTodayWithdrawalDay = isWithdrawalDay();
+            
+            if (currentBalance >= 500 && isTodayWithdrawalDay) {
+                infoElement.innerHTML = 'Select an amount to withdraw (Maximum: KSh ' + Math.min(currentBalance, 50000).toLocaleString() + ')';
+                infoElement.style.color = 'var(--success)';
+            } else if (!isTodayWithdrawalDay) {
+                const today = new Date();
+                const dayNames = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+                const nextWithdrawalDay = today.getDay() <= 3 ? 3 : 5;
+                const nextDayName = dayNames[nextWithdrawalDay];
+                
+                infoElement.innerHTML = 'Withdrawals only on Wednesdays and Fridays. Next withdrawal day: ' + nextDayName;
+                infoElement.style.color = 'var(--warning)';
+            } else {
+                infoElement.innerHTML = 'You need at least KSh 500 to withdraw';
+                infoElement.style.color = 'var(--danger)';
+            }
+        }
+        
+        const mpesaField = document.getElementById('withdrawMpesa');
+        if (mpesaField && profile.phone) {
+            mpesaField.value = profile.phone;
+        }
+    }
+
+    async function handleWithdrawal() {
+        const mpesaInput = document.getElementById('withdrawMpesa');
+        const passwordInput = document.getElementById('withdrawPassword');
+        const withdrawBtn = document.getElementById('withdrawBtn');
+
+        const amount = selectedAmount;
+        const mpesaNumber = mpesaInput.value.trim().replace(/\s/g, '');
+        const password = passwordInput.value.trim();
+        const currentBalance = parseFloat(userProfile.balance) || 0;
+
+        // Validation - Check if today is a withdrawal day
+        if (!isWithdrawalDay()) {
+            const today = new Date();
+            const dayNames = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+            const dayName = dayNames[today.getDay()];
+            const nextWithdrawalDay = today.getDay() <= 3 ? 3 : 5;
+            const nextDayName = dayNames[nextWithdrawalDay];
+            
+            showMessage('Withdrawals are only processed on Wednesdays and Fridays. Today is ' + dayName + '. Next withdrawal day: ' + nextDayName, 'error');
             return;
         }
 
-        historyBody.innerHTML = withdrawals.map(function(withdrawal) {
-            const date = new Date(withdrawal.created_at).toLocaleDateString();
-            const amount = 'KSh ' + (parseFloat(withdrawal.amount) || 0).toLocaleString();
-            const mpesa = withdrawal.mpesa_number || '-';
+        // Validation - Check if user has already withdrawn today
+        const hasWithdrawn = await hasWithdrawnToday();
+        if (hasWithdrawn) {
+            showMessage('You have already made a withdrawal today. Only one withdrawal is allowed per withdrawal day.', 'error');
+            return;
+        }
+
+        // Validation
+        if (!amount || amount < 500) {
+            showMessage('Please select an amount to withdraw', 'error');
+            return;
+        }
+
+        if (amount > 50000) {
+            showMessage('Maximum withdrawal amount is KSh 50,000 per transaction', 'error');
+            return;
+        }
+
+        if (!mpesaNumber || mpesaNumber.length !== 10 || isNaN(mpesaNumber)) {
+            showMessage('Please enter a valid 10-digit M-Pesa number', 'error');
+            return;
+        }
+
+        if (!password || password.length !== 6) {
+            showMessage('Please enter your 6-digit withdrawal password', 'error');
+            return;
+        }
+
+        // Only check if user has enough for the withdrawal amount
+        if (amount > currentBalance) {
+            showMessage('Insufficient balance. You need KSh ' + amount.toLocaleString() + ' to withdraw KSh ' + (amount - (amount * 0.10)).toLocaleString() + ' after tax', 'error');
+            return;
+        }
+
+        const userPassword = userProfile.withdraw_password || '123456';
+        if (password !== userPassword) {
+            showMessage('Invalid withdrawal password', 'error');
+            return;
+        }
+
+        try {
+            withdrawBtn.innerHTML = '<span class="loading"></span> Processing...';
+            withdrawBtn.disabled = true;
+
+            const taxAmount = amount * 0.10;
+            const netAmount = amount - taxAmount;
+
+            // Create withdrawal request
+            const { error } = await supabaseClient
+                .from('withdrawals')
+                .insert([
+                    {
+                        user_id: currentUser.id,
+                        user_email: currentUser.email,
+                        amount: netAmount,
+                        original_amount: amount,
+                        tax_amount: taxAmount,
+                        mpesa_number: mpesaNumber,
+                        status: 'pending',
+                        created_at: new Date().toISOString()
+                    }
+                ]);
+
+            if (error) throw error;
+
+            // Only deduct the withdrawal amount from balance
+            const newBalance = currentBalance - amount;
+            const { error: updateError } = await supabaseClient
+                .from('profiles')
+                .update({ balance: newBalance })
+                .eq('id', currentUser.id);
+
+            if (updateError) throw updateError;
+
+            userProfile.balance = newBalance;
+            updateUI(userProfile);
+
+            // Clear form
+            selectedAmount = 0;
+            passwordInput.value = '';
+            document.getElementById('taxCalculation').style.display = 'none';
+            document.getElementById('selectedAmountDisplay').style.display = 'none';
             
-            let statusClass = 'status-pending';
-            let statusText = 'Pending';
-            
-            if (withdrawal.status === 'completed' || withdrawal.status === 'paid' || withdrawal.status === 'approved') {
-                statusClass = 'status-paid';
-                statusText = 'Paid';
-            } else if (withdrawal.status === 'cancelled' || withdrawal.status === 'rejected' || withdrawal.status === 'failed') {
-                statusClass = 'status-failed';
-                statusText = 'Failed to withdraw';
-            } else if (withdrawal.status === 'processing') {
-                statusClass = 'status-processing';
-                statusText = 'Processing';
+            // Clear selected button
+            const selectedButton = document.querySelector('.amount-btn.selected');
+            if (selectedButton) {
+                selectedButton.classList.remove('selected');
             }
 
-            return '<tr><td>' + date + '</td><td>' + amount + '</td><td>' + mpesa + '</td><td><span class="status-badge ' + statusClass + '">' + statusText + '</span></td></tr>';
-        }).join('');
+            showMessage('Withdrawal request submitted successfully! KSh ' + taxAmount.toLocaleString() + ' tax deducted. Net amount: KSh ' + netAmount.toLocaleString(), 'success');
+            
+            await loadWithdrawalHistory();
 
-    } catch (error) {
-        console.error('History load error:', error);
-        const historyBody = document.getElementById('withdrawalHistory');
-        if (historyBody) {
-            historyBody.innerHTML = '<tr><td colspan="4" style="text-align:center;padding:30px;color:var(--danger);">Failed to load withdrawal history</td></tr>';
+        } catch (error) {
+            console.error('Withdrawal error:', error);
+            showMessage('Failed to process withdrawal: ' + error.message, 'error');
+        } finally {
+            if (withdrawBtn) {
+                withdrawBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Submit Withdrawal Request';
+                withdrawBtn.disabled = false;
+            }
         }
     }
-}
 
-async function subscribeToWithdrawalUpdates() {
-    try {
-        const subscription = supabaseClient
-            .channel('withdrawal-updates')
-            .on(
-                'postgres_changes',
-                {
-                    event: '*',
-                    schema: 'public',
-                    table: 'withdrawals',
-                    filter: 'user_id=eq.' + currentUser.id
-                },
-                function(payload) {
-                    loadWithdrawalHistory();
-                }
-            )
-            .subscribe();
+    async function changeWithdrawPassword() {
+        const oldPasswordInput = document.getElementById('oldWithdrawPassword');
+        const newPasswordInput = document.getElementById('newWithdrawPassword');
+        const confirmPasswordInput = document.getElementById('confirmWithdrawPassword');
+        const passwordBtn = document.getElementById('passwordBtn');
 
-        return subscription;
+        const oldPassword = oldPasswordInput.value.trim();
+        const newPassword = newPasswordInput.value.trim();
+        const confirmPassword = confirmPasswordInput.value.trim();
 
-    } catch (error) {
-        console.error('Error setting up real-time subscription:', error);
-    }
-}
+        if (!oldPassword) {
+            showMessage('Please enter your current password', 'error');
+            return;
+        }
 
-function showMessage(message, type) {
-    const messageContainer = document.getElementById('messageContainer');
-    if (!messageContainer) return;
-    
-    messageContainer.innerHTML = '<div class="message ' + type + '">' + message + '</div>';
-    
-    if (type === 'success') {
-        setTimeout(function() {
-            if (messageContainer) {
-                messageContainer.innerHTML = '';
+        if (!newPassword || newPassword.length !== 6) {
+            showMessage('New password must be exactly 6 digits', 'error');
+            return;
+        }
+
+        if (newPassword !== confirmPassword) {
+            showMessage('New passwords do not match', 'error');
+            return;
+        }
+
+        const userPassword = userProfile.withdraw_password || '123456';
+        if (oldPassword !== userPassword) {
+            showMessage('Current password is incorrect', 'error');
+            return;
+        }
+
+        try {
+            passwordBtn.innerHTML = '<span class="loading"></span> Updating...';
+            passwordBtn.disabled = true;
+
+            const { error } = await supabaseClient
+                .from('profiles')
+                .update({ withdraw_password: newPassword })
+                .eq('id', currentUser.id);
+
+            if (error) throw error;
+
+            userProfile.withdraw_password = newPassword;
+
+            oldPasswordInput.value = '';
+            newPasswordInput.value = '';
+            confirmPasswordInput.value = '';
+
+            showMessage('Withdrawal password updated successfully!', 'success');
+
+        } catch (error) {
+            console.error('Password change error:', error);
+            showMessage('Failed to update password: ' + error.message, 'error');
+        } finally {
+            if (passwordBtn) {
+                passwordBtn.innerHTML = '<i class="fas fa-sync-alt"></i> Update Password';
+                passwordBtn.disabled = false;
             }
-        }, 5000);
+        }
     }
-}
 
-async function handleLogout() {
-    try {
-        const { error } = await supabaseClient.auth.signOut();
-        if (error) throw error;
-        window.location.href = "login.html";
-    } catch (error) {
-        console.error("Logout error:", error);
-        showMessage('Failed to logout', 'error');
+    async function loadWithdrawalHistory() {
+        try {
+            const { data: withdrawals, error } = await supabaseClient
+                .from('withdrawals')
+                .select('*')
+                .eq('user_id', currentUser.id)
+                .order('created_at', { ascending: false })
+                .limit(10);
+
+            if (error) throw error;
+
+            const historyBody = document.getElementById('withdrawalHistory');
+            if (!historyBody) return;
+            
+            if (!withdrawals || withdrawals.length === 0) {
+                historyBody.innerHTML = '<tr><td colspan="4" style="text-align:center;padding:30px;color:var(--gray);">No withdrawal history found</td></tr>';
+                return;
+            }
+
+            historyBody.innerHTML = withdrawals.map(function(withdrawal) {
+                const date = new Date(withdrawal.created_at).toLocaleDateString();
+                const amount = 'KSh ' + (parseFloat(withdrawal.amount) || 0).toLocaleString();
+                const mpesa = withdrawal.mpesa_number || '-';
+                
+                let statusClass = 'status-pending';
+                let statusText = 'Pending';
+                
+                if (withdrawal.status === 'completed' || withdrawal.status === 'paid' || withdrawal.status === 'approved') {
+                    statusClass = 'status-paid';
+                    statusText = 'Paid';
+                } else if (withdrawal.status === 'cancelled' || withdrawal.status === 'rejected' || withdrawal.status === 'failed') {
+                    statusClass = 'status-failed';
+                    statusText = 'Failed to withdraw';
+                } else if (withdrawal.status === 'processing') {
+                    statusClass = 'status-processing';
+                    statusText = 'Processing';
+                }
+
+                return '<tr><td>' + date + '</td><td>' + amount + '</td><td>' + mpesa + '</td><td><span class="status-badge ' + statusClass + '">' + statusText + '</span></td></tr>';
+            }).join('');
+
+        } catch (error) {
+            console.error('History load error:', error);
+            const historyBody = document.getElementById('withdrawalHistory');
+            if (historyBody) {
+                historyBody.innerHTML = '<tr><td colspan="4" style="text-align:center;padding:30px;color:var(--danger);">Failed to load withdrawal history</td></tr>';
+            }
+        }
     }
-}
 
-// Auth state listener
-supabaseClient.auth.onAuthStateChange(function(event, session) {
-    if (event === 'SIGNED_OUT') {
-        window.location.href = "login.html";
+    async function subscribeToWithdrawalUpdates() {
+        try {
+            const subscription = supabaseClient
+                .channel('withdrawal-updates')
+                .on(
+                    'postgres_changes',
+                    {
+                        event: '*',
+                        schema: 'public',
+                        table: 'withdrawals',
+                        filter: 'user_id=eq.' + currentUser.id
+                    },
+                    function(payload) {
+                        loadWithdrawalHistory();
+                    }
+                )
+                .subscribe();
+
+            return subscription;
+
+        } catch (error) {
+            console.error('Error setting up real-time subscription:', error);
+        }
     }
-});
-</script>
 
-<script>
-// PWA Installation
-let deferredPrompt;
-const installBtn = document.getElementById('installBtn');
+    function showMessage(message, type) {
+        const messageContainer = document.getElementById('messageContainer');
+        if (!messageContainer) return;
+        
+        messageContainer.innerHTML = '<div class="message ' + type + '">' + message + '</div>';
+        
+        if (type === 'success') {
+            setTimeout(function() {
+                if (messageContainer) {
+                    messageContainer.innerHTML = '';
+                }
+            }, 5000);
+        }
+    }
 
-window.addEventListener('beforeinstallprompt', (e) => {
-  e.preventDefault();
-  deferredPrompt = e;
-  if (installBtn) installBtn.style.display = 'block';
-});
+    async function handleLogout() {
+        try {
+            const { error } = await supabaseClient.auth.signOut();
+            if (error) throw error;
+            window.location.href = "login.html";
+        } catch (error) {
+            console.error("Logout error:", error);
+            showMessage('Failed to logout', 'error');
+        }
+    }
 
-if (installBtn) {
-  installBtn.addEventListener('click', async () => {
-    installBtn.style.display = 'none';
-    deferredPrompt.prompt();
-    await deferredPrompt.userChoice;
-    deferredPrompt = null;
-  });
-}
-
-// Service Worker
-if ('serviceWorker' in navigator) {
-  window.addEventListener('load', () => {
-    navigator.serviceWorker.register('/service-worker.js');
-  });
-}
-</script>
-
+    // Auth state listener
+    supabaseClient.auth.onAuthStateChange(function(event, session) {
+        if (event === 'SIGNED_OUT') {
+            window.location.href = "login.html";
+        }
+    });
+  </script>
 </body>
 </html>
+
