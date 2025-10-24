@@ -1,1666 +1,1115 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Tasks - Academic Writing Hub</title>
-  <!-- PWA Meta Tags -->
-<meta name="theme-color" content="#b8860b">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="default">
-<meta name="apple-mobile-web-app-title" content="Gold Gain">
-<meta name="mobile-web-app-capable" content="yes">
-
-<!-- PWA Manifest -->
-<link rel="manifest" href="manifest.json">
-
-<!-- Icons -->
-<link rel="icon" href="icons/icon-192x192.png">
-<link rel="apple-touch-icon" href="icons/icon-192x192.png">
-  <style>
-    :root {
-      --primary: #004aad;
-      --primary-light: #3a6fc8;
-      --secondary: #ff6b35;
-      --success: #28a745;
-      --warning: #ffc107;
-      --danger: #dc3545;
-      --light: #f8f9fa;
-      --dark: #343a40;
-      --gray: #6c757d;
-      --border: #e9ecef;
-    }
-
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
-    body {
-      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-      background: linear-gradient(135deg, #f4f6f9 0%, #e9ecef 100%);
-      color: #333;
-      line-height: 1.6;
-    }
-
-    header {
-      background: var(--primary);
-      color: #fff;
-      padding: 15px 20px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      box-shadow: 0 2px 15px rgba(0,0,0,0.1);
-      position: sticky;
-      top: 0;
-      z-index: 100;
-    }
-
-    .header-left h1 {
-      margin: 0;
-      font-size: 22px;
-      font-weight: 700;
-    }
-
-    .header-left .slogan {
-      font-size: 13px;
-      opacity: 0.9;
-      margin-top: 2px;
-    }
-
-    .header-right {
-      display: flex;
-      align-items: center;
-      gap: 15px;
-    }
-
-    .user-menu {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      cursor: pointer;
-      padding: 8px 12px;
-      border-radius: 8px;
-      transition: background 0.3s;
-    }
-
-    .user-menu:hover {
-      background: var(--primary-light);
-    }
-
-    .user-avatar {
-      width: 36px;
-      height: 36px;
-      border-radius: 50%;
-      background: var(--secondary);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-weight: bold;
-      color: white;
-    }
-
-    .mobile-menu-btn {
-      display: none;
-      background: none;
-      border: none;
-      color: white;
-      font-size: 20px;
-      cursor: pointer;
-    }
-
-    .container {
-      display: flex;
-      min-height: calc(100vh - 70px);
-    }
-
-    nav {
-      width: 260px;
-      background: #fff;
-      border-right: 1px solid var(--border);
-      padding: 20px 0;
-      transition: transform 0.3s ease;
-      box-shadow: 2px 0 10px rgba(0,0,0,0.05);
-    }
-
-    nav a {
-      padding: 15px 25px;
-      text-decoration: none;
-      color: var(--dark);
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      transition: all 0.3s;
-      border-left: 3px solid transparent;
-    }
-
-    nav a:hover {
-      background: var(--primary);
-      color: #fff;
-      border-left-color: var(--secondary);
-    }
-
-    nav a.active {
-      background: var(--light);
-      color: var(--primary);
-      border-left-color: var(--primary);
-      font-weight: 600;
-    }
-
-    main {
-      flex: 1;
-      padding: 25px;
-      overflow-y: auto;
-    }
-
-    .page-header {
-      background: linear-gradient(135deg, var(--primary), var(--primary-light));
-      color: white;
-      padding: 25px;
-      border-radius: 16px;
-      box-shadow: 0 8px 25px rgba(0,74,173,0.15);
-      margin-bottom: 30px;
-    }
-
-    .page-header h1 {
-      font-size: 28px;
-      margin-bottom: 8px;
-    }
-
-    .page-header p {
-      opacity: 0.9;
-      font-size: 16px;
-    }
-
-    .stats-cards {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 20px;
-      margin-bottom: 30px;
-    }
-
-    .stat-card {
-      background: white;
-      padding: 20px;
-      border-radius: 12px;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.08);
-      text-align: center;
-      border-left: 4px solid var(--primary);
-    }
-
-    .stat-card.balance { border-left-color: var(--success); }
-    .stat-card.tasks { border-left-color: var(--primary); }
-    .stat-card.earnings { border-left-color: var(--secondary); }
-
-    .stat-value {
-      font-size: 24px;
-      font-weight: 700;
-      color: var(--primary);
-      margin-bottom: 5px;
-    }
-
-    .stat-label {
-      color: var(--gray);
-      font-size: 14px;
-      font-weight: 500;
-    }
-
-    .refresh-indicator {
-      background: white;
-      padding: 15px 20px;
-      border-radius: 12px;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.08);
-      margin-bottom: 25px;
-      display: flex;
-      align-items: center;
-      gap: 15px;
-      border-left: 4px solid var(--success);
-    }
-
-    .refresh-indicator .icon {
-      font-size: 24px;
-    }
-
-    .refresh-indicator .info {
-      flex: 1;
-    }
-
-    .refresh-indicator .info h4 {
-      color: var(--primary);
-      margin-bottom: 5px;
-    }
-
-    .refresh-indicator .info p {
-      color: var(--gray);
-      font-size: 14px;
-    }
-
-    .refresh-countdown {
-      background: var(--primary);
-      color: white;
-      padding: 8px 15px;
-      border-radius: 20px;
-      font-weight: 600;
-      font-size: 14px;
-    }
-
-    .filters-section {
-      background: white;
-      padding: 20px;
-      border-radius: 12px;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.08);
-      margin-bottom: 25px;
-    }
-
-    .filters-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 15px;
-      align-items: end;
-    }
-
-    .filter-group {
-      display: flex;
-      flex-direction: column;
-    }
-
-    .filter-group label {
-      font-weight: 600;
-      margin-bottom: 8px;
-      color: var(--dark);
-    }
-
-    .filter-group select,
-    .filter-group input {
-      padding: 10px;
-      border: 2px solid var(--border);
-      border-radius: 8px;
-      font-size: 14px;
-      transition: border-color 0.3s;
-    }
-
-    .filter-group select:focus,
-    .filter-group input:focus {
-      border-color: var(--primary);
-      outline: none;
-    }
-
-    .search-box {
-      position: relative;
-    }
-
-    .search-box input {
-      padding-left: 40px;
-      width: 100%;
-    }
-
-    .search-icon {
-      position: absolute;
-      left: 12px;
-      top: 50%;
-      transform: translateY(-50%);
-      color: var(--gray);
-    }
-
-    .tasks-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-      gap: 25px;
-      margin-bottom: 30px;
-    }
-
-    .task-card {
-      background: white;
-      border-radius: 16px;
-      padding: 25px;
-      box-shadow: 0 8px 25px rgba(0,0,0,0.1);
-      transition: all 0.3s ease;
-      border: 2px solid transparent;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .task-card:hover {
-      transform: translateY(-8px);
-      box-shadow: 0 15px 35px rgba(0,0,0,0.15);
-    }
-
-    .task-card.featured {
-      border-color: var(--warning);
-    }
-
-    .task-card.featured::before {
-      content: 'FEATURED';
-      position: absolute;
-      top: 15px;
-      right: -30px;
-      background: var(--warning);
-      color: var(--dark);
-      padding: 5px 30px;
-      font-size: 12px;
-      font-weight: 600;
-      transform: rotate(45deg);
-    }
-
-    .task-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
-      margin-bottom: 15px;
-    }
-
-    .task-title {
-      font-size: 18px;
-      font-weight: 700;
-      color: var(--primary);
-      margin-bottom: 5px;
-    }
-
-    .task-type {
-      display: inline-block;
-      padding: 4px 12px;
-      background: var(--light);
-      color: var(--primary);
-      border-radius: 20px;
-      font-size: 12px;
-      font-weight: 600;
-    }
-
-    .task-reward {
-      font-size: 24px;
-      font-weight: 800;
-      color: var(--success);
-      text-align: right;
-    }
-
-    .task-reward span {
-      font-size: 14px;
-      color: var(--gray);
-      font-weight: 500;
-    }
-
-    .task-description {
-      color: var(--gray);
-      margin-bottom: 20px;
-      line-height: 1.5;
-    }
-
-    .task-status-container {
-      margin: 15px 0;
-      padding: 12px;
-      border-radius: 8px;
-      font-weight: 600;
-      font-size: 14px;
-    }
-
-    .task-status.approved {
-      background: #d4edda;
-      color: #155724;
-      border: 1px solid #c3e6cb;
-    }
-
-    .task-status.rejected {
-      background: #f8d7da;
-      color: #721c24;
-      border: 1px solid #f5c6cb;
-    }
-
-    .task-status.submitted {
-      background: #fff3cd;
-      color: #856404;
-      border: 1px solid #ffeaa7;
-    }
-
-    .task-status.in-progress {
-      background: #cce7ff;
-      color: #004085;
-      border: 1px solid #b3d7ff;
-    }
-
-    .task-status small {
-      font-weight: normal;
-      font-size: 12px;
-      display: block;
-      margin-top: 5px;
-    }
-
-    .task-meta {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 20px;
-      padding-top: 15px;
-      border-top: 1px solid var(--border);
-    }
-
-    .task-difficulty {
-      display: flex;
-      align-items: center;
-      gap: 5px;
-      font-size: 14px;
-    }
-
-    .difficulty-beginner { color: var(--success); }
-    .difficulty-intermediate { color: var(--warning); }
-    .difficulty-advanced { color: var(--danger); }
-
-    .task-requirements {
-      font-size: 14px;
-      color: var(--gray);
-    }
-
-    .task-actions {
-      display: flex;
-      gap: 10px;
-    }
-
-    .btn {
-      padding: 12px 20px;
-      border: none;
-      border-radius: 8px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      flex: 1;
-      text-align: center;
-    }
-
-    .btn-primary {
-      background: var(--primary);
-      color: white;
-    }
-
-    .btn-primary:hover {
-      background: var(--primary-light);
-      transform: translateY(-2px);
-    }
-
-    .btn-success {
-      background: var(--success);
-      color: white;
-    }
-
-    .btn-success:hover {
-      background: #218838;
-      transform: translateY(-2px);
-    }
-
-    .btn-warning {
-      background: var(--warning);
-      color: var(--dark);
-    }
-
-    .btn-warning:hover {
-      background: #e0a800;
-      transform: translateY(-2px);
-    }
-
-    .btn-danger {
-      background: var(--danger);
-      color: white;
-    }
-
-    .btn-danger:hover {
-      background: #c82333;
-      transform: translateY(-2px);
-    }
-
-    .btn:disabled {
-      background: var(--gray);
-      cursor: not-allowed;
-      transform: none;
-    }
-
-    .no-tasks {
-      text-align: center;
-      padding: 60px 20px;
-      color: var(--gray);
-    }
-
-    .no-tasks h3 {
-      margin-bottom: 10px;
-      color: var(--dark);
-    }
-
-    .loading {
-      display: inline-block;
-      width: 20px;
-      height: 20px;
-      border: 3px solid #f3f3f3;
-      border-top: 3px solid var(--primary);
-      border-radius: 50%;
-      animation: spin 1s linear infinite;
-    }
-
-    .message {
-      padding: 15px;
-      border-radius: 8px;
-      margin: 15px 0;
-      text-align: center;
-      font-weight: 600;
-    }
-
-    .message.success {
-      background: #d4edda;
-      color: #155724;
-      border: 1px solid #c3e6cb;
-    }
-
-    .message.error {
-      background: #f8d7da;
-      color: #721c24;
-      border: 1px solid #f5c6cb;
-    }
-
-    .message.info {
-      background: #cce7ff;
-      color: #004085;
-      border: 1px solid #b3d7ff;
-    }
-
-    @keyframes spin {
-      0% { transform: rotate(0deg); }
-      100% { transform: rotate(360deg); }
-    }
-
-    .my-tasks-section {
-      background: white;
-      padding: 25px;
-      border-radius: 12px;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.08);
-      margin-bottom: 30px;
-    }
-
-    .tasks-tabs {
-      display: flex;
-      gap: 10px;
-      margin-bottom: 20px;
-      border-bottom: 2px solid var(--border);
-    }
-
-    .tab-btn {
-      padding: 12px 24px;
-      background: none;
-      border: none;
-      border-bottom: 3px solid transparent;
-      font-weight: 600;
-      color: var(--gray);
-      cursor: pointer;
-      transition: all 0.3s;
-    }
-
-    .tab-btn.active {
-      color: var(--primary);
-      border-bottom-color: var(--primary);
-    }
-
-    .my-tasks-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-      gap: 20px;
-    }
-
-    .table-tools {
-      background: var(--light);
-      padding: 15px;
-      border-radius: 8px;
-      margin-bottom: 15px;
-    }
-
-    .table-controls {
-      display: flex;
-      gap: 10px;
-      margin-bottom: 10px;
-      flex-wrap: wrap;
-    }
-
-    .table-controls button {
-      padding: 8px 15px;
-      background: var(--primary);
-      color: white;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-      font-size: 14px;
-    }
-
-    .table-preview {
-      border: 2px solid var(--border);
-      border-radius: 8px;
-      padding: 15px;
-      background: white;
-      min-height: 100px;
-      overflow-x: auto;
-    }
-
-    .table-preview table {
-      width: 100%;
-      border-collapse: collapse;
-    }
-
-    .table-preview th,
-    .table-preview td {
-      border: 1px solid var(--border);
-      padding: 8px;
-      text-align: left;
-    }
-
-    .table-preview th {
-      background: var(--light);
-      font-weight: 600;
-    }
-
-    .modal {
-      display: none;
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0, 0, 0, 0.7);
-      z-index: 1000;
-      justify-content: center;
-      align-items: flex-start;
-      padding: 20px 10px;
-      overflow-y: auto;
-    }
-
-    .modal-content {
-      background: white;
-      border-radius: 16px;
-      width: 95%;
-      max-width: 800px;
-      max-height: 90vh;
-      padding: 30px;
-      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
-      position: relative;
-      animation: modalFade 0.3s;
-      overflow-y: auto;
-      margin: 20px auto;
-    }
-
-    @keyframes modalFade {
-      from {opacity: 0; transform: translateY(-20px);}
-      to {opacity: 1; transform: translateY(0);}
-    }
-
-    .close-modal {
-      position: absolute;
-      top: 15px;
-      right: 20px;
-      font-size: 1.5rem;
-      cursor: pointer;
-      color: var(--gray);
-      background: rgba(255,255,255,0.9);
-      border-radius: 50%;
-      width: 30px;
-      height: 30px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      z-index: 1001;
-    }
-
-    .close-modal:hover {
-      color: var(--danger);
-    }
-
-    @media (max-width: 768px) {
-      .header-right .user-name {
-        display: none;
-      }
-
-      .mobile-menu-btn {
-        display: block;
-      }
-
-      nav {
-        position: fixed;
-        top: 70px;
-        left: 0;
-        height: calc(100vh - 70px);
-        transform: translateX(-100%);
-        z-index: 99;
-        background: white;
-      }
-
-      nav.active {
-        transform: translateX(0);
-      }
-
-      .tasks-grid {
-        grid-template-columns: 1fr;
-      }
-
-      .filters-grid {
-        grid-template-columns: 1fr;
-      }
-
-      .task-header {
-        flex-direction: column;
-        gap: 10px;
-      }
-
-      .task-reward {
-        text-align: left;
-      }
-
-      .my-tasks-grid {
-        grid-template-columns: 1fr;
-      }
-
-      .tasks-tabs {
-        flex-wrap: wrap;
-      }
-
-      .refresh-indicator {
-        flex-direction: column;
-        text-align: center;
-        gap: 10px;
-      }
-
-      .modal-content {
-        padding: 20px 15px;
-      }
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tasks - Academic Writing Hub</title>
+    <style>
+        :root {
+            --primary: #004aad; --primary-light: #3a6fc8; --primary-dark: #003580;
+            --secondary: #ff6b35; --success: #28a745; --warning: #ffc107;
+            --danger: #dc3545; --light: #f8f9fa; --dark: #343a40;
+            --gray: #6c757d; --border: #dee2e6; --shadow: rgba(0,0,0,0.1);
+        }
+        
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: "Segoe UI", sans-serif; background: #f8fafc; color: #333; line-height: 1.6; }
+        
+        header {
+            background: var(--primary); color: #fff; padding: 15px 20px;
+            display: flex; justify-content: space-between; align-items: center;
+            box-shadow: 0 2px 15px rgba(0,0,0,0.1); position: sticky; top: 0; z-index: 100;
+        }
+        
+        .header-left h1 { margin: 0; font-size: 22px; font-weight: 700; }
+        .header-left .slogan { font-size: 13px; opacity: 0.9; margin-top: 2px; }
+        
+        .header-right { display: flex; align-items: center; gap: 15px; }
+        .user-menu { display: flex; align-items: center; gap: 10px; cursor: pointer; padding: 8px 12px; border-radius: 8px; transition: background 0.3s; }
+        .user-menu:hover { background: var(--primary-light); }
+        .user-avatar { width: 36px; height: 36px; border-radius: 50%; background: var(--secondary); display: flex; align-items: center; justify-content: center; font-weight: bold; color: white; }
+        .mobile-menu-btn { display: none; background: none; border: none; color: white; font-size: 20px; cursor: pointer; }
+        
+        .container { display: flex; min-height: calc(100vh - 70px); }
+        
+        nav {
+            width: 260px; background: #fff; border-right: 1px solid var(--border);
+            padding: 20px 0; transition: transform 0.3s ease; box-shadow: 2px 0 10px rgba(0,0,0,0.05);
+        }
+        
+        nav a {
+            padding: 15px 25px; text-decoration: none; color: var(--dark);
+            display: flex; align-items: center; gap: 12px; transition: all 0.3s;
+            border-left: 3px solid transparent;
+        }
+        
+        nav a:hover { background: var(--primary); color: #fff; border-left-color: var(--secondary); }
+        nav a.active { background: var(--light); color: var(--primary); border-left-color: var(--primary); font-weight: 600; }
+        
+        main { flex: 1; padding: 25px; overflow-y: auto; }
+        
+        .page-header {
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            color: white; padding: 25px; border-radius: 16px; box-shadow: 0 8px 25px rgba(0,74,173,0.15);
+            margin-bottom: 30px;
+        }
+        
+        .page-header h1 { font-size: 28px; margin-bottom: 8px; }
+        .page-header p { opacity: 0.9; font-size: 16px; }
+        
+        .admin-review-notice {
+            background: linear-gradient(135deg, var(--warning), #ffd54f); color: var(--dark);
+            padding: 20px; border-radius: 16px; margin-bottom: 25px; box-shadow: 0 6px 20px rgba(255,193,7,0.3);
+            border-left: 6px solid var(--warning); display: flex; align-items: center; gap: 20px;
+        }
+        
+        .admin-review-notice .icon { font-size: 32px; flex-shrink: 0; }
+        .admin-review-notice .content h4 { margin-bottom: 8px; font-size: 18px; font-weight: 700; }
+        .admin-review-notice .content p { margin: 0; opacity: 0.9; }
+        
+        .stats-cards {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px; margin-bottom: 30px;
+        }
+        
+        .stat-card {
+            background: white; padding: 20px; border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08); text-align: center;
+            border-left: 4px solid var(--primary);
+        }
+        
+        .stat-card.balance { border-left-color: var(--success); }
+        .stat-card.tasks { border-left-color: var(--primary); }
+        .stat-card.earnings { border-left-color: var(--secondary); }
+        .stat-card.pending { border-left-color: var(--warning); }
+        
+        .stat-value { font-size: 24px; font-weight: 700; color: var(--primary); margin-bottom: 5px; }
+        .stat-label { color: var(--gray); font-size: 14px; font-weight: 500; }
+        
+        .refresh-indicator {
+            background: white; padding: 15px 20px; border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08); margin-bottom: 25px;
+            display: flex; align-items: center; gap: 15px; border-left: 4px solid var(--success);
+        }
+        
+        .refresh-indicator .icon { font-size: 24px; }
+        .refresh-indicator .info { flex: 1; }
+        .refresh-indicator .info h4 { color: var(--primary); margin-bottom: 5px; }
+        .refresh-indicator .info p { color: var(--gray); font-size: 14px; }
+        .refresh-countdown { background: var(--primary); color: white; padding: 8px 15px; border-radius: 20px; font-weight: 600; font-size: 14px; }
+        
+        .my-tasks-section {
+            background: white; padding: 25px; border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08); margin-bottom: 30px;
+        }
+        
+        .my-tasks-section h3 { color: var(--primary); margin-bottom: 20px; }
+        
+        .tasks-tabs {
+            display: flex; gap: 10px; margin-bottom: 20px;
+            border-bottom: 2px solid var(--border);
+        }
+        
+        .tab-btn {
+            padding: 12px 24px; background: none; border: none;
+            border-bottom: 3px solid transparent; font-weight: 600;
+            color: var(--gray); cursor: pointer; transition: all 0.3s;
+        }
+        
+        .tab-btn.active { color: var(--primary); border-bottom-color: var(--primary); }
+        
+        .tasks-summary {
+            background: var(--light); padding: 15px; border-radius: 8px; margin-bottom: 15px;
+        }
+        
+        .tasks-summary-grid {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px; text-align: center;
+        }
+        
+        .summary-item { padding: 15px; background: white; border-radius: 8px; box-shadow: 0 2px 8px var(--shadow); }
+        .summary-value { font-size: 24px; font-weight: 700; margin-bottom: 5px; }
+        .summary-label { font-size: 12px; color: var(--gray); font-weight: 600; }
+        .summary-total .summary-value { color: var(--primary); }
+        .summary-approved .summary-value { color: var(--success); }
+        .summary-pending .summary-value { color: var(--warning); }
+        .summary-rejected .summary-value { color: var(--danger); }
+        .summary-progress .summary-value { color: #17a2b8; }
+        
+        .my-tasks-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); gap: 20px; }
+        
+        .task-card {
+            background: white; border-radius: 16px; padding: 25px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1); transition: all 0.3s ease;
+            border: 2px solid transparent; position: relative; overflow: hidden;
+        }
+        
+        .task-card:hover { transform: translateY(-5px); box-shadow: 0 12px 30px rgba(0,0,0,0.15); }
+        .task-card.featured { border-color: var(--warning); }
+        
+        .task-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 15px; }
+        .task-title { font-size: 18px; font-weight: 700; color: var(--primary); margin-bottom: 5px; }
+        .task-type { display: inline-block; padding: 4px 12px; background: var(--light); color: var(--primary); border-radius: 20px; font-size: 12px; font-weight: 600; }
+        .task-reward { font-size: 24px; font-weight: 800; color: var(--success); text-align: right; }
+        .task-reward span { font-size: 14px; color: var(--gray); font-weight: 500; }
+        .task-description { color: var(--gray); margin-bottom: 20px; line-height: 1.5; }
+        
+        .task-status-container { margin: 15px 0; padding: 12px; border-radius: 8px; font-weight: 600; font-size: 14px; }
+        .task-status-container.approved { background: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+        .task-status-container.rejected { background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+        .task-status-container.submitted { background: #fff3cd; color: #856404; border: 1px solid #ffeaa7; }
+        .task-status-container.in-progress { background: #cce7ff; color: #004085; border: 1px solid #b3d7ff; }
+        
+        .task-meta { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; padding-top: 15px; border-top: 1px solid var(--border); }
+        .task-difficulty { display: flex; align-items: center; gap: 5px; font-size: 14px; }
+        .difficulty-beginner { color: var(--success); } .difficulty-intermediate { color: var(--warning); } .difficulty-advanced { color: var(--danger); }
+        .task-requirements { font-size: 14px; color: var(--gray); }
+        
+        .task-actions { display: flex; gap: 10px; }
+        .btn { padding: 12px 20px; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; transition: all 0.3s ease; flex: 1; text-align: center; }
+        .btn-primary { background: var(--primary); color: white; } .btn-primary:hover { background: var(--primary-light); }
+        .btn-success { background: var(--success); color: white; } .btn-success:hover { background: #218838; }
+        .btn-warning { background: var(--warning); color: var(--dark); } .btn-warning:hover { background: #e0a800; }
+        .btn-danger { background: var(--danger); color: white; } .btn-danger:hover { background: #c82333; }
+        .btn:disabled { background: var(--gray); cursor: not-allowed; }
+        
+        .no-tasks { text-align: center; padding: 60px 20px; color: var(--gray); }
+        .no-tasks h3 { margin-bottom: 10px; color: var(--dark); }
+        
+        .filters-section { background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.08); margin-bottom: 25px; }
+        .filters-section h3 { margin-bottom: 15px; color: var(--primary); }
+        
+        .filters-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; align-items: end; }
+        .filter-group { display: flex; flex-direction: column; }
+        .filter-group label { font-weight: 600; margin-bottom: 8px; color: var(--dark); }
+        .filter-group select, .filter-group input { padding: 10px; border: 2px solid var(--border); border-radius: 8px; font-size: 14px; transition: border-color 0.3s; }
+        .filter-group select:focus, .filter-group input:focus { border-color: var(--primary); outline: none; }
+        
+        .search-box { position: relative; }
+        .search-box input { padding-left: 40px; width: 100%; }
+        .search-icon { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: var(--gray); }
+        
+        .tasks-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); gap: 25px; margin-bottom: 30px; }
+        
+        .message { padding: 15px; border-radius: 8px; margin: 15px 0; text-align: center; font-weight: 600; }
+        .message.success { background: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+        .message.error { background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+        .message.info { background: #cce7ff; color: #004085; border: 1px solid #b3d7ff; }
+        
+        /* Advanced Workspace Styles */
+        .workspace-tools { background: var(--light); padding: 15px; border-radius: 8px; margin-bottom: 15px; }
+        .toolbar { display: flex; gap: 10px; margin-bottom: 10px; flex-wrap: wrap; }
+        .tool-btn { padding: 8px 12px; background: var(--primary); color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 12px; }
+        .tool-btn:hover { background: var(--primary-light); }
+        
+        .workspace-area { border: 2px solid var(--border); border-radius: 8px; padding: 15px; background: white; min-height: 400px; }
+        .workspace-tabs { display: flex; gap: 5px; margin-bottom: 15px; border-bottom: 1px solid var(--border); }
+        .workspace-tab { padding: 8px 16px; background: var(--light); border: none; border-radius: 4px 4px 0 0; cursor: pointer; }
+        .workspace-tab.active { background: var(--primary); color: white; }
+        
+        .text-editor { width: 100%; height: 300px; padding: 15px; border: 1px solid var(--border); border-radius: 4px; font-family: monospace; resize: vertical; }
+        .spreadsheet-table { width: 100%; border-collapse: collapse; margin-bottom: 15px; }
+        .spreadsheet-table th, .spreadsheet-table td { border: 1px solid var(--border); padding: 8px; min-width: 100px; }
+        .spreadsheet-table th { background: var(--primary); color: white; }
+        .spreadsheet-table td { background: white; }
+        .spreadsheet-table td:focus { background: #fff9c4; outline: none; }
+        
+        .file-upload-area { border: 2px dashed var(--border); border-radius: 8px; padding: 40px; text-align: center; margin-bottom: 15px; }
+        .file-upload-area.dragover { border-color: var(--primary); background: var(--light); }
+        
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 1000; justify-content: center; align-items: flex-start; padding: 20px 10px; overflow-y: auto; }
+        .modal-content { background: white; border-radius: 16px; width: 95%; max-width: 900px; max-height: 90vh; padding: 30px; box-shadow: 0 15px 40px rgba(0,0,0,0.2); position: relative; animation: modalFade 0.3s; overflow-y: auto; margin: 20px auto; }
+        @keyframes modalFade { from {opacity: 0; transform: translateY(-20px);} to {opacity: 1; transform: translateY(0);} }
+        .close-modal { position: absolute; top: 15px; right: 20px; font-size: 1.5rem; cursor: pointer; color: var(--gray); }
+        
+        @media (max-width: 768px) {
+            .header-right .user-name { display: none; }
+            .mobile-menu-btn { display: block; }
+            nav { position: fixed; top: 70px; left: 0; height: calc(100vh - 70px); transform: translateX(-100%); z-index: 99; background: white; }
+            nav.active { transform: translateX(0); }
+            .tasks-grid, .my-tasks-grid { grid-template-columns: 1fr; }
+            .filters-grid { grid-template-columns: 1fr; }
+            .task-header { flex-direction: column; gap: 10px; }
+            .task-reward { text-align: left; }
+            .tasks-tabs { flex-wrap: wrap; }
+            .refresh-indicator { flex-direction: column; text-align: center; gap: 10px; }
+            .admin-review-notice { flex-direction: column; text-align: center; gap: 15px; }
+            .modal-content { padding: 20px 15px; }
+            .toolbar { justify-content: center; }
+        }
+    </style>
 </head>
 <body>
+    <header>
+        <div class="header-left">
+            <h1>Academic Writing Hub</h1>
+            <div class="slogan">Empowering Your Potential Through Academic Writing</div>
+        </div>
+        <div class="header-right">
+            <div class="user-menu" id="userMenu">
+                <div class="user-avatar" id="userAvatar">U</div>
+                <span class="user-name" id="userName">Loading...</span>
+            </div>
+            <button class="mobile-menu-btn" id="mobileMenuBtn">☰</button>
+        </div>
+    </header>
 
-  <header>
-    <div class="header-left">
-      <h1>Academic Writing Hub</h1>
-      <div class="slogan">Empowering Your Potential Through Academic Writing</div>
+    <div class="container">
+        <nav id="sidebar">
+            <a href="dashboard.html">🏠 Dashboard</a>
+            <a href="membership.html">💳 Membership</a>
+            <a href="tasks.html" class="active">📋 Tasks</a>
+            <a href="withdraw.html">💵 Withdraw</a>
+            <a href="referrals.html">👥 Referrals</a>
+            <a href="profile.html">🙍 Profile</a>
+            <a href="support.html">📩 Support</a>
+            <a href="#" id="logoutBtn">🚪 Logout</a>
+        </nav>
+
+        <main>
+            <div class="page-header">
+                <h1>📋 Available Tasks</h1>
+                <p>Complete tasks to earn money. Filter by type or difficulty to find tasks that match your skills.</p>
+            </div>
+
+            <div class="admin-review-notice">
+                <div class="icon">⏰</div>
+                <div class="content">
+                    <h4>Task Review Schedule</h4>
+                    <p><strong>Admin reviews submitted tasks every Tuesday and Thursday only.</strong> Please plan your submissions accordingly.</p>
+                </div>
+            </div>
+
+            <div class="refresh-indicator">
+                <div class="icon">🔄</div>
+                <div class="info">
+                    <h4>Auto-Refresh System</h4>
+                    <p>Tasks automatically refresh daily at 12:00 AM. New tasks will appear automatically.</p>
+                </div>
+                <div class="refresh-countdown" id="refreshCountdown">Next: 00:00:00</div>
+            </div>
+
+            <div class="stats-cards">
+                <div class="stat-card balance">
+                    <div class="stat-value" id="balanceAmount">KSh 0.00</div>
+                    <div class="stat-label">Available Balance</div>
+                </div>
+                <div class="stat-card tasks">
+                    <div class="stat-value" id="completedTasks">0</div>
+                    <div class="stat-label">Completed Tasks</div>
+                </div>
+                <div class="stat-card earnings">
+                    <div class="stat-value" id="totalEarnings">KSh 0.00</div>
+                    <div class="stat-label">Total Earnings</div>
+                </div>
+                <div class="stat-card pending">
+                    <div class="stat-value" id="pendingEarnings">KSh 0.00</div>
+                    <div class="stat-label">Pending Review</div>
+                </div>
+            </div>
+
+            <div class="my-tasks-section">
+                <h3>📊 My Tasks Status</h3>
+                
+                <div class="tasks-summary">
+                    <div class="tasks-summary-grid">
+                        <div class="summary-item summary-total">
+                            <div class="summary-value" id="totalTasksCount">0</div>
+                            <div class="summary-label">Total Tasks</div>
+                        </div>
+                        <div class="summary-item summary-approved">
+                            <div class="summary-value" id="approvedTasksCount">0</div>
+                            <div class="summary-label">Approved</div>
+                        </div>
+                        <div class="summary-item summary-pending">
+                            <div class="summary-value" id="pendingTasksCount">0</div>
+                            <div class="summary-label">Under Review</div>
+                        </div>
+                        <div class="summary-item summary-progress">
+                            <div class="summary-value" id="inProgressTasksCount">0</div>
+                            <div class="summary-label">In Progress</div>
+                        </div>
+                        <div class="summary-item summary-rejected">
+                            <div class="summary-value" id="rejectedTasksCount">0</div>
+                            <div class="summary-label">Rejected</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tasks-tabs">
+                    <button class="tab-btn active" data-tab="all-tasks">All Tasks</button>
+                    <button class="tab-btn" data-tab="in-progress">In Progress</button>
+                    <button class="tab-btn" data-tab="submitted">Under Review</button>
+                    <button class="tab-btn" data-tab="completed">Approved</button>
+                    <button class="tab-btn" data-tab="rejected">Rejected</button>
+                </div>
+
+                <div class="my-tasks-grid" id="myTasksContainer">
+                    <div class="no-tasks">
+                        <h3>📭 No Tasks Started</h3>
+                        <p>Start working on tasks to see your progress here!</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="filters-section">
+                <h3>🔍 Filter Tasks</h3>
+                <div class="filters-grid">
+                    <div class="filter-group">
+                        <label for="taskType">Task Type</label>
+                        <select id="taskType">
+                            <option value="all">All Types</option>
+                            <option value="academic_writing">Academic Writing</option>
+                            <option value="academic_research">Academic Research</option>
+                            <option value="content_writing">Content Writing</option>
+                            <option value="data_entry">Data Entry</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label for="difficulty">Difficulty</label>
+                        <select id="difficulty">
+                            <option value="all">All Levels</option>
+                            <option value="beginner">Beginner</option>
+                            <option value="intermediate">Intermediate</option>
+                            <option value="advanced">Advanced</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label for="membership">Required Membership</label>
+                        <select id="membership">
+                            <option value="all">All Levels</option>
+                            <option value="starter">Starter</option>
+                            <option value="pro">Pro</option>
+                            <option value="premium">Premium</option>
+                        </select>
+                    </div>
+                    <div class="filter-group search-box">
+                        <label for="search">Search Tasks</label>
+                        <span class="search-icon">🔍</span>
+                        <input type="text" id="search" placeholder="Search by title or description...">
+                    </div>
+                </div>
+            </div>
+
+            <div id="messageContainer"></div>
+
+            <div class="tasks-grid" id="tasksContainer">
+                <div class="no-tasks" id="noTasks">
+                    <h3>📭 No Tasks Available</h3>
+                    <p>Tasks will appear here once they're available. Check back later!</p>
+                </div>
+            </div>
+        </main>
     </div>
-    <div class="header-right">
-      <div class="user-menu" id="userMenu">
-        <div class="user-avatar" id="userAvatar">U</div>
-        <span class="user-name" id="userName">Loading...</span>
-      </div>
-      <button class="mobile-menu-btn" id="mobileMenuBtn">☰</button>
+
+    <!-- Task Modal with Advanced Workspace -->
+    <div class="modal" id="taskModal">
+        <div class="modal-content">
+            <span class="close-modal" id="closeTaskModal">&times;</span>
+            <div id="modalContent"></div>
+        </div>
     </div>
-  </header>
 
-  <div class="container">
-    <nav id="sidebar">
-      <a href="dashboard.html">🏠 Dashboard</a>
-      <a href="membership.html">💳 Membership</a>
-      <a href="tasks.html" class="active">📋 Tasks</a>
-      <a href="withdraw.html">💵 Withdraw</a>
-      <a href="referrals.html">👥 Referrals</a>
-      <a href="profile.html">🙍 Profile</a>
-      <a href="support.html">📩 Support</a>
-      <a href="#" id="logoutBtn">🚪 Logout</a>
-    </nav>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script>
+        // Supabase configuration
+        const SUPABASE_URL = "https://lfrjtklkbppihaaiuxef.supabase.co";
+        const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imxmcmp0a2xrYnBwaWhhYWl1eGVmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTkwNTI5MzMsImV4cCI6MjA3NDYyODkzM30.2FVqnt5daF2Tw-RmVBwOGgt4GuIQQSkG8IUZt30QxIM";
 
-    <main>
-      <div class="page-header">
-        <h1>📋 Available Tasks</h1>
-        <p>Complete tasks to earn money. Filter by type or difficulty to find tasks that match your skills.</p>
-      </div>
-
-      <div class="refresh-indicator">
-        <div class="icon">🔄</div>
-        <div class="info">
-          <h4>Auto-Refresh System</h4>
-          <p>Tasks automatically refresh daily at 12:00 AM. New tasks will appear automatically.</p>
-        </div>
-        <div class="refresh-countdown" id="refreshCountdown">Next: 00:00:00</div>
-      </div>
-
-      <div class="stats-cards">
-        <div class="stat-card balance">
-          <div class="stat-value" id="balanceAmount">KSh 0.00</div>
-          <div class="stat-label">Current Balance</div>
-        </div>
-        <div class="stat-card tasks">
-          <div class="stat-value" id="completedTasks">0</div>
-          <div class="stat-label">Tasks Completed</div>
-        </div>
-        <div class="stat-card earnings">
-          <div class="stat-value" id="totalEarnings">KSh 0.00</div>
-          <div class="stat-label">Total Earnings</div>
-        </div>
-      </div>
-
-      <div class="my-tasks-section">
-        <h3 style="color: var(--primary); margin-bottom: 20px;">📊 My Tasks Status</h3>
-        <div class="tasks-tabs">
-          <button class="tab-btn active" data-tab="all-tasks">All Tasks</button>
-          <button class="tab-btn" data-tab="in-progress">In Progress</button>
-          <button class="tab-btn" data-tab="submitted">Submitted</button>
-          <button class="tab-btn" data-tab="completed">Completed</button>
-        </div>
-        <div class="my-tasks-grid" id="myTasksContainer">
-          <div class="no-tasks">
-            <h3>📭 No Tasks Started</h3>
-            <p>Start working on tasks to see your progress here!</p>
-          </div>
-        </div>
-      </div>
-
-      <div class="filters-section">
-        <h3 style="margin-bottom: 15px; color: var(--primary);">🔍 Filter Tasks</h3>
-        <div class="filters-grid">
-          <div class="filter-group">
-            <label for="taskType">Task Type</label>
-            <select id="taskType">
-              <option value="all">All Types</option>
-              <option value="transcription">Transcription</option>
-              <option value="academic_writing">Academic Writing</option>
-              <option value="data_entry">Data Entry</option>
-              <option value="web_design">Web Design</option>
-              <option value="affiliate_marketing">Affiliate Marketing</option>
-              <option value="network_marketing">Network Marketing</option>
-              <option value="online_gaming">Online Gaming</option>
-              <option value="content_writing">Content Writing</option>
-              <option value="proofreading">Proofreading</option>
-              <option value="research">Research</option>
-              <option value="social_media">Social Media</option>
-            </select>
-          </div>
-          <div class="filter-group">
-            <label for="difficulty">Difficulty</label>
-            <select id="difficulty">
-              <option value="all">All Levels</option>
-              <option value="beginner">Beginner</option>
-              <option value="intermediate">Intermediate</option>
-              <option value="advanced">Advanced</option>
-            </select>
-          </div>
-          <div class="filter-group">
-            <label for="membership">Required Membership</label>
-            <select id="membership">
-              <option value="all">All Levels</option>
-              <option value="starter">Starter</option>
-              <option value="pro">Pro</option>
-              <option value="premium">Premium</option>
-            </select>
-          </div>
-          <div class="filter-group search-box">
-            <label for="search">Search Tasks</label>
-            <span class="search-icon">🔍</span>
-            <input type="text" id="search" placeholder="Search by title or description...">
-          </div>
-        </div>
-      </div>
-
-      <div id="messageContainer"></div>
-
-      <div class="tasks-grid" id="tasksContainer">
-        <div class="no-tasks" id="noTasks">
-          <h3>📭 No Tasks Available</h3>
-          <p>Tasks will appear here once they're available. Check back later!</p>
-        </div>
-      </div>
-    </main>
-  </div>
-
-  <div class="modal" id="taskModal">
-    <div class="modal-content">
-      <span class="close-modal" id="closeTaskModal">&times;</span>
-      <div id="modalContent"></div>
-    </div>
-  </div>
-
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script>
-    // Supabase configuration
-    const SUPABASE_URL = "https://lfrjtklkbppihaaiuxef.supabase.co";
-    const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imxmcmp0a2xrYnBwaWhhYWl1eGVmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTkwNTI5MzMsImV4cCI6MjA3NDYyODkzM30.2FVqnt5daF2Tw-RmVBwOGgt4GuIQQSkG8IUZt30QxIM";
-
-    // Initialize Supabase client
-    let supabaseClient;
-    try {
-      supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-    } catch (error) {
-      console.error('Failed to initialize Supabase client:', error);
-    }
-
-    // Global variables
-    let currentUser = null;
-    let userProfile = null;
-    let allTasks = [];
-    let userTasks = [];
-    let currentTab = 'all-tasks';
-
-    // DOM Elements
-    const mobileMenuBtn = document.getElementById('mobileMenuBtn');
-    const sidebar = document.getElementById('sidebar');
-    const logoutBtn = document.getElementById('logoutBtn');
-    const tasksContainer = document.getElementById('tasksContainer');
-    const noTasks = document.getElementById('noTasks');
-    const messageContainer = document.getElementById('messageContainer');
-    const myTasksContainer = document.getElementById('myTasksContainer');
-    const refreshCountdown = document.getElementById('refreshCountdown');
-    const taskModal = document.getElementById('taskModal');
-    const closeTaskModalBtn = document.getElementById('closeTaskModal');
-
-    // Filter elements
-    const taskTypeFilter = document.getElementById('taskType');
-    const difficultyFilter = document.getElementById('difficulty');
-    const membershipFilter = document.getElementById('membership');
-    const searchFilter = document.getElementById('search');
-
-    // Initialize the application
-    document.addEventListener('DOMContentLoaded', function() {
-      initializeApp();
-    });
-
-    async function initializeApp() {
-      setupEventListeners();
-      await checkAuth();
-      startAutoRefreshTimer();
-    }
-
-    function setupEventListeners() {
-      // Mobile menu toggle
-      mobileMenuBtn.addEventListener('click', function() {
-        sidebar.classList.toggle('active');
-      });
-
-      // Close mobile menu when clicking outside
-      document.addEventListener('click', function(e) {
-        if (!sidebar.contains(e.target) && !mobileMenuBtn.contains(e.target)) {
-          sidebar.classList.remove('active');
+        // Initialize Supabase client
+        let supabaseClient;
+        try {
+            supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+            console.log('Supabase client initialized');
+        } catch (error) {
+            console.error('Failed to initialize Supabase:', error);
         }
-      });
 
-      // Logout
-      logoutBtn.addEventListener('click', function(e) {
-        e.preventDefault();
-        handleLogout();
-      });
+        // Global variables
+        let currentUser = null;
+        let userProfile = null;
+        let allTasks = [];
+        let userTasks = [];
+        let currentTab = 'all-tasks';
+        let currentTaskId = null;
 
-      // Filter event listeners
-      taskTypeFilter.addEventListener('change', renderTasks);
-      difficultyFilter.addEventListener('change', renderTasks);
-      membershipFilter.addEventListener('change', renderTasks);
-      searchFilter.addEventListener('input', renderTasks);
+        // DOM Elements
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const sidebar = document.getElementById('sidebar');
+        const logoutBtn = document.getElementById('logoutBtn');
+        const tasksContainer = document.getElementById('tasksContainer');
+        const messageContainer = document.getElementById('messageContainer');
+        const myTasksContainer = document.getElementById('myTasksContainer');
+        const refreshCountdown = document.getElementById('refreshCountdown');
+        const taskModal = document.getElementById('taskModal');
+        const closeTaskModalBtn = document.getElementById('closeTaskModal');
 
-      // Tab buttons
-      document.querySelectorAll('.tab-btn').forEach(btn => {
-        btn.addEventListener('click', function() {
-          showTab(this.getAttribute('data-tab'));
+        // Initialize app
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeApp();
         });
-      });
 
-      // Close modal
-      closeTaskModalBtn.addEventListener('click', closeTaskModal);
-      
-      // Close modal when clicking outside
-      window.addEventListener('click', function(e) {
-        if (e.target === taskModal) {
-          closeTaskModal();
-        }
-      });
-    }
-
-    // Authentication check
-    async function checkAuth() {
-      if (!supabaseClient) {
-        showMessage('Error: Application not initialized', 'error');
-        return;
-      }
-
-      try {
-        const { data: { session }, error } = await supabaseClient.auth.getSession();
-        
-        if (!session || error) {
-          window.location.href = "login.html";
-          return;
+        async function initializeApp() {
+            setupEventListeners();
+            await checkAuth();
+            startAutoRefreshTimer();
         }
 
-        currentUser = session.user;
-        await loadUserData();
+        function setupEventListeners() {
+            mobileMenuBtn.addEventListener('click', function() {
+                sidebar.classList.toggle('active');
+            });
 
-      } catch (error) {
-        console.error('Auth check error:', error);
-        window.location.href = "login.html";
-      }
-    }
+            document.addEventListener('click', function(e) {
+                if (!sidebar.contains(e.target) && !mobileMenuBtn.contains(e.target)) {
+                    sidebar.classList.remove('active');
+                }
+            });
 
-    // Load user data and tasks
-    async function loadUserData() {
-      try {
-        // Load user profile
-        const { data: profile, error: profileError } = await supabaseClient
-          .from('profiles')
-          .select('*')
-          .eq('id', currentUser.id)
-          .single();
+            logoutBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                handleLogout();
+            });
 
-        if (profileError) throw profileError;
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    showTab(this.getAttribute('data-tab'));
+                });
+            });
 
-        userProfile = profile;
-        updateUserStats(profile);
+            closeTaskModalBtn.addEventListener('click', closeTaskModal);
+            window.addEventListener('click', function(e) {
+                if (e.target === taskModal) closeTaskModal();
+            });
 
-        // Load available tasks
-        await loadTasks();
-
-        // Load user's assigned tasks
-        await loadUserTasks();
-
-      } catch (error) {
-        console.error("Data load error:", error);
-        showMessage('Failed to load data', 'error');
-      }
-    }
-
-    // Load available tasks
-    async function loadTasks() {
-      try {
-        const { data: tasks, error } = await supabaseClient
-          .from('tasks')
-          .select('*')
-          .eq('status', 'active')
-          .order('created_at', { ascending: false });
-
-        if (error) throw error;
-
-        allTasks = tasks || [];
-        renderTasks();
-        renderMyTasks();
-
-      } catch (error) {
-        console.error("Tasks load error:", error);
-        showMessage('Failed to load tasks', 'error');
-      }
-    }
-
-    // Load user's assigned tasks
-    async function loadUserTasks() {
-      try {
-        const { data: assignedTasks, error } = await supabaseClient
-          .from('user_tasks')
-          .select(', tasks()')
-          .eq('user_id', currentUser.id);
-
-        if (error) throw error;
-
-        userTasks = assignedTasks || [];
-        renderMyTasks();
-
-      } catch (error) {
-        console.error("User tasks load error:", error);
-      }
-    }
-
-    // Update user statistics
-    function updateUserStats(profile) {
-      document.getElementById('balanceAmount').textContent = 'KSh ' + ((profile.balance || 0).toLocaleString());
-      document.getElementById('completedTasks').textContent = profile.tasks_completed || 0;
-      document.getElementById('totalEarnings').textContent = 'KSh ' + ((profile.total_earnings || 0).toLocaleString());
-      
-      // Update user info in header
-      document.getElementById('userName').textContent = profile.full_name || 'User';
-      document.getElementById('userAvatar').textContent = (profile.full_name || 'U').charAt(0).toUpperCase();
-    }
-
-    // Render tasks based on filters
-    function renderTasks() {
-      const taskType = taskTypeFilter.value;
-      const difficulty = difficultyFilter.value;
-      const membership = membershipFilter.value;
-      const searchTerm = searchFilter.value.toLowerCase();
-
-      let filteredTasks = allTasks.filter(function(task) {
-        if (taskType !== 'all' && task.task_type !== taskType) return false;
-        if (difficulty !== 'all' && task.difficulty !== difficulty) return false;
-        if (membership !== 'all' && task.required_membership !== membership) return false;
-        if (searchTerm && !task.title.toLowerCase().includes(searchTerm) && 
-            !task.description.toLowerCase().includes(searchTerm)) return false;
-        return true;
-      });
-
-      if (filteredTasks.length === 0) {
-        noTasks.style.display = 'block';
-        tasksContainer.innerHTML = '';
-        tasksContainer.appendChild(noTasks);
-        return;
-      }
-
-      noTasks.style.display = 'none';
-
-      tasksContainer.innerHTML = filteredTasks.map(function(task) {
-        const userTask = userTasks.find(function(ut) { return ut.task_id === task.id; });
-        const isAssigned = userTask && ['assigned', 'in_progress', 'submitted'].includes(userTask.status);
-        const isCompleted = userTask && userTask.status === 'approved';
-        const isRejected = userTask && userTask.status === 'rejected';
-        const isSubmitted = userTask && userTask.status === 'submitted';
-        const canAssign = !isAssigned && !isCompleted && !isRejected && hasRequiredMembership(task.required_membership);
-
-        let actionButton = '';
-        let statusBadge = '';
-        
-        if (isCompleted) {
-          statusBadge = '<div class="task-status approved">✅ Approved - KSh ' + (userTask.paid_amount || task.reward_amount) + ' Earned</div>';
-          actionButton = '<button class="btn btn-success" disabled>✅ Completed</button>';
-        } else if (isRejected) {
-          statusBadge = '<div class="task-status rejected">❌ Rejected' + 
-                       (userTask.admin_feedback ? '<br><small>Feedback: ' + userTask.admin_feedback + '</small>' : '') + 
-                       '</div>';
-          actionButton = '<button class="btn btn-danger" onclick="viewTaskDetails(\'' + task.id + '\')">📝 View Details</button>';
-        } else if (isSubmitted) {
-          statusBadge = '<div class="task-status submitted">🟡 Submitted - Awaiting Review</div>';
-          actionButton = '<button class="btn btn-warning" onclick="viewTaskDetails(\'' + task.id + '\')">📝 View Details</button>';
-        } else if (isAssigned) {
-          statusBadge = '<div class="task-status in-progress">🟡 In Progress</div>';
-          actionButton = '<button class="btn btn-warning" onclick="viewTaskDetails(\'' + task.id + '\')">📝 Continue Task</button>';
-        } else if (canAssign) {
-          actionButton = '<button class="btn btn-primary" onclick="assignTask(\'' + task.id + '\')">🎯 Start Task</button>';
-        } else {
-          actionButton = '<button class="btn" disabled title="Upgrade to ' + formatMembership(task.required_membership) + ' membership">🔒 Upgrade Required</button>';
+            // Filter event listeners
+            document.getElementById('taskType').addEventListener('change', renderTasks);
+            document.getElementById('difficulty').addEventListener('change', renderTasks);
+            document.getElementById('membership').addEventListener('change', renderTasks);
+            document.getElementById('search').addEventListener('input', renderTasks);
         }
 
-        return '<div class="task-card ' + (task.featured ? 'featured' : '') + '">' +
-          '<div class="task-header">' +
-            '<div>' +
-              '<div class="task-title">' + (task.title || 'No Title') + '</div>' +
-              '<span class="task-type">' + formatTaskType(task.task_type) + '</span>' +
+        async function checkAuth() {
+            if (!supabaseClient) {
+                showMessage('Application not initialized', 'error');
+                return;
+            }
+
+            try {
+                const { data: { session }, error } = await supabaseClient.auth.getSession();
+                if (!session || error) {
+                    window.location.href = "login.html";
+                    return;
+                }
+                currentUser = session.user;
+                await loadUserData();
+            } catch (error) {
+                console.error('Auth error:', error);
+                window.location.href = "login.html";
+            }
+        }
+
+        async function loadUserData() {
+            try {
+                const { data: profile, error } = await supabaseClient
+                    .from('profiles')
+                    .select('*')
+                    .eq('id', currentUser.id)
+                    .single();
+
+                if (error) throw error;
+                userProfile = profile;
+                updateUserStats(profile);
+                await loadTasks();
+                await loadUserTasks();
+            } catch (error) {
+                console.error("Data load error:", error);
+                showMessage('Failed to load data', 'error');
+            }
+        }
+
+        async function loadTasks() {
+            try {
+                const { data: tasks, error } = await supabaseClient
+                    .from('tasks')
+                    .select('*')
+                    .eq('status', 'active')
+                    .order('created_at', { ascending: false });
+
+                if (error) throw error;
+                allTasks = tasks || [];
+                renderTasks();
+            } catch (error) {
+                console.error("Tasks load error:", error);
+                showMessage('Failed to load tasks', 'error');
+            }
+        }
+
+        async function loadUserTasks() {
+            try {
+                const { data: assignedTasks, error } = await supabaseClient
+                    .from('user_tasks')
+                    .select(', tasks()')
+                    .eq('user_id', currentUser.id)
+                    .order('assigned_at', { ascending: false });
+
+                if (error) throw error;
+                userTasks = assignedTasks || [];
+                updateEarningsStats();
+                renderMyTasks();
+            } catch (error) {
+                console.error("User tasks error:", error);
+            }
+        }
+
+        function updateUserStats(profile) {
+            document.getElementById('balanceAmount').textContent = 'KSh ' + ((profile.balance || 0).toLocaleString());
+            document.getElementById('completedTasks').textContent = profile.tasks_completed || 0;
+            document.getElementById('totalEarnings').textContent = 'KSh ' + ((profile.total_earnings || 0).toLocaleString());
+            document.getElementById('userName').textContent = profile.full_name || 'User';
+            document.getElementById('userAvatar').textContent = (profile.full_name || 'U').charAt(0).toUpperCase();
+        }
+
+        function updateEarningsStats() {
+            if (!userProfile || !userTasks) return;
+
+            const totalTasks = userTasks.length;
+            const approvedTasks = userTasks.filter(task => task.status === 'approved').length;
+            const pendingTasks = userTasks.filter(task => task.status === 'submitted').length;
+            const rejectedTasks = userTasks.filter(task => task.status === 'rejected').length;
+            const inProgressTasks = userTasks.filter(task => task.status === 'assigned' || task.status === 'in_progress').length;
+
+            const totalEarnings = userTasks
+                .filter(task => task.status === 'approved')
+                .reduce((sum, task) => sum + (task.paid_amount || task.tasks?.reward_amount || 0), 0);
+
+            const pendingEarnings = userTasks
+                .filter(task => task.status === 'submitted')
+                .reduce((sum, task) => sum + (task.tasks?.reward_amount || 0), 0);
+
+            document.getElementById('pendingEarnings').textContent = 'KSh ' + (pendingEarnings.toLocaleString());
+            document.getElementById('totalTasksCount').textContent = totalTasks;
+            document.getElementById('approvedTasksCount').textContent = approvedTasks;
+            document.getElementById('pendingTasksCount').textContent = pendingTasks;
+            document.getElementById('inProgressTasksCount').textContent = inProgressTasks;
+            document.getElementById('rejectedTasksCount').textContent = rejectedTasks;
+        }
+
+        function renderTasks() {
+            const taskType = document.getElementById('taskType').value;
+            const difficulty = document.getElementById('difficulty').value;
+            const membership = document.getElementById('membership').value;
+            const searchTerm = document.getElementById('search').value.toLowerCase();
+
+            let filteredTasks = allTasks.filter(function(task) {
+                if (taskType !== 'all' && task.task_type !== taskType) return false;
+                if (difficulty !== 'all' && task.difficulty !== difficulty) return false;
+                if (membership !== 'all' && task.required_membership !== membership) return false;
+                if (searchTerm && !task.title.toLowerCase().includes(searchTerm) && 
+                    !task.description.toLowerCase().includes(searchTerm)) return false;
+                return true;
+            });
+
+            if (filteredTasks.length === 0) {
+                tasksContainer.innerHTML = '<div class="no-tasks"><h3>📭 No Tasks Available</h3><p>No tasks match your filters.</p></div>';
+                return;
+            }
+
+            tasksContainer.innerHTML = filteredTasks.map(function(task) {
+                const userTask = userTasks.find(function(ut) { return ut.task_id === task.id; });
+                const isAssigned = userTask && ['assigned', 'in_progress', 'submitted'].includes(userTask.status);
+                const isCompleted = userTask && userTask.status === 'approved';
+                const isRejected = userTask && userTask.status === 'rejected';
+                const canAssign = !isAssigned && !isCompleted && !isRejected;
+
+                let actionButton = '';
+                let statusBadge = '';
+                
+                if (isCompleted) {
+                    statusBadge = '<div class="task-status-container approved">✅ Approved</div>';
+                    actionButton = '<button class="btn btn-success" disabled>Completed</button>';
+                } else if (isRejected) {
+                    statusBadge = '<div class="task-status-container rejected">❌ Rejected</div>';
+                    actionButton = '<button class="btn btn-danger" onclick="viewTaskDetails(\'' + task.id + '\')">View Details</button>';
+                } else if (isAssigned) {
+                    statusBadge = '<div class="task-status-container in-progress">🟡 In Progress</div>';
+                    actionButton = '<button class="btn btn-warning" onclick="viewTaskDetails(\'' + task.id + '\')">Continue</button>';
+                } else if (canAssign) {
+                    actionButton = '<button class="btn btn-primary" onclick="assignTask(\'' + task.id + '\')">Start Task</button>';
+                }
+
+                return '<div class="task-card">' +
+                    '<div class="task-header">' +
+                        '<div><div class="task-title">' + task.title + '</div><span class="task-type">' + formatTaskType(task.task_type) + '</span></div>' +
+                        '<div class="task-reward">KSh ' + task.reward_amount + '<br><span>reward</span></div>' +
+                    '</div>' +
+                    '<div class="task-description">' + task.description + '</div>' +
+                    statusBadge +
+                    '<div class="task-meta">' +
+                        '<div class="task-difficulty"><span class="difficulty-' + task.difficulty + '">' + getDifficultyIcon(task.difficulty) + ' ' + formatDifficulty(task.difficulty) + '</span></div>' +
+                        '<div class="task-requirements">Requires: <strong>' + formatMembership(task.required_membership) + '</strong></div>' +
+                    '</div>' +
+                    '<div class="task-actions">' + actionButton + '</div>' +
+                '</div>';
+            }).join('');
+        }
+
+        function renderMyTasks() {
+            if (!userTasks || userTasks.length === 0) {
+                myTasksContainer.innerHTML = '<div class="no-tasks"><h3>📭 No Tasks Started</h3><p>Start working on tasks!</p></div>';
+                return;
+            }
+
+            let filteredTasks = userTasks;
+            switch(currentTab) {
+                case 'in-progress': filteredTasks = userTasks.filter(task => task.status === 'assigned' || task.status === 'in_progress'); break;
+                case 'submitted': filteredTasks = userTasks.filter(task => task.status === 'submitted'); break;
+                case 'completed': filteredTasks = userTasks.filter(task => task.status === 'approved'); break;
+                case 'rejected': filteredTasks = userTasks.filter(task => task.status === 'rejected'); break;
+            }
+
+            if (filteredTasks.length === 0) {
+                myTasksContainer.innerHTML = '<div class="no-tasks"><h3>No tasks in this category</h3></div>';
+                return;
+            }
+
+            myTasksContainer.innerHTML = filteredTasks.map(userTask => {
+                const task = userTask.tasks;
+                if (!task) return '';
+
+                let statusBadge = '', statusColor = '', earningsInfo = '';
+                switch(userTask.status) {
+                    case 'approved': statusBadge = '✅ Approved'; statusColor = 'approved'; earningsInfo = '<div style="color: var(--success); margin: 5px 0;">Earned: KSh ' + (userTask.paid_amount || task.reward_amount) + '</div>'; break;
+                    case 'rejected': statusBadge = '❌ Rejected'; statusColor = 'rejected'; break;
+                    case 'submitted': statusBadge = '🟡 Under Review'; statusColor = 'submitted'; break;
+                    default: statusBadge = '🔵 In Progress'; statusColor = 'in-progress';
+                }
+
+                return '<div class="task-card">' +
+                    '<div class="task-header">' +
+                        '<div><div class="task-title">' + task.title + '</div><span class="task-type">' + formatTaskType(task.task_type) + '</span></div>' +
+                        '<div class="task-reward">KSh ' + task.reward_amount + '<br><span>reward</span></div>' +
+                    '</div>' +
+                    '<div class="task-status-container ' + statusColor + '"><strong>' + statusBadge + '</strong></div>' +
+                    earningsInfo +
+                    '<div class="task-actions"><button class="btn btn-primary" onclick="viewTaskDetails(\'' + task.id + '\')">View Details</button></div>' +
+                '</div>';
+            }).join('');
+        }
+
+        function showTab(tabName) {
+            currentTab = tabName;
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            document.querySelector('[data-tab="' + tabName + '"]').classList.add('active');
+            renderMyTasks();
+        }
+
+        function formatTaskType(type) {
+            const types = { 'academic_writing': 'Academic Writing', 'academic_research': 'Academic Research', 'content_writing': 'Content Writing', 'data_entry': 'Data Entry' };
+            return types[type] || type;
+        }
+
+        function formatDifficulty(difficulty) {
+            return difficulty ? difficulty.charAt(0).toUpperCase() + difficulty.slice(1) : 'Beginner';
+        }
+
+        function getDifficultyIcon(difficulty) {
+            return { 'beginner': '🟢', 'intermediate': '🟡', 'advanced': '🔴' }[difficulty] || '⚪';
+        }
+
+        function formatMembership(membership) {
+            return membership ? membership.charAt(0).toUpperCase() + membership.slice(1) : 'Starter';
+        }
+
+        async function assignTask(taskId) {
+            try {
+                const { data: existingTask } = await supabaseClient
+                    .from('user_tasks')
+                    .select('*')
+                    .eq('user_id', currentUser.id)
+                    .eq('task_id', taskId)
+                    .single();
+
+                if (existingTask) {
+                    showMessage('You already have this task!', 'info');
+                    return;
+                }
+
+                const { error } = await supabaseClient
+                    .from('user_tasks')
+                    .insert([{ user_id: currentUser.id, task_id: taskId, status: 'assigned', assigned_at: new Date().toISOString() }]);
+
+                if (error) throw error;
+                showMessage('Task assigned successfully!', 'success');
+                await loadUserTasks();
+                renderTasks();
+            } catch (error) {
+                console.error('Assignment error:', error);
+                showMessage('Failed to assign task', 'error');
+            }
+        }
+
+        function viewTaskDetails(taskId) {
+            const task = allTasks.find(t => t.id === taskId);
+            const userTask = userTasks.find(ut => ut.task_id === taskId);
+            currentTaskId = taskId;
+            
+            if (!task) {
+                showMessage('Task not found', 'error');
+                return;
+            }
+
+            let modalContent = '<h2 style="color: var(--primary); margin-bottom: 20px;">' + task.title + '</h2>' +
+                '<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 20px; background: var(--light); padding: 20px; border-radius: 12px;">' +
+                    '<div><strong>📋 Task Type:</strong> ' + formatTaskType(task.task_type) + '</div>' +
+                    '<div><strong>🎯 Difficulty:</strong> <span class="difficulty-' + task.difficulty + '">' + formatDifficulty(task.difficulty) + '</span></div>' +
+                    '<div><strong>💰 Reward:</strong> KSh ' + task.reward_amount + '</div>' +
+                    '<div><strong>📊 Status:</strong> ' + (userTask ? formatTaskStatus(userTask.status) : 'Not Started') + '</div>' +
+                '</div>';
+
+            if (task.deadline_days) {
+                modalContent += '<div style="margin-bottom: 10px; padding: 12px; background: var(--warning-light); border-radius: 8px;"><strong>⏰ Deadline:</strong> ' + task.deadline_days + ' days</div>';
+            }
+            
+            if (task.word_count) {
+                modalContent += '<div style="margin-bottom: 10px; padding: 12px; background: var(--light); border-radius: 8px;"><strong>📝 Word Count:</strong> ' + task.word_count + ' words</div>';
+            }
+            
+            if (task.requirements) {
+                let requirementsList = '';
+                try {
+                    const reqData = task.requirements;
+                    let reqArray;
+                    if (typeof reqData === 'string') {
+                        reqArray = JSON.parse(reqData);
+                    } else {
+                        reqArray = reqData;
+                    }
+                    if (Array.isArray(reqArray)) {
+                        requirementsList = reqArray.map(req => '<li>' + req + '</li>').join('');
+                    } else {
+                        requirementsList = '<li>' + reqData + '</li>';
+                    }
+                } catch (e) {
+                    requirementsList = '<li>' + task.requirements + '</li>';
+                }
+                modalContent += '<div style="margin-bottom: 20px;"><strong>📋 Requirements:</strong><ul style="margin: 10px 0; padding-left: 20px;">' + requirementsList + '</ul></div>';
+            }
+
+            modalContent += '<div style="margin-bottom: 25px;">' +
+                '<h3 style="color: var(--primary); margin-bottom: 15px;">Task Description</h3>' +
+                '<div style="background: white; padding: 20px; border-radius: 12px; border: 2px solid var(--border);">' +
+                    '<p style="line-height: 1.6; margin: 0;">' + task.description + '</p>' +
+                '</div>' +
+            '</div>';
+
+            if (userTask && userTask.admin_feedback) {
+                modalContent += '<div style="margin-bottom: 25px;">' +
+                    '<h3 style="color: var(--primary); margin-bottom: 15px;">Admin Feedback</h3>' +
+                    '<div style="background: #f8d7da; padding: 20px; border-radius: 12px; border-left: 6px solid var(--danger);">' +
+                        '<strong>💬 Feedback:</strong><br>' + userTask.admin_feedback +
+                    '</div>' +
+                '</div>';
+            }
+
+            if (userTask && (userTask.status === 'assigned' || userTask.status === 'rejected' || userTask.status === 'in_progress')) {
+                modalContent += createWorkspace(task, userTask);
+            }
+
+            document.getElementById('modalContent').innerHTML = modalContent;
+            taskModal.style.display = 'flex';
+            
+            // Initialize workspace if needed
+            if (userTask && (userTask.status === 'assigned' || userTask.status === 'rejected' || userTask.status === 'in_progress')) {
+                initializeWorkspace();
+            }
+        }
+
+        // FIXED: Using string concatenation instead of template literals to avoid syntax errors
+        function createWorkspace(task, userTask) {
+            var workspaceType = task.task_type === 'data_entry' ? 'data entry work' : 'academic work';
+            var buttonText = userTask.status === 'rejected' ? '🔄 Resubmit Work' : '📤 Submit Work';
+            
+            return '<div class="workspace-tools">' +
+                '<h3 style="color: var(--primary); margin-bottom: 15px;">🛠️ Workspace Tools</h3>' +
+                '<div class="toolbar">' +
+                    '<button class="tool-btn" onclick="switchWorkspaceTab(\'text\')">📝 Text Editor</button>' +
+                    '<button class="tool-btn" onclick="switchWorkspaceTab(\'spreadsheet\')">📊 Spreadsheet</button>' +
+                    '<button class="tool-btn" onclick="switchWorkspaceTab(\'upload\')">📁 File Upload</button>' +
+                    '<button class="tool-btn" onclick="addTableRow()">➕ Add Row</button>' +
+                    '<button class="tool-btn" onclick="addTableColumn()">➕ Add Column</button>' +
+                    '<button class="tool-btn" onclick="clearTable()">🗑️ Clear Table</button>' +
+                    '<button class="tool-btn" onclick="downloadTable()">💾 Download CSV</button>' +
+                '</div>' +
             '</div>' +
-            '<div class="task-reward">' +
-              'KSh ' + (task.reward_amount || '0') +
-              '<br><span>reward</span>' +
+
+            '<div class="workspace-tabs">' +
+                '<button class="workspace-tab active" data-tab="text">Text Editor</button>' +
+                '<button class="workspace-tab" data-tab="spreadsheet">Spreadsheet</button>' +
+                '<button class="workspace-tab" data-tab="upload">File Upload</button>' +
             '</div>' +
-          '</div>' +
-          '<div class="task-description">' +
-            (task.description || 'No description provided.') +
-          '</div>' +
-          (statusBadge ? '<div class="task-status-container">' + statusBadge + '</div>' : '') +
-          '<div class="task-meta">' +
-            '<div class="task-difficulty">' +
-              '<span class="difficulty-' + (task.difficulty || 'beginner') + '">' + getDifficultyIcon(task.difficulty) + ' ' + formatDifficulty(task.difficulty) + '</span>' +
+
+            '<div id="textWorkspace" class="workspace-area">' +
+                '<textarea class="text-editor" id="submissionText" placeholder="Start writing your ' + workspaceType + ' here...">' + (userTask.submission_text || '') + '</textarea>' +
             '</div>' +
-            '<div class="task-requirements">' +
-              'Requires: <strong>' + formatMembership(task.required_membership) + '</strong>' +
+
+            '<div id="spreadsheetWorkspace" class="workspace-area" style="display: none;">' +
+                '<table class="spreadsheet-table" id="dataTable">' +
+                    '<thead>' +
+                        '<tr>' +
+                            '<th contenteditable="true">Column 1</th>' +
+                            '<th contenteditable="true">Column 2</th>' +
+                        '</tr>' +
+                    '</thead>' +
+                    '<tbody>' +
+                        '<tr>' +
+                            '<td contenteditable="true">Data 1</td>' +
+                            '<td contenteditable="true">Data 2</td>' +
+                        '</tr>' +
+                    '</tbody>' +
+                '</table>' +
             '</div>' +
-          '</div>' +
-          '<div class="task-actions">' +
-            actionButton +
-          '</div>' +
-        '</div>';
-      }).join('');
-    }
 
-    // Render user's tasks in the status section
-    function renderMyTasks() {
-      if (!userTasks || userTasks.length === 0) {
-        myTasksContainer.innerHTML = '<div class="no-tasks"><h3>📭 No Tasks Started</h3><p>Start working on tasks to see your progress here!</p></div>';
-        return;
-      }
-
-      let filteredTasks = userTasks;
-
-      // Filter based on current tab
-      if (currentTab === 'in-progress') {
-        filteredTasks = userTasks.filter(function(task) { 
-          return ['assigned', 'in_progress'].includes(task.status); 
-        });
-      } else if (currentTab === 'submitted') {
-        filteredTasks = userTasks.filter(function(task) { 
-          return task.status === 'submitted'; 
-        });
-      } else if (currentTab === 'completed') {
-        filteredTasks = userTasks.filter(function(task) { 
-          return task.status === 'approved'; 
-        });
-      }
-
-      if (filteredTasks.length === 0) {
-        myTasksContainer.innerHTML = '<div class="no-tasks"><h3>📭 No Tasks in This Category</h3><p>No tasks match the selected filter.</p></div>';
-        return;
-      }
-
-      myTasksContainer.innerHTML = filteredTasks.map(function(userTask) {
-        const task = userTask.tasks;
-        if (!task) return '';
-
-        let statusBadge = '';
-        let statusColor = '';
-        
-        switch(userTask.status) {
-          case 'approved':
-            statusBadge = '✅ Approved';
-            statusColor = 'approved';
-            break;
-          case 'rejected':
-            statusBadge = '❌ Rejected';
-            statusColor = 'rejected';
-            break;
-          case 'submitted':
-            statusBadge = '🟡 Submitted';
-            statusColor = 'submitted';
-            break;
-          case 'assigned':
-          case 'in_progress':
-            statusBadge = '🟡 In Progress';
-            statusColor = 'in-progress';
-            break;
-          default:
-            statusBadge = '⚪ ' + userTask.status;
-            statusColor = 'in-progress';
-        }
-
-        return '<div class="task-card">' +
-          '<div class="task-header">' +
-            '<div>' +
-              '<div class="task-title">' + (task.title || 'No Title') + '</div>' +
-              '<span class="task-type">' + formatTaskType(task.task_type) + '</span>' +
+            '<div id="uploadWorkspace" class="workspace-area" style="display: none;">' +
+                '<div class="file-upload-area" id="fileUploadArea">' +
+                    '<p>📁 Drag & drop files here or click to upload</p>' +
+                    '<input type="file" id="fileInput" multiple style="display: none;">' +
+                    '<button class="btn btn-primary" onclick="document.getElementById(\'fileInput\').click()">Choose Files</button>' +
+                '</div>' +
+                '<div id="fileList"></div>' +
             '</div>' +
-            '<div class="task-reward">' +
-              'KSh ' + (task.reward_amount || '0') +
-              '<br><span>reward</span>' +
-            '</div>' +
-          '</div>' +
-          '<div class="task-status-container ' + statusColor + '">' +
-            '<strong>' + statusBadge + '</strong>' +
-            (userTask.status === 'approved' ? '<br><small>Earned: KSh ' + (userTask.paid_amount || task.reward_amount) + '</small>' : '') +
-            (userTask.status === 'rejected' && userTask.admin_feedback ? '<br><small>Feedback: ' + userTask.admin_feedback + '</small>' : '') +
-            (userTask.submitted_at ? '<br><small>Submitted: ' + new Date(userTask.submitted_at).toLocaleDateString() + '</small>' : '') +
-          '</div>' +
-          '<div class="task-actions">' +
-            '<button class="btn btn-primary" onclick="viewTaskDetails(\'' + task.id + '\')">View Details</button>' +
-          '</div>' +
-        '</div>';
-      }).join('');
-    }
 
-    // Show different tabs
-    function showTab(tabName) {
-      currentTab = tabName;
-      
-      // Update active tab button
-      document.querySelectorAll('.tab-btn').forEach(function(btn) {
-        btn.classList.remove('active');
-      });
-      document.querySelector('[data-tab="' + tabName + '"]').classList.add('active');
-      
-      renderMyTasks();
-    }
-
-    // Check membership
-    function hasRequiredMembership(requiredMembership) {
-      if (!userProfile || !userProfile.role) return false;
-      
-      const membershipLevels = { 'starter': 1, 'pro': 2, 'premium': 3 };
-      const userLevel = membershipLevels[userProfile.role] || 0;
-      const requiredLevel = membershipLevels[requiredMembership] || 0;
-      return userLevel >= requiredLevel;
-    }
-
-    function formatTaskType(type) {
-      if (!type) return 'Unknown';
-      
-      const types = {
-        'transcription': 'Transcription',
-        'academic_writing': 'Academic Writing',
-        'data_entry': 'Data Entry',
-        'web_design': 'Web Design',
-        'affiliate_marketing': 'Affiliate Marketing',
-        'network_marketing': 'Network Marketing',
-        'online_gaming': 'Online Gaming',
-        'content_writing': 'Content Writing',
-        'proofreading': 'Proofreading',
-        'research': 'Research',
-        'social_media': 'Social Media'
-      };
-      return types[type] || type;
-    }
-
-    function formatDifficulty(difficulty) {
-      if (!difficulty) return 'Beginner';
-      return difficulty.charAt(0).toUpperCase() + difficulty.slice(1);
-    }
-
-    function getDifficultyIcon(difficulty) {
-      const icons = { 'beginner': '🟢', 'intermediate': '🟡', 'advanced': '🔴' };
-      return icons[difficulty] || '⚪';
-    }
-
-    function formatMembership(membership) {
-      if (!membership) return 'Starter';
-      return membership.charAt(0).toUpperCase() + membership.slice(1);
-    }
-
-    // Assign task - FIXED: Prevents duplicate assignments
-    async function assignTask(taskId) {
-      try {
-        if (!supabaseClient || !currentUser) {
-          throw new Error('Not authenticated');
+            '<div style="margin-top: 20px;">' +
+                '<button onclick="submitTask(\'' + task.id + '\')" class="btn btn-primary" style="width: 100%; padding: 15px; font-size: 16px;">' +
+                    buttonText +
+                '</button>' +
+            '</div>';
         }
 
-        // FIRST: Check if user already has this task
-        const { data: existingTask, error: checkError } = await supabaseClient
-          .from('user_tasks')
-          .select('*')
-          .eq('user_id', currentUser.id)
-          .eq('task_id', taskId)
-          .single();
-
-        if (checkError && checkError.code !== 'PGRST116') {
-          // PGRST116 means "no rows returned" - which is fine
-          throw checkError;
+        function initializeWorkspace() {
+            // Setup file upload
+            const fileUploadArea = document.getElementById('fileUploadArea');
+            const fileInput = document.getElementById('fileInput');
+            
+            if (fileUploadArea && fileInput) {
+                fileUploadArea.addEventListener('dragover', function(e) {
+                    e.preventDefault();
+                    fileUploadArea.classList.add('dragover');
+                });
+                
+                fileUploadArea.addEventListener('dragleave', function() {
+                    fileUploadArea.classList.remove('dragover');
+                });
+                
+                fileUploadArea.addEventListener('drop', function(e) {
+                    e.preventDefault();
+                    fileUploadArea.classList.remove('dragover');
+                    handleFiles(e.dataTransfer.files);
+                });
+                
+                fileInput.addEventListener('change', function() {
+                    handleFiles(this.files);
+                });
+            }
         }
 
-        // If task already exists, show appropriate message
-        if (existingTask) {
-          if (existingTask.status === 'approved') {
-            showMessage('✅ You have already completed this task!', 'info');
-          } else if (existingTask.status === 'rejected') {
-            showMessage('❌ This task was rejected. You cannot redo it.', 'error');
-          } else if (existingTask.status === 'submitted') {
-            showMessage('🟡 This task is already submitted and awaiting review.', 'info');
-          } else {
-            showMessage('🟡 You have already started this task! Continue working on it.', 'info');
-          }
-          return;
+        function switchWorkspaceTab(tabName) {
+            document.querySelectorAll('.workspace-tab').forEach(tab => tab.classList.remove('active'));
+            document.querySelectorAll('.workspace-area').forEach(area => area.style.display = 'none');
+            
+            document.querySelector('[data-tab="' + tabName + '"]').classList.add('active');
+            document.getElementById(tabName + 'Workspace').style.display = 'block';
         }
 
-        showMessage('Assigning task...', 'info');
-
-        // Only create new record if it doesn't exist
-        const { error } = await supabaseClient
-          .from('user_tasks')
-          .insert([{
-            user_id: currentUser.id,
-            task_id: taskId,
-            status: 'assigned',
-            assigned_at: new Date().toISOString()
-          }]);
-
-        if (error) throw error;
-
-        showMessage('✅ Task assigned successfully!', 'success');
-        await loadUserTasks();
-        renderTasks();
-        renderMyTasks();
-
-      } catch (error) {
-        console.error('Task assignment error:', error);
-        showMessage('❌ Failed to assign task: ' + error.message, 'error');
-      }
-    }
-
-    // View task details
-    async function viewTaskDetails(taskId) {
-      const task = allTasks.find(function(t) { return t.id === taskId; });
-      const userTask = userTasks.find(function(ut) { return ut.task_id === taskId; });
-      
-      if (!task) {
-        showMessage('Task not found', 'error');
-        return;
-      }
-
-      let modalContent = '';
-      let submissionForm = '';
-
-      // Only show submission form for tasks that are assigned or rejected
-      if (userTask && (userTask.status === 'assigned' || userTask.status === 'rejected')) {
-        submissionForm = 
-          '<div class="table-tools">' +
-            '<h4 style="color: var(--primary); margin-bottom: 15px;">📊 Table Builder (For Data Tasks)</h4>' +
-            '<div class="table-controls">' +
-              '<button onclick="addTableRow()">➕ Add Row</button>' +
-              '<button onclick="addTableColumn()">➕ Add Column</button>' +
-              '<button onclick="clearTable()">🗑 Clear Table</button>' +
-            '</div>' +
-            '<div class="table-preview" id="tablePreview">' +
-              '<table id="editableTable">' +
-                '<thead>' +
-                  '<tr>' +
-                    '<th contenteditable="true">Column 1</th>' +
-                    '<th contenteditable="true">Column 2</th>' +
-                  '</tr>' +
-                '</thead>' +
-                '<tbody>' +
-                  '<tr>' +
-                    '<td contenteditable="true">Data 1</td>' +
-                    '<td contenteditable="true">Data 2</td>' +
-                  '</tr>' +
-                '</tbody>' +
-              '</table>' +
-            '</div>' +
-          '</div>' +
-          '<div style="margin-bottom: 20px;">' +
-            '<h3 style="color: var(--primary); margin-bottom: 10px;">Submit Your Work</h3>' +
-            '<textarea id="submissionText" placeholder="Paste your completed work here... You can also use the table builder above for data tasks." style="width: 100%; height: 200px; padding: 12px; border: 2px solid var(--border); border-radius: 8px; font-size: 14px; resize: vertical;">' +
-              (userTask.submission_text || '') +
-            '</textarea>' +
-            '<button onclick="submitTask(\'' + taskId + '\')" class="btn btn-primary" style="width: 100%; margin-top: 10px;">' +
-              (userTask.status === 'rejected' ? 'Resubmit Work' : 'Submit Work') +
-            '</button>' +
-          '</div>';
-      }
-
-      modalContent = 
-        '<h2 style="color: var(--primary); margin-bottom: 20px;">' + task.title + '</h2>' +
-        '<div style="margin-bottom: 20px;">' +
-          '<strong>Task Type:</strong> ' + formatTaskType(task.task_type) + '<br>' +
-          '<strong>Difficulty:</strong> <span class="difficulty-' + task.difficulty + '">' + formatDifficulty(task.difficulty) + '</span><br>' +
-          '<strong>Reward:</strong> KSh ' + task.reward_amount + '<br>' +
-          '<strong>Status:</strong> ' + (userTask ? formatTaskStatus(userTask.status) : 'Not Started') +
-        '</div>' +
-        '<div style="margin-bottom: 20px;">' +
-          '<h3 style="color: var(--primary); margin-bottom: 10px;">Task Description</h3>' +
-          '<p>' + (task.description || 'No description provided.') + '</p>' +
-        '</div>' +
-        (userTask && userTask.admin_feedback ? 
-          '<div style="margin-bottom: 20px;">' +
-            '<h3 style="color: var(--primary); margin-bottom: 10px;">Admin Feedback</h3>' +
-            '<div style="background: #f8d7da; padding: 15px; border-radius: 8px; font-size: 14px; color: #721c24;">' +
-              userTask.admin_feedback +
-            '</div>' +
-          '</div>' 
-        : '') +
-        submissionForm;
-
-      document.getElementById('modalContent').innerHTML = modalContent;
-      taskModal.style.display = 'flex';
-    }
-
-    // Table builder functions
-    function addTableRow() {
-      const table = document.getElementById('editableTable');
-      if (!table) return;
-      
-      const rowCount = table.rows.length;
-      const colCount = table.rows[0].cells.length;
-      
-      const newRow = table.insertRow(rowCount);
-      for (let i = 0; i < colCount; i++) {
-        const cell = newRow.insertCell(i);
-        cell.contentEditable = true;
-        cell.innerHTML = 'New Data';
-      }
-    }
-
-    function addTableColumn() {
-      const table = document.getElementById('editableTable');
-      if (!table) return;
-      
-      const rowCount = table.rows.length;
-      
-      for (let i = 0; i < rowCount; i++) {
-        const cell = table.rows[i].insertCell(-1);
-        cell.contentEditable = true;
-        cell.innerHTML = i === 0 ? 'New Column' : 'New Data';
-      }
-    }
-
-    function clearTable() {
-      const table = document.getElementById('editableTable');
-      if (!table) return;
-      
-      const rowCount = table.rows.length;
-      const colCount = table.rows[0].cells.length;
-      
-      for (let i = 0; i < rowCount; i++) {
-        for (let j = 0; j < colCount; j++) {
-          table.rows[i].cells[j].innerHTML = i === 0 ? 'Column ' + (j + 1) : 'Data';
-        }
-      }
-    }
-
-    // Format task status
-    function formatTaskStatus(status) {
-      const statusMap = {
-        'assigned': '🟡 In Progress',
-        'submitted': '🟠 Submitted',
-        'approved': '✅ Completed',
-        'rejected': '❌ Rejected'
-      };
-      return statusMap[status] || status;
-    }
-
-    // Submit task work
-    async function submitTask(taskId) {
-      try {
-        let submissionText = document.getElementById('submissionText').value.trim();
-        
-        // Include table data if available
-        const table = document.getElementById('editableTable');
-        if (table) {
-          const tableHTML = table.outerHTML;
-          if (tableHTML) {
-            submissionText += '\n\n=== TABLE DATA ===\n' + tableHTML;
-          }
-        }
-        
-        if (!submissionText) {
-          showMessage('Please enter your completed work', 'error');
-          return;
+        function addTableRow() {
+            const table = document.getElementById('dataTable');
+            if (!table) return;
+            
+            const rowCount = table.rows.length;
+            const colCount = table.rows[0].cells.length;
+            
+            const newRow = table.insertRow(rowCount);
+            for (let i = 0; i < colCount; i++) {
+                const cell = newRow.insertCell(i);
+                cell.contentEditable = true;
+                cell.innerHTML = 'New Data';
+            }
         }
 
-        showMessage('Submitting your work...', 'info');
-
-        const { error } = await supabaseClient
-          .from('user_tasks')
-          .update({
-            status: 'submitted',
-            submission_text: submissionText,
-            submitted_at: new Date().toISOString()
-          })
-          .eq('user_id', currentUser.id)
-          .eq('task_id', taskId);
-
-        if (error) throw error;
-
-        showMessage('✅ Work submitted successfully! Waiting for admin approval.', 'success');
-        closeTaskModal();
-        await loadUserTasks();
-        renderTasks();
-        renderMyTasks();
-
-      } catch (error) {
-        console.error('Task submission error:', error);
-        showMessage('❌ Failed to submit work: ' + error.message, 'error');
-      }
-    }
-
-    // Close task modal
-    function closeTaskModal() {
-      taskModal.style.display = 'none';
-    }
-
-    // Auto-refresh system
-    function startAutoRefreshTimer() {
-      function updateCountdown() {
-        const now = new Date();
-        const tomorrow = new Date(now);
-        tomorrow.setDate(tomorrow.getDate() + 1);
-        tomorrow.setHours(0, 0, 0, 0);
-        
-        const diff = tomorrow - now;
-        const hours = Math.floor(diff / (1000 * 60 * 60));
-        const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-        const seconds = Math.floor((diff % (1000 * 60)) / 1000);
-        
-        refreshCountdown.textContent = 'Next: ' + 
-          hours.toString().padStart(2, '0') + ':' + 
-          minutes.toString().padStart(2, '0') + ':' + 
-          seconds.toString().padStart(2, '0');
-        
-        // Check if it's midnight (for auto-refresh)
-        if (hours === 0 && minutes === 0 && seconds === 0) {
-          loadTasks();
-          showMessage('🔄 Tasks have been refreshed for the new day!', 'info');
+        function addTableColumn() {
+            const table = document.getElementById('dataTable');
+            if (!table) return;
+            
+            const rowCount = table.rows.length;
+            
+            for (let i = 0; i < rowCount; i++) {
+                const cell = table.rows[i].insertCell(-1);
+                cell.contentEditable = true;
+                cell.innerHTML = i === 0 ? 'New Column' : 'New Data';
+            }
         }
-      }
-      
-      updateCountdown();
-      setInterval(updateCountdown, 1000);
-    }
 
-    function showMessage(message, type) {
-      messageContainer.innerHTML = '<div class="message ' + type + '">' + message + '</div>';
-      if (type === 'success' || type === 'info') {
-        setTimeout(function() { 
-          messageContainer.innerHTML = ''; 
-        }, 5000);
-      }
-    }
-
-    // Logout
-    async function handleLogout() {
-      try {
-        const { error } = await supabaseClient.auth.signOut();
-        if (error) throw error;
-        window.location.href = "login.html";
-      } catch (error) {
-        console.error("Logout error:", error);
-        showMessage('Failed to logout', 'error');
-      }
-    }
-
-    // Auth state listener
-    if (supabaseClient) {
-      supabaseClient.auth.onAuthStateChange(function(event, session) {
-        if (event === 'SIGNED_OUT') {
-          window.location.href = "login.html";
+        function clearTable() {
+            const table = document.getElementById('dataTable');
+            if (!table) return;
+            
+            const rowCount = table.rows.length;
+            const colCount = table.rows[0].cells.length;
+            
+            for (let i = 0; i < rowCount; i++) {
+                for (let j = 0; j < colCount; j++) {
+                    table.rows[i].cells[j].innerHTML = i === 0 ? 'Column ' + (j + 1) : 'Data';
+                }
+            }
         }
-      });
-    }
 
-    // Make functions globally available
-    window.showTab = showTab;
-    window.viewTaskDetails = viewTaskDetails;
-    window.assignTask = assignTask;
-    window.submitTask = submitTask;
-    window.closeTaskModal = closeTaskModal;
-    window.addTableRow = addTableRow;
-    window.addTableColumn = addTableColumn;
-    window.clearTable = clearTable;
-  </script>
-  <script>
-// PWA Installation
-let deferredPrompt;
-const installBtn = document.getElementById('installBtn');
+        function downloadTable() {
+            const table = document.getElementById('dataTable');
+            if (!table) return;
+            
+            let csv = [];
+            for (let i = 0; i < table.rows.length; i++) {
+                let row = [], cols = table.rows[i].querySelectorAll('td, th');
+                for (let j = 0; j < cols.length; j++) {
+                    row.push('"' + (cols[j].innerText || '').replace(/"/g, '""') + '"');
+                }
+                csv.push(row.join(','));
+            }
+            
+            const csvContent = 'data:text/csv;charset=utf-8,' + csv.join('\n');
+            const encodedUri = encodeURI(csvContent);
+            const link = document.createElement('a');
+            link.setAttribute('href', encodedUri);
+            link.setAttribute('download', 'task_data.csv');
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
 
-window.addEventListener('beforeinstallprompt', (e) => {
-  e.preventDefault();
-  deferredPrompt = e;
-  if (installBtn) installBtn.style.display = 'block';
-});
+        function handleFiles(files) {
+            const fileList = document.getElementById('fileList');
+            if (!fileList) return;
+            
+            fileList.innerHTML = '';
+            for (let file of files) {
+                const fileItem = document.createElement('div');
+                fileItem.style.padding = '10px';
+                fileItem.style.border = '1px solid var(--border)';
+                fileItem.style.borderRadius = '4px';
+                fileItem.style.margin = '5px 0';
+                fileItem.innerHTML = '📄 ' + file.name + ' (' + (file.size / 1024).toFixed(1) + ' KB)';
+                fileList.appendChild(fileItem);
+            }
+        }
 
-if (installBtn) {
-  installBtn.addEventListener('click', async () => {
-    installBtn.style.display = 'none';
-    deferredPrompt.prompt();
-    await deferredPrompt.userChoice;
-    deferredPrompt = null;
-  });
-}
+        function formatTaskStatus(status) {
+            const statusMap = {
+                'assigned': '🔵 In Progress',
+                'in_progress': '🔵 In Progress',
+                'submitted': '🟡 Under Review',
+                'approved': '✅ Approved',
+                'rejected': '❌ Rejected'
+            };
+            return statusMap[status] || status;
+        }
 
-// Service Worker
-if ('serviceWorker' in navigator) {
-  window.addEventListener('load', () => {
-    navigator.serviceWorker.register('/service-worker.js');
-  });
-}
-</script>
+        async function submitTask(taskId) {
+            try {
+                let submissionText = document.getElementById('submissionText')?.value.trim() || '';
+                
+                // Include table data if available
+                const table = document.getElementById('dataTable');
+                if (table) {
+                    let tableData = [];
+                    for (let i = 0; i < table.rows.length; i++) {
+                        let row = [];
+                        for (let j = 0; j < table.rows[i].cells.length; j++) {
+                            row.push(table.rows[i].cells[j].innerText);
+                        }
+                        tableData.push(row.join(','));
+                    }
+                    if (tableData.length > 0) {
+                        submissionText += '\n\n=== SPREADSHEET DATA ===\n' + tableData.join('\n');
+                    }
+                }
+                
+                if (!submissionText) {
+                    showMessage('Please enter your completed work', 'error');
+                    return;
+                }
 
+                showMessage('Submitting your work...', 'info');
+
+                const { error } = await supabaseClient
+                    .from('user_tasks')
+                    .update({
+                        status: 'submitted',
+                        submission_text: submissionText,
+                        submitted_at: new Date().toISOString()
+                    })
+                    .eq('user_id', currentUser.id)
+                    .eq('task_id', taskId);
+
+                if (error) throw error;
+
+                showMessage('✅ Work submitted successfully! Admin reviews on Tuesdays and Thursdays.', 'success');
+                closeTaskModal();
+                await loadUserTasks();
+                renderTasks();
+                renderMyTasks();
+
+            } catch (error) {
+                console.error('Task submission error:', error);
+                showMessage('❌ Failed to submit work: ' + error.message, 'error');
+            }
+        }
+
+        function closeTaskModal() {
+            taskModal.style.display = 'none';
+            currentTaskId = null;
+        }
+
+        function startAutoRefreshTimer() {
+            function updateCountdown() {
+                const now = new Date();
+                const tomorrow = new Date(now);
+                tomorrow.setDate(tomorrow.getDate() + 1);
+                tomorrow.setHours(0,0,0,0);
+                const diff = tomorrow - now;
+                const hours = Math.floor(diff/(1000*60*60));
+                const minutes = Math.floor((diff%(1000*60*60))/(1000*60));
+                const seconds = Math.floor((diff%(1000*60))/1000);
+                refreshCountdown.textContent = 'Next: ' + hours.toString().padStart(2,'0') + ':' + minutes.toString().padStart(2,'0') + ':' + seconds.toString().padStart(2,'0');
+            }
+            updateCountdown();
+            setInterval(updateCountdown, 1000);
+        }
+
+        function showMessage(message, type) {
+            messageContainer.innerHTML = '<div class="message ' + type + '">' + message + '</div>';
+            setTimeout(() => messageContainer.innerHTML = '', 5000);
+        }
+
+        async function handleLogout() {
+            try {
+                await supabaseClient.auth.signOut();
+                window.location.href = "login.html";
+            } catch (error) {
+                console.error("Logout error:", error);
+            }
+        }
+
+        // Global functions for workspace
+        window.showTab = showTab;
+        window.viewTaskDetails = viewTaskDetails;
+        window.assignTask = assignTask;
+        window.submitTask = submitTask;
+        window.closeTaskModal = closeTaskModal;
+        window.switchWorkspaceTab = switchWorkspaceTab;
+        window.addTableRow = addTableRow;
+        window.addTableColumn = addTableColumn;
+        window.clearTable = clearTable;
+        window.downloadTable = downloadTable;
+    </script>
 </body>
 </html>
-
