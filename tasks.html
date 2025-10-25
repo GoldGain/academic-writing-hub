@@ -217,6 +217,8 @@
         .file-upload-area { border: 2px dashed var(--border); border-radius: 8px; padding: 40px; text-align: center; margin-bottom: 15px; }
         .file-upload-area.dragover { border-color: var(--primary); background: var(--light); }
         
+        .membership-required { background: linear-gradient(135deg, var(--warning), #ffd54f); color: var(--dark); padding: 10px 15px; border-radius: 8px; margin: 10px 0; text-align: center; font-weight: 600; }
+        
         .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 1000; justify-content: center; align-items: flex-start; padding: 20px 10px; overflow-y: auto; }
         .modal-content { background: white; border-radius: 16px; width: 95%; max-width: 900px; max-height: 90vh; padding: 30px; box-shadow: 0 15px 40px rgba(0,0,0,0.2); position: relative; animation: modalFade 0.3s; overflow-y: auto; margin: 20px auto; }
         @keyframes modalFade { from {opacity: 0; transform: translateY(-20px);} to {opacity: 1; transform: translateY(0);} }
@@ -581,11 +583,11 @@
 
             const totalEarnings = userTasks
                 .filter(task => task.status === 'approved')
-                .reduce((sum, task) => sum + (task.paid_amount || task.tasks?.reward_amount || 0), 0);
+                .reduce((sum, task) => sum + (task.paid_amount || (task.tasks ? task.tasks.reward_amount : 0)), 0);
 
             const pendingEarnings = userTasks
                 .filter(task => task.status === 'submitted')
-                .reduce((sum, task) => sum + (task.tasks?.reward_amount || 0), 0);
+                .reduce((sum, task) => sum + (task.tasks ? task.tasks.reward_amount : 0), 0);
 
             document.getElementById('pendingEarnings').textContent = 'KSh ' + (pendingEarnings.toLocaleString());
             document.getElementById('totalTasksCount').textContent = totalTasks;
@@ -621,11 +623,21 @@
                 const isCompleted = userTask && userTask.status === 'approved';
                 const isRejected = userTask && userTask.status === 'rejected';
                 const canAssign = !isAssigned && !isCompleted && !isRejected;
+                
+                // Check membership requirement
+                const userMembership = userProfile ? userProfile.role : 'starter';
+                const taskMembership = task.required_membership || 'starter';
+                const membershipLevels = { 'starter': 1, 'pro': 2, 'premium': 3 };
+                const hasRequiredMembership = membershipLevels[userMembership] >= membershipLevels[taskMembership];
 
                 let actionButton = '';
                 let statusBadge = '';
+                let membershipNotice = '';
                 
-                if (isCompleted) {
+                if (!hasRequiredMembership) {
+                    membershipNotice = '<div class="membership-required">🔒 Upgrade to ' + formatMembership(taskMembership) + ' membership to access this task</div>';
+                    actionButton = '<button class="btn btn-primary" onclick="upgradeMembership()" style="background: var(--warning); color: var(--dark);">Upgrade to Unlock</button>';
+                } else if (isCompleted) {
                     statusBadge = '<div class="task-status-container approved">✅ Approved</div>';
                     actionButton = '<button class="btn btn-success" disabled>Completed</button>';
                 } else if (isRejected) {
@@ -644,6 +656,7 @@
                         '<div class="task-reward">KSh ' + task.reward_amount + '<br><span>reward</span></div>' +
                     '</div>' +
                     '<div class="task-description">' + task.description + '</div>' +
+                    membershipNotice +
                     statusBadge +
                     '<div class="task-meta">' +
                         '<div class="task-difficulty"><span class="difficulty-' + task.difficulty + '">' + getDifficultyIcon(task.difficulty) + ' ' + formatDifficulty(task.difficulty) + '</span></div>' +
@@ -660,12 +673,23 @@
                 return;
             }
 
-            let filteredTasks = userTasks;
+            let filteredTasks = userTasks.filter(userTask => userTask.tasks); // Filter out tasks with null data
+            
             switch(currentTab) {
-                case 'in-progress': filteredTasks = userTasks.filter(task => task.status === 'assigned' || task.status === 'in_progress'); break;
-                case 'submitted': filteredTasks = userTasks.filter(task => task.status === 'submitted'); break;
-                case 'completed': filteredTasks = userTasks.filter(task => task.status === 'approved'); break;
-                case 'rejected': filteredTasks = userTasks.filter(task => task.status === 'rejected'); break;
+                case 'in-progress': 
+                    filteredTasks = filteredTasks.filter(task => 
+                        task.status === 'assigned' || task.status === 'in_progress'
+                    ); 
+                    break;
+                case 'submitted': 
+                    filteredTasks = filteredTasks.filter(task => task.status === 'submitted'); 
+                    break;
+                case 'completed': 
+                    filteredTasks = filteredTasks.filter(task => task.status === 'approved'); 
+                    break;
+                case 'rejected': 
+                    filteredTasks = filteredTasks.filter(task => task.status === 'rejected'); 
+                    break;
             }
 
             if (filteredTasks.length === 0) {
@@ -677,12 +701,28 @@
                 const task = userTask.tasks;
                 if (!task) return '';
 
-                let statusBadge = '', statusColor = '', earningsInfo = '';
+                let statusBadge = '', statusColor = '', earningsInfo = '', actionButton = '';
                 switch(userTask.status) {
-                    case 'approved': statusBadge = '✅ Approved'; statusColor = 'approved'; earningsInfo = '<div style="color: var(--success); margin: 5px 0;">Earned: KSh ' + (userTask.paid_amount || task.reward_amount) + '</div>'; break;
-                    case 'rejected': statusBadge = '❌ Rejected'; statusColor = 'rejected'; break;
-                    case 'submitted': statusBadge = '🟡 Under Review'; statusColor = 'submitted'; break;
-                    default: statusBadge = '🔵 In Progress'; statusColor = 'in-progress';
+                    case 'approved': 
+                        statusBadge = '✅ Approved'; 
+                        statusColor = 'approved'; 
+                        earningsInfo = '<div style="color: var(--success); margin: 5px 0;">Earned: KSh ' + (userTask.paid_amount || (task.reward_amount || 0)) + '</div>';
+                        actionButton = '<button class="btn btn-success" disabled>Completed</button>';
+                        break;
+                    case 'rejected': 
+                        statusBadge = '❌ Rejected'; 
+                        statusColor = 'rejected';
+                        actionButton = '<button class="btn btn-primary" onclick="viewTaskDetails(\'' + task.id + '\')">View Details</button>';
+                        break;
+                    case 'submitted': 
+                        statusBadge = '🟡 Under Review'; 
+                        statusColor = 'submitted';
+                        actionButton = '<button class="btn btn-warning" disabled>Under Review</button>';
+                        break;
+                    default: 
+                        statusBadge = '🔵 In Progress'; 
+                        statusColor = 'in-progress';
+                        actionButton = '<button class="btn btn-primary" onclick="viewTaskDetails(\'' + task.id + '\')">Continue Task</button>';
                 }
 
                 return '<div class="task-card">' +
@@ -692,7 +732,11 @@
                     '</div>' +
                     '<div class="task-status-container ' + statusColor + '"><strong>' + statusBadge + '</strong></div>' +
                     earningsInfo +
-                    '<div class="task-actions"><button class="btn btn-primary" onclick="viewTaskDetails(\'' + task.id + '\')">View Details</button></div>' +
+                    '<div class="task-meta">' +
+                        '<div class="task-difficulty"><span class="difficulty-' + task.difficulty + '">' + getDifficultyIcon(task.difficulty) + ' ' + formatDifficulty(task.difficulty) + '</span></div>' +
+                        '<div class="task-requirements">Requires: <strong>' + formatMembership(task.required_membership) + '</strong></div>' +
+                    '</div>' +
+                    '<div class="task-actions">' + actionButton + '</div>' +
                 '</div>';
             }).join('');
         }
@@ -723,29 +767,49 @@
 
         async function assignTask(taskId) {
             try {
-                const { data: existingTask } = await supabaseClient
-                    .from('user_tasks')
-                    .select('*')
-                    .eq('user_id', currentUser.id)
-                    .eq('task_id', taskId)
-                    .single();
-
+                // Check if user already has this task
+                const existingTask = userTasks.find(ut => ut.task_id === taskId);
                 if (existingTask) {
                     showMessage('You already have this task!', 'info');
+                    viewTaskDetails(taskId);
+                    return;
+                }
+
+                // Check membership requirement
+                const task = allTasks.find(t => t.id === taskId);
+                if (!task) {
+                    showMessage('Task not found', 'error');
+                    return;
+                }
+
+                const userMembership = userProfile ? userProfile.role : 'starter';
+                const taskMembership = task.required_membership || 'starter';
+                const membershipLevels = { 'starter': 1, 'pro': 2, 'premium': 3 };
+                
+                if (membershipLevels[userMembership] < membershipLevels[taskMembership]) {
+                    showMessage('You need ' + formatMembership(taskMembership) + ' membership to access this task', 'error');
                     return;
                 }
 
                 const { error } = await supabaseClient
                     .from('user_tasks')
-                    .insert([{ user_id: currentUser.id, task_id: taskId, status: 'assigned', assigned_at: new Date().toISOString() }]);
+                    .insert([{ 
+                        user_id: currentUser.id, 
+                        task_id: taskId, 
+                        status: 'assigned', 
+                        assigned_at: new Date().toISOString() 
+                    }]);
 
                 if (error) throw error;
+                
                 showMessage('Task assigned successfully!', 'success');
                 await loadUserTasks();
                 renderTasks();
+                viewTaskDetails(taskId);
+                
             } catch (error) {
                 console.error('Assignment error:', error);
-                showMessage('Failed to assign task', 'error');
+                showMessage('Failed to assign task: ' + error.message, 'error');
             }
         }
 
@@ -768,7 +832,7 @@
                 '</div>';
 
             if (task.deadline_days) {
-                modalContent += '<div style="margin-bottom: 10px; padding: 12px; background: var(--warning-light); border-radius: 8px;"><strong>⏰ Deadline:</strong> ' + task.deadline_days + ' days</div>';
+                modalContent += '<div style="margin-bottom: 10px; padding: 12px; background: #fff3cd; border-radius: 8px;"><strong>⏰ Deadline:</strong> ' + task.deadline_days + ' days from assignment</div>';
             }
             
             if (task.word_count) {
@@ -812,25 +876,35 @@
                 '</div>';
             }
 
-            if (userTask && (userTask.status === 'assigned' || userTask.status === 'rejected' || userTask.status === 'in_progress')) {
+            // Only show workspace for tasks that are assigned, in progress, or rejected (for viewing)
+            if (userTask && (userTask.status === 'assigned' || userTask.status === 'in_progress' || userTask.status === 'rejected')) {
                 modalContent += createWorkspace(task, userTask);
+            } else if (!userTask) {
+                // Show assign button for unassigned tasks
+                modalContent += '<div style="margin-top: 20px; text-align: center;">' +
+                    '<button onclick="assignTask(\'' + task.id + '\')" class="btn btn-primary" style="padding: 15px 30px; font-size: 16px;">Start This Task</button>' +
+                '</div>';
             }
 
             document.getElementById('modalContent').innerHTML = modalContent;
             taskModal.style.display = 'flex';
             
             // Initialize workspace if needed
-            if (userTask && (userTask.status === 'assigned' || userTask.status === 'rejected' || userTask.status === 'in_progress')) {
+            if (userTask && (userTask.status === 'assigned' || userTask.status === 'in_progress')) {
                 initializeWorkspace();
             }
         }
 
-        // FIXED: Using string concatenation instead of template literals to avoid syntax errors
         function createWorkspace(task, userTask) {
             var workspaceType = task.task_type === 'data_entry' ? 'data entry work' : 'academic work';
-            var buttonText = userTask.status === 'rejected' ? '🔄 Resubmit Work' : '📤 Submit Work';
+            var buttonText = '📤 Submit Work';
+            var canSubmit = userTask.status !== 'rejected';
             
-            return '<div class="workspace-tools">' +
+            if (userTask.status === 'rejected') {
+                buttonText = '❌ Task Rejected - Cannot Resubmit';
+            }
+
+            var workspaceHTML = '<div class="workspace-tools">' +
                 '<h3 style="color: var(--primary); margin-bottom: 15px;">🛠️ Workspace Tools</h3>' +
                 '<div class="toolbar">' +
                     '<button class="tool-btn" onclick="switchWorkspaceTab(\'text\')">📝 Text Editor</button>' +
@@ -877,13 +951,21 @@
                     '<button class="btn btn-primary" onclick="document.getElementById(\'fileInput\').click()">Choose Files</button>' +
                 '</div>' +
                 '<div id="fileList"></div>' +
-            '</div>' +
-
-            '<div style="margin-top: 20px;">' +
-                '<button onclick="submitTask(\'' + task.id + '\')" class="btn btn-primary" style="width: 100%; padding: 15px; font-size: 16px;">' +
-                    buttonText +
-                '</button>' +
             '</div>';
+
+            if (canSubmit) {
+                workspaceHTML += '<div style="margin-top: 20px;">' +
+                    '<button onclick="submitTask(\'' + task.id + '\')" class="btn btn-primary" style="width: 100%; padding: 15px; font-size: 16px;">' +
+                        buttonText +
+                    '</button>' +
+                '</div>';
+            } else {
+                workspaceHTML += '<div style="margin-top: 20px; text-align: center; padding: 20px; background: #f8d7da; border-radius: 8px;">' +
+                    '<p style="color: #721c24; margin: 0;"><strong>This task has been rejected and cannot be resubmitted.</strong></p>' +
+                '</div>';
+            }
+
+            return workspaceHTML;
         }
 
         function initializeWorkspace() {
@@ -1015,6 +1097,14 @@
 
         async function submitTask(taskId) {
             try {
+                const userTask = userTasks.find(ut => ut.task_id === taskId);
+                
+                // Prevent submission for rejected tasks
+                if (userTask && userTask.status === 'rejected') {
+                    showMessage('This task has been rejected and cannot be resubmitted.', 'error');
+                    return;
+                }
+
                 let submissionText = document.getElementById('submissionText')?.value.trim() || '';
                 
                 // Include table data if available
@@ -1087,7 +1177,11 @@
 
         function showMessage(message, type) {
             messageContainer.innerHTML = '<div class="message ' + type + '">' + message + '</div>';
-            setTimeout(() => messageContainer.innerHTML = '', 5000);
+            setTimeout(() => {
+                if (messageContainer.innerHTML.includes(message)) {
+                    messageContainer.innerHTML = '';
+                }
+            }, 5000);
         }
 
         async function handleLogout() {
@@ -1097,6 +1191,10 @@
             } catch (error) {
                 console.error("Logout error:", error);
             }
+        }
+
+        function upgradeMembership() {
+            window.location.href = "membership.html";
         }
 
         // Global functions for workspace
@@ -1110,6 +1208,9 @@
         window.addTableColumn = addTableColumn;
         window.clearTable = clearTable;
         window.downloadTable = downloadTable;
+        window.upgradeMembership = upgradeMembership;
+        window.handleFiles = handleFiles;
     </script>
 </body>
 </html>
+
