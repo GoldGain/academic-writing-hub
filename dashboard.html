@@ -25,7 +25,6 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   
   <style>
-    /* Previous CSS remains the same */
     :root {
       --primary: #004aad;
       --primary-light: #3a6fc8;
@@ -66,11 +65,11 @@
       overflow-x: hidden;
     }
 
-    /* Header Styles */
+    /* FIXED: Header Styles - Improved for mobile */
     header {
       background: var(--gradient-primary);
       color: #fff;
-      padding: 15px 25px;
+      padding: 15px 20px;
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -79,36 +78,53 @@
       top: 0;
       z-index: 100;
       backdrop-filter: blur(10px);
+      min-height: 70px;
+    }
+
+    .header-left {
+      display: flex;
+      flex-direction: column;
+      flex-shrink: 1;
+      min-width: 0; /* Allows text truncation */
     }
 
     .header-left h1 {
       margin: 0;
-      font-size: 24px;
+      font-size: 22px;
       font-weight: 700;
       letter-spacing: -0.5px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 100%;
     }
 
     .header-left .slogan {
-      font-size: 13px;
+      font-size: 12px;
       opacity: 0.9;
-      margin-top: 4px;
+      margin-top: 2px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
 
     .header-right {
       display: flex;
       align-items: center;
-      gap: 15px;
+      gap: 12px;
+      flex-shrink: 0;
     }
 
     .user-menu {
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 8px;
       cursor: pointer;
-      padding: 8px 15px;
+      padding: 6px 12px;
       border-radius: 12px;
       transition: all 0.3s ease;
       background: rgba(255, 255, 255, 0.1);
+      max-width: 180px;
     }
 
     .user-menu:hover {
@@ -117,8 +133,8 @@
     }
 
     .user-avatar {
-      width: 40px;
-      height: 40px;
+      width: 36px;
+      height: 36px;
       border-radius: 50%;
       background: var(--gradient-secondary);
       display: flex;
@@ -127,6 +143,15 @@
       font-weight: bold;
       color: white;
       box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      flex-shrink: 0;
+    }
+
+    .user-name {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 100px;
+      font-size: 14px;
     }
 
     .mobile-menu-btn {
@@ -140,6 +165,7 @@
       height: 40px;
       border-radius: 10px;
       transition: background 0.3s;
+      flex-shrink: 0;
     }
 
     .mobile-menu-btn:hover {
@@ -152,7 +178,7 @@
       min-height: calc(100vh - 70px);
     }
 
-    /* Sidebar Styles */
+    /* FIXED: Sidebar Styles - Improved mobile behavior */
     nav {
       width: 260px;
       background: #fff;
@@ -161,6 +187,7 @@
       transition: transform 0.3s ease;
       box-shadow: 2px 0 10px rgba(0, 0, 0, 0.05);
       z-index: 99;
+      overflow-y: auto;
     }
 
     nav a {
@@ -950,10 +977,44 @@
       100% { background-position: 20px 20px; }
     }
 
-    /* Mobile Responsive */
+    /* FIXED: Mobile Responsive - Improved navigation and header */
+    @media (max-width: 1024px) {
+      .header-left h1 {
+        font-size: 20px;
+      }
+      
+      .user-name {
+        max-width: 120px;
+      }
+    }
+
     @media (max-width: 768px) {
-      .header-right .user-name {
-        display: none;
+      header {
+        padding: 12px 15px;
+      }
+      
+      .header-left h1 {
+        font-size: 18px;
+      }
+      
+      .header-left .slogan {
+        font-size: 11px;
+      }
+
+      .user-menu {
+        max-width: 140px;
+        padding: 5px 10px;
+      }
+
+      .user-name {
+        max-width: 80px;
+        font-size: 13px;
+      }
+
+      .user-avatar {
+        width: 32px;
+        height: 32px;
+        font-size: 14px;
       }
 
       .mobile-menu-btn {
@@ -969,14 +1030,22 @@
         z-index: 99;
         background: white;
         width: 280px;
+        box-shadow: 5px 0 15px rgba(0, 0, 0, 0.1);
       }
 
       nav.active {
         transform: translateX(0);
       }
 
+      /* FIXED: Ensure nav links work properly on mobile */
+      nav a {
+        padding: 16px 25px;
+        font-size: 16px;
+      }
+
       main {
         padding: 20px;
+        width: 100%;
       }
 
       .stats-grid {
@@ -1031,6 +1100,39 @@
     }
 
     @media (max-width: 480px) {
+      header {
+        padding: 10px 12px;
+      }
+      
+      .header-left h1 {
+        font-size: 16px;
+      }
+      
+      .header-left .slogan {
+        font-size: 10px;
+      }
+
+      .user-menu {
+        max-width: 120px;
+        gap: 6px;
+      }
+
+      .user-name {
+        max-width: 60px;
+        font-size: 12px;
+      }
+
+      .user-avatar {
+        width: 28px;
+        height: 28px;
+      }
+
+      .mobile-menu-btn {
+        width: 36px;
+        height: 36px;
+        font-size: 18px;
+      }
+
       .quick-actions {
         grid-template-columns: 1fr;
       }
@@ -1071,6 +1173,21 @@
         justify-content: center;
       }
     }
+
+    /* FIXED: Extra small devices */
+    @media (max-width: 360px) {
+      .header-left h1 {
+        font-size: 15px;
+      }
+      
+      .user-menu {
+        max-width: 100px;
+      }
+      
+      .user-name {
+        max-width: 50px;
+      }
+    }
   </style>
 </head>
 <body>
@@ -1085,20 +1202,22 @@
         <div class="user-avatar" id="userAvatar">U</div>
         <span class="user-name" id="userName">Loading...</span>
       </div>
-      <button class="mobile-menu-btn" id="mobileMenuBtn">☰</button>
+      <button class="mobile-menu-btn" id="mobileMenuBtn">
+        <i class="fas fa-bars"></i>
+      </button>
     </div>
   </header>
 
   <div class="container">
     <nav id="sidebar">
-      <a href="dashboard.html" class="active"><span class="nav-icon">🏠</span> Dashboard</a>
-      <a href="membership.html"><span class="nav-icon">💳</span> Membership</a>
-      <a href="tasks.html"><span class="nav-icon">📋</span> Tasks</a>
-      <a href="withdraw.html"><span class="nav-icon">💵</span> Withdraw</a>
-      <a href="referrals.html"><span class="nav-icon">👥</span> Referrals</a>
-      <a href="profile.html"><span class="nav-icon">🙍</span> Profile</a>
-      <a href="support.html"><span class="nav-icon">📩</span> Support</a>
-      <a href="#" id="logoutBtn"><span class="nav-icon">🚪</span> Logout</a>
+      <a href="dashboard.html" class="active"><i class="fas fa-home nav-icon"></i> Dashboard</a>
+      <a href="membership.html"><i class="fas fa-id-card nav-icon"></i> Membership</a>
+      <a href="tasks.html"><i class="fas fa-tasks nav-icon"></i> Tasks</a>
+      <a href="withdraw.html"><i class="fas fa-money-bill-wave nav-icon"></i> Withdraw</a>
+      <a href="referrals.html"><i class="fas fa-user-plus nav-icon"></i> Referrals</a>
+      <a href="profile.html"><i class="fas fa-user nav-icon"></i> Profile</a>
+      <a href="support.html"><i class="fas fa-envelope nav-icon"></i> Support</a>
+      <a href="#" id="logoutBtn"><i class="fas fa-sign-out-alt nav-icon"></i> Logout</a>
     </nav>
 
     <main>
@@ -1374,26 +1493,60 @@
     });
   }
 
+  // FIXED: Improved mobile navigation setup
   function setupApplication() {
     // DOM Elements
     const mobileMenuBtn = document.getElementById('mobileMenuBtn');
     const sidebar = document.getElementById('sidebar');
     const logoutBtn = document.getElementById('logoutBtn');
+    const navLinks = document.querySelectorAll('nav a');
 
-    // Mobile menu toggle
+    // Mobile menu toggle - FIXED: Proper event handling
     if (mobileMenuBtn) {
       mobileMenuBtn.addEventListener('click', function(e) {
         e.stopPropagation();
         sidebar.classList.toggle('active');
+        // Change icon based on state
+        const icon = mobileMenuBtn.querySelector('i');
+        if (sidebar.classList.contains('active')) {
+          icon.className = 'fas fa-times';
+        } else {
+          icon.className = 'fas fa-bars';
+        }
       });
     }
 
-    // Close mobile menu when clicking outside
+    // FIXED: Close mobile menu when clicking on nav links
+    navLinks.forEach(link => {
+      link.addEventListener('click', function() {
+        if (window.innerWidth <= 768) {
+          sidebar.classList.remove('active');
+          const icon = mobileMenuBtn.querySelector('i');
+          icon.className = 'fas fa-bars';
+        }
+      });
+    });
+
+    // Close mobile menu when clicking outside - FIXED: Better implementation
     document.addEventListener('click', function(e) {
       if (sidebar && mobileMenuBtn) {
-        if (!sidebar.contains(e.target) && !mobileMenuBtn.contains(e.target)) {
+        const isClickInsideSidebar = sidebar.contains(e.target);
+        const isClickOnMenuButton = mobileMenuBtn.contains(e.target);
+        
+        if (!isClickInsideSidebar && !isClickOnMenuButton && sidebar.classList.contains('active')) {
           sidebar.classList.remove('active');
+          const icon = mobileMenuBtn.querySelector('i');
+          icon.className = 'fas fa-bars';
         }
+      }
+    });
+
+    // Close mobile menu on window resize if it becomes larger
+    window.addEventListener('resize', function() {
+      if (window.innerWidth > 768 && sidebar) {
+        sidebar.classList.remove('active');
+        const icon = mobileMenuBtn.querySelector('i');
+        if (icon) icon.className = 'fas fa-bars';
       }
     });
 
@@ -2065,8 +2218,7 @@
           });
         });
       }
-
-      // Render activities
+// Render activities
       activityList.innerHTML = activities.map(function(activity) {
         return '<li class="activity-item">' +
           '<div class="activity-icon"><i class="' + activity.icon + '"></i></div>' +
@@ -2156,7 +2308,8 @@
       }, 5000);
     }
   }
-// Logout handler
+
+  // Logout handler
   async function handleLogout(e) {
     if (e) e.preventDefault();
     
