@@ -48,6 +48,9 @@
       --gold: #ffd700;
       --gold-light: #fff9c4;
       --gold-dark: #b8860b;
+      --executive: #8b5cf6;
+      --vip: #f59e0b;
+      --elite: #dc2626;
     }
 
     * {
@@ -532,6 +535,9 @@
     .membership-card.starter::before { background: var(--gradient-success); }
     .membership-card.pro::before { background: var(--gradient-primary); }
     .membership-card.premium::before { background: var(--gradient-warning); }
+    .membership-card.executive::before { background: linear-gradient(135deg, var(--executive) 0%, #a78bfa 100%); }
+    .membership-card.vip::before { background: linear-gradient(135deg, var(--vip) 0%, #fbbf24 100%); }
+    .membership-card.elite::before { background: linear-gradient(135deg, var(--elite) 0%, #ef4444 100%); }
 
     .membership-name {
       font-size: 22px;
@@ -600,6 +606,30 @@
     
     .membership-card.premium .upgrade-btn { background: var(--gradient-warning); box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3); }
     .membership-card.premium .upgrade-btn:hover { box-shadow: 0 8px 20px rgba(245, 158, 11, 0.4); }
+
+    .membership-card.executive .upgrade-btn { 
+      background: linear-gradient(135deg, var(--executive) 0%, #a78bfa 100%); 
+      box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3); 
+    }
+    .membership-card.executive .upgrade-btn:hover { 
+      box-shadow: 0 8px 20px rgba(139, 92, 246, 0.4); 
+    }
+
+    .membership-card.vip .upgrade-btn { 
+      background: linear-gradient(135deg, var(--vip) 0%, #fbbf24 100%); 
+      box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3); 
+    }
+    .membership-card.vip .upgrade-btn:hover { 
+      box-shadow: 0 8px 20px rgba(245, 158, 11, 0.4); 
+    }
+
+    .membership-card.elite .upgrade-btn { 
+      background: linear-gradient(135deg, var(--elite) 0%, #ef4444 100%); 
+      box-shadow: 0 4px 12px rgba(220, 38, 38, 0.3); 
+    }
+    .membership-card.elite .upgrade-btn:hover { 
+      box-shadow: 0 8px 20px rgba(220, 38, 38, 0.4); 
+    }
 
     /* Recent Activity */
     .recent-activity {
@@ -1322,46 +1352,107 @@
         <p>Select a membership package to start earning. All packages require payment.</p>
         
         <div class="membership-grid">
+          <!-- 🟢 STARTER PACKAGE -->
           <div class="membership-card starter">
             <div class="membership-name">Starter Package</div>
             <div class="membership-price">Ksh 3,500</div>
             <ul class="membership-features">
-              <li><i class="fas fa-check"></i> Access to basic tasks</li>
-              <li><i class="fas fa-check"></i> Up to Ksh 2,000 daily earnings</li>
+              <li><i class="fas fa-check"></i> Basic transcription tasks</li>
+              <li><i class="fas fa-check"></i> Network marketing opportunities</li>
+              <li><i class="fas fa-check"></i> Affiliate marketing programs</li>
+              <li><i class="fas fa-check"></i> Online gaming tasks</li>
               <li><i class="fas fa-check"></i> Email support</li>
-              <li><i class="fas fa-check"></i> 10 tasks per day limit</li>
-              <li><i class="fas fa-check"></i> Standard withdrawal processing</li>
+              <li><i class="fas fa-check"></i> Up to Ksh 2,000 daily limit</li>
+              <li><i class="fas fa-check"></i> 10 tasks/day maximum</li>
+              <li><i class="fas fa-check"></i> Standard withdrawals (24-48 hours)</li>
             </ul>
             <button class="upgrade-btn" onclick="upgradeMembership('starter')" id="starterUpgradeBtn">Get Starter Package</button>
           </div>
           
+          <!-- 🔵 PRO PACKAGE -->
           <div class="membership-card pro">
             <div class="membership-name">Pro Package</div>
             <div class="membership-price">Ksh 5,500</div>
             <ul class="membership-features">
-              <li><i class="fas fa-check"></i> Access to Pro tasks</li>
-              <li><i class="fas fa-check"></i> Up to Ksh 8,000 daily earnings</li>
+              <li><i class="fas fa-check"></i> All Starter features PLUS</li>
+              <li><i class="fas fa-check"></i> Freelancing & academic writing tasks</li>
+              <li><i class="fas fa-check"></i> Higher payment rates</li>
               <li><i class="fas fa-check"></i> Priority support</li>
-              <li><i class="fas fa-check"></i> 30 tasks per day limit</li>
-              <li><i class="fas fa-check"></i> Faster withdrawal processing</li>
-              <li><i class="fas fa-check"></i> Higher reward rates</li>
+              <li><i class="fas fa-check"></i> Team growth rewards</li>
+              <li><i class="fas fa-check"></i> Up to Ksh 8,000 daily limit</li>
+              <li><i class="fas fa-check"></i> 30 tasks/day maximum</li>
+              <li><i class="fas fa-check"></i> Faster withdrawals (12-24 hours)</li>
             </ul>
             <button class="upgrade-btn" onclick="upgradeMembership('pro')" id="proUpgradeBtn">Get Pro Package</button>
           </div>
           
+          <!-- 🟡 PREMIUM PACKAGE -->
           <div class="membership-card premium">
             <div class="membership-name">Premium Package</div>
             <div class="membership-price">Ksh 8,000</div>
             <ul class="membership-features">
-              <li><i class="fas fa-check"></i> All tasks unlocked</li>
+              <li><i class="fas fa-check"></i> All Pro features PLUS</li>
               <li><i class="fas fa-check"></i> Unlimited daily earnings</li>
+              <li><i class="fas fa-check"></i> All task categories unlocked</li>
               <li><i class="fas fa-check"></i> 24/7 premium support</li>
               <li><i class="fas fa-check"></i> Unlimited tasks per day</li>
-              <li><i class="fas fa-check"></i> Instant withdrawal processing</li>
-              <li><i class="fas fa-check"></i> Highest reward rates</li>
-              <li><i class="fas fa-check"></i> Early access to new features</li>
+              <li><i class="fas fa-check"></i> Instant withdrawals</li>
+              <li><i class="fas fa-check"></i> Highest payment rates</li>
+              <li><i class="fas fa-check"></i> Early feature access</li>
             </ul>
             <button class="upgrade-btn" onclick="upgradeMembership('premium')" id="premiumUpgradeBtn">Get Premium Package</button>
+          </div>
+
+          <!-- 🟣 EXECUTIVE PACKAGE -->
+          <div class="membership-card executive">
+            <div class="membership-name">Executive Package</div>
+            <div class="membership-price">Ksh 15,000</div>
+            <ul class="membership-features">
+              <li><i class="fas fa-check"></i> All Premium features PLUS</li>
+              <li><i class="fas fa-check"></i> Personal account manager</li>
+              <li><i class="fas fa-check"></i> Weekly mentorship sessions</li>
+              <li><i class="fas fa-check"></i> Advanced analytics dashboard</li>
+              <li><i class="fas fa-check"></i> Priority task allocation</li>
+              <li><i class="fas fa-check"></i> 25% higher earning rates</li>
+              <li><i class="fas fa-check"></i> Exclusive webinars</li>
+              <li><i class="fas fa-check"></i> Custom earning strategies</li>
+            </ul>
+            <button class="upgrade-btn" onclick="upgradeMembership('executive')" id="executiveUpgradeBtn">Get Executive Package</button>
+          </div>
+
+          <!-- 🟠 VIP PACKAGE -->
+          <div class="membership-card vip">
+            <div class="membership-name">VIP Package</div>
+            <div class="membership-price">Ksh 20,000</div>
+            <ul class="membership-features">
+              <li><i class="fas fa-check"></i> All Executive features PLUS</li>
+              <li><i class="fas fa-check"></i> Dedicated support team</li>
+              <li><i class="fas fa-check"></i> Monthly strategy calls</li>
+              <li><i class="fas fa-check"></i> Early all-feature access</li>
+              <li><i class="fas fa-check"></i> Custom task requests</li>
+              <li><i class="fas fa-check"></i> 50% higher earning rates</li>
+              <li><i class="fas fa-check"></i> VIP community access</li>
+              <li><i class="fas fa-check"></i> +50% REFERRAL BONUS</li>
+            </ul>
+            <button class="upgrade-btn" onclick="upgradeMembership('vip')" id="vipUpgradeBtn">Get VIP Package</button>
+          </div>
+
+          <!-- 🔴 ELITE PACKAGE -->
+          <div class="membership-card elite">
+            <div class="membership-name">Elite Package</div>
+            <div class="membership-price">Ksh 25,000</div>
+            <ul class="membership-features">
+              <li><i class="fas fa-check"></i> All VIP features PLUS</li>
+              <li><i class="fas fa-check"></i> 1-on-1 business coaching</li>
+              <li><i class="fas fa-check"></i> Revenue sharing opportunities</li>
+              <li><i class="fas fa-check"></i> Mastermind group access</li>
+              <li><i class="fas fa-check"></i> Lifetime platform updates</li>
+              <li><i class="fas fa-check"></i> 100% higher earning rates</li>
+              <li><i class="fas fa-check"></i> Partnership opportunities</li>
+              <li><i class="fas fa-check"></i> +100% REFERRAL BONUS</li>
+              <li><i class="fas fa-check"></i> Residual income streams</li>
+            </ul>
+            <button class="upgrade-btn" onclick="upgradeMembership('elite')" id="eliteUpgradeBtn">Get Elite Package</button>
           </div>
         </div>
       </div>
@@ -1794,6 +1885,12 @@
       membershipDisplay = 'Pro';
     } else if (profile.role === 'premium') {
       membershipDisplay = 'Premium';
+    } else if (profile.role === 'executive') {
+      membershipDisplay = 'Executive';
+    } else if (profile.role === 'vip') {
+      membershipDisplay = 'VIP';
+    } else if (profile.role === 'elite') {
+      membershipDisplay = 'Elite';
     }
     
     if (membershipType) membershipType.textContent = membershipDisplay;
@@ -1808,98 +1905,94 @@
     const starterBtn = document.getElementById('starterUpgradeBtn');
     const proBtn = document.getElementById('proUpgradeBtn');
     const premiumBtn = document.getElementById('premiumUpgradeBtn');
+    const executiveBtn = document.getElementById('executiveUpgradeBtn');
+    const vipBtn = document.getElementById('vipUpgradeBtn');
+    const eliteBtn = document.getElementById('eliteUpgradeBtn');
     
-    if (!starterBtn || !proBtn || !premiumBtn) return;
+    if (!starterBtn || !proBtn || !premiumBtn || !executiveBtn || !vipBtn || !eliteBtn) return;
 
     const currentBalance = parseFloat(profile.balance) || 0;
     const currentRole = profile.role || 'none';
 
-    // CORRECTED: Use consistent package prices (3500/5500/8000)
+    // CORRECTED: Use all 6 package prices
     const packagePrices = {
       'starter': 3500,
       'pro': 5500,
-      'premium': 8000
+      'premium': 8000,
+      'executive': 15000,
+      'vip': 20000,
+      'elite': 25000
     };
 
     // Reset all buttons first
     starterBtn.disabled = false;
     proBtn.disabled = false;
     premiumBtn.disabled = false;
+    executiveBtn.disabled = false;
+    vipBtn.disabled = false;
+    eliteBtn.disabled = false;
 
-    // Starter Package Logic
-    if (currentRole === 'none') {
-      if (currentBalance >= packagePrices.starter) {
-        starterBtn.textContent = 'Get Starter Package (Ksh ' + packagePrices.starter.toLocaleString() + ')';
-        starterBtn.disabled = false;
+    // Helper function to update button state
+    function updateButton(button, packageName, currentRole, currentBalance) {
+      const price = packagePrices[packageName];
+      const membershipLevels = { 
+        'none': 0, 
+        'starter': 1, 
+        'pro': 2, 
+        'premium': 3, 
+        'executive': 4, 
+        'vip': 5, 
+        'elite': 6 
+      };
+      
+      const currentLevel = membershipLevels[currentRole] || 0;
+      const packageLevel = membershipLevels[packageName];
+
+      if (currentRole === packageName) {
+        button.textContent = 'Current Package';
+        button.disabled = true;
+      } else if (currentLevel > packageLevel) {
+        button.textContent = 'Already Upgraded';
+        button.disabled = true;
       } else {
-        starterBtn.textContent = 'Insufficient Balance - Ksh ' + packagePrices.starter.toLocaleString();
-        starterBtn.disabled = true;
+        if (currentBalance >= price) {
+          let buttonText = `Get ${packageName.charAt(0).toUpperCase() + packageName.slice(1)} Package (Ksh ${price.toLocaleString()})`;
+          if (currentRole !== 'none') {
+            buttonText = `Upgrade to ${packageName.charAt(0).toUpperCase() + packageName.slice(1)} (Ksh ${price.toLocaleString()})`;
+          }
+          button.textContent = buttonText;
+          button.disabled = false;
+        } else {
+          button.textContent = `Insufficient Balance - Ksh ${price.toLocaleString()}`;
+          button.disabled = true;
+        }
       }
-    } else if (currentRole === 'starter') {
-      starterBtn.textContent = 'Current Package';
-      starterBtn.disabled = true;
-    } else if (currentRole === 'pro' || currentRole === 'premium') {
-      starterBtn.textContent = 'Already Upgraded';
-      starterBtn.disabled = true;
-    } else {
-      starterBtn.textContent = 'Get Starter Package (Ksh ' + packagePrices.starter.toLocaleString() + ')';
-      starterBtn.disabled = currentBalance < packagePrices.starter;
     }
 
-    // Pro Package Logic
-    if (currentRole === 'none' || currentRole === 'starter') {
-      if (currentBalance >= packagePrices.pro) {
-        proBtn.textContent = currentRole === 'none' ? 'Get Pro Package (Ksh ' + packagePrices.pro.toLocaleString() + ')' : 'Upgrade to Pro (Ksh ' + packagePrices.pro.toLocaleString() + ')';
-        proBtn.disabled = false;
-      } else {
-        proBtn.textContent = 'Insufficient Balance - Ksh ' + packagePrices.pro.toLocaleString();
-        proBtn.disabled = true;
-      }
-    } else if (currentRole === 'pro') {
-      proBtn.textContent = 'Current Package';
-      proBtn.disabled = true;
-    } else if (currentRole === 'premium') {
-      proBtn.textContent = 'Already Upgraded';
-      proBtn.disabled = true;
-    } else {
-      proBtn.textContent = 'Get Pro Package (Ksh ' + packagePrices.pro.toLocaleString() + ')';
-      proBtn.disabled = currentBalance < packagePrices.pro;
-    }
-
-    // Premium Package Logic
-    if (currentRole === 'none' || currentRole === 'starter' || currentRole === 'pro') {
-      if (currentBalance >= packagePrices.premium) {
-        let buttonText = 'Get Premium Package (Ksh ' + packagePrices.premium.toLocaleString() + ')';
-        if (currentRole === 'starter') buttonText = 'Upgrade to Premium (Ksh ' + packagePrices.premium.toLocaleString() + ')';
-        if (currentRole === 'pro') buttonText = 'Upgrade to Premium (Ksh ' + packagePrices.premium.toLocaleString() + ')';
-        
-        premiumBtn.textContent = buttonText;
-        premiumBtn.disabled = false;
-      } else {
-        premiumBtn.textContent = 'Insufficient Balance - Ksh ' + packagePrices.premium.toLocaleString();
-        premiumBtn.disabled = true;
-      }
-    } else if (currentRole === 'premium') {
-      premiumBtn.textContent = 'Current Package';
-      premiumBtn.disabled = true;
-    } else {
-      premiumBtn.textContent = 'Get Premium Package (Ksh ' + packagePrices.premium.toLocaleString() + ')';
-      premiumBtn.disabled = currentBalance < packagePrices.premium;
-    }
+    // Update all buttons
+    updateButton(starterBtn, 'starter', currentRole, currentBalance);
+    updateButton(proBtn, 'pro', currentRole, currentBalance);
+    updateButton(premiumBtn, 'premium', currentRole, currentBalance);
+    updateButton(executiveBtn, 'executive', currentRole, currentBalance);
+    updateButton(vipBtn, 'vip', currentRole, currentBalance);
+    updateButton(eliteBtn, 'elite', currentRole, currentBalance);
   }
 
-  // FIXED: Upgrade membership function with CORRECT prices
+  // FIXED: Upgrade membership function with ALL 6 packages
   async function upgradeMembership(newRole) {
     if (!supabaseClient || !userProfile) {
       showMessage('Application not ready. Please wait...', 'error');
       return;
     }
 
-    // CORRECTED: Use consistent package prices (3500/5500/8000)
+    // CORRECTED: All 6 package prices
     const packagePrices = {
       'starter': 3500,
       'pro': 5500,
-      'premium': 8000
+      'premium': 8000,
+      'executive': 15000,
+      'vip': 20000,
+      'elite': 25000
     };
 
     const price = packagePrices[newRole];
@@ -1908,12 +2001,20 @@
 
     // Check if user can afford the package
     if (currentBalance < price) {
-      showMessage('Insufficient balance. You need Ksh ' + price + ' to get the ' + newRole + ' package.', 'error');
+      showMessage('Insufficient balance. You need Ksh ' + price.toLocaleString() + ' to get the ' + newRole + ' package.', 'error');
       return;
     }
 
     // Check if user already has this package or higher
-    const membershipLevels = { 'none': 0, 'starter': 1, 'pro': 2, 'premium': 3 };
+    const membershipLevels = { 
+      'none': 0, 
+      'starter': 1, 
+      'pro': 2, 
+      'premium': 3, 
+      'executive': 4, 
+      'vip': 5, 
+      'elite': 6 
+    };
     const currentLevel = membershipLevels[currentMembership] || 0;
     const newLevel = membershipLevels[newRole];
     
@@ -1957,10 +2058,10 @@
         await payReferralBonus(userProfile.referred_by, currentUser.id, newRole);
       }
       
-      showMessage('🎉 Successfully upgraded to ' + newRole + ' package! Ksh ' + price + ' deducted from your balance.', 'success');
+      showMessage('🎉 Successfully upgraded to ' + newRole + ' package! Ksh ' + price.toLocaleString() + ' deducted from your balance.', 'success');
 
       // Add to recent activities
-      addActivity('Upgraded to ' + newRole + ' package', '-Ksh ' + price);
+      addActivity('Upgraded to ' + newRole + ' package', '-Ksh ' + price.toLocaleString());
 
     } catch (error) {
       console.error('Upgrade error:', error);
@@ -1976,7 +2077,7 @@
       // 1. Get referrer's profile using their referral code
       const { data: referrer, error: refError } = await supabaseClient
         .from('profiles')
-        .select('id, balance, total_earnings, referral_code')
+        .select('id, balance, total_earnings, referral_code, role')
         .eq('referral_code', referrerCode)
         .single();
       
@@ -1987,8 +2088,8 @@
 
       console.log('✅ Referrer found:', referrer.id);
 
-      // 2. CORRECTED: Use proper referral bonus amounts (NOT package prices)
-      const bonusAmount = calculateReferralBonus(packageType);
+      // 2. CORRECTED: Use proper referral bonus amounts for ALL 6 packages
+      const bonusAmount = calculateReferralBonus(packageType, referrer.role);
       console.log('💵 Referral bonus amount:', bonusAmount, 'for package:', packageType);
 
       // 3. Check if bonus was already paid for this referral
@@ -2068,15 +2169,28 @@
     }
   }
 
-  // FIXED: Calculate referral bonus amounts (NOT package prices)
-  function calculateReferralBonus(packageType) {
-    // CORRECT: These are referral BONUS amounts, NOT package prices
-    const referralBonuses = {
+  // FIXED: Calculate referral bonus amounts for ALL 6 packages with multipliers
+  function calculateReferralBonus(packageType, referrerRole) {
+    // Base referral bonuses
+    const baseBonuses = {
       'starter': 1000,    // Bonus for Starter package referral
       'pro': 1800,        // Bonus for Pro package referral  
-      'premium': 3000     // Bonus for Premium package referral
+      'premium': 3000,    // Bonus for Premium package referral
+      'executive': 5000,  // Bonus for Executive package referral
+      'vip': 7500,        // Bonus for VIP package referral
+      'elite': 10000      // Bonus for Elite package referral
     };
-    return referralBonuses[packageType] || 0;
+
+    let bonus = baseBonuses[packageType] || 0;
+    
+    // Apply multipliers for VIP and Elite referrers
+    if (referrerRole === 'vip') {
+      bonus = Math.floor(bonus * 1.5); // +50% bonus
+    } else if (referrerRole === 'elite') {
+      bonus = Math.floor(bonus * 2.0); // +100% bonus
+    }
+    
+    return bonus;
   }
 
   // ENHANCED: Update recent activities with real data
@@ -2139,6 +2253,9 @@
       if (profile.role === 'starter') membershipText = 'Starter Package';
       if (profile.role === 'pro') membershipText = 'Pro Package';
       if (profile.role === 'premium') membershipText = 'Premium Package';
+      if (profile.role === 'executive') membershipText = 'Executive Package';
+      if (profile.role === 'vip') membershipText = 'VIP Package';
+      if (profile.role === 'elite') membershipText = 'Elite Package';
       
       activities.push({
         icon: 'fas fa-crown',
@@ -2200,21 +2317,26 @@
       }).join('');
     }
   }
-// Helper function to format time ago
-  function formatTimeAgo(dateString) {
-    const date = new Date(dateString);
-    const now = new Date();
-    const diffMs = now - date;
-    const diffMins = Math.floor(diffMs / 60000);
-    const diffHours = Math.floor(diffMs / 3600000);
-    const diffDays = Math.floor(diffMs / 86400000);
 
-    if (diffMins < 1) return 'Just now';
-    if (diffMins < 60) return diffMins + ' min ago';
-    if (diffHours < 24) return diffHours + ' hour' + (diffHours > 1 ? 's' : '') + ' ago';
-    if (diffDays < 7) return diffDays + ' day' + (diffDays > 1 ? 's' : '') + ' ago';
-    
-    return date.toLocaleDateString();
+  // Helper function to format time ago
+  function formatTimeAgo(dateString) {
+    try {
+      const date = new Date(dateString);
+      const now = new Date();
+      const diffMs = now - date;
+      const diffMins = Math.floor(diffMs / 60000);
+      const diffHours = Math.floor(diffMs / 3600000);
+      const diffDays = Math.floor(diffMs / 86400000);
+
+      if (diffMins < 1) return 'Just now';
+      if (diffMins < 60) return diffMins + ' min ago';
+      if (diffHours < 24) return diffHours + ' hour' + (diffHours > 1 ? 's' : '') + ' ago';
+      if (diffDays < 7) return diffDays + ' day' + (diffDays > 1 ? 's' : '') + ' ago';
+      
+      return date.toLocaleDateString();
+    } catch (error) {
+      return 'Recently';
+    }
   }
 
   // Add new activity
@@ -2321,3 +2443,4 @@ if ('serviceWorker' in navigator) {
 
 </body>
 </html>
+
