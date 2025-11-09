@@ -4,19 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Membership - Academic Writing Hub</title>
-  <!-- PWA Meta Tags -->
-<meta name="theme-color" content="#b8860b">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="default">
-<meta name="apple-mobile-web-app-title" content="Gold Gain">
-<meta name="mobile-web-app-capable" content="yes">
-
-<!-- PWA Manifest -->
-<link rel="manifest" href="manifest.json">
-
-<!-- Icons -->
-<link rel="icon" href="icons/icon-192x192.png">
-<link rel="apple-touch-icon" href="icons/icon-192x192.png">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
     :root {
       --primary: #004aad;
@@ -44,6 +32,7 @@
       background: linear-gradient(135deg, #f4f6f9 0%, #e9ecef 100%);
       color: #333;
       line-height: 1.6;
+      min-height: 100vh;
     }
 
     header {
@@ -176,6 +165,58 @@
       font-size: 16px;
     }
 
+    .dashboard-cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 20px;
+      margin-bottom: 30px;
+    }
+
+    .dashboard-card {
+      background: white;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+
+    .dashboard-card i {
+      font-size: 32px;
+      margin-bottom: 15px;
+      color: var(--primary);
+    }
+
+    .dashboard-card h3 {
+      font-size: 16px;
+      color: var(--gray);
+      margin-bottom: 10px;
+    }
+
+    .dashboard-card .value {
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--dark);
+    }
+
+    .dashboard-card.balance {
+      border-left: 4px solid var(--success);
+    }
+
+    .dashboard-card.earnings {
+      border-left: 4px solid var(--gold);
+    }
+
+    .dashboard-card.referrals {
+      border-left: 4px solid var(--primary);
+    }
+
+    .dashboard-card.tasks {
+      border-left: 4px solid var(--secondary);
+    }
+
     .current-membership {
       background: white;
       padding: 20px;
@@ -194,6 +235,156 @@
       font-size: 14px;
       font-weight: 600;
       margin-bottom: 15px;
+    }
+
+    .deposit-section {
+      background: white;
+      padding: 25px;
+      border-radius: 12px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+      margin-bottom: 30px;
+    }
+
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 20px;
+      color: var(--primary);
+    }
+
+    .section-header i {
+      font-size: 24px;
+    }
+
+    .deposit-form {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+
+    @media (max-width: 768px) {
+      .deposit-form {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .form-group {
+      margin-bottom: 15px;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 600;
+      color: var(--dark);
+    }
+
+    .form-control {
+      width: 100%;
+      padding: 12px 15px;
+      border: 2px solid var(--border);
+      border-radius: 8px;
+      font-size: 1rem;
+      transition: border-color 0.3s;
+    }
+
+    .form-control:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 2px rgba(0, 74, 173, 0.2);
+    }
+
+    .copy-box {
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin: 15px 0;
+    }
+
+    .copy-box span {
+      font-family: monospace;
+      font-size: 1.1rem;
+      color: var(--dark);
+      font-weight: 600;
+      word-break: break-all;
+    }
+
+    .btn {
+      padding: 12px 20px;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      color: white;
+    }
+
+    .btn-primary:hover {
+      background: var(--primary-light);
+      transform: translateY(-2px);
+    }
+
+    .btn-success {
+      background: var(--success);
+      color: white;
+    }
+
+    .btn-success:hover {
+      background: #218838;
+      transform: translateY(-2px);
+    }
+
+    .btn-gold {
+      background: linear-gradient(135deg, var(--gold), #d4af37);
+      color: white;
+    }
+
+    .btn-gold:hover {
+      background: linear-gradient(135deg, #8b6914, var(--gold));
+      transform: translateY(-2px);
+    }
+
+    .btn-copy {
+      background: var(--primary);
+      color: white;
+      border: none;
+      border-radius: 5px;
+      padding: 8px 15px;
+      cursor: pointer;
+      transition: background 0.3s;
+      white-space: nowrap;
+      margin-left: 10px;
+    }
+
+    .btn-copy:hover {
+      background: var(--primary-light);
+    }
+
+    .btn-copy.copied {
+      background: var(--success);
+    }
+
+    .note {
+      background: var(--gold-light);
+      border-left: 4px solid var(--gold);
+      padding: 12px;
+      margin: 15px 0;
+      border-radius: 0 8px 8px 0;
+      font-size: 0.9rem;
     }
 
     .packages-grid {
@@ -306,7 +497,7 @@
       transform: none;
     }
 
-    /* Payment Modal Styles - MOBILE FIXED */
+    /* Payment Modal Styles */
     .modal {
       display: none;
       position: fixed;
@@ -379,88 +570,6 @@
 
     .payment-step h3 i {
       color: var(--gold);
-    }
-
-    .copy-box {
-      background: white;
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      padding: 12px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin: 15px 0;
-    }
-
-    .copy-box span {
-      font-family: monospace;
-      font-size: 1.1rem;
-      color: var(--dark);
-      font-weight: 600;
-      word-break: break-all;
-    }
-
-    .copy-btn {
-      background: var(--primary);
-      color: white;
-      border: none;
-      border-radius: 5px;
-      padding: 8px 15px;
-      cursor: pointer;
-      transition: background 0.3s;
-      white-space: nowrap;
-      margin-left: 10px;
-    }
-
-    .copy-btn:hover {
-      background: var(--primary-light);
-    }
-
-    .copy-btn.copied {
-      background: var(--success);
-    }
-
-    .transaction-input {
-      width: 100%;
-      padding: 12px 15px;
-      border: 2px solid var(--border);
-      border-radius: 8px;
-      font-size: 1rem;
-      margin: 10px 0;
-    }
-
-    .transaction-input:focus {
-      outline: none;
-      border-color: var(--primary);
-      box-shadow: 0 0 0 2px rgba(0, 74, 173, 0.2);
-    }
-
-    .note {
-      background: var(--gold-light);
-      border-left: 4px solid var(--gold);
-      padding: 12px;
-      margin: 15px 0;
-      border-radius: 0 8px 8px 0;
-      font-size: 0.9rem;
-    }
-
-    .confirm-btn {
-      width: 100%;
-      padding: 15px;
-      background: var(--success);
-      color: white;
-      border: none;
-      border-radius: 10px;
-      font-size: 16px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      margin-top: 10px;
-    }
-
-    .confirm-btn:hover {
-      background: #218838;
-      transform: translateY(-2px);
     }
 
     .referral-section {
@@ -660,14 +769,14 @@
 
   <div class="container">
     <nav id="sidebar">
-      <a href="dashboard.html">🏠 Dashboard</a>
-      <a href="membership.html" class="active">💳 Membership</a>
-      <a href="tasks.html">📋 Tasks</a>
-      <a href="withdraw.html">💵 Withdraw</a>
-      <a href="referrals.html">👥 Referrals</a>
-      <a href="profile.html">🙍 Profile</a>
-      <a href="support.html">📩 Support</a>
-      <a href="#" id="logoutBtn">🚪 Logout</a>
+      <a href="dashboard.html"><i class="fas fa-home"></i> Dashboard</a>
+      <a href="membership.html" class="active"><i class="fas fa-crown"></i> Membership</a>
+      <a href="tasks.html"><i class="fas fa-tasks"></i> Tasks</a>
+      <a href="withdraw.html"><i class="fas fa-wallet"></i> Withdraw</a>
+      <a href="referrals.html"><i class="fas fa-users"></i> Referrals</a>
+      <a href="profile.html"><i class="fas fa-user"></i> Profile</a>
+      <a href="support.html"><i class="fas fa-headset"></i> Support</a>
+      <a href="#" id="logoutBtn"><i class="fas fa-sign-out-alt"></i> Logout</a>
     </nav>
 
     <main>
@@ -676,10 +785,85 @@
         <p>Choose the perfect package to unlock more earning opportunities and features</p>
       </div>
 
+      <div class="dashboard-cards">
+        <div class="dashboard-card balance">
+          <i class="fas fa-wallet"></i>
+          <h3>Account Balance</h3>
+          <div class="value" id="accountBalance">KSh 0</div>
+        </div>
+        <div class="dashboard-card earnings">
+          <i class="fas fa-chart-line"></i>
+          <h3>Total Earnings</h3>
+          <div class="value" id="totalEarnings">KSh 0</div>
+        </div>
+        <div class="dashboard-card referrals">
+          <i class="fas fa-user-plus"></i>
+          <h3>Referrals</h3>
+          <div class="value" id="referralCount">0</div>
+        </div>
+        <div class="dashboard-card tasks">
+          <i class="fas fa-check-circle"></i>
+          <h3>Completed Tasks</h3>
+          <div class="value" id="completedTasks">0</div>
+        </div>
+      </div>
+
       <div class="current-membership">
-        <div class="membership-badge" id="currentMembership">Loading...</div>
+        <div class="membership-badge" id="currentMembership">Free</div>
         <h3>Your Current Plan</h3>
-        <p id="membershipDetails">Loading your membership details...</p>
+        <p id="membershipDetails">You are currently on the Free plan. Upgrade to access more features and earning opportunities.</p>
+      </div>
+
+      <div class="deposit-section">
+        <div class="section-header">
+          <i class="fas fa-money-bill-wave"></i>
+          <h2>Deposit Funds</h2>
+        </div>
+        <p>Add funds to your account for future withdrawals or membership upgrades</p>
+        
+        <div class="deposit-form">
+          <div>
+            <div class="payment-step">
+              <h3><i class="fas fa-copy"></i> Step 1: Copy Payment Number</h3>
+              <p>Send money to the following business number:</p>
+              <div class="copy-box">
+                <span id="businessNumber">0780619918</span>
+                <button class="btn-copy" id="copyBusinessBtn">Copy</button>
+              </div>
+            </div>
+            
+            <div class="payment-step">
+              <h3><i class="fas fa-money-check"></i> Step 2: Enter Transaction Details</h3>
+              <div class="form-group">
+                <label for="depositAmount">Amount Deposited (KSh)</label>
+                <input type="number" class="form-control" id="depositAmount" placeholder="Enter amount">
+              </div>
+              <div class="form-group">
+                <label for="transactionId">Transaction ID</label>
+                <input type="text" class="form-control" id="transactionId" placeholder="Enter transaction ID">
+              </div>
+            </div>
+          </div>
+          
+          <div>
+            <div class="payment-step">
+              <h3><i class="fas fa-info-circle"></i> Deposit Information</h3>
+              <div class="note">
+                <strong>Important Notes:</strong>
+                <ul style="margin-top: 10px; padding-left: 20px;">
+                  <li>Minimum deposit amount is KSh 100</li>
+                  <li>Deposits require admin approval before being credited</li>
+                  <li>Processing time is 1-2 hours during business hours</li>
+                  <li>Ensure transaction ID is correct for faster processing</li>
+                </ul>
+              </div>
+            </div>
+            
+            <button class="btn btn-success" id="submitDeposit" style="width: 100%; margin-top: 20px;">
+              <i class="fas fa-paper-plane"></i> Submit Deposit Request
+            </button>
+          </div>
+        </div>
       </div>
 
       <div id="messageContainer"></div>
@@ -747,11 +931,11 @@
           </h2>
           
           <div class="payment-step">
-            <h3><i>1</i> Copy Business Number</h3>
+            <h3><i class="fas fa-copy"></i> Step 1: Copy Business Number</h3>
             <p>Send the exact amount to the following business number:</p>
             <div class="copy-box">
-              <span id="businessNumber">0780619918</span>
-              <button class="copy-btn" id="copyBusinessBtn">Copy</button>
+              <span id="businessNumberModal">0780619918</span>
+              <button class="btn-copy" id="copyBusinessModalBtn">Copy</button>
             </div>
             <div class="note">
               <strong>Important:</strong> Make sure to send the exact amount: <strong id="paymentAmount">KSh 0</strong>
@@ -759,36 +943,44 @@
           </div>
           
           <div class="payment-step">
-            <h3><i>2</i> Enter Transaction ID</h3>
+            <h3><i class="fas fa-money-check"></i> Step 2: Enter Transaction ID</h3>
             <p>After making the payment, enter your transaction ID below:</p>
-            <input type="text" class="transaction-input" id="transactionId" placeholder="Enter your transaction ID">
+            <input type="text" class="form-control" id="transactionIdModal" placeholder="Enter your transaction ID">
             <div class="note">
               <strong>Note:</strong> Your upgrade will be processed after admin approval. This usually takes 1-2 hours during business hours.
             </div>
           </div>
           
-          <button class="confirm-btn" id="confirmPayment">Confirm Payment</button>
+          <button class="btn btn-success" id="confirmPayment" style="width: 100%;">
+            <i class="fas fa-check-circle"></i> Confirm Payment
+          </button>
         </div>
       </div>
 
       <!-- Referral Section -->
       <div class="referral-section">
-        <h3>🔗 Your Referral Link</h3>
+        <div class="section-header">
+          <i class="fas fa-link"></i>
+          <h2>Your Referral Link</h2>
+        </div>
         <p>Share this link to earn referral bonuses when others sign up:</p>
         <div class="referral-input">
           <input type="text" id="referralLink" readonly>
-          <button class="copy-btn" id="copyReferralBtn">Copy</button>
+          <button class="btn-copy" id="copyReferralBtn">Copy</button>
         </div>
       </div>
 
       <!-- Team Section -->
       <div class="team-section">
-        <h3>👥 Your Referral Team</h3>
+        <div class="section-header">
+          <i class="fas fa-users"></i>
+          <h2>Your Referral Team</h2>
+        </div>
         <table class="team-table">
           <thead>
             <tr>
+              <th>Name</th>
               <th>Email</th>
-              <th>Phone</th>
               <th>Joined Date</th>
               <th>Status</th>
             </tr>
@@ -835,10 +1027,19 @@
     const paymentAmount = document.getElementById('paymentAmount');
     const confirmPaymentBtn = document.getElementById('confirmPayment');
     const copyBusinessBtn = document.getElementById('copyBusinessBtn');
+    const copyBusinessModalBtn = document.getElementById('copyBusinessModalBtn');
     const copyReferralBtn = document.getElementById('copyReferralBtn');
-    const transactionId = document.getElementById('transactionId');
+    const transactionIdModal = document.getElementById('transactionIdModal');
     const userAvatar = document.getElementById('userAvatar');
     const userName = document.getElementById('userName');
+    const accountBalance = document.getElementById('accountBalance');
+    const totalEarnings = document.getElementById('totalEarnings');
+    const referralCount = document.getElementById('referralCount');
+    const completedTasks = document.getElementById('completedTasks');
+    const depositAmount = document.getElementById('depositAmount');
+    const transactionId = document.getElementById('transactionId');
+    const submitDepositBtn = document.getElementById('submitDeposit');
+    const referralLink = document.getElementById('referralLink');
 
     // Initialize the application
     document.addEventListener('DOMContentLoaded', function() {
@@ -883,14 +1084,21 @@
         copyToClipboard('0780619918', copyBusinessBtn);
       });
 
+      // Copy business number in modal
+      copyBusinessModalBtn.addEventListener('click', function() {
+        copyToClipboard('0780619918', copyBusinessModalBtn);
+      });
+
       // Copy referral link
       copyReferralBtn.addEventListener('click', function() {
-        const referralLink = document.getElementById('referralLink');
         copyToClipboard(referralLink.value, copyReferralBtn);
       });
 
       // Confirm payment
       confirmPaymentBtn.addEventListener('click', handlePaymentConfirmation);
+
+      // Submit deposit
+      submitDepositBtn.addEventListener('click', handleDeposit);
 
       // Logout
       logoutBtn.addEventListener('click', function(e) {
@@ -931,7 +1139,7 @@
 
         userProfile = data;
         updateUI(data);
-        loadTeamMembers(data.referral_code);
+        await loadTeamMembers(data.referral_code);
 
       } catch (error) {
         console.error("Profile load error:", error);
@@ -957,8 +1165,21 @@
       userName.textContent = profile.full_name || 'User';
       userAvatar.textContent = (profile.full_name || 'U').charAt(0).toUpperCase();
 
+      // Update account balance
+      const balance = profile.balance || 0;
+      accountBalance.textContent = 'KSh ' + balance.toLocaleString();
+
+      // Update total earnings
+      const earnings = profile.total_earnings || 0;
+      totalEarnings.textContent = 'KSh ' + earnings.toLocaleString();
+
+      // Update referral count
+      referralCount.textContent = profile.referral_count || 0;
+
+      // Update completed tasks
+      completedTasks.textContent = profile.completed_tasks || 0;
+
       // Update referral link with proper URL
-      const referralLink = document.getElementById('referralLink');
       referralLink.value = window.location.origin + '/signup.html?ref=' + profile.referral_code;
     }
 
@@ -974,31 +1195,73 @@
       paymentModal.style.display = 'flex';
       
       // Reset transaction ID
-      transactionId.value = '';
+      transactionIdModal.value = '';
     }
 
-    // Copy to clipboard function
-    function copyToClipboard(text, button) {
-      navigator.clipboard.writeText(text)
-        .then(function() {
-          const originalText = button.textContent;
-          button.textContent = 'Copied!';
-          button.classList.add('copied');
-          
-          setTimeout(function() {
-            button.textContent = originalText;
-            button.classList.remove('copied');
-          }, 2000);
-        })
-        .catch(function(err) {
-          console.error('Failed to copy: ', err);
-          showMessage('Failed to copy text', 'error');
-        });
+    // Handle deposit request
+    async function handleDeposit() {
+      const amount = parseFloat(depositAmount.value);
+      const transaction = transactionId.value.trim();
+      
+      if (!amount || amount < 100) {
+        showMessage('Please enter a valid amount (minimum KSh 100)', 'error');
+        return;
+      }
+      
+      if (!transaction) {
+        showMessage('Please enter your transaction ID', 'error');
+        return;
+      }
+      
+      // Show loading state
+      submitDepositBtn.innerHTML = '<span class="loading"></span> Processing...';
+      submitDepositBtn.disabled = true;
+      
+      try {
+        // Create deposit request in Supabase
+        const { data, error } = await supabaseClient
+          .from('deposit_requests')
+          .insert([
+            {
+              user_id: currentUser.id,
+              user_email: currentUser.email,
+              amount: amount,
+              transaction_id: transaction,
+              status: 'pending',
+              created_at: new Date().toISOString()
+            }
+          ]);
+        
+        if (error) {
+          // If table doesn't exist, show message
+          if (error.message.includes('does not exist')) {
+            showMessage('Deposit system is being configured. Please contact support to complete your deposit.', 'info');
+            return;
+          } else {
+            throw error;
+          }
+        }
+        
+        // Show success message
+        showMessage(`Deposit request for KSh ${amount.toLocaleString()} submitted successfully! Your deposit will be credited after admin approval.`, 'success');
+        
+        // Reset form
+        depositAmount.value = '';
+        transactionId.value = '';
+        
+      } catch (error) {
+        console.error('Deposit request error:', error);
+        showMessage('Failed to submit deposit request. Please try again or contact support.', 'error');
+      } finally {
+        // Reset button state
+        submitDepositBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Submit Deposit Request';
+        submitDepositBtn.disabled = false;
+      }
     }
 
     // Handle payment confirmation
     async function handlePaymentConfirmation() {
-      const transactionIdValue = transactionId.value.trim();
+      const transactionIdValue = transactionIdModal.value.trim();
       
       if (!transactionIdValue) {
         showMessage('Please enter your transaction ID', 'error');
@@ -1041,7 +1304,7 @@
         }
         
         // Show success message
-        showMessage('Payment confirmation submitted successfully! Your ' + selectedPackage + ' membership will be activated after admin approval.', 'success');
+        showMessage(`Payment confirmation submitted successfully! Your ${selectedPackage} membership will be activated after admin approval.`, 'success');
         
         // Close modal
         paymentModal.style.display = 'none';
@@ -1051,17 +1314,17 @@
         showMessage('Failed to submit payment confirmation. Please try again or contact support.', 'error');
       } finally {
         // Reset button state
-        confirmPaymentBtn.innerHTML = 'Confirm Payment';
+        confirmPaymentBtn.innerHTML = '<i class="fas fa-check-circle"></i> Confirm Payment';
         confirmPaymentBtn.disabled = false;
       }
     }
 
-    // Load team members - FIXED: Show "Free" for members without packages
+    // Load team members
     async function loadTeamMembers(referralCode) {
       try {
         const { data: team, error } = await supabaseClient
           .from('profiles')
-          .select('email, phone, created_at, role')
+          .select('full_name, email, created_at, role')
           .eq('referred_by', referralCode)
           .order('created_at', { ascending: false });
 
@@ -1096,8 +1359,8 @@
           }
           
           return '<tr>' +
+            '<td>' + (member.full_name || '-') + '</td>' +
             '<td>' + (member.email || '-') + '</td>' +
-            '<td>' + (member.phone || '-') + '</td>' +
             '<td>' + new Date(member.created_at).toLocaleDateString() + '</td>' +
             '<td>' +
               '<span style="padding: 4px 8px; border-radius: 12px; font-size: 12px; font-weight: 600; background: ' + statusColor + '; color: #000;">' +
@@ -1116,6 +1379,25 @@
             '</td>' +
           '</tr>';
       }
+    }
+
+    // Copy to clipboard function
+    function copyToClipboard(text, button) {
+      navigator.clipboard.writeText(text)
+        .then(function() {
+          const originalText = button.textContent;
+          button.textContent = 'Copied!';
+          button.classList.add('copied');
+          
+          setTimeout(function() {
+            button.textContent = originalText;
+            button.classList.remove('copied');
+          }, 2000);
+        })
+        .catch(function(err) {
+          console.error('Failed to copy: ', err);
+          showMessage('Failed to copy text', 'error');
+        });
     }
 
     // Show message
@@ -1155,33 +1437,6 @@
     // Make functions globally available
     window.selectPackage = selectPackage;
   </script>
-  <script>
-// PWA Installation
-let deferredPrompt;
-const installBtn = document.getElementById('installBtn');
-
-window.addEventListener('beforeinstallprompt', (e) => {
-  e.preventDefault();
-  deferredPrompt = e;
-  if (installBtn) installBtn.style.display = 'block';
-});
-
-if (installBtn) {
-  installBtn.addEventListener('click', async () => {
-    installBtn.style.display = 'none';
-    deferredPrompt.prompt();
-    await deferredPrompt.userChoice;
-    deferredPrompt = null;
-  });
-}
-
-// Service Worker
-if ('serviceWorker' in navigator) {
-  window.addEventListener('load', () => {
-    navigator.serviceWorker.register('/service-worker.js');
-  });
-}
-</script>
 
 </body>
 </html>
