@@ -1353,6 +1353,214 @@
             font-weight: 700;
         }
         
+        /* ===== PAYMENT MODAL STYLES ===== */
+        .payment-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            padding: var(--spacing-md);
+            overflow-y: auto;
+        }
+        
+        .payment-content {
+            background: white;
+            border-radius: var(--border-radius-xl);
+            width: 100%;
+            max-width: 500px;
+            max-height: 90vh;
+            padding: var(--spacing-xl);
+            box-shadow: 0 25px 50px rgba(0,0,0,0.3);
+            position: relative;
+            animation: modalFade 0.4s;
+            overflow-y: auto;
+        }
+        
+        .payment-header {
+            text-align: center;
+            margin-bottom: var(--spacing-lg);
+        }
+        
+        .payment-header h2 {
+            color: var(--primary);
+            margin-bottom: var(--spacing-sm);
+            font-size: var(--font-size-xl);
+            font-weight: 800;
+        }
+        
+        .payment-amount {
+            font-size: var(--font-size-xxl);
+            font-weight: 900;
+            color: var(--success);
+            margin: var(--spacing-lg) 0;
+            text-align: center;
+        }
+        
+        .payment-steps {
+            background: linear-gradient(135deg, #e7f3ff, #d4e7ff);
+            padding: var(--spacing-md);
+            border-radius: var(--border-radius-md);
+            margin: var(--spacing-lg) 0;
+            border-left: 5px solid var(--primary);
+        }
+        
+        .payment-steps ol {
+            padding-left: var(--spacing-md);
+            line-height: 1.6;
+            font-size: var(--font-size-sm);
+        }
+        
+        .payment-steps li {
+            margin-bottom: var(--spacing-sm);
+        }
+        
+        .mpesa-code-input {
+            width: 100%;
+            padding: var(--spacing-md);
+            border: 2px solid var(--border);
+            border-radius: var(--border-radius-md);
+            font-size: var(--font-size-md);
+            text-align: center;
+            letter-spacing: 2px;
+            font-weight: 700;
+            margin: var(--spacing-md) 0;
+        }
+        
+        .mpesa-code-input:focus {
+            border-color: var(--primary);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(0,74,173,0.1);
+        }
+        
+        .payment-actions {
+            display: flex;
+            gap: var(--spacing-md);
+            margin-top: var(--spacing-xl);
+        }
+        
+        .payment-actions .btn {
+            flex: 1;
+        }
+        
+        .tool-locked {
+            position: relative;
+        }
+        
+        .tool-locked::after {
+            content: '🔒';
+            position: absolute;
+            top: var(--spacing-sm);
+            right: var(--spacing-sm);
+            font-size: var(--font-size-lg);
+        }
+        
+        .tool-price {
+            background: var(--warning);
+            color: var(--dark);
+            padding: var(--spacing-xs) var(--spacing-sm);
+            border-radius: 20px;
+            font-size: var(--font-size-xs);
+            font-weight: 700;
+            margin-top: var(--spacing-sm);
+            display: inline-block;
+        }
+        
+        /* ===== MANUAL PAYMENT STYLES ===== */
+        .manual-payment-section {
+            background: linear-gradient(135deg, #e7f5ee, #d4edda);
+            padding: var(--spacing-md);
+            border-radius: var(--border-radius-md);
+            margin: var(--spacing-lg) 0;
+            border-left: 5px solid var(--success);
+        }
+        
+        .manual-payment-section h4 {
+            color: var(--success);
+            margin-bottom: var(--spacing-md);
+            font-size: var(--font-size-lg);
+        }
+        
+        .mpesa-number-display {
+            background: var(--dark);
+            color: white;
+            padding: var(--spacing-md);
+            border-radius: var(--border-radius-sm);
+            font-family: monospace;
+            font-size: var(--font-size-md);
+            text-align: center;
+            margin: var(--spacing-md) 0;
+            letter-spacing: 2px;
+            font-weight: 700;
+            word-break: break-all;
+        }
+        
+        .copy-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: var(--spacing-sm) var(--spacing-md);
+            border-radius: var(--border-radius-sm);
+            cursor: pointer;
+            font-weight: 600;
+            transition: all var(--transition-normal);
+            margin-left: var(--spacing-sm);
+            width: 100%;
+            margin-top: var(--spacing-sm);
+        }
+        
+        .copy-btn:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+        
+        .transaction-message-box {
+            width: 100%;
+            min-height: 120px;
+            padding: var(--spacing-md);
+            border: 2px solid var(--border);
+            border-radius: var(--border-radius-sm);
+            font-family: 'Segoe UI', sans-serif;
+            font-size: var(--font-size-sm);
+            resize: vertical;
+            margin: var(--spacing-md) 0;
+            box-shadow: inset 0 2px 6px rgba(0,0,0,0.05);
+        }
+        
+        .transaction-message-box:focus {
+            border-color: var(--primary);
+            outline: none;
+            box-shadow: inset 0 2px 6px rgba(0,0,0,0.05), 0 0 0 3px rgba(0,74,173,0.1);
+        }
+        
+        .payment-status-indicator {
+            padding: var(--spacing-md);
+            border-radius: var(--border-radius-sm);
+            text-align: center;
+            font-weight: 700;
+            margin: var(--spacing-md) 0;
+        }
+        
+        .payment-status-indicator.pending {
+            background: var(--gradient-warning);
+            color: var(--dark);
+        }
+        
+        .payment-status-indicator.approved {
+            background: var(--gradient-success);
+            color: white;
+        }
+        
+        .payment-status-indicator.rejected {
+            background: var(--gradient-danger);
+            color: white;
+        }
+        
         /* ===== MEMBERSHIP UPGRADE PROMPT ===== */
         .membership-upgrade-prompt {
             background: var(--gradient-warning);
@@ -1487,6 +1695,14 @@
                 grid-template-columns: 1fr 1fr; 
             }
             
+            .payment-actions { 
+                flex-direction: column; 
+            }
+            
+            .payment-content {
+                padding: var(--spacing-lg);
+            }
+            
             main {
                 padding: var(--spacing-lg);
             }
@@ -1527,8 +1743,29 @@
                 flex-direction: column;
             }
             
-            .my-tasks-section, .filters-section {
-                padding: var(--spacing-lg);
+            .payment-steps ol {
+                padding-left: var(--spacing-md);
+            }
+            
+            .payment-content {
+                padding: var(--spacing-md);
+            }
+            
+            .manual-payment-section {
+                padding: var(--spacing-md);
+            }
+            
+            .mpesa-number-display {
+                font-size: var(--font-size-sm);
+                padding: var(--spacing-sm);
+            }
+            
+            .payment-header h2 {
+                font-size: var(--font-size-lg);
+            }
+            
+            .payment-amount {
+                font-size: var(--font-size-xl);
             }
         }
         
@@ -1547,6 +1784,10 @@
             
             .modal-content {
                 padding: var(--spacing-lg) var(--spacing-md);
+            }
+            
+            .payment-content {
+                padding: var(--spacing-md) var(--spacing-sm);
             }
         }
     </style>
@@ -1676,6 +1917,10 @@
                             <option value="content_writing">Content Writing</option>
                             <option value="data_entry">Data Entry</option>
                             <option value="transcription">Audio Transcription</option>
+                            <option value="network_marketing">Network Marketing</option>
+                            <option value="affiliate_marketing">Affiliate Marketing</option>
+                            <option value="online_gaming">Online Gaming</option>
+                            <option value="freelancing">Freelancing</option>
                         </select>
                     </div>
                     <div class="filter-group">
@@ -1694,6 +1939,9 @@
                             <option value="starter">Starter</option>
                             <option value="pro">Pro</option>
                             <option value="premium">Premium</option>
+                            <option value="executive">Executive</option>
+                            <option value="vip">VIP</option>
+                            <option value="elite">Elite</option>
                         </select>
                     </div>
                     <div class="filter-group search-box">
@@ -1723,6 +1971,178 @@
         </div>
     </div>
 
+    <!-- Manual Payment Modal -->
+    <div class="payment-modal" id="manualPaymentModal">
+        <div class="payment-content">
+            <span class="close-modal" id="closeManualPaymentModal">&times;</span>
+            <div class="payment-header">
+                <h2 id="manualPaymentTitle">Purchase Task Access</h2>
+                <p id="manualPaymentDescription">Complete payment to access this task</p>
+            </div>
+            
+            <div class="payment-amount" id="manualPaymentAmount">KSh 200</div>
+            
+            <div class="manual-payment-section">
+                <h4>📱 Manual M-Pesa Payment</h4>
+                <p>Send payment directly to our M-Pesa number and paste the confirmation message below.</p>
+                
+                <div style="margin: 20px 0;">
+                    <strong>M-Pesa Number:</strong>
+                    <div class="mpesa-number-display" id="mpesaNumberDisplay">0780619918</div>
+                    <button class="copy-btn" id="copyMpesaNumber">Copy Number</button>
+                </div>
+                
+                <div class="payment-steps">
+                    <h4>Payment Instructions</h4>
+                    <ol>
+                        <li>Go to M-Pesa on your phone</li>
+                        <li>Select <strong>Send Money</strong></li>
+                        <li>Enter Phone Number: <strong>0780619918</strong></li>
+                        <li>Enter Amount: <strong id="manualMpesaAmount">200</strong></li>
+                        <li>Enter your M-Pesa PIN</li>
+                        <li>Wait for confirmation message</li>
+                        <li>Copy the entire message and paste it below</li>
+                    </ol>
+                </div>
+                
+                <div class="form-group">
+                    <label for="transactionMessage">Paste M-Pesa Confirmation Message</label>
+                    <textarea id="transactionMessage" class="transaction-message-box" placeholder="Paste the entire M-Pesa confirmation message here..."></textarea>
+                    <small style="display: block; margin-top: 5px; color: var(--gray);">Paste the complete message you received from M-Pesa after payment</small>
+                </div>
+                
+                <div class="payment-status-indicator pending" id="paymentStatusIndicator" style="display: none;">
+                    Payment Under Review - Admin will approve within 24 hours
+                </div>
+            </div>
+            
+            <div class="payment-actions">
+                <button class="btn btn-success" id="submitPayment">Submit Payment for Review</button>
+                <button class="btn btn-danger" id="cancelManualPayment">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Membership Upgrade Modal -->
+    <div class="modal" id="membershipUpgradeModal">
+        <div class="modal-content">
+            <span class="close-modal" id="closeMembershipUpgradeModal">&times;</span>
+            <div class="payment-header">
+                <h2>🔒 Membership Upgrade Required</h2>
+                <p>You need a higher membership level to access this task</p>
+            </div>
+            
+            <div class="membership-upgrade-prompt">
+                <h4>Upgrade Your Membership</h4>
+                <p>This task requires <strong id="requiredMembershipLevel">Premium</strong> membership level. Upgrade now to unlock access to higher-paying tasks and exclusive features.</p>
+                
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 15px; margin: 20px 0;">
+                    <div style="text-align: center; padding: 20px; background: white; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); border: 2px solid var(--primary);">
+                        <h5>Starter</h5>
+                        <div style="font-size: 24px; font-weight: 800; color: var(--primary); margin: 10px 0;">KSh 3,500</div>
+                        <ul style="text-align: left; font-size: 14px; margin: 15px 0; padding-left: 20px;">
+                            <li>Basic transcription tasks</li>
+                            <li>Network marketing opportunities</li>
+                            <li>Affiliate marketing programs</li>
+                            <li>Online gaming tasks</li>
+                            <li>Email support</li>
+                            <li>Up to KSh 2,000 daily limit</li>
+                            <li>10 tasks/day maximum</li>
+                            <li>Standard withdrawals (24-48 hours)</li>
+                        </ul>
+                        <button class="btn btn-primary" style="padding: 8px 16px;" id="upgradeStarter">Upgrade to Starter</button>
+                    </div>
+                    
+                    <div style="text-align: center; padding: 20px; background: white; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); border: 2px solid var(--warning);">
+                        <h5>Pro</h5>
+                        <div style="font-size: 24px; font-weight: 800; color: var(--primary); margin: 10px 0;">KSh 5,500</div>
+                        <ul style="text-align: left; font-size: 14px; margin: 15px 0; padding-left: 20px;">
+                            <li>All Starter features PLUS</li>
+                            <li>Freelancing & academic writing tasks</li>
+                            <li>Higher payment rates</li>
+                            <li>Priority support</li>
+                            <li>Team growth rewards</li>
+                            <li>Up to KSh 8,000 daily limit</li>
+                            <li>30 tasks/day maximum</li>
+                            <li>Faster withdrawals (12-24 hours)</li>
+                        </ul>
+                        <button class="btn btn-warning" style="padding: 8px 16px;" id="upgradePro">Upgrade to Pro</button>
+                    </div>
+                    
+                    <div style="text-align: center; padding: 20px; background: white; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); border: 2px solid var(--success);">
+                        <h5>Premium</h5>
+                        <div style="font-size: 24px; font-weight: 800; color: var(--primary); margin: 10px 0;">KSh 8,000</div>
+                        <ul style="text-align: left; font-size: 14px; margin: 15px 0; padding-left: 20px;">
+                            <li>All Pro features PLUS</li>
+                            <li>Unlimited daily earnings</li>
+                            <li>All task categories unlocked</li>
+                            <li>24/7 premium support</li>
+                            <li>Unlimited tasks per day</li>
+                            <li>Instant withdrawals</li>
+                            <li>Highest payment rates</li>
+                            <li>Early feature access</li>
+                        </ul>
+                        <button class="btn btn-success" style="padding: 8px 16px;" id="upgradePremium">Upgrade to Premium</button>
+                    </div>
+
+                    <div style="text-align: center; padding: 20px; background: white; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); border: 2px solid var(--secondary);">
+                        <h5>Executive</h5>
+                        <div style="font-size: 24px; font-weight: 800; color: var(--primary); margin: 10px 0;">KSh 15,000</div>
+                        <ul style="text-align: left; font-size: 14px; margin: 15px 0; padding-left: 20px;">
+                            <li>All Premium features PLUS</li>
+                            <li>Personal account manager</li>
+                            <li>Weekly mentorship sessions</li>
+                            <li>Advanced analytics dashboard</li>
+                            <li>Priority task allocation</li>
+                            <li>25% higher earning rates</li>
+                            <li>Exclusive webinars</li>
+                            <li>Custom earning strategies</li>
+                        </ul>
+                        <button class="btn btn-secondary" style="padding: 8px 16px; background: var(--secondary);" id="upgradeExecutive">Upgrade to Executive</button>
+                    </div>
+
+                    <div style="text-align: center; padding: 20px; background: white; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); border: 2px solid var(--gold);">
+                        <h5>VIP</h5>
+                        <div style="font-size: 24px; font-weight: 800; color: var(--primary); margin: 10px 0;">KSh 20,000</div>
+                        <ul style="text-align: left; font-size: 14px; margin: 15px 0; padding-left: 20px;">
+                            <li>All Executive features PLUS</li>
+                            <li>Dedicated support team</li>
+                            <li>Monthly strategy calls</li>
+                            <li>Early all-feature access</li>
+                            <li>Custom task requests</li>
+                            <li>50% higher earning rates</li>
+                            <li>VIP community access</li>
+                            <li>+50% REFERRAL BONUS</li>
+                        </ul>
+                        <button class="btn" style="padding: 8px 16px; background: var(--gold); color: var(--dark);" id="upgradeVIP">Upgrade to VIP</button>
+                    </div>
+
+                    <div style="text-align: center; padding: 20px; background: white; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); border: 2px solid var(--danger);">
+                        <h5>Elite</h5>
+                        <div style="font-size: 24px; font-weight: 800; color: var(--primary); margin: 10px 0;">KSh 25,000</div>
+                        <ul style="text-align: left; font-size: 14px; margin: 15px 0; padding-left: 20px;">
+                            <li>All VIP features PLUS</li>
+                            <li>1-on-1 business coaching</li>
+                            <li>Revenue sharing opportunities</li>
+                            <li>Mastermind group access</li>
+                            <li>Lifetime platform updates</li>
+                            <li>100% higher earning rates</li>
+                            <li>Partnership opportunities</li>
+                            <li>+100% REFERRAL BONUS</li>
+                            <li>Residual income streams</li>
+                        </ul>
+                        <button class="btn btn-danger" style="padding: 8px 16px;" id="upgradeElite">Upgrade to Elite</button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="payment-actions">
+                <button class="btn btn-primary" id="goToMembershipPage">Upgrade Now</button>
+                <button class="btn btn-danger" id="cancelUpgrade">Maybe Later</button>
+            </div>
+        </div>
+    </div>
+
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script>
         // ===== SUPABASE CONFIGURATION =====
@@ -1737,6 +2157,22 @@
         } catch (error) {
             console.error('Failed to initialize Supabase:', error);
         }
+
+        // ===== APPLICATION CONFIGURATION =====
+        const APP_CONFIG = {
+            ADMIN_MPESA_NUMBER: "0780619918",
+            TASK_ACCESS_FEE: 200, // All tasks cost KSh 200
+            AUTO_REFRESH_INTERVAL: 24 * 60 * 60 * 1000, // 24 hours
+            AUTO_SAVE_INTERVAL: 2 * 60 * 1000, // 2 minutes
+            MEMBERSHIP_PACKAGES: {
+                'starter': { price: 3500, name: 'Starter' },
+                'pro': { price: 5500, name: 'Pro' },
+                'premium': { price: 8000, name: 'Premium' },
+                'executive': { price: 15000, name: 'Executive' },
+                'vip': { price: 20000, name: 'VIP' },
+                'elite': { price: 25000, name: 'Elite' }
+            }
+        };
 
         // Global variables
         let currentUser = null;
@@ -1753,6 +2189,8 @@
         let isTimerRunning = false;
         let isAssigningTask = false;
         let currentUserTask = null;
+        let currentPaymentType = null;
+        let currentPaymentAmount = 0;
         let purchasedTools = [];
 
         // DOM Elements
@@ -1765,6 +2203,33 @@
         const refreshCountdown = document.getElementById('refreshCountdown');
         const taskModal = document.getElementById('taskModal');
         const closeTaskModalBtn = document.getElementById('closeTaskModal');
+        
+        // Manual Payment Modal Elements
+        const manualPaymentModal = document.getElementById('manualPaymentModal');
+        const closeManualPaymentModalBtn = document.getElementById('closeManualPaymentModal');
+        const manualPaymentTitle = document.getElementById('manualPaymentTitle');
+        const manualPaymentDescription = document.getElementById('manualPaymentDescription');
+        const manualPaymentAmount = document.getElementById('manualPaymentAmount');
+        const manualMpesaAmount = document.getElementById('manualMpesaAmount');
+        const mpesaNumberDisplay = document.getElementById('mpesaNumberDisplay');
+        const copyMpesaNumberBtn = document.getElementById('copyMpesaNumber');
+        const transactionMessage = document.getElementById('transactionMessage');
+        const paymentStatusIndicator = document.getElementById('paymentStatusIndicator');
+        const submitPaymentBtn = document.getElementById('submitPayment');
+        const cancelManualPaymentBtn = document.getElementById('cancelManualPayment');
+        
+        // Membership Upgrade Modal Elements
+        const membershipUpgradeModal = document.getElementById('membershipUpgradeModal');
+        const closeMembershipUpgradeModalBtn = document.getElementById('closeMembershipUpgradeModal');
+        const requiredMembershipLevel = document.getElementById('requiredMembershipLevel');
+        const goToMembershipPageBtn = document.getElementById('goToMembershipPage');
+        const cancelUpgradeBtn = document.getElementById('cancelUpgrade');
+        const upgradeStarterBtn = document.getElementById('upgradeStarter');
+        const upgradeProBtn = document.getElementById('upgradePro');
+        const upgradePremiumBtn = document.getElementById('upgradePremium');
+        const upgradeExecutiveBtn = document.getElementById('upgradeExecutive');
+        const upgradeVIPBtn = document.getElementById('upgradeVIP');
+        const upgradeEliteBtn = document.getElementById('upgradeElite');
 
         // Initialize app
         document.addEventListener('DOMContentLoaded', function() {
@@ -1775,6 +2240,7 @@
             setupEventListeners();
             await checkAuth();
             startAutoRefreshTimer();
+            setupAutoSave();
         }
 
         function setupEventListeners() {
@@ -1800,9 +2266,13 @@
             });
 
             closeTaskModalBtn.addEventListener('click', closeTaskModal);
+            closeManualPaymentModalBtn.addEventListener('click', closeManualPaymentModal);
+            closeMembershipUpgradeModalBtn.addEventListener('click', closeMembershipUpgradeModal);
             
             window.addEventListener('click', function(e) {
                 if (e.target === taskModal) closeTaskModal();
+                if (e.target === manualPaymentModal) closeManualPaymentModal();
+                if (e.target === membershipUpgradeModal) closeMembershipUpgradeModal();
             });
 
             // Filter event listeners
@@ -1813,6 +2283,21 @@
                 clearTimeout(searchTimeout);
                 searchTimeout = setTimeout(() => renderTasks(), 300);
             });
+
+            // Manual payment event listeners
+            copyMpesaNumberBtn.addEventListener('click', copyMpesaNumber);
+            submitPaymentBtn.addEventListener('click', submitManualPayment);
+            cancelManualPaymentBtn.addEventListener('click', closeManualPaymentModal);
+            
+            // Membership upgrade event listeners
+            goToMembershipPageBtn.addEventListener('click', redirectToMembership);
+            cancelUpgradeBtn.addEventListener('click', closeMembershipUpgradeModal);
+            upgradeStarterBtn.addEventListener('click', () => upgradeMembership('starter'));
+            upgradeProBtn.addEventListener('click', () => upgradeMembership('pro'));
+            upgradePremiumBtn.addEventListener('click', () => upgradeMembership('premium'));
+            upgradeExecutiveBtn.addEventListener('click', () => upgradeMembership('executive'));
+            upgradeVIPBtn.addEventListener('click', () => upgradeMembership('vip'));
+            upgradeEliteBtn.addEventListener('click', () => upgradeMembership('elite'));
         }
 
         async function checkAuth() {
@@ -1849,29 +2334,12 @@
                 await loadTasks();
                 await loadUserTasks();
                 
-                // Load purchased tools
-                await loadPurchasedTools();
+                // Load purchased tools (all tools are free now)
+                purchasedTools = ['spell_checker', 'word_counter', 'readability_checker', 'citation_generator', 'seo_checker'];
+                console.log('All tools are now free:', purchasedTools);
             } catch (error) {
                 console.error("Data load error:", error);
                 showMessage('Failed to load data', 'error');
-            }
-        }
-
-        async function loadPurchasedTools() {
-            try {
-                const { data: purchases, error } = await supabaseClient
-                    .from('tool_purchases')
-                    .select('tool_name')
-                    .eq('user_id', currentUser.id)
-                    .eq('status', 'approved');
-
-                if (error) throw error;
-                
-                purchasedTools = purchases ? purchases.map(p => p.tool_name) : [];
-                console.log('Purchased tools:', purchasedTools);
-            } catch (error) {
-                console.error('Error loading purchased tools:', error);
-                purchasedTools = [];
             }
         }
 
@@ -1989,7 +2457,7 @@
                 // Check membership requirement
                 const userMembership = userProfile ? userProfile.role : 'starter';
                 const taskMembership = task.required_membership || 'starter';
-                const membershipLevels = { 'starter': 1, 'pro': 2, 'premium': 3 };
+                const membershipLevels = { 'starter': 1, 'pro': 2, 'premium': 3, 'executive': 4, 'vip': 5, 'elite': 6 };
                 const hasRequiredMembership = membershipLevels[userMembership] >= membershipLevels[taskMembership];
 
                 let actionButton = '';
@@ -2012,8 +2480,8 @@
                     statusBadge = '<div class="task-status-container in-progress">🔵 Task In Progress</div>';
                     actionButton = '<button class="btn btn-warning" onclick="viewTaskDetails(\'' + task.id + '\')">Continue Task</button>';
                 } else if (canAssign) {
-                    // REMOVED PAYMENT REQUIREMENT - Direct task assignment
-                    actionButton = '<button class="btn btn-primary" onclick="assignTaskAndOpenWorkspace(\'' + task.id + '\')">Start Task</button>';
+                    // For all tasks, use manual payment system - KSh 200 for all tasks
+                    actionButton = '<button class="btn btn-primary" onclick="showManualPaymentModal(\'' + task.id + '\', \'task_access\')">🔒 Purchase Access (KSh 200)</button>';
                 }
 
                 // Add audio icon for transcription tasks
@@ -2134,7 +2602,11 @@
                 'academic_research': 'Academic Research', 
                 'content_writing': 'Content Writing', 
                 'data_entry': 'Data Entry',
-                'transcription': 'Audio Transcription'
+                'transcription': 'Audio Transcription',
+                'network_marketing': 'Network Marketing',
+                'affiliate_marketing': 'Affiliate Marketing',
+                'online_gaming': 'Online Gaming',
+                'freelancing': 'Freelancing'
             };
             return types[type] || type;
         }
@@ -2202,6 +2674,14 @@
             setInterval(updateCountdown, 1000);
         }
 
+        function setupAutoSave() {
+            setInterval(() => {
+                if (currentTaskId) {
+                    autoSaveWork();
+                }
+            }, APP_CONFIG.AUTO_SAVE_INTERVAL);
+        }
+
         async function handleLogout() {
             try {
                 const { error } = await supabaseClient.auth.signOut();
@@ -2225,650 +2705,847 @@
             }
         }
 
-        async function assignTaskAndOpenWorkspace(taskId) {
-            // Prevent multiple assignment clicks
-            if (isAssigningTask) {
-                console.log('Assignment already in progress, please wait...');
+        function closeManualPaymentModal() {
+            manualPaymentModal.style.display = 'none';
+            transactionMessage.value = '';
+            paymentStatusIndicator.style.display = 'none';
+            currentPaymentType = null;
+            currentPaymentAmount = 0;
+        }
+        
+        function closeMembershipUpgradeModal() {
+            membershipUpgradeModal.style.display = 'none';
+        }
+
+        function showManualPaymentModal(taskId, paymentType) {
+            const task = allTasks.find(t => t.id === taskId);
+            if (!task) return;
+            
+            let amount = APP_CONFIG.TASK_ACCESS_FEE; // All tasks cost KSh 200
+            let description = `Pay KSh ${amount} to access "${task.title}" task`;
+            
+            currentPaymentType = paymentType;
+            currentPaymentAmount = amount;
+            currentTaskId = taskId;
+            
+            manualPaymentTitle.textContent = 'Purchase Task Access';
+            manualPaymentDescription.textContent = description;
+            manualPaymentAmount.textContent = `KSh ${amount}`;
+            manualMpesaAmount.textContent = amount.toString();
+            mpesaNumberDisplay.textContent = APP_CONFIG.ADMIN_MPESA_NUMBER;
+            
+            // Reset UI
+            paymentStatusIndicator.style.display = 'none';
+            transactionMessage.value = '';
+            
+            manualPaymentModal.style.display = 'flex';
+        }
+        
+        function showMembershipUpgradeModal(requiredLevel) {
+            requiredMembershipLevel.textContent = formatMembership(requiredLevel);
+            membershipUpgradeModal.style.display = 'flex';
+        }
+
+        function copyMpesaNumber() {
+            navigator.clipboard.writeText(APP_CONFIG.ADMIN_MPESA_NUMBER).then(() => {
+                showMessage('M-Pesa number copied to clipboard', 'success');
+            }).catch(err => {
+                console.error('Failed to copy text: ', err);
+                showMessage('Failed to copy M-Pesa number', 'error');
+            });
+        }
+
+        async function submitManualPayment() {
+            const message = transactionMessage.value.trim();
+            
+            if (!message) {
+                showMessage('Please paste the M-Pesa confirmation message', 'error');
                 return;
             }
-
+            
             try {
-                isAssigningTask = true;
+                showMessage('Submitting payment for admin review...', 'info');
                 
-                // Disable the button immediately to prevent double clicks
-                const buttons = document.querySelectorAll(`button[onclick="assignTaskAndOpenWorkspace('${taskId}')"]`);
-                buttons.forEach(button => {
-                    button.disabled = true;
-                    button.innerHTML = '<span class="loading-spinner"></span> Assigning...';
-                });
-                
-                // Check if user already has this task in ANY status
-                const existingTask = userTasks.find(ut => ut.task_id === taskId);
-                if (existingTask) {
-                    console.log('Task already assigned with status:', existingTask.status);
-                    // If task exists, just open the workspace directly
-                    viewTaskDetails(taskId);
-                    resetAssignmentButtons(taskId);
-                    isAssigningTask = false;
-                    return;
-                }
-
-                // Check membership requirement
-                const task = allTasks.find(t => t.id === taskId);
-                if (!task) {
-                    showMessage('Task not found', 'error');
-                    resetAssignmentButtons(taskId);
-                    isAssigningTask = false;
-                    return;
-                }
-
-                const userMembership = userProfile ? userProfile.role : 'starter';
-                const taskMembership = task.required_membership || 'starter';
-                const membershipLevels = { 'starter': 1, 'pro': 2, 'premium': 3 };
-                
-                if (membershipLevels[userMembership] < membershipLevels[taskMembership]) {
-                    showMessage('You need ' + formatMembership(taskMembership) + ' membership to access this task', 'error');
-                    resetAssignmentButtons(taskId);
-                    isAssigningTask = false;
-                    return;
-                }
-
-                showMessage('Assigning task...', 'info');
-
-                // First, double-check with Supabase to ensure no duplicate exists
-                const { data: existingTasks, error: checkError } = await supabaseClient
-                    .from('user_tasks')
-                    .select('*')
-                    .eq('user_id', currentUser.id)
-                    .eq('task_id', taskId);
-
-                if (checkError) {
-                    console.error('Error checking for existing tasks:', checkError);
-                    throw checkError;
-                }
-
-                if (existingTasks && existingTasks.length > 0) {
-                    console.log('Task already exists in database:', existingTasks[0]);
-                    // Update local state and open the workspace
-                    await loadUserTasks();
-                    viewTaskDetails(taskId);
-                    resetAssignmentButtons(taskId);
-                    isAssigningTask = false;
-                    return;
-                }
-
-                // If no existing task found, proceed with assignment
+                // Record the payment in the database
                 const { data, error } = await supabaseClient
-                    .from('user_tasks')
-                    .insert([{ 
-                        user_id: currentUser.id, 
-                        task_id: taskId, 
-                        status: 'assigned', 
-                        assigned_at: new Date().toISOString(),
-                        time_spent: 0 // Initialize time spent to 0
-                    }])
-                    .select()
-                    .single();
-
-                if (error) {
-                    if (error.code === '23505') { // Unique constraint violation
-                        console.log('Unique constraint violation - task already assigned');
-                        // Task already assigned, refresh and open workspace
-                        await loadUserTasks();
-                        viewTaskDetails(taskId);
-                        resetAssignmentButtons(taskId);
-                        isAssigningTask = false;
-                        return;
-                    }
-                    throw error;
-                }
+                    .from('payments')
+                    .insert([{
+                        user_id: currentUser.id,
+                        transaction_message: message,
+                        amount: currentPaymentAmount,
+                        payment_type: currentPaymentType,
+                        task_id: currentTaskId,
+                        status: 'pending',
+                        payment_method: 'manual_mpesa',
+                        created_at: new Date().toISOString()
+                    }]);
                 
-                showMessage('Task assigned successfully!', 'success');
+                if (error) throw error;
                 
-                // Refresh user tasks to get the latest data
-                await loadUserTasks();
-                renderTasks();
+                // Show payment status
+                paymentStatusIndicator.style.display = 'block';
+                paymentStatusIndicator.className = 'payment-status-indicator pending';
+                paymentStatusIndicator.textContent = 'Payment Under Review - Admin will approve within 24 hours';
                 
-                // Open the workspace directly
-                viewTaskDetails(taskId);
+                showMessage('✅ Payment submitted for admin approval. You will receive access once approved.', 'success');
+                
+                // Close modal after 3 seconds
+                setTimeout(() => {
+                    closeManualPaymentModal();
+                }, 3000);
                 
             } catch (error) {
-                console.error('Assignment error:', error);
-                showMessage('Failed to assign task: ' + error.message, 'error');
-                resetAssignmentButtons(taskId);
-            } finally {
-                isAssigningTask = false;
+                console.error('Payment error:', error);
+                showMessage('Failed to submit payment: ' + error.message, 'error');
             }
         }
 
-        function resetAssignmentButtons(taskId) {
-            const buttons = document.querySelectorAll(`button[onclick="assignTaskAndOpenWorkspace('${taskId}')"]`);
-            buttons.forEach(button => {
-                button.disabled = false;
-                button.innerHTML = 'Start Task';
-            });
+        async function upgradeMembership(level) {
+            try {
+                const packageInfo = APP_CONFIG.MEMBERSHIP_PACKAGES[level];
+                if (!packageInfo) {
+                    showMessage('Invalid membership level', 'error');
+                    return;
+                }
+
+                showMessage(`Initiating upgrade to ${packageInfo.name} package...`, 'info');
+                
+                // Record membership upgrade request
+                const { data, error } = await supabaseClient
+                    .from('membership_upgrades')
+                    .insert([{
+                        user_id: currentUser.id,
+                        requested_level: level,
+                        amount: packageInfo.price,
+                        status: 'pending',
+                        created_at: new Date().toISOString()
+                    }]);
+                
+                if (error) throw error;
+                
+                showMessage(`✅ Upgrade to ${packageInfo.name} requested! Please complete payment of KSh ${packageInfo.price.toLocaleString()} to activate your new membership.`, 'success');
+                closeMembershipUpgradeModal();
+                
+            } catch (error) {
+                console.error('Membership upgrade error:', error);
+                showMessage('Failed to request membership upgrade: ' + error.message, 'error');
+            }
+        }
+        
+        function redirectToMembership() {
+            window.location.href = 'membership.html';
         }
 
-        function viewTaskDetails(taskId) {
+        // ===== TASK WORKSPACE FUNCTIONS =====
+        async function viewTaskDetails(taskId) {
             const task = allTasks.find(t => t.id === taskId);
-            const userTask = userTasks.find(ut => ut.task_id === taskId);
+            if (!task) return;
+
             currentTaskId = taskId;
-            currentUserTask = userTask; // Store for timer function
             
-            if (!task) {
-                showMessage('Task not found', 'error');
+            // Check if user has access to this task
+            const userTask = userTasks.find(ut => ut.task_id === taskId);
+            
+            if (!userTask) {
+                showMessage('You need to purchase access to this task first', 'error');
                 return;
             }
 
-            let modalContent = '<h2 style="color: var(--primary); margin-bottom: 25px; font-size: 28px; font-weight: 800;">' + 
-                (task.task_type === 'transcription' ? '🎧 ' : '') + task.title + '</h2>' +
-                '<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin-bottom: 25px; background: linear-gradient(135deg, var(--light), #e9ecef); padding: 25px; border-radius: 16px; box-shadow: 0 4px 12px rgba(0,0,0,0.05);">' +
-                    '<div><strong style="color: var(--primary);">📋 Task Type:</strong> ' + formatTaskType(task.task_type) + '</div>' +
-                    '<div><strong style="color: var(--primary);">🎯 Difficulty:</strong> <span class="difficulty-' + task.difficulty + '" style="font-weight: 700;">' + formatDifficulty(task.difficulty) + '</span></div>' +
-                    '<div><strong style="color: var(--primary);">💰 Reward:</strong> KSh ' + task.reward_amount + '</div>' +
-                    '<div><strong style="color: var(--primary);">📊 Status:</strong> ' + (userTask ? formatTaskStatus(userTask.status) : 'Not Started') + '</div>' +
-                '</div>';
+            // Get the user task details
+            const { data: userTaskDetails, error } = await supabaseClient
+                .from('user_tasks')
+                .select('*')
+                .eq('user_id', currentUser.id)
+                .eq('task_id', taskId)
+                .single();
 
-            // Add audio duration for transcription tasks
-            if (task.task_type === 'transcription' && task.audio_duration) {
-                const minutes = Math.floor(task.audio_duration / 60);
-                const seconds = task.audio_duration % 60;
-                modalContent += `<div style="margin-bottom: 15px; padding: 16px; background: linear-gradient(135deg, #e7f3ff, #d4e7ff); border-radius: 12px; border-left: 5px solid var(--primary);">
-                    <strong>🎧 Audio Duration:</strong> ${minutes}:${seconds.toString().padStart(2, '0')}
-                </div>`;
+            if (error) {
+                console.error('Error fetching user task:', error);
+                showMessage('Error loading task details', 'error');
+                return;
             }
 
-            // Add audio URL display for transcription tasks
-            if (task.task_type === 'transcription' && task.audio_url) {
-                modalContent += `
-                    <div style="margin-bottom: 20px; padding: 20px; background: linear-gradient(135deg, #e7f3ff, #d4e7ff); border-radius: 12px; border-left: 5px solid var(--primary);">
-                        <h4 style="color: var(--primary); margin-bottom: 10px;">🎧 Audio File</h4>
-                        <div style="display: flex; justify-content: space-between; align-items: center;">
-                            <div>
-                                <strong>Audio URL:</strong> 
-                                <a href="${task.audio_url}" target="_blank" style="color: var(--primary); text-decoration: underline; word-break: break-all;">
-                                    ${task.audio_url}
-                                </a>
-                            </div>
-                            <button class="btn btn-primary" onclick="testAudio('${task.audio_url}')" style="padding: 8px 16px;">
-                                Test Audio
-                            </button>
-                        </div>
-                    </div>
-                `;
-            }
+            currentUserTask = userTaskDetails;
 
-            if (task.deadline_days) {
-                modalContent += '<div style="margin-bottom: 15px; padding: 16px; background: linear-gradient(135deg, #fff3cd, #ffeaa7); border-radius: 12px; border-left: 5px solid var(--warning);"><strong>⏰ Deadline:</strong> ' + task.deadline_days + ' days from assignment</div>';
-            }
+            // Create workspace based on task type
+            let workspaceContent = '';
             
-            if (task.word_count || task.word_count_target) {
-                const wordCount = task.word_count_target || task.word_count;
-                modalContent += '<div style="margin-bottom: 15px; padding: 16px; background: linear-gradient(135deg, var(--light), #e9ecef); border-radius: 12px; border-left: 5px solid var(--primary);"><strong>📝 ' + 
-                    (task.task_type === 'transcription' ? 'Target Words:' : 'Word Count:') + '</strong> ' + wordCount + ' words</div>';
-            }
-            
-            if (task.requirements) {
-                let requirementsList = '';
-                try {
-                    const reqData = task.requirements;
-                    let reqArray;
-                    if (typeof reqData === 'string') {
-                        reqArray = JSON.parse(reqData);
-                    } else {
-                        reqArray = reqData;
-                    }
-                    if (Array.isArray(reqArray)) {
-                        requirementsList = reqArray.map(req => '<li style="margin-bottom: 8px; padding-left: 8px;">' + req + '</li>').join('');
-                    } else {
-                        requirementsList = '<li style="margin-bottom: 8px; padding-left: 8px;">' + reqData + '</li>';
-                    }
-                } catch (e) {
-                    requirementsList = '<li style="margin-bottom: 8px; padding-left: 8px;">' + task.requirements + '</li>';
-                }
-                modalContent += '<div style="margin-bottom: 25px;"><strong style="color: var(--primary); font-size: 18px;">📋 Requirements:</strong><ul style="margin: 15px 0; padding-left: 25px; font-size: 15px; line-height: 1.6;">' + requirementsList + '</ul></div>';
-            }
-
-            modalContent += '<div style="margin-bottom: 30px;">' +
-                '<h3 style="color: var(--primary); margin-bottom: 18px; font-size: 22px; font-weight: 700;">Task Description</h3>' +
-                '<div style="background: white; padding: 25px; border-radius: 14px; border: 2px solid var(--border); box-shadow: 0 4px 12px rgba(0,0,0,0.05);">' +
-                    '<p style="line-height: 1.7; margin: 0; font-size: 16px;">' + task.description + '</p>' +
-                '</div>' +
-            '</div>';
-
-            // Show admin feedback if task is rejected
-            if (userTask && userTask.status === 'rejected' && userTask.admin_feedback) {
-                modalContent += '<div style="margin-bottom: 30px;">' +
-                    '<h3 style="color: var(--primary); margin-bottom: 18px; font-size: 22px; font-weight: 700;">❌ Rejection Feedback</h3>' +
-                    '<div style="background: linear-gradient(135deg, #f8d7da, #f5c6cb); padding: 22px; border-radius: 14px; border-left: 6px solid var(--danger); box-shadow: 0 4px 12px rgba(220,53,69,0.1);">' +
-                        '<strong style="color: #721c24; font-size: 16px;">💬 Reason for Rejection:</strong><br><div style="margin-top: 12px; color: #721c24; line-height: 1.6; font-size: 15px;">' + userTask.admin_feedback + '</div>' +
-                    '</div>' +
-                '</div>';
-            }
-
-            // Add timer for all task types when assigned
-            if (userTask && (userTask.status === 'assigned' || userTask.status === 'in_progress')) {
-                modalContent += `
-                    <div class="timer-display">
-                        <h4 style="margin-bottom: 15px; font-size: 20px;">⏱️ Time Spent on Task</h4>
-                        <div id="timerDisplay" style="font-size: 32px; font-weight: 800; margin: 15px 0;">
-                            00:00:00
-                        </div>
-                        <div style="color: var(--warning); font-weight: 600; font-size: 14px;">
-                            ⚠️ Timer started automatically and cannot be paused
-                        </div>
-                    </div>
-                `;
-            }
-
-            // Add advanced tools section for all task types
-            modalContent += createAdvancedToolsSection(task);
-
-            // SPECIAL HANDLING FOR TRANSCRIPTION TASKS
             if (task.task_type === 'transcription') {
-                modalContent += createTranscriptionWorkspace(task, userTask);
-            }
-            // Show workspace for other tasks based on status
-            else if (userTask) {
-                // If task is assigned or in progress, show editable workspace
-                if (userTask.status === 'assigned' || userTask.status === 'in_progress') {
-                    modalContent += createWorkspace(task, userTask, true);
-                } 
-                // If task is submitted, approved, or rejected, show read-only workspace with submission
-                else if (userTask.status === 'submitted' || userTask.status === 'approved' || userTask.status === 'rejected') {
-                    modalContent += createWorkspace(task, userTask, false);
-                }
+                workspaceContent = createTranscriptionWorkspace(task, userTaskDetails);
+            } else {
+                workspaceContent = createWorkspace(task, userTaskDetails);
             }
 
-            document.getElementById('modalContent').innerHTML = modalContent;
+            document.getElementById('modalContent').innerHTML = `
+                <h2>${task.title}</h2>
+                <div class="task-meta" style="margin: 20px 0;">
+                    <div class="task-difficulty"><span class="difficulty-${task.difficulty}">${getDifficultyIcon(task.difficulty)} ${formatDifficulty(task.difficulty)}</span></div>
+                    <div class="task-reward" style="font-size: 24px;">KSh ${task.reward_amount}</div>
+                </div>
+                <div class="task-description">${task.description}</div>
+                ${workspaceContent}
+            `;
+
             taskModal.style.display = 'flex';
             
-            // Initialize audio player for transcription tasks
-            if (task.task_type === 'transcription') {
-                setTimeout(() => {
-                    initializeAudioPlayer(task.audio_url);
-                }, 100);
-            }
-            // Initialize workspace for other tasks if needed
-            else if (userTask && (userTask.status === 'assigned' || userTask.status === 'in_progress')) {
-                initializeWorkspace();
-            }
-
-            // Start timer automatically if task is assigned
-            if (userTask && (userTask.status === 'assigned' || userTask.status === 'in_progress')) {
-                setTimeout(() => {
-                    startTaskTimer();
-                }, 1000);
-            }
+            // Initialize workspace
+            setTimeout(() => {
+                initializeWorkspace(task.task_type);
+            }, 100);
         }
 
-        function createAdvancedToolsSection(task) {
-            let toolsHTML = '<div style="margin-bottom: 30px;">';
-            toolsHTML += '<h3 style="color: var(--primary); margin-bottom: 20px; font-size: 22px; font-weight: 700;">🛠️ Advanced Workspace Tools</h3>';
-            toolsHTML += '<div class="advanced-tools">';
-            
-            // Common tools for all task types
-            const commonTools = [
-                { icon: '📝', name: 'Text Editor', desc: 'Rich text editor with formatting options', price: 0 },
-                { icon: '💾', name: 'Auto Save', desc: 'Automatically saves your work every 2 minutes', price: 0 },
-                { icon: '📊', name: 'Word Counter', desc: 'Track your word count and progress', price: 0 },
-                { icon: '⏱️', name: 'Timer', desc: 'Track time spent on the task', price: 0 },
-                { icon: '🔍', name: 'Spell Check', desc: 'Check spelling and grammar', price: 0 },
-                { icon: '📁', name: 'File Manager', desc: 'Upload and manage files', price: 0 }
-            ];
-            
-            // Task-specific tools
-            let taskSpecificTools = [];
-            
-            switch(task.task_type) {
-                case 'academic_writing':
-                    taskSpecificTools = [
-                        { icon: '📚', name: 'Citation Tool', desc: 'Generate citations in various formats', price: 0 },
-                        { icon: '📖', name: 'Plagiarism Check', desc: 'Check for duplicate content', price: 0 },
-                        { icon: '📋', name: 'Outline Builder', desc: 'Create structured outlines', price: 0 },
-                        { icon: '🔬', name: 'Research Assistant', desc: 'Find relevant academic sources', price: 0 }
-                    ];
-                    break;
-                case 'academic_research':
-                    taskSpecificTools = [
-                        { icon: '📊', name: 'Data Analysis', desc: 'Analyze research data', price: 0 },
-                        { icon: '📈', name: 'Charts & Graphs', desc: 'Create visual representations', price: 0 },
-                        { icon: '🔍', name: 'Literature Review', desc: 'Manage research sources', price: 0 },
-                        { icon: '📋', name: 'Methodology Builder', desc: 'Structure research methods', price: 0 }
-                    ];
-                    break;
-                case 'content_writing':
-                    taskSpecificTools = [
-                        { icon: '🔍', name: 'SEO Analyzer', desc: 'Optimize content for search engines', price: 0 },
-                        { icon: '📈', name: 'Readability Score', desc: 'Check content readability', price: 0 },
-                        { icon: '🎯', name: 'Keyword Planner', desc: 'Find relevant keywords', price: 0 },
-                        { icon: '📱', name: 'Social Media Format', desc: 'Format for social platforms', price: 0 }
-                    ];
-                    break;
-                case 'data_entry':
-                    taskSpecificTools = [
-                        { icon: '📋', name: 'Spreadsheet', desc: 'Tabular data entry tool', price: 0 },
-                        { icon: '📊', name: 'Data Validation', desc: 'Validate and clean data', price: 0 },
-                        { icon: '🔢', name: 'Auto-Fill', desc: 'Automatically fill repetitive data', price: 0 },
-                        { icon: '📤', name: 'Export Tools', desc: 'Export data in multiple formats', price: 0 }
-                    ];
-                    break;
-                case 'transcription':
-                    taskSpecificTools = [
-                        { icon: '🎧', name: 'Audio Player', desc: 'Advanced playback controls', price: 0 },
-                        { icon: '⏱️', name: 'Timestamp Tool', desc: 'Insert timestamps easily', price: 0 },
-                        { icon: '🔊', name: 'Speed Control', desc: 'Adjust playback speed', price: 0 },
-                        { icon: '👥', name: 'Speaker Labels', desc: 'Identify different speakers', price: 0 }
-                    ];
-                    break;
-            }
-            
-            // Combine and render all tools
-            const allTools = [...commonTools, ...taskSpecificTools];
-            
-            allTools.forEach(tool => {
-                toolsHTML += `
-                    <div class="tool-card" onclick="activateTool('${tool.name}')">
-                        <div class="tool-icon">${tool.icon}</div>
-                        <div class="tool-name">${tool.name}</div>
-                        <div class="tool-desc">${tool.desc}</div>
+        function createAdvancedToolsSection() {
+            return `
+                <div class="workspace-tools">
+                    <h3>🛠️ Advanced Writing Tools</h3>
+                    <div class="advanced-tools">
+                        <div class="tool-card" onclick="activateTool('spell_checker')">
+                            <div class="tool-icon">🔍</div>
+                            <div class="tool-name">Spell Checker</div>
+                            <div class="tool-desc">Check spelling and grammar in your text</div>
+                        </div>
+                        <div class="tool-card" onclick="activateTool('word_counter')">
+                            <div class="tool-icon">📊</div>
+                            <div class="tool-name">Word Counter</div>
+                            <div class="tool-desc">Count words, characters, and paragraphs</div>
+                        </div>
+                        <div class="tool-card" onclick="activateTool('readability_checker')">
+                            <div class="tool-icon">📖</div>
+                            <div class="tool-name">Readability Check</div>
+                            <div class="tool-desc">Analyze text readability and complexity</div>
+                        </div>
+                        <div class="tool-card" onclick="activateTool('citation_generator')">
+                            <div class="tool-icon">📚</div>
+                            <div class="tool-name">Citation Generator</div>
+                            <div class="tool-desc">Generate citations in multiple formats</div>
+                        </div>
+                        <div class="tool-card" onclick="activateTool('seo_checker')">
+                            <div class="tool-icon">🔍</div>
+                            <div class="tool-name">SEO Checker</div>
+                            <div class="tool-desc">Optimize content for search engines</div>
+                        </div>
                     </div>
-                `;
-            });
-            
-            toolsHTML += '</div></div>';
-            return toolsHTML;
+                </div>
+            `;
         }
 
         function createTranscriptionWorkspace(task, userTask) {
-            let workspaceHTML = '<div class="transcription-workspace">';
-            workspaceHTML += '<h3 style="color: var(--primary); margin-bottom: 20px; font-size: 22px; font-weight: 700;">🎧 Transcription Workspace</h3>';
-            
-            // Audio player section
-            workspaceHTML += '<div class="audio-player-section">';
-            workspaceHTML += '<h4 style="margin-bottom: 15px; color: var(--primary);">Audio Player</h4>';
-            workspaceHTML += '<audio id="audioPlayer" controls>';
-            workspaceHTML += 'Your browser does not support the audio element.';
-            workspaceHTML += '</audio>';
-            workspaceHTML += '<div class="audio-controls">';
-            workspaceHTML += '<button class="tool-btn" onclick="togglePlayback()">⏯️ Play/Pause</button>';
-            workspaceHTML += '<button class="tool-btn" onclick="skipBackward()">⏪ Skip -15s</button>';
-            workspaceHTML += '<button class="tool-btn" onclick="skipForward()">⏩ Skip +15s</button>';
-            workspaceHTML += '<select id="playbackSpeed" onchange="changePlaybackSpeed(this.value)" style="padding: 8px; border-radius: 8px; border: 2px solid var(--border);">';
-            workspaceHTML += '<option value="0.5">0.5x</option>';
-            workspaceHTML += '<option value="0.75">0.75x</option>';
-            workspaceHTML += '<option value="1" selected>1x</option>';
-            workspaceHTML += '<option value="1.25">1.25x</option>';
-            workspaceHTML += '<option value="1.5">1.5x</option>';
-            workspaceHTML += '<option value="2">2x</option>';
-            workspaceHTML += '</select>';
-            workspaceHTML += '</div>';
-            workspaceHTML += '</div>';
-            
-            // Transcription guidelines
-            workspaceHTML += '<div class="transcription-guidelines">';
-            workspaceHTML += '<h4 style="margin-bottom: 10px; color: var(--primary);">📝 Transcription Guidelines</h4>';
-            workspaceHTML += '<ul style="padding-left: 20px; font-size: 14px; line-height: 1.6;">';
-            workspaceHTML += '<li>Transcribe exactly what you hear, including filler words (um, uh, etc.)</li>';
-            workspaceHTML += '<li>Use proper punctuation and capitalization</li>';
-            workspaceHTML += '<li>Indicate speaker changes with [Speaker 1], [Speaker 2], etc.</li>';
-            workspaceHTML += '<li>Note unclear sections with [inaudible] or [unclear]</li>';
-            workspaceHTML += '<li>Include timestamps for important sections if required</li>';
-            workspaceHTML += '</ul>';
-            workspaceHTML += '</div>';
-            
-            // Text editor for transcription
-            workspaceHTML += '<div class="workspace-tools">';
-            workspaceHTML += '<h4>Transcription Editor</h4>';
-            workspaceHTML += '<div class="toolbar">';
-            workspaceHTML += '<button class="tool-btn" onclick="insertTimestamp()">⏱️ Insert Timestamp</button>';
-            workspaceHTML += '<button class="tool-btn" onclick="insertSpeakerLabel()">👤 Insert Speaker</button>';
-            workspaceHTML += '<button class="tool-btn" onclick="clearText()">🗑️ Clear Text</button>';
-            workspaceHTML += '<button class="tool-btn" onclick="wordCountCheck()">📊 Word Count</button>';
-            workspaceHTML += '</div>';
-            workspaceHTML += '</div>';
-            
-            // Text area for transcription
-            const isEditable = userTask && (userTask.status === 'assigned' || userTask.status === 'in_progress');
-            workspaceHTML += '<textarea id="transcriptionText" class="text-editor" placeholder="Start transcribing here..." ' + 
-                (isEditable ? '' : 'disabled') + '>' + 
-                (userTask && userTask.submission_data ? userTask.submission_data : '') + 
-                '</textarea>';
-            
-            // Word count display
-            workspaceHTML += '<div style="margin-top: 15px; display: flex; justify-content: space-between; align-items: center;">';
-            workspaceHTML += '<div>Word Count: <span id="wordCount">0</span></div>';
-            if (isEditable) {
-                workspaceHTML += '<button class="btn btn-success" onclick="submitTranscriptionTask()">Submit Transcription</button>';
-            }
-            workspaceHTML += '</div>';
-            
-            workspaceHTML += '</div>';
-            return workspaceHTML;
+            return `
+                <div class="transcription-workspace">
+                    <div class="audio-player-section">
+                        <h3>🎧 Audio Player</h3>
+                        <audio id="audioPlayer" controls>
+                            <source src="${task.audio_url || '#'}" type="audio/mpeg">
+                            Your browser does not support the audio element.
+                        </audio>
+                        <div class="audio-controls">
+                            <button class="tool-btn" onclick="togglePlayback()">⏯️ Play/Pause</button>
+                            <button class="tool-btn" onclick="skipBackward()">⏪ 15s Back</button>
+                            <button class="tool-btn" onclick="skipForward()">⏩ 15s Forward</button>
+                            <button class="tool-btn" onclick="toggleLoop()">🔁 Loop</button>
+                            <select class="tool-btn" onchange="changePlaybackSpeed(this.value)">
+                                <option value="1">1x Speed</option>
+                                <option value="0.75">0.75x</option>
+                                <option value="0.5">0.5x</option>
+                                <option value="1.25">1.25x</option>
+                                <option value="1.5">1.5x</option>
+                            </select>
+                            <button class="tool-btn" onclick="insertTimestamp()">⏱️ Insert Timestamp</button>
+                            <button class="tool-btn" onclick="insertSpeakerLabel()">👤 Speaker Label</button>
+                            <button class="tool-btn" onclick="insertBackgroundNote()">💬 Background Note</button>
+                        </div>
+                    </div>
+
+                    <div class="transcription-guidelines">
+                        <h4>📝 Transcription Guidelines</h4>
+                        <ul>
+                            <li>Transcribe exactly what you hear - don't correct grammar</li>
+                            <li>Use proper punctuation and capitalization</li>
+                            <li>Include speaker labels when multiple people are speaking</li>
+                            <li>Note background sounds and non-speech audio in [brackets]</li>
+                            <li>Use timestamps for important sections [00:00]</li>
+                            <li>Maintain original meaning and context</li>
+                        </ul>
+                    </div>
+
+                    ${createAdvancedToolsSection()}
+
+                    <div class="workspace-area">
+                        <div class="workspace-tabs">
+                            <button class="workspace-tab active" onclick="switchWorkspaceTab('transcription')">Transcription</button>
+                            <button class="workspace-tab" onclick="switchWorkspaceTab('notes')">Notes</button>
+                        </div>
+                        
+                        <div id="transcriptionTab" class="workspace-tab-content">
+                            <textarea id="transcriptionText" class="text-editor" placeholder="Start transcribing the audio here...">${userTask.work_data?.transcription || ''}</textarea>
+                            <div style="display: flex; justify-content: space-between; margin-top: 15px;">
+                                <div>
+                                    <span id="wordCount">Words: 0</span>
+                                    <button class="tool-btn" onclick="clearText()">🗑️ Clear</button>
+                                    <button class="tool-btn" onclick="downloadAudio()">💾 Download</button>
+                                </div>
+                                <div>
+                                    <button class="btn btn-success" onclick="submitTranscriptionTask()">Submit Transcription</button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div id="notesTab" class="workspace-tab-content" style="display: none;">
+                            <textarea id="transcriptionNotes" class="text-editor" placeholder="Add notes about the transcription here...">${userTask.work_data?.notes || ''}</textarea>
+                        </div>
+                    </div>
+                </div>
+            `;
         }
 
-        function createWorkspace(task, userTask, isEditable) {
-            let workspaceHTML = '<div class="workspace-tools">';
-            workspaceHTML += '<h3>Workspace</h3>';
-            workspaceHTML += '<div class="workspace-tabs">';
-            workspaceHTML += '<button class="workspace-tab active" onclick="switchWorkspaceTab(\'text\')">Text Editor</button>';
-            workspaceHTML += '<button class="workspace-tab" onclick="switchWorkspaceTab(\'upload\')">File Upload</button>';
-            if (task.task_type === 'data_entry') {
-                workspaceHTML += '<button class="workspace-tab" onclick="switchWorkspaceTab(\'spreadsheet\')">Spreadsheet</button>';
-            }
-            workspaceHTML += '</div>';
-            workspaceHTML += '</div>';
+        function createWorkspace(task, userTask) {
+            const workspaceType = task.task_type === 'data_entry' ? 'spreadsheet' : 'text';
             
-            workspaceHTML += '<div class="workspace-area">';
-            
-            // Text editor tab
-            workspaceHTML += '<div id="textTab" class="workspace-tab-content">';
-            workspaceHTML += '<textarea id="submissionText" class="text-editor" placeholder="Start working on your task here..." ' + 
-                (isEditable ? '' : 'disabled') + '>' + 
-                (userTask && userTask.submission_data ? userTask.submission_data : '') + 
-                '</textarea>';
-            workspaceHTML += '</div>';
-            
-            // File upload tab
-            workspaceHTML += '<div id="uploadTab" class="workspace-tab-content" style="display: none;">';
-            workspaceHTML += '<div class="file-upload-area" onclick="document.getElementById(\'fileInput\').click()" ondrop="handleFiles(event)" ondragover="event.preventDefault()">';
-            workspaceHTML += '<i class="fas fa-cloud-upload-alt" style="font-size: 48px; color: var(--primary); margin-bottom: 15px;"></i>';
-            workspaceHTML += '<h4>Drag & Drop Files Here</h4>';
-            workspaceHTML += '<p>or click to select files</p>';
-            workspaceHTML += '<input type="file" id="fileInput" multiple style="display: none;" onchange="handleFiles(this.files)">';
-            workspaceHTML += '</div>';
-            workspaceHTML += '<div id="uploadedFiles"></div>';
-            workspaceHTML += '</div>';
-            
-            // Spreadsheet tab (for data entry tasks)
-            if (task.task_type === 'data_entry') {
-                workspaceHTML += '<div id="spreadsheetTab" class="workspace-tab-content" style="display: none;">';
-                workspaceHTML += '<div class="toolbar">';
-                workspaceHTML += '<button class="tool-btn" onclick="addTableRow()">➕ Add Row</button>';
-                workspaceHTML += '<button class="tool-btn" onclick="addTableColumn()">➕ Add Column</button>';
-                workspaceHTML += '<button class="tool-btn" onclick="clearTable()">🗑️ Clear Table</button>';
-                workspaceHTML += '<button class="tool-btn" onclick="downloadTable()">📥 Download CSV</button>';
-                workspaceHTML += '</div>';
-                workspaceHTML += '<table class="spreadsheet-table" id="dataTable">';
-                workspaceHTML += '<thead><tr><th contenteditable="true">Column 1</th></tr></thead>';
-                workspaceHTML += '<tbody><tr><td contenteditable="true"></td></tr></tbody>';
-                workspaceHTML += '</table>';
-                workspaceHTML += '</div>';
-            }
-            
-            workspaceHTML += '</div>';
-            
-            // Submit button for editable tasks
-            if (isEditable) {
-                workspaceHTML += '<div style="margin-top: 20px; text-align: center;">';
-                workspaceHTML += '<button class="btn btn-success" onclick="submitTask()">Submit Task for Review</button>';
-                workspaceHTML += '</div>';
-            }
-            
-            return workspaceHTML;
-        }
-
-        function initializeAudioPlayer(audioUrl) {
-            audioPlayer = document.getElementById('audioPlayer');
-            if (audioPlayer && audioUrl) {
-                audioPlayer.src = audioUrl;
+            return `
+                ${createAdvancedToolsSection()}
                 
-                audioPlayer.addEventListener('play', function() {
-                    isPlaying = true;
-                });
-                
-                audioPlayer.addEventListener('pause', function() {
-                    isPlaying = false;
-                });
-            }
+                <div class="workspace-area">
+                    <div class="workspace-tabs">
+                        <button class="workspace-tab active" onclick="switchWorkspaceTab('main')">Main Workspace</button>
+                        <button class="workspace-tab" onclick="switchWorkspaceTab('research')">Research</button>
+                        <button class="workspace-tab" onclick="switchWorkspaceTab('resources')">Resources</button>
+                    </div>
+                    
+                    <div id="mainTab" class="workspace-tab-content">
+                        ${workspaceType === 'spreadsheet' ? createSpreadsheetWorkspace(userTask) : createTextWorkspace(userTask)}
+                    </div>
+                    
+                    <div id="researchTab" class="workspace-tab-content" style="display: none;">
+                        <textarea id="researchNotes" class="text-editor" placeholder="Add your research notes here...">${userTask.work_data?.research || ''}</textarea>
+                    </div>
+                    
+                    <div id="resourcesTab" class="workspace-tab-content" style="display: none;">
+                        <div class="file-upload-area" id="fileUploadArea" ondragover="handleDragOver(event)" ondrop="handleFiles(event)">
+                            <p>📁 Drag & drop files here or click to upload</p>
+                            <input type="file" id="fileInput" multiple style="display: none;" onchange="handleFiles(event)">
+                            <button class="btn btn-primary" onclick="document.getElementById('fileInput').click()">Select Files</button>
+                        </div>
+                        <div id="uploadedFiles">
+                            ${userTask.work_data?.uploaded_files ? userTask.work_data.uploaded_files.map(file => `
+                                <div style="padding: 10px; border: 1px solid #ddd; margin: 5px 0; border-radius: 5px;">
+                                    📄 ${file.name} (${(file.size / 1024).toFixed(2)} KB)
+                                </div>
+                            `).join('') : ''}
+                        </div>
+                    </div>
+                    
+                    <div style="margin-top: 20px; display: flex; justify-content: space-between;">
+                        <div>
+                            <button class="btn btn-warning" onclick="autoSaveWork()">💾 Save Draft</button>
+                            <button class="btn btn-primary" onclick="startTaskTimer()">⏱️ Start Timer</button>
+                        </div>
+                        <div>
+                            <button class="btn btn-success" onclick="submitTask()">Submit Task</button>
+                        </div>
+                    </div>
+                    
+                    <div class="timer-display" id="timerDisplay" style="display: none;">
+                        Time Spent: <span id="timerValue">00:00:00</span>
+                    </div>
+                </div>
+            `;
         }
 
-        function initializeWorkspace() {
-            // Initialize any workspace-specific functionality
-            console.log('Workspace initialized');
+        function createSpreadsheetWorkspace(userTask) {
+            return `
+                <div class="spreadsheet-container">
+                    <div class="toolbar">
+                        <button class="tool-btn" onclick="addTableRow()">➕ Add Row</button>
+                        <button class="tool-btn" onclick="addTableColumn()">➕ Add Column</button>
+                        <button class="tool-btn" onclick="clearTable()">🗑️ Clear Table</button>
+                        <button class="tool-btn" onclick="downloadTable()">📥 Download CSV</button>
+                    </div>
+                    <table class="spreadsheet-table" id="dataTable">
+                        <thead>
+                            <tr>
+                                <th contenteditable="true">Column 1</th>
+                                <th contenteditable="true">Column 2</th>
+                                <th contenteditable="true">Column 3</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td contenteditable="true"></td>
+                                <td contenteditable="true"></td>
+                                <td contenteditable="true"></td>
+                            </tr>
+                            <tr>
+                                <td contenteditable="true"></td>
+                                <td contenteditable="true"></td>
+                                <td contenteditable="true"></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            `;
+        }
+
+        function createTextWorkspace(userTask) {
+            return `
+                <textarea id="workspaceText" class="text-editor" placeholder="Start working on your task here...">${userTask.work_data?.content || ''}</textarea>
+                <div style="margin-top: 15px;">
+                    <button class="tool-btn" onclick="formatText('bold')"><strong>B</strong></button>
+                    <button class="tool-btn" onclick="formatText('italic')"><em>I</em></button>
+                    <button class="tool-btn" onclick="formatText('underline')"><u>U</u></button>
+                    <button class="tool-btn" onclick="wordCountCheck()">Word Count</button>
+                </div>
+            `;
+        }
+
+        function initializeWorkspace(taskType) {
+            // Initialize audio player for transcription tasks
+            if (taskType === 'transcription') {
+                audioPlayer = document.getElementById('audioPlayer');
+                if (audioPlayer) {
+                    audioPlayer.addEventListener('play', function() {
+                        isPlaying = true;
+                    });
+                    audioPlayer.addEventListener('pause', function() {
+                        isPlaying = false;
+                    });
+                }
+                
+                // Initialize word counter
+                const transcriptionText = document.getElementById('transcriptionText');
+                if (transcriptionText) {
+                    transcriptionText.addEventListener('input', updateWordCounter);
+                    updateWordCounter();
+                }
+            }
+            
+            // Initialize word counter for text workspace
+            const workspaceText = document.getElementById('workspaceText');
+            if (workspaceText) {
+                workspaceText.addEventListener('input', function() {
+                    updateWordCounter(this, 'wordCountGeneral');
+                });
+            }
         }
 
         function startTaskTimer() {
             if (isTimerRunning) return;
             
             isTimerRunning = true;
-            // Use the current user task time if available, otherwise start from 0
-            timerSeconds = currentUserTask ? (currentUserTask.time_spent || 0) : 0;
+            timerSeconds = currentUserTask.time_spent || 0;
             
-            timerInterval = setInterval(async () => {
+            document.getElementById('timerDisplay').style.display = 'block';
+            
+            timerInterval = setInterval(function() {
                 timerSeconds++;
-                const timerDisplay = document.getElementById('timerDisplay');
-                if (timerDisplay) {
-                    timerDisplay.textContent = formatTime(timerSeconds);
-                }
-                
-                // Auto-save time every 30 seconds
-                if (timerSeconds % 30 === 0 && currentTaskId) {
-                    await updateTaskTime();
-                }
+                updateTaskTime();
+                document.getElementById('timerValue').textContent = formatTime(timerSeconds);
             }, 1000);
         }
 
         function formatTime(seconds) {
-            const hours = Math.floor(seconds / 3600);
-            const minutes = Math.floor((seconds % 3600) / 60);
+            const hrs = Math.floor(seconds / 3600);
+            const mins = Math.floor((seconds % 3600) / 60);
             const secs = seconds % 60;
-            return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+            return `${hrs.toString().padStart(2, '0')}:${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
         }
 
         async function updateTaskTime() {
-            if (!currentTaskId) return;
+            if (!currentUserTask) return;
             
             try {
-                await supabaseClient
+                const { error } = await supabaseClient
                     .from('user_tasks')
-                    .update({
-                        time_spent: timerSeconds,
-                        updated_at: new Date().toISOString()
-                    })
-                    .eq('user_id', currentUser.id)
-                    .eq('task_id', currentTaskId);
+                    .update({ time_spent: timerSeconds })
+                    .eq('id', currentUserTask.id);
+                
+                if (error) throw error;
             } catch (error) {
-                console.error('Failed to update task time:', error);
+                console.error('Error updating task time:', error);
             }
         }
 
         async function submitTask() {
-            if (!currentTaskId) {
-                showMessage('No task selected', 'error');
-                return;
-            }
-
+            if (!currentTaskId || !currentUserTask) return;
+            
             try {
-                const submissionText = document.getElementById('submissionText')?.value || '';
+                // Get work data based on task type
+                let workData = {};
+                const task = allTasks.find(t => t.id === currentTaskId);
                 
-                if (!submissionText.trim()) {
-                    showMessage('Please complete the task before submitting', 'error');
-                    return;
+                if (task.task_type === 'transcription') {
+                    const transcriptionText = document.getElementById('transcriptionText');
+                    const transcriptionNotes = document.getElementById('transcriptionNotes');
+                    
+                    workData = {
+                        transcription: transcriptionText ? transcriptionText.value : '',
+                        notes: transcriptionNotes ? transcriptionNotes.value : '',
+                        word_count: transcriptionText ? transcriptionText.value.split(/\s+/).filter(word => word.length > 0).length : 0
+                    };
+                } else if (task.task_type === 'data_entry') {
+                    // Extract data from spreadsheet
+                    const table = document.getElementById('dataTable');
+                    const data = [];
+                    
+                    if (table) {
+                        const rows = table.querySelectorAll('tr');
+                        rows.forEach(row => {
+                            const rowData = [];
+                            const cells = row.querySelectorAll('th, td');
+                            cells.forEach(cell => {
+                                rowData.push(cell.textContent);
+                            });
+                            data.push(rowData);
+                        });
+                    }
+                    
+                    workData = {
+                        spreadsheet_data: data,
+                        content: JSON.stringify(data)
+                    };
+                } else {
+                    const workspaceText = document.getElementById('workspaceText');
+                    const researchNotes = document.getElementById('researchNotes');
+                    
+                    workData = {
+                        content: workspaceText ? workspaceText.value : '',
+                        research: researchNotes ? researchNotes.value : '',
+                        word_count: workspaceText ? workspaceText.value.split(/\s+/).filter(word => word.length > 0).length : 0
+                    };
                 }
-
-                showMessage('Submitting task...', 'info');
-
-                const { data, error } = await supabaseClient
+                
+                // Update user task
+                const { error } = await supabaseClient
                     .from('user_tasks')
                     .update({
                         status: 'submitted',
-                        submission_data: submissionText,
                         submitted_at: new Date().toISOString(),
+                        work_data: workData,
                         time_spent: timerSeconds
                     })
-                    .eq('user_id', currentUser.id)
-                    .eq('task_id', currentTaskId);
-
-                if (error) throw error;
-
-                showMessage('Task submitted successfully! It will be reviewed by an admin.', 'success');
+                    .eq('id', currentUserTask.id);
                 
-                // Refresh user tasks and close modal
+                if (error) throw error;
+                
+                showMessage('Task submitted successfully! It will be reviewed by admin.', 'success');
+                closeTaskModal();
+                
+                // Reload user tasks
                 await loadUserTasks();
-                setTimeout(() => {
-                    closeTaskModal();
-                    renderTasks();
-                }, 2000);
                 
             } catch (error) {
-                console.error('Submission error:', error);
+                console.error('Error submitting task:', error);
                 showMessage('Failed to submit task: ' + error.message, 'error');
             }
         }
 
         async function submitTranscriptionTask() {
-            if (!currentTaskId) {
-                showMessage('No task selected', 'error');
+            await submitTask();
+        }
+
+        // ===== AUDIO PLAYER FUNCTIONS =====
+        function togglePlayback() {
+            if (!audioPlayer) return;
+            
+            if (isPlaying) {
+                audioPlayer.pause();
+            } else {
+                audioPlayer.play();
+            }
+        }
+
+        function skipBackward() {
+            if (!audioPlayer) return;
+            audioPlayer.currentTime = Math.max(0, audioPlayer.currentTime - 15);
+        }
+
+        function skipForward() {
+            if (!audioPlayer) return;
+            audioPlayer.currentTime = Math.min(audioPlayer.duration, audioPlayer.currentTime + 15);
+        }
+
+        function changePlaybackSpeed(speed) {
+            if (!audioPlayer) return;
+            audioPlayer.playbackRate = parseFloat(speed);
+        }
+
+        function insertTimestamp() {
+            if (!audioPlayer) return;
+            
+            const timestamp = `[${formatTime(Math.floor(audioPlayer.currentTime))}]`;
+            insertAtCursor(timestamp);
+        }
+
+        function insertSpeakerLabel() {
+            const label = '[SPEAKER]: ';
+            insertAtCursor(label);
+        }
+
+        function insertBackgroundNote() {
+            const note = '[BACKGROUND: ]';
+            insertAtCursor(note);
+        }
+
+        function insertAtCursor(text) {
+            const transcriptionText = document.getElementById('transcriptionText');
+            if (!transcriptionText) return;
+            
+            const start = transcriptionText.selectionStart;
+            const end = transcriptionText.selectionEnd;
+            const value = transcriptionText.value;
+            
+            transcriptionText.value = value.substring(0, start) + text + value.substring(end);
+            transcriptionText.selectionStart = transcriptionText.selectionEnd = start + text.length;
+            transcriptionText.focus();
+            
+            // Update word count
+            updateWordCounter();
+        }
+
+        function clearText() {
+            const transcriptionText = document.getElementById('transcriptionText');
+            if (transcriptionText && confirm('Are you sure you want to clear all text?')) {
+                transcriptionText.value = '';
+                updateWordCounter();
+            }
+        }
+
+        function formatText(command) {
+            const workspaceText = document.getElementById('workspaceText');
+            if (!workspaceText) return;
+            
+            document.execCommand(command, false, null);
+            workspaceText.focus();
+        }
+
+        function wordCountCheck() {
+            const workspaceText = document.getElementById('workspaceText');
+            if (!workspaceText) return;
+            
+            const text = workspaceText.value;
+            const wordCount = text.split(/\s+/).filter(word => word.length > 0).length;
+            const charCount = text.length;
+            
+            showMessage(`Word Count: ${wordCount} words, ${charCount} characters`, 'info');
+        }
+
+        function downloadAudio() {
+            const transcriptionText = document.getElementById('transcriptionText');
+            if (!transcriptionText) return;
+            
+            const text = transcriptionText.value;
+            const blob = new Blob([text], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'transcription.txt';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
+
+        async function autoSaveTranscription() {
+            if (!currentTaskId || !currentUserTask) return;
+            
+            const transcriptionText = document.getElementById('transcriptionText');
+            const transcriptionNotes = document.getElementById('transcriptionNotes');
+            
+            if (!transcriptionText) return;
+            
+            try {
+                const workData = {
+                    transcription: transcriptionText.value,
+                    notes: transcriptionNotes ? transcriptionNotes.value : '',
+                    word_count: transcriptionText.value.split(/\s+/).filter(word => word.length > 0).length,
+                    last_saved: new Date().toISOString()
+                };
+                
+                const { error } = await supabaseClient
+                    .from('user_tasks')
+                    .update({ work_data: workData })
+                    .eq('id', currentUserTask.id);
+                
+                if (error) throw error;
+                
+                console.log('Transcription auto-saved');
+            } catch (error) {
+                console.error('Error auto-saving transcription:', error);
+            }
+        }
+
+        async function autoSaveWork() {
+            if (!currentTaskId || !currentUserTask) return;
+            
+            try {
+                let workData = {};
+                const task = allTasks.find(t => t.id === currentTaskId);
+                
+                if (task.task_type === 'transcription') {
+                    await autoSaveTranscription();
+                    return;
+                } else if (task.task_type === 'data_entry') {
+                    // Save spreadsheet data
+                    const table = document.getElementById('dataTable');
+                    const data = [];
+                    
+                    if (table) {
+                        const rows = table.querySelectorAll('tr');
+                        rows.forEach(row => {
+                            const rowData = [];
+                            const cells = row.querySelectorAll('th, td');
+                            cells.forEach(cell => {
+                                rowData.push(cell.textContent);
+                            });
+                            data.push(rowData);
+                        });
+                    }
+                    
+                    workData = {
+                        spreadsheet_data: data,
+                        content: JSON.stringify(data),
+                        last_saved: new Date().toISOString()
+                    };
+                } else {
+                    const workspaceText = document.getElementById('workspaceText');
+                    const researchNotes = document.getElementById('researchNotes');
+                    
+                    workData = {
+                        content: workspaceText ? workspaceText.value : '',
+                        research: researchNotes ? researchNotes.value : '',
+                        word_count: workspaceText ? workspaceText.value.split(/\s+/).filter(word => word.length > 0).length : 0,
+                        last_saved: new Date().toISOString()
+                    };
+                }
+                
+                const { error } = await supabaseClient
+                    .from('user_tasks')
+                    .update({ work_data: workData })
+                    .eq('id', currentUserTask.id);
+                
+                if (error) throw error;
+                
+                showMessage('Work saved successfully!', 'success');
+            } catch (error) {
+                console.error('Error auto-saving work:', error);
+                showMessage('Failed to save work', 'error');
+            }
+        }
+
+        // ===== TOOL FUNCTIONS =====
+        function activateTool(toolName) {
+            switch(toolName) {
+                case 'spell_checker':
+                    runSpellCheck();
+                    break;
+                case 'word_counter':
+                    updateWordCounter();
+                    break;
+                case 'readability_checker':
+                    checkReadability();
+                    break;
+                case 'citation_generator':
+                    generateCitations();
+                    break;
+                case 'seo_checker':
+                    checkSEO();
+                    break;
+            }
+        }
+
+        function updateWordCounter() {
+            const transcriptionText = document.getElementById('transcriptionText');
+            const wordCountElement = document.getElementById('wordCount');
+            
+            if (!transcriptionText || !wordCountElement) return;
+            
+            const text = transcriptionText.value;
+            const wordCount = text.split(/\s+/).filter(word => word.length > 0).length;
+            
+            wordCountElement.textContent = `Words: ${wordCount}`;
+            
+            if (wordCount < 100) {
+                wordCountElement.className = 'low';
+            } else {
+                wordCountElement.className = 'good';
+            }
+        }
+
+        function runSpellCheck() {
+            const activeEditor = document.getElementById('transcriptionText') || document.getElementById('workspaceText');
+            if (!activeEditor) return;
+            
+            showMessage('Spell check would be implemented here with a proper library', 'info');
+        }
+
+        function checkReadability() {
+            const activeEditor = document.getElementById('transcriptionText') || document.getElementById('workspaceText');
+            if (!activeEditor) return;
+            
+            const text = activeEditor.value;
+            const sentences = text.split(/[.!?]+/).filter(s => s.length > 0);
+            const words = text.split(/\s+/).filter(w => w.length > 0);
+            const wordCount = words.length;
+            
+            if (sentences.length === 0 || wordCount === 0) {
+                showMessage('Not enough text to analyze readability', 'info');
                 return;
             }
+            
+            const avgSentenceLength = wordCount / sentences.length;
+            const longWords = words.filter(word => word.length > 6).length;
+            const percentageLongWords = (longWords / wordCount) * 100;
+            
+            let readabilityLevel = 'Very Easy';
+            if (avgSentenceLength > 25 || percentageLongWords > 20) readabilityLevel = 'Difficult';
+            else if (avgSentenceLength > 20 || percentageLongWords > 15) readabilityLevel = 'Fairly Difficult';
+            else if (avgSentenceLength > 15 || percentageLongWords > 10) readabilityLevel = 'Standard';
+            else if (avgSentenceLength > 10) readabilityLevel = 'Fairly Easy';
+            
+            showMessage(`Readability: ${readabilityLevel} (Avg. ${avgSentenceLength.toFixed(1)} words per sentence, ${percentageLongWords.toFixed(1)}% long words)`, 'info');
+        }
 
-            try {
-                const transcriptionText = document.getElementById('transcriptionText')?.value || '';
-                
-                if (!transcriptionText.trim()) {
-                    showMessage('Please complete the transcription before submitting', 'error');
-                    return;
+        function generateCitations() {
+            showMessage('Citation generator would create references in APA, MLA, or Chicago format', 'info');
+        }
+
+        function checkSEO() {
+            const activeEditor = document.getElementById('workspaceText');
+            if (!activeEditor) return;
+            
+            const text = activeEditor.value;
+            const words = text.split(/\s+/).filter(w => w.length > 0);
+            const wordCount = words.length;
+            
+            // Simple SEO analysis
+            const hasTitle = text.length > 0;
+            const hasParagraphs = text.split('\n\n').length > 1;
+            const density = {};
+            
+            // Count word frequency (simple keyword density)
+            words.forEach(word => {
+                const cleanWord = word.toLowerCase().replace(/[^a-z]/g, '');
+                if (cleanWord.length > 3) {
+                    density[cleanWord] = (density[cleanWord] || 0) + 1;
                 }
-
-                showMessage('Submitting transcription...', 'info');
-
-                const { data, error } = await supabaseClient
-                    .from('user_tasks')
-                    .update({
-                        status: 'submitted',
-                        submission_data: transcriptionText,
-                        submitted_at: new Date().toISOString(),
-                        time_spent: timerSeconds
-                    })
-                    .eq('user_id', currentUser.id)
-                    .eq('task_id', currentTaskId);
-
-                if (error) throw error;
-
-                showMessage('Transcription submitted successfully! It will be reviewed by an admin.', 'success');
-                
-                // Refresh user tasks and close modal
-                await loadUserTasks();
-                setTimeout(() => {
-                    closeTaskModal();
-                    renderTasks();
-                }, 2000);
-                
-            } catch (error) {
-                console.error('Submission error:', error);
-                showMessage('Failed to submit transcription: ' + error.message, 'error');
-            }
+            });
+            
+            // Get top keywords
+            const topKeywords = Object.entries(density)
+                .sort((a, b) => b[1] - a[1])
+                .slice(0, 5)
+                .map(([word, count]) => `${word} (${((count/wordCount)*100).toFixed(1)}%)`)
+                .join(', ');
+            
+            let seoScore = 0;
+            if (wordCount > 300) seoScore += 2;
+            if (hasTitle) seoScore += 1;
+            if (hasParagraphs) seoScore += 1;
+            if (wordCount > 500) seoScore += 1;
+            
+            showMessage(`SEO Score: ${seoScore}/5. Top keywords: ${topKeywords || 'None detected'}`, 'info');
         }
 
-        function testAudio(audioUrl) {
-            if (audioUrl) {
-                window.open(audioUrl, '_blank');
-            } else {
-                showMessage('No audio URL available', 'error');
-            }
-        }
-
+        // ===== WORKSPACE UTILITY FUNCTIONS =====
         function switchWorkspaceTab(tabName) {
             // Hide all tab contents
             document.querySelectorAll('.workspace-tab-content').forEach(tab => {
@@ -2880,499 +3557,127 @@
                 tab.classList.remove('active');
             });
             
-            // Show selected tab and mark as active
+            // Show selected tab and activate its button
             document.getElementById(tabName + 'Tab').style.display = 'block';
             event.target.classList.add('active');
         }
 
         function addTableRow() {
             const table = document.getElementById('dataTable');
-            const rowCount = table.rows.length;
-            const colCount = table.rows[0].cells.length;
+            if (!table) return;
             
-            const newRow = table.insertRow(rowCount);
-            for (let i = 0; i < colCount; i++) {
-                const cell = newRow.insertCell(i);
+            const tbody = table.querySelector('tbody');
+            const columns = table.querySelector('thead tr').children.length;
+            
+            const newRow = document.createElement('tr');
+            for (let i = 0; i < columns; i++) {
+                const cell = document.createElement('td');
                 cell.contentEditable = true;
+                newRow.appendChild(cell);
             }
+            
+            tbody.appendChild(newRow);
         }
 
         function addTableColumn() {
             const table = document.getElementById('dataTable');
-            const headerRow = table.rows[0];
-            const colCount = headerRow.cells.length;
+            if (!table) return;
             
-            // Add header cell
-            const headerCell = headerRow.insertCell(colCount);
-            headerCell.contentEditable = true;
-            headerCell.textContent = 'Column ' + (colCount + 1);
+            // Add header
+            const headerRow = table.querySelector('thead tr');
+            const newHeader = document.createElement('th');
+            newHeader.contentEditable = true;
+            newHeader.textContent = 'Column ' + (headerRow.children.length + 1);
+            headerRow.appendChild(newHeader);
             
-            // Add cells to all data rows
-            for (let i = 1; i < table.rows.length; i++) {
-                const cell = table.rows[i].insertCell(colCount);
-                cell.contentEditable = true;
-            }
+            // Add cells to each row
+            const rows = table.querySelectorAll('tbody tr');
+            rows.forEach(row => {
+                const newCell = document.createElement('td');
+                newCell.contentEditable = true;
+                row.appendChild(newCell);
+            });
         }
 
         function clearTable() {
-            if (confirm('Are you sure you want to clear the entire table?')) {
-                const table = document.getElementById('dataTable');
-                // Keep only the header row
-                while (table.rows.length > 1) {
-                    table.deleteRow(1);
-                }
-                
-                // Clear all cells in the header row
-                const headerRow = table.rows[0];
-                for (let i = 0; i < headerRow.cells.length; i++) {
-                    headerRow.cells[i].textContent = 'Column ' + (i + 1);
-                }
+            if (!confirm('Are you sure you want to clear all table data?')) return;
+            
+            const table = document.getElementById('dataTable');
+            if (!table) return;
+            
+            const tbody = table.querySelector('tbody');
+            tbody.innerHTML = '';
+            
+            // Add two empty rows
+            for (let i = 0; i < 2; i++) {
+                addTableRow();
             }
         }
 
         function downloadTable() {
             const table = document.getElementById('dataTable');
-            let csv = [];
+            if (!table) return;
             
-            // Get headers
-            const headers = [];
-            for (let i = 0; i < table.rows[0].cells.length; i++) {
-                headers.push(table.rows[0].cells[i].textContent);
-            }
-            csv.push(headers.join(','));
+            let csv = '';
+            const rows = table.querySelectorAll('tr');
             
-            // Get data rows
-            for (let i = 1; i < table.rows.length; i++) {
-                const row = [];
-                for (let j = 0; j < table.rows[i].cells.length; j++) {
-                    row.push(table.rows[i].cells[j].textContent);
-                }
-                csv.push(row.join(','));
-            }
-            
-            // Create and download CSV file
-            const csvContent = "data:text/csv;charset=utf-8," + csv.join('\n');
-            const encodedUri = encodeURI(csvContent);
-            const link = document.createElement("a");
-            link.setAttribute("href", encodedUri);
-            link.setAttribute("download", "data_export.csv");
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-        }
-
-        function handleFiles(files) {
-            const fileList = files.length ? files : event.dataTransfer.files;
-            const uploadedFilesDiv = document.getElementById('uploadedFiles');
-            
-            for (let i = 0; i < fileList.length; i++) {
-                const file = fileList[i];
-                const fileItem = document.createElement('div');
-                fileItem.style.cssText = 'background: white; padding: 12px; border-radius: 8px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 6px rgba(0,0,0,0.1);';
-                fileItem.innerHTML = `
-                    <div>
-                        <strong>${file.name}</strong> (${(file.size / 1024).toFixed(2)} KB)
-                    </div>
-                    <button class="tool-btn" onclick="this.parentElement.remove()" style="background: var(--danger); padding: 6px 12px;">Remove</button>
-                `;
-                uploadedFilesDiv.appendChild(fileItem);
-            }
-            
-            showMessage(`Added ${fileList.length} file(s)`, 'success');
-        }
-
-        function togglePlayback() {
-            if (audioPlayer) {
-                if (isPlaying) {
-                    audioPlayer.pause();
-                } else {
-                    audioPlayer.play();
-                }
-            }
-        }
-
-        function skipBackward() {
-            if (audioPlayer) {
-                audioPlayer.currentTime = Math.max(0, audioPlayer.currentTime - 15);
-            }
-        }
-
-        function skipForward() {
-            if (audioPlayer) {
-                audioPlayer.currentTime = Math.min(audioPlayer.duration, audioPlayer.currentTime + 15);
-            }
-        }
-
-        function changePlaybackSpeed(speed) {
-            if (audioPlayer) {
-                audioPlayer.playbackRate = parseFloat(speed);
-            }
-        }
-
-        function insertTimestamp() {
-            const textArea = document.getElementById('transcriptionText');
-            if (textArea && audioPlayer) {
-                const timestamp = `[${formatTime(Math.floor(audioPlayer.currentTime))}] `;
-                insertAtCursor(textArea, timestamp);
-            }
-        }
-
-        function insertSpeakerLabel() {
-            const textArea = document.getElementById('transcriptionText');
-            if (textArea) {
-                const speakerLabel = '[Speaker 1]: ';
-                insertAtCursor(textArea, speakerLabel);
-            }
-        }
-
-        function insertBackgroundNote() {
-            const textArea = document.getElementById('transcriptionText');
-            if (textArea) {
-                const note = '[Background noise] ';
-                insertAtCursor(textArea, note);
-            }
-        }
-
-        function clearText() {
-            const textArea = document.getElementById('transcriptionText');
-            if (textArea && confirm('Are you sure you want to clear all text?')) {
-                textArea.value = '';
-                updateWordCount();
-            }
-        }
-
-        function formatText(command) {
-            document.execCommand(command, false, null);
-        }
-
-        function wordCountCheck() {
-            const textArea = document.getElementById('transcriptionText');
-            if (textArea) {
-                const wordCount = textArea.value.trim().split(/\s+/).length;
-                const charCount = textArea.value.length;
-                showMessage(`Word Count: ${wordCount} words, Character Count: ${charCount} characters`, 'info');
-                updateWordCount();
-            }
-        }
-
-        function downloadAudio() {
-            showMessage('Audio download would start here', 'info');
-            // In a real app, this would download the audio file
-        }
-
-        function autoSaveTranscription() {
-            const textArea = document.getElementById('transcriptionText');
-            if (textArea) {
-                localStorage.setItem('transcription_autosave', textArea.value);
-                updateWordCount();
-            }
-        }
-
-        function autoSaveWork() {
-            const textArea = document.getElementById('submissionText');
-            if (textArea) {
-                localStorage.setItem('workspace_autosave', textArea.value);
-                showMessage('Work auto-saved', 'success');
-            }
-        }
-
-        function generateCitations() {
-            showMessage('Citation generator would open here', 'info');
-            // In a real app, this would open a citation generator
-        }
-
-        function checkSEO() {
-            const textArea = document.getElementById('submissionText');
-            if (textArea) {
-                const text = textArea.value;
-                const wordCount = text.trim().split(/\s+/).length;
-                const keywordDensity = {}; // This would be calculated in a real app
+            rows.forEach(row => {
+                const rowData = [];
+                const cells = row.querySelectorAll('th, td');
                 
-                showMessage(`SEO Analysis: ${wordCount} words. For detailed analysis, use a dedicated SEO tool.`, 'info');
-            }
-        }
-
-        // Helper function to insert text at cursor position
-        function insertAtCursor(textArea, text) {
-            const start = textArea.selectionStart;
-            const end = textArea.selectionEnd;
-            const value = textArea.value;
-            
-            textArea.value = value.substring(0, start) + text + value.substring(end);
-            textArea.selectionStart = textArea.selectionEnd = start + text.length;
-            textArea.focus();
-        }
-
-        // Helper function to update word count display
-        function updateWordCount() {
-            const textArea = document.getElementById('transcriptionText');
-            const wordCountSpan = document.getElementById('wordCount');
-            
-            if (textArea && wordCountSpan) {
-                const wordCount = textArea.value.trim().split(/\s+/).length;
-                wordCountSpan.textContent = wordCount;
+                cells.forEach(cell => {
+                    rowData.push(`"${cell.textContent.replace(/"/g, '""')}"`);
+                });
                 
-                // Color code based on word count
-                if (wordCount < 100) {
-                    wordCountSpan.className = 'low';
-                } else {
-                    wordCountSpan.className = 'good';
-                }
+                csv += rowData.join(',') + '\n';
+            });
+            
+            const blob = new Blob([csv], { type: 'text/csv' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'table_data.csv';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
+
+        function handleFiles(e) {
+            e.preventDefault();
+            const files = e.dataTransfer ? e.dataTransfer.files : e.target.files;
+            
+            if (!files || files.length === 0) return;
+            
+            const fileList = document.getElementById('uploadedFiles');
+            
+            for (let i = 0; i < files.length; i++) {
+                const file = files[i];
+                const fileElement = document.createElement('div');
+                fileElement.style.padding = '10px';
+                fileElement.style.border = '1px solid #ddd';
+                fileElement.style.margin = '5px 0';
+                fileElement.style.borderRadius = '5px';
+                fileElement.innerHTML = `📄 ${file.name} (${(file.size / 1024).toFixed(2)} KB)`;
+                fileList.appendChild(fileElement);
             }
+            
+            // Auto-save file references
+            autoSaveWork();
         }
 
-        // Function to activate tools when clicked
-        function activateTool(toolName) {
-            switch(toolName) {
-                case 'Text Editor':
-                    switchWorkspaceTab('text');
-                    showMessage('Text editor activated. You can now start writing your content.', 'info');
-                    break;
-                case 'Auto Save':
-                    autoSaveWork();
-                    showMessage('Auto-save enabled. Your work will be saved automatically every 2 minutes.', 'success');
-                    // Set up auto-save interval
-                    setInterval(() => {
-                        if (currentTaskId) autoSaveWork();
-                    }, 120000); // 2 minutes
-                    break;
-                case 'Word Counter':
-                    const textArea = document.getElementById('submissionText') || document.getElementById('transcriptionText');
-                    if (textArea) {
-                        const wordCount = textArea.value.trim().split(/\s+/).length;
-                        const charCount = textArea.value.length;
-                        showMessage(`Word Count: ${wordCount} words, Character Count: ${charCount} characters`, 'info');
-                        
-                        // Create a word counter panel if it doesn't exist
-                        let wordCounterPanel = document.getElementById('wordCounterPanel');
-                        if (!wordCounterPanel) {
-                            wordCounterPanel = document.createElement('div');
-                            wordCounterPanel.id = 'wordCounterPanel';
-                            wordCounterPanel.className = 'tool-panel';
-                            wordCounterPanel.innerHTML = `
-                                <h4>📊 Word Counter</h4>
-                                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
-                                    <div style="text-align: center;">
-                                        <div style="font-size: 24px; font-weight: 700; color: var(--primary);">${wordCount}</div>
-                                        <div style="font-size: 14px; color: var(--gray);">Words</div>
-                                    </div>
-                                    <div style="text-align: center;">
-                                        <div style="font-size: 24px; font-weight: 700; color: var(--primary);">${charCount}</div>
-                                        <div style="font-size: 14px; color: var(--gray);">Characters</div>
-                                    </div>
-                                </div>
-                                <button class="tool-btn" onclick="updateWordCounter()" style="margin-top: 15px; width: 100%;">Update Count</button>
-                            `;
-                            
-                            // Insert after the advanced tools section
-                            const advancedTools = document.querySelector('.advanced-tools').parentElement;
-                            advancedTools.parentNode.insertBefore(wordCounterPanel, advancedTools.nextSibling);
-                        }
-                    }
-                    break;
-                case 'Timer':
-                    showMessage('Timer is already running and tracking your time spent on this task.', 'info');
-                    break;
-                case 'Spell Check':
-                    // Simple spell check implementation
-                    const textAreaForSpell = document.getElementById('submissionText') || document.getElementById('transcriptionText');
-                    if (textAreaForSpell) {
-                        const text = textAreaForSpell.value;
-                        // This is a simple implementation - in a real app you'd use a proper spell check library
-                        const commonMisspellings = ['recieve', 'seperate', 'definately', 'occured', 'untill'];
-                        let foundErrors = [];
-                        
-                        commonMisspellings.forEach(word => {
-                            if (text.toLowerCase().includes(word)) {
-                                foundErrors.push(word);
-                            }
-                        });
-                        
-                        if (foundErrors.length > 0) {
-                            showMessage(`Potential spelling issues found: ${foundErrors.join(', ')}`, 'warning');
-                            
-                            // Create a spell check panel
-                            let spellCheckPanel = document.getElementById('spellCheckPanel');
-                            if (!spellCheckPanel) {
-                                spellCheckPanel = document.createElement('div');
-                                spellCheckPanel.id = 'spellCheckPanel';
-                                spellCheckPanel.className = 'tool-panel';
-                                spellCheckPanel.innerHTML = `
-                                    <h4>🔍 Spell Check Results</h4>
-                                    <div style="margin-bottom: 15px;">
-                                        <strong>Potential Issues:</strong>
-                                        <ul style="margin-top: 10px;">
-                                            ${foundErrors.map(error => `<li>${error}</li>`).join('')}
-                                        </ul>
-                                    </div>
-                                    <button class="tool-btn" onclick="runSpellCheck()" style="margin-right: 10px;">Check Again</button>
-                                    <button class="tool-btn" onclick="document.getElementById('spellCheckPanel').remove()" style="background: var(--danger);">Close</button>
-                                `;
-                                
-                                // Insert after the advanced tools section
-                                const advancedTools = document.querySelector('.advanced-tools').parentElement;
-                                advancedTools.parentNode.insertBefore(spellCheckPanel, advancedTools.nextSibling);
-                            }
-                        } else {
-                            showMessage('No obvious spelling errors detected.', 'success');
-                        }
-                    }
-                    break;
-                case 'File Manager':
-                    switchWorkspaceTab('upload');
-                    showMessage('File upload area activated. You can now upload supporting files.', 'info');
-                    break;
-                case 'Citation Tool':
-                    generateCitations();
-                    break;
-                case 'Plagiarism Check':
-                    showMessage('Plagiarism check would scan your text against online sources (premium feature).', 'info');
-                    break;
-                case 'Outline Builder':
-                    const outline = `# ${document.querySelector('h2').textContent}\n\n## Introduction\n\n## Main Points\n- Point 1\n- Point 2\n- Point 3\n\n## Conclusion\n`;
-                    const textAreaForOutline = document.getElementById('submissionText');
-                    if (textAreaForOutline) {
-                        textAreaForOutline.value = outline + textAreaForOutline.value;
-                        showMessage('Basic outline structure added to your document.', 'success');
-                    }
-                    break;
-                case 'Research Assistant':
-                    showMessage('Research assistant would help find relevant academic sources (premium feature).', 'info');
-                    break;
-                case 'Data Analysis':
-                    showMessage('Data analysis tools would help process and visualize your data (premium feature).', 'info');
-                    break;
-                case 'Charts & Graphs':
-                    showMessage('Chart and graph tools would help visualize your data (premium feature).', 'info');
-                    break;
-                case 'Literature Review':
-                    showMessage('Literature review tools would help organize your research sources (premium feature).', 'info');
-                    break;
-                case 'Methodology Builder':
-                    showMessage('Methodology builder would help structure your research methods section (premium feature).', 'info');
-                    break;
-                case 'SEO Analyzer':
-                    checkSEO();
-                    break;
-                case 'Readability Score':
-                    const textAreaForReadability = document.getElementById('submissionText');
-                    if (textAreaForReadability) {
-                        const text = textAreaForReadability.value;
-                        const sentences = text.split(/[.!?]+/).length - 1;
-                        const words = text.split(/\s+/).length;
-                        const avgSentenceLength = sentences > 0 ? words / sentences : 0;
-                        
-                        let readability = 'Good';
-                        if (avgSentenceLength > 25) readability = 'Difficult';
-                        else if (avgSentenceLength > 18) readability = 'Fair';
-                        
-                        showMessage(`Readability: ${readability}. Average sentence length: ${avgSentenceLength.toFixed(1)} words.`, 'info');
-                        
-                        // Create a readability panel
-                        let readabilityPanel = document.getElementById('readabilityPanel');
-                        if (!readabilityPanel) {
-                            readabilityPanel = document.createElement('div');
-                            readabilityPanel.id = 'readabilityPanel';
-                            readabilityPanel.className = 'tool-panel';
-                            readabilityPanel.innerHTML = `
-                                <h4>📈 Readability Analysis</h4>
-                                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 15px;">
-                                    <div style="text-align: center;">
-                                        <div style="font-size: 24px; font-weight: 700; color: var(--primary);">${words}</div>
-                                        <div style="font-size: 14px; color: var(--gray);">Words</div>
-                                    </div>
-                                    <div style="text-align: center;">
-                                        <div style="font-size: 24px; font-weight: 700; color: var(--primary);">${sentences}</div>
-                                        <div style="font-size: 14px; color: var(--gray);">Sentences</div>
-                                    </div>
-                                </div>
-                                <div style="text-align: center; margin-bottom: 15px;">
-                                    <div style="font-size: 20px; font-weight: 700; color: ${readability === 'Good' ? 'var(--success)' : readability === 'Fair' ? 'var(--warning)' : 'var(--danger)'};">${readability}</div>
-                                    <div style="font-size: 14px; color: var(--gray);">Readability Score</div>
-                                </div>
-                                <div style="text-align: center;">
-                                    <div style="font-size: 18px; font-weight: 700; color: var(--primary);">${avgSentenceLength.toFixed(1)}</div>
-                                    <div style="font-size: 14px; color: var(--gray);">Avg. Sentence Length</div>
-                                </div>
-                                <button class="tool-btn" onclick="checkReadability()" style="margin-top: 15px; width: 100%;">Reanalyze</button>
-                            `;
-                            
-                            // Insert after the advanced tools section
-                            const advancedTools = document.querySelector('.advanced-tools').parentElement;
-                            advancedTools.parentNode.insertBefore(readabilityPanel, advancedTools.nextSibling);
-                        }
-                    }
-                    break;
-                case 'Keyword Planner':
-                    showMessage('Keyword planner would suggest relevant keywords for your content (premium feature).', 'info');
-                    break;
-                case 'Social Media Format':
-                    const textAreaForSocial = document.getElementById('submissionText');
-                    if (textAreaForSocial) {
-                        let text = textAreaForSocial.value;
-                        // Add hashtags and emojis for social media
-                        text += '\n\n#content #writing #socialmedia 👍';
-                        textAreaForSocial.value = text;
-                        showMessage('Social media formatting applied to your content.', 'success');
-                    }
-                    break;
-                case 'Spreadsheet':
-                    switchWorkspaceTab('spreadsheet');
-                    showMessage('Spreadsheet activated for data entry tasks.', 'info');
-                    break;
-                case 'Data Validation':
-                    showMessage('Data validation would check your data for consistency and accuracy (premium feature).', 'info');
-                    break;
-                case 'Auto-Fill':
-                    showMessage('Auto-fill would help with repetitive data entry (premium feature).', 'info');
-                    break;
-                case 'Export Tools':
-                    downloadTable();
-                    break;
-                case 'Audio Player':
-                    showMessage('Audio player controls are available in the transcription workspace.', 'info');
-                    break;
-                case 'Timestamp Tool':
-                    insertTimestamp();
-                    break;
-                case 'Speed Control':
-                    showMessage('Use the speed control slider to adjust audio playback speed.', 'info');
-                    break;
-                case 'Speaker Labels':
-                    insertSpeakerLabel();
-                    break;
-                default:
-                    showMessage(`Tool "${toolName}" activated.`, 'info');
-            }
+        function handleDragOver(e) {
+            e.preventDefault();
+            e.currentTarget.classList.add('dragover');
         }
 
-        // Helper functions for tools
-        function updateWordCounter() {
-            const textArea = document.getElementById('submissionText') || document.getElementById('transcriptionText');
-            if (textArea) {
-                const wordCount = textArea.value.trim().split(/\s+/).length;
-                const charCount = textArea.value.length;
-                
-                const wordCounterPanel = document.getElementById('wordCounterPanel');
-                if (wordCounterPanel) {
-                    wordCounterPanel.querySelector('div:nth-child(2) > div:first-child > div:first-child').textContent = wordCount;
-                    wordCounterPanel.querySelector('div:nth-child(2) > div:last-child > div:first-child').textContent = charCount;
-                }
-            }
-        }
-
-        function runSpellCheck() {
-            activateTool('Spell Check');
-        }
-
-        function checkReadability() {
-            activateTool('Readability Score');
+        function testAudio() {
+            showMessage('Audio test functionality would be implemented here', 'info');
         }
 
         // Global functions for workspace
         window.showTab = showTab;
         window.viewTaskDetails = viewTaskDetails;
-        window.assignTaskAndOpenWorkspace = assignTaskAndOpenWorkspace;
         window.submitTask = submitTask;
         window.submitTranscriptionTask = submitTranscriptionTask;
         window.closeTaskModal = closeTaskModal;
@@ -3381,6 +3686,8 @@
         window.addTableColumn = addTableColumn;
         window.clearTable = clearTable;
         window.downloadTable = downloadTable;
+        window.showMembershipUpgradeModal = showMembershipUpgradeModal;
+        window.showManualPaymentModal = showManualPaymentModal;
         window.handleFiles = handleFiles;
         window.playPauseAudio = togglePlayback;
         window.skipBackward = skipBackward;
@@ -3406,5 +3713,4 @@
         window.testAudio = testAudio;
     </script>
 </body>
-</html>
-
+</html>         
