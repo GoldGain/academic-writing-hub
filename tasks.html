@@ -2161,9 +2161,10 @@
         // ===== APPLICATION CONFIGURATION =====
         const APP_CONFIG = {
             ADMIN_MPESA_NUMBER: "0780619918",
-            TASK_ACCESS_FEE: 200, // All tasks cost KSh 200
-            AUTO_REFRESH_INTERVAL: 24 * 60 * 60 * 1000, // 24 hours
-            AUTO_SAVE_INTERVAL: 2 * 60 * 1000, // 2 minutes
+            TASK_ACCESS_FEE: 200,
+            AUTO_REFRESH_INTERVAL: 24 * 60 * 60 * 1000,
+            AUTO_SAVE_INTERVAL: 2 * 60 * 1000,
+            PAYMENT_CHECK_INTERVAL: 30 * 1000,
             MEMBERSHIP_PACKAGES: {
                 'starter': { price: 3500, name: 'Starter' },
                 'pro': { price: 5500, name: 'Pro' },
@@ -2192,6 +2193,7 @@
         let currentPaymentType = null;
         let currentPaymentAmount = 0;
         let purchasedTools = [];
+        let paymentCheckInterval = null;
 
         // DOM Elements
         const mobileMenuBtn = document.getElementById('mobileMenuBtn');
@@ -2241,6 +2243,7 @@
             await checkAuth();
             startAutoRefreshTimer();
             setupAutoSave();
+            startPaymentMonitor();
         }
 
         function setupEventListeners() {
@@ -2334,7 +2337,7 @@
                 await loadTasks();
                 await loadUserTasks();
                 
-                // Load purchased tools (all tools are free now)
+                // Load purchased tools
                 purchasedTools = ['spell_checker', 'word_counter', 'readability_checker', 'citation_generator', 'seo_checker'];
                 console.log('All tools are now free:', purchasedTools);
             } catch (error) {
@@ -2362,7 +2365,6 @@
 
         async function loadUserTasks() {
             try {
-                // Use a simpler query without the nested relation to avoid 400 errors
                 const { data: assignedTasks, error } = await supabaseClient
                     .from('user_tasks')
                     .select('*')
@@ -2379,7 +2381,6 @@
                 renderMyTasks();
             } catch (error) {
                 console.error("User tasks error:", error);
-                // Initialize with empty array if there's an error
                 userTasks = [];
                 updateEarningsStats();
                 renderMyTasks();
@@ -2410,7 +2411,6 @@
             const pendingEarnings = userTasks
                 .filter(task => task.status === 'submitted')
                 .reduce((sum, task) => {
-                    // Find the task details to get the reward amount
                     const taskDetails = allTasks.find(t => t.id === task.task_id);
                     return sum + (taskDetails ? taskDetails.reward_amount : 0);
                 }, 0);
@@ -2452,7 +2452,7 @@
                 const isCompleted = userTask && userTask.status === 'approved';
                 const isRejected = userTask && userTask.status === 'rejected';
                 const isSubmitted = userTask && userTask.status === 'submitted';
-                const canAssign = !userTask; // Only show start button if no user task exists
+                const canAssign = !userTask;
 
                 // Check membership requirement
                 const userMembership = userProfile ? userProfile.role : 'starter';
@@ -2480,8 +2480,15 @@
                     statusBadge = '<div class="task-status-container in-progress">🔵 Task In Progress</div>';
                     actionButton = '<button class="btn btn-warning" onclick="viewTaskDetails(\'' + task.id + '\')">Continue Task</button>';
                 } else if (canAssign) {
-                    // For all tasks, use manual payment system - KSh 200 for all tasks
-                    actionButton = '<button class="btn btn-primary" onclick="showManualPaymentModal(\'' + task.id + '\', \'task_access\')">🔒 Purchase Access (KSh 200)</button>';
+                    // Check if payment is pending or approved
+                    const paymentStatus = getPaymentStatus(task.id);
+                    if (paymentStatus === 'approved') {
+                        actionButton = '<button class="btn btn-success" onclick="assignTaskAfterPayment(\'' + task.id + '\')">Start Task Now</button>';
+                    } else if (paymentStatus === 'pending') {
+                        actionButton = '<button class="btn btn-warning" disabled>Payment Under Review</button>';
+                    } else {
+                        actionButton = '<button class="btn btn-primary" onclick="showManualPaymentModal(\'' + task.id + '\', \'task_access\')">🔒 Purchase Access (KSh 200)</button>';
+                    }
                 }
 
                 // Add audio icon for transcription tasks
@@ -2502,6 +2509,12 @@
                     '<div class="task-actions">' + actionButton + '</div>' +
                 '</div>';
             }).join('');
+        }
+
+        function getPaymentStatus(taskId) {
+            // This would check the payment status for a specific task
+            // For now, we'll implement this in the payment monitor
+            return null;
         }
 
         function renderMyTasks() {
@@ -2635,19 +2648,15 @@
         }
 
         function showMessage(message, type) {
-            // Clear any existing messages
             const existingMessages = document.querySelectorAll('.message');
             existingMessages.forEach(msg => msg.remove());
             
-            // Create new message
             const messageDiv = document.createElement('div');
             messageDiv.className = `message ${type}`;
             messageDiv.textContent = message;
             
-            // Insert at the top of the message container
             messageContainer.insertBefore(messageDiv, messageContainer.firstChild);
             
-            // Auto remove after 5 seconds
             setTimeout(() => {
                 if (messageDiv.parentNode) {
                     messageDiv.remove();
@@ -2669,7 +2678,6 @@
                 refreshCountdown.textContent = `Next: ${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
             }
             
-            // Update immediately and then every second
             updateCountdown();
             setInterval(updateCountdown, 1000);
         }
@@ -2682,8 +2690,109 @@
             }, APP_CONFIG.AUTO_SAVE_INTERVAL);
         }
 
+        // ===== PAYMENT WORKFLOW FUNCTIONS =====
+        function startPaymentMonitor() {
+            // Check immediately
+            checkApprovedPayments();
+            
+            // Then check every 30 seconds
+            paymentCheckInterval = setInterval(checkApprovedPayments, APP_CONFIG.PAYMENT_CHECK_INTERVAL);
+        }
+
+        async function checkApprovedPayments() {
+            try {
+                const { data: approvedPayments, error } = await supabaseClient
+                    .from('payments')
+                    .select('*')
+                    .eq('user_id', currentUser.id)
+                    .eq('status', 'approved')
+                    .is('task_assigned', null); // Only get payments where task hasn't been assigned yet
+
+                if (error) throw error;
+
+                if (approvedPayments && approvedPayments.length > 0) {
+                    console.log('Found approved payments:', approvedPayments.length);
+                    for (const payment of approvedPayments) {
+                        await assignTaskAfterPayment(payment);
+                    }
+                    // Reload tasks after assignments
+                    await loadUserTasks();
+                    renderTasks();
+                }
+            } catch (error) {
+                console.error('Error checking approved payments:', error);
+            }
+        }
+
+        async function assignTaskAfterPayment(payment) {
+            try {
+                console.log('Assigning task for payment:', payment.id);
+                
+                // Check if user already has this task
+                const existingTask = userTasks.find(ut => ut.task_id === payment.task_id);
+                if (existingTask) {
+                    console.log('Task already assigned to user');
+                    await markPaymentAsProcessed(payment.id);
+                    return;
+                }
+
+                // Assign the task
+                const { data, error } = await supabaseClient
+                    .from('user_tasks')
+                    .insert([{ 
+                        user_id: currentUser.id, 
+                        task_id: payment.task_id, 
+                        status: 'assigned', 
+                        assigned_at: new Date().toISOString(),
+                        time_spent: 0,
+                        payment_id: payment.id
+                    }])
+                    .select()
+                    .single();
+
+                if (error) {
+                    if (error.code === '23505') {
+                        console.log('Task already assigned (unique constraint)');
+                    } else {
+                        throw error;
+                    }
+                }
+
+                // Mark payment as processed
+                await markPaymentAsProcessed(payment.id);
+                
+                showMessage(`✅ Task access granted! You can now work on "${getTaskTitle(payment.task_id)}".`, 'success');
+                
+            } catch (error) {
+                console.error('Error assigning task after payment:', error);
+                showMessage('Error assigning task after payment approval', 'error');
+            }
+        }
+
+        function getTaskTitle(taskId) {
+            const task = allTasks.find(t => t.id === taskId);
+            return task ? task.title : 'the task';
+        }
+
+        async function markPaymentAsProcessed(paymentId) {
+            try {
+                const { error } = await supabaseClient
+                    .from('payments')
+                    .update({ task_assigned: true })
+                    .eq('id', paymentId);
+
+                if (error) throw error;
+                console.log('Payment marked as processed:', paymentId);
+            } catch (error) {
+                console.error('Error marking payment as processed:', error);
+            }
+        }
+
         async function handleLogout() {
             try {
+                if (paymentCheckInterval) {
+                    clearInterval(paymentCheckInterval);
+                }
                 const { error } = await supabaseClient.auth.signOut();
                 if (error) throw error;
                 window.location.href = "login.html";
@@ -2697,7 +2806,6 @@
             taskModal.style.display = 'none';
             document.getElementById('modalContent').innerHTML = '';
             
-            // Stop timer if running
             if (timerInterval) {
                 clearInterval(timerInterval);
                 timerInterval = null;
@@ -2721,7 +2829,7 @@
             const task = allTasks.find(t => t.id === taskId);
             if (!task) return;
             
-            let amount = APP_CONFIG.TASK_ACCESS_FEE; // All tasks cost KSh 200
+            let amount = APP_CONFIG.TASK_ACCESS_FEE;
             let description = `Pay KSh ${amount} to access "${task.title}" task`;
             
             currentPaymentType = paymentType;
@@ -2734,7 +2842,6 @@
             manualMpesaAmount.textContent = amount.toString();
             mpesaNumberDisplay.textContent = APP_CONFIG.ADMIN_MPESA_NUMBER;
             
-            // Reset UI
             paymentStatusIndicator.style.display = 'none';
             transactionMessage.value = '';
             
@@ -2766,7 +2873,6 @@
             try {
                 showMessage('Submitting payment for admin review...', 'info');
                 
-                // Record the payment in the database
                 const { data, error } = await supabaseClient
                     .from('payments')
                     .insert([{
@@ -2777,19 +2883,18 @@
                         task_id: currentTaskId,
                         status: 'pending',
                         payment_method: 'manual_mpesa',
-                        created_at: new Date().toISOString()
+                        created_at: new Date().toISOString(),
+                        task_assigned: null
                     }]);
                 
                 if (error) throw error;
                 
-                // Show payment status
                 paymentStatusIndicator.style.display = 'block';
                 paymentStatusIndicator.className = 'payment-status-indicator pending';
                 paymentStatusIndicator.textContent = 'Payment Under Review - Admin will approve within 24 hours';
                 
                 showMessage('✅ Payment submitted for admin approval. You will receive access once approved.', 'success');
                 
-                // Close modal after 3 seconds
                 setTimeout(() => {
                     closeManualPaymentModal();
                 }, 3000);
@@ -2810,7 +2915,6 @@
 
                 showMessage(`Initiating upgrade to ${packageInfo.name} package...`, 'info');
                 
-                // Record membership upgrade request
                 const { data, error } = await supabaseClient
                     .from('membership_upgrades')
                     .insert([{
@@ -2843,7 +2947,6 @@
 
             currentTaskId = taskId;
             
-            // Check if user has access to this task
             const userTask = userTasks.find(ut => ut.task_id === taskId);
             
             if (!userTask) {
@@ -2851,7 +2954,6 @@
                 return;
             }
 
-            // Get the user task details
             const { data: userTaskDetails, error } = await supabaseClient
                 .from('user_tasks')
                 .select('*')
@@ -2867,7 +2969,6 @@
 
             currentUserTask = userTaskDetails;
 
-            // Create workspace based on task type
             let workspaceContent = '';
             
             if (task.task_type === 'transcription') {
@@ -2888,7 +2989,6 @@
 
             taskModal.style.display = 'flex';
             
-            // Initialize workspace
             setTimeout(() => {
                 initializeWorkspace(task.task_type);
             }, 100);
@@ -3098,7 +3198,6 @@
         }
 
         function initializeWorkspace(taskType) {
-            // Initialize audio player for transcription tasks
             if (taskType === 'transcription') {
                 audioPlayer = document.getElementById('audioPlayer');
                 if (audioPlayer) {
@@ -3110,7 +3209,6 @@
                     });
                 }
                 
-                // Initialize word counter
                 const transcriptionText = document.getElementById('transcriptionText');
                 if (transcriptionText) {
                     transcriptionText.addEventListener('input', updateWordCounter);
@@ -3118,7 +3216,6 @@
                 }
             }
             
-            // Initialize word counter for text workspace
             const workspaceText = document.getElementById('workspaceText');
             if (workspaceText) {
                 workspaceText.addEventListener('input', function() {
@@ -3168,7 +3265,6 @@
             if (!currentTaskId || !currentUserTask) return;
             
             try {
-                // Get work data based on task type
                 let workData = {};
                 const task = allTasks.find(t => t.id === currentTaskId);
                 
@@ -3182,7 +3278,6 @@
                         word_count: transcriptionText ? transcriptionText.value.split(/\s+/).filter(word => word.length > 0).length : 0
                     };
                 } else if (task.task_type === 'data_entry') {
-                    // Extract data from spreadsheet
                     const table = document.getElementById('dataTable');
                     const data = [];
                     
@@ -3213,7 +3308,6 @@
                     };
                 }
                 
-                // Update user task
                 const { error } = await supabaseClient
                     .from('user_tasks')
                     .update({
@@ -3229,7 +3323,6 @@
                 showMessage('Task submitted successfully! It will be reviewed by admin.', 'success');
                 closeTaskModal();
                 
-                // Reload user tasks
                 await loadUserTasks();
                 
             } catch (error) {
@@ -3297,7 +3390,6 @@
             transcriptionText.selectionStart = transcriptionText.selectionEnd = start + text.length;
             transcriptionText.focus();
             
-            // Update word count
             updateWordCounter();
         }
 
@@ -3384,7 +3476,6 @@
                     await autoSaveTranscription();
                     return;
                 } else if (task.task_type === 'data_entry') {
-                    // Save spreadsheet data
                     const table = document.getElementById('dataTable');
                     const data = [];
                     
@@ -3516,12 +3607,10 @@
             const words = text.split(/\s+/).filter(w => w.length > 0);
             const wordCount = words.length;
             
-            // Simple SEO analysis
             const hasTitle = text.length > 0;
             const hasParagraphs = text.split('\n\n').length > 1;
             const density = {};
             
-            // Count word frequency (simple keyword density)
             words.forEach(word => {
                 const cleanWord = word.toLowerCase().replace(/[^a-z]/g, '');
                 if (cleanWord.length > 3) {
@@ -3529,7 +3618,6 @@
                 }
             });
             
-            // Get top keywords
             const topKeywords = Object.entries(density)
                 .sort((a, b) => b[1] - a[1])
                 .slice(0, 5)
@@ -3547,17 +3635,14 @@
 
         // ===== WORKSPACE UTILITY FUNCTIONS =====
         function switchWorkspaceTab(tabName) {
-            // Hide all tab contents
             document.querySelectorAll('.workspace-tab-content').forEach(tab => {
                 tab.style.display = 'none';
             });
             
-            // Remove active class from all tabs
             document.querySelectorAll('.workspace-tab').forEach(tab => {
                 tab.classList.remove('active');
             });
             
-            // Show selected tab and activate its button
             document.getElementById(tabName + 'Tab').style.display = 'block';
             event.target.classList.add('active');
         }
@@ -3583,14 +3668,12 @@
             const table = document.getElementById('dataTable');
             if (!table) return;
             
-            // Add header
             const headerRow = table.querySelector('thead tr');
             const newHeader = document.createElement('th');
             newHeader.contentEditable = true;
             newHeader.textContent = 'Column ' + (headerRow.children.length + 1);
             headerRow.appendChild(newHeader);
             
-            // Add cells to each row
             const rows = table.querySelectorAll('tbody tr');
             rows.forEach(row => {
                 const newCell = document.createElement('td');
@@ -3608,7 +3691,6 @@
             const tbody = table.querySelector('tbody');
             tbody.innerHTML = '';
             
-            // Add two empty rows
             for (let i = 0; i < 2; i++) {
                 addTableRow();
             }
@@ -3662,7 +3744,6 @@
                 fileList.appendChild(fileElement);
             }
             
-            // Auto-save file references
             autoSaveWork();
         }
 
@@ -3711,6 +3792,8 @@
         window.runSpellCheck = runSpellCheck;
         window.checkReadability = checkReadability;
         window.testAudio = testAudio;
+        window.assignTaskAfterPayment = assignTaskAfterPayment;
     </script>
 </body>
-</html>         
+</html>
+
