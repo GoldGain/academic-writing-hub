@@ -1353,234 +1353,6 @@
             font-weight: 700;
         }
         
-        /* ===== PAYMENT MODAL STYLES ===== */
-        .payment-modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.8);
-            z-index: 1000;
-            justify-content: center;
-            align-items: center;
-            padding: var(--spacing-md);
-            overflow-y: auto;
-        }
-        
-        .payment-content {
-            background: white;
-            border-radius: var(--border-radius-xl);
-            width: 100%;
-            max-width: 500px;
-            max-height: 90vh;
-            padding: var(--spacing-xl);
-            box-shadow: 0 25px 50px rgba(0,0,0,0.3);
-            position: relative;
-            animation: modalFade 0.4s;
-            overflow-y: auto;
-        }
-        
-        .payment-header {
-            text-align: center;
-            margin-bottom: var(--spacing-lg);
-        }
-        
-        .payment-header h2 {
-            color: var(--primary);
-            margin-bottom: var(--spacing-sm);
-            font-size: var(--font-size-xl);
-            font-weight: 800;
-        }
-        
-        .payment-amount {
-            font-size: var(--font-size-xxl);
-            font-weight: 900;
-            color: var(--success);
-            margin: var(--spacing-lg) 0;
-            text-align: center;
-        }
-        
-        .payment-steps {
-            background: linear-gradient(135deg, #e7f3ff, #d4e7ff);
-            padding: var(--spacing-md);
-            border-radius: var(--border-radius-md);
-            margin: var(--spacing-lg) 0;
-            border-left: 5px solid var(--primary);
-        }
-        
-        .payment-steps ol {
-            padding-left: var(--spacing-md);
-            line-height: 1.6;
-            font-size: var(--font-size-sm);
-        }
-        
-        .payment-steps li {
-            margin-bottom: var(--spacing-sm);
-        }
-        
-        .mpesa-code-input {
-            width: 100%;
-            padding: var(--spacing-md);
-            border: 2px solid var(--border);
-            border-radius: var(--border-radius-md);
-            font-size: var(--font-size-md);
-            text-align: center;
-            letter-spacing: 2px;
-            font-weight: 700;
-            margin: var(--spacing-md) 0;
-        }
-        
-        .mpesa-code-input:focus {
-            border-color: var(--primary);
-            outline: none;
-            box-shadow: 0 0 0 3px rgba(0,74,173,0.1);
-        }
-        
-        .payment-actions {
-            display: flex;
-            gap: var(--spacing-md);
-            margin-top: var(--spacing-xl);
-        }
-        
-        .payment-actions .btn {
-            flex: 1;
-        }
-        
-        .tool-locked {
-            position: relative;
-        }
-        
-        .tool-locked::after {
-            content: '🔒';
-            position: absolute;
-            top: var(--spacing-sm);
-            right: var(--spacing-sm);
-            font-size: var(--font-size-lg);
-        }
-        
-        .tool-price {
-            background: var(--warning);
-            color: var(--dark);
-            padding: var(--spacing-xs) var(--spacing-sm);
-            border-radius: 20px;
-            font-size: var(--font-size-xs);
-            font-weight: 700;
-            margin-top: var(--spacing-sm);
-            display: inline-block;
-        }
-        
-        /* ===== MANUAL PAYMENT STYLES ===== */
-        .manual-payment-section {
-            background: linear-gradient(135deg, #e7f5ee, #d4edda);
-            padding: var(--spacing-md);
-            border-radius: var(--border-radius-md);
-            margin: var(--spacing-lg) 0;
-            border-left: 5px solid var(--success);
-        }
-        
-        .manual-payment-section h4 {
-            color: var(--success);
-            margin-bottom: var(--spacing-md);
-            font-size: var(--font-size-lg);
-        }
-        
-        .mpesa-number-display {
-            background: var(--dark);
-            color: white;
-            padding: var(--spacing-md);
-            border-radius: var(--border-radius-sm);
-            font-family: monospace;
-            font-size: var(--font-size-md);
-            text-align: center;
-            margin: var(--spacing-md) 0;
-            letter-spacing: 2px;
-            font-weight: 700;
-            word-break: break-all;
-        }
-        
-        .copy-btn {
-            background: var(--primary);
-            color: white;
-            border: none;
-            padding: var(--spacing-sm) var(--spacing-md);
-            border-radius: var(--border-radius-sm);
-            cursor: pointer;
-            font-weight: 600;
-            transition: all var(--transition-normal);
-            margin-left: var(--spacing-sm);
-            width: 100%;
-            margin-top: var(--spacing-sm);
-        }
-        
-        .copy-btn:hover {
-            background: var(--primary-dark);
-            transform: translateY(-2px);
-        }
-        
-        .transaction-message-box {
-            width: 100%;
-            min-height: 120px;
-            padding: var(--spacing-md);
-            border: 2px solid var(--border);
-            border-radius: var(--border-radius-sm);
-            font-family: 'Segoe UI', sans-serif;
-            font-size: var(--font-size-sm);
-            resize: vertical;
-            margin: var(--spacing-md) 0;
-            box-shadow: inset 0 2px 6px rgba(0,0,0,0.05);
-        }
-        
-        .transaction-message-box:focus {
-            border-color: var(--primary);
-            outline: none;
-            box-shadow: inset 0 2px 6px rgba(0,0,0,0.05), 0 0 0 3px rgba(0,74,173,0.1);
-        }
-        
-        .payment-status-indicator {
-            padding: var(--spacing-md);
-            border-radius: var(--border-radius-sm);
-            text-align: center;
-            font-weight: 700;
-            margin: var(--spacing-md) 0;
-        }
-        
-        .payment-status-indicator.pending {
-            background: var(--gradient-warning);
-            color: var(--dark);
-        }
-        
-        .payment-status-indicator.approved {
-            background: var(--gradient-success);
-            color: white;
-        }
-        
-        .payment-status-indicator.rejected {
-            background: var(--gradient-danger);
-            color: white;
-        }
-        
-        /* ===== MEMBERSHIP UPGRADE PROMPT ===== */
-        .membership-upgrade-prompt {
-            background: var(--gradient-warning);
-            padding: var(--spacing-lg);
-            border-radius: var(--border-radius-md);
-            margin: var(--spacing-lg) 0;
-            text-align: center;
-            border-left: 5px solid var(--warning);
-        }
-        
-        .membership-upgrade-prompt h4 {
-            color: var(--dark);
-            margin-bottom: var(--spacing-md);
-        }
-        
-        .membership-upgrade-prompt p {
-            margin-bottom: var(--spacing-md);
-            color: var(--dark);
-        }
-        
         /* ===== RESPONSIVE DESIGN ===== */
         @media (max-width: 1200px) {
             .tasks-grid, .my-tasks-grid { 
@@ -1695,14 +1467,6 @@
                 grid-template-columns: 1fr 1fr; 
             }
             
-            .payment-actions { 
-                flex-direction: column; 
-            }
-            
-            .payment-content {
-                padding: var(--spacing-lg);
-            }
-            
             main {
                 padding: var(--spacing-lg);
             }
@@ -1743,29 +1507,8 @@
                 flex-direction: column;
             }
             
-            .payment-steps ol {
-                padding-left: var(--spacing-md);
-            }
-            
             .payment-content {
                 padding: var(--spacing-md);
-            }
-            
-            .manual-payment-section {
-                padding: var(--spacing-md);
-            }
-            
-            .mpesa-number-display {
-                font-size: var(--font-size-sm);
-                padding: var(--spacing-sm);
-            }
-            
-            .payment-header h2 {
-                font-size: var(--font-size-lg);
-            }
-            
-            .payment-amount {
-                font-size: var(--font-size-xl);
             }
         }
         
@@ -1784,10 +1527,6 @@
             
             .modal-content {
                 padding: var(--spacing-lg) var(--spacing-md);
-            }
-            
-            .payment-content {
-                padding: var(--spacing-md) var(--spacing-sm);
             }
         }
     </style>
@@ -1971,178 +1710,6 @@
         </div>
     </div>
 
-    <!-- Manual Payment Modal -->
-    <div class="payment-modal" id="manualPaymentModal">
-        <div class="payment-content">
-            <span class="close-modal" id="closeManualPaymentModal">&times;</span>
-            <div class="payment-header">
-                <h2 id="manualPaymentTitle">Purchase Task Access</h2>
-                <p id="manualPaymentDescription">Complete payment to access this task</p>
-            </div>
-            
-            <div class="payment-amount" id="manualPaymentAmount">KSh 200</div>
-            
-            <div class="manual-payment-section">
-                <h4>📱 Manual M-Pesa Payment</h4>
-                <p>Send payment directly to our M-Pesa number and paste the confirmation message below.</p>
-                
-                <div style="margin: 20px 0;">
-                    <strong>M-Pesa Number:</strong>
-                    <div class="mpesa-number-display" id="mpesaNumberDisplay">0780619918</div>
-                    <button class="copy-btn" id="copyMpesaNumber">Copy Number</button>
-                </div>
-                
-                <div class="payment-steps">
-                    <h4>Payment Instructions</h4>
-                    <ol>
-                        <li>Go to M-Pesa on your phone</li>
-                        <li>Select <strong>Send Money</strong></li>
-                        <li>Enter Phone Number: <strong>0780619918</strong></li>
-                        <li>Enter Amount: <strong id="manualMpesaAmount">200</strong></li>
-                        <li>Enter your M-Pesa PIN</li>
-                        <li>Wait for confirmation message</li>
-                        <li>Copy the entire message and paste it below</li>
-                    </ol>
-                </div>
-                
-                <div class="form-group">
-                    <label for="transactionMessage">Paste M-Pesa Confirmation Message</label>
-                    <textarea id="transactionMessage" class="transaction-message-box" placeholder="Paste the entire M-Pesa confirmation message here..."></textarea>
-                    <small style="display: block; margin-top: 5px; color: var(--gray);">Paste the complete message you received from M-Pesa after payment</small>
-                </div>
-                
-                <div class="payment-status-indicator pending" id="paymentStatusIndicator" style="display: none;">
-                    Payment Under Review - Admin will approve within 24 hours
-                </div>
-            </div>
-            
-            <div class="payment-actions">
-                <button class="btn btn-success" id="submitPayment">Submit Payment for Review</button>
-                <button class="btn btn-danger" id="cancelManualPayment">Cancel</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Membership Upgrade Modal -->
-    <div class="modal" id="membershipUpgradeModal">
-        <div class="modal-content">
-            <span class="close-modal" id="closeMembershipUpgradeModal">&times;</span>
-            <div class="payment-header">
-                <h2>🔒 Membership Upgrade Required</h2>
-                <p>You need a higher membership level to access this task</p>
-            </div>
-            
-            <div class="membership-upgrade-prompt">
-                <h4>Upgrade Your Membership</h4>
-                <p>This task requires <strong id="requiredMembershipLevel">Premium</strong> membership level. Upgrade now to unlock access to higher-paying tasks and exclusive features.</p>
-                
-                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 15px; margin: 20px 0;">
-                    <div style="text-align: center; padding: 20px; background: white; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); border: 2px solid var(--primary);">
-                        <h5>Starter</h5>
-                        <div style="font-size: 24px; font-weight: 800; color: var(--primary); margin: 10px 0;">KSh 3,500</div>
-                        <ul style="text-align: left; font-size: 14px; margin: 15px 0; padding-left: 20px;">
-                            <li>Basic transcription tasks</li>
-                            <li>Network marketing opportunities</li>
-                            <li>Affiliate marketing programs</li>
-                            <li>Online gaming tasks</li>
-                            <li>Email support</li>
-                            <li>Up to KSh 2,000 daily limit</li>
-                            <li>10 tasks/day maximum</li>
-                            <li>Standard withdrawals (24-48 hours)</li>
-                        </ul>
-                        <button class="btn btn-primary" style="padding: 8px 16px;" id="upgradeStarter">Upgrade to Starter</button>
-                    </div>
-                    
-                    <div style="text-align: center; padding: 20px; background: white; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); border: 2px solid var(--warning);">
-                        <h5>Pro</h5>
-                        <div style="font-size: 24px; font-weight: 800; color: var(--primary); margin: 10px 0;">KSh 5,500</div>
-                        <ul style="text-align: left; font-size: 14px; margin: 15px 0; padding-left: 20px;">
-                            <li>All Starter features PLUS</li>
-                            <li>Freelancing & academic writing tasks</li>
-                            <li>Higher payment rates</li>
-                            <li>Priority support</li>
-                            <li>Team growth rewards</li>
-                            <li>Up to KSh 8,000 daily limit</li>
-                            <li>30 tasks/day maximum</li>
-                            <li>Faster withdrawals (12-24 hours)</li>
-                        </ul>
-                        <button class="btn btn-warning" style="padding: 8px 16px;" id="upgradePro">Upgrade to Pro</button>
-                    </div>
-                    
-                    <div style="text-align: center; padding: 20px; background: white; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); border: 2px solid var(--success);">
-                        <h5>Premium</h5>
-                        <div style="font-size: 24px; font-weight: 800; color: var(--primary); margin: 10px 0;">KSh 8,000</div>
-                        <ul style="text-align: left; font-size: 14px; margin: 15px 0; padding-left: 20px;">
-                            <li>All Pro features PLUS</li>
-                            <li>Unlimited daily earnings</li>
-                            <li>All task categories unlocked</li>
-                            <li>24/7 premium support</li>
-                            <li>Unlimited tasks per day</li>
-                            <li>Instant withdrawals</li>
-                            <li>Highest payment rates</li>
-                            <li>Early feature access</li>
-                        </ul>
-                        <button class="btn btn-success" style="padding: 8px 16px;" id="upgradePremium">Upgrade to Premium</button>
-                    </div>
-
-                    <div style="text-align: center; padding: 20px; background: white; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); border: 2px solid var(--secondary);">
-                        <h5>Executive</h5>
-                        <div style="font-size: 24px; font-weight: 800; color: var(--primary); margin: 10px 0;">KSh 15,000</div>
-                        <ul style="text-align: left; font-size: 14px; margin: 15px 0; padding-left: 20px;">
-                            <li>All Premium features PLUS</li>
-                            <li>Personal account manager</li>
-                            <li>Weekly mentorship sessions</li>
-                            <li>Advanced analytics dashboard</li>
-                            <li>Priority task allocation</li>
-                            <li>25% higher earning rates</li>
-                            <li>Exclusive webinars</li>
-                            <li>Custom earning strategies</li>
-                        </ul>
-                        <button class="btn btn-secondary" style="padding: 8px 16px; background: var(--secondary);" id="upgradeExecutive">Upgrade to Executive</button>
-                    </div>
-
-                    <div style="text-align: center; padding: 20px; background: white; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); border: 2px solid var(--gold);">
-                        <h5>VIP</h5>
-                        <div style="font-size: 24px; font-weight: 800; color: var(--primary); margin: 10px 0;">KSh 20,000</div>
-                        <ul style="text-align: left; font-size: 14px; margin: 15px 0; padding-left: 20px;">
-                            <li>All Executive features PLUS</li>
-                            <li>Dedicated support team</li>
-                            <li>Monthly strategy calls</li>
-                            <li>Early all-feature access</li>
-                            <li>Custom task requests</li>
-                            <li>50% higher earning rates</li>
-                            <li>VIP community access</li>
-                            <li>+50% REFERRAL BONUS</li>
-                        </ul>
-                        <button class="btn" style="padding: 8px 16px; background: var(--gold); color: var(--dark);" id="upgradeVIP">Upgrade to VIP</button>
-                    </div>
-
-                    <div style="text-align: center; padding: 20px; background: white; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); border: 2px solid var(--danger);">
-                        <h5>Elite</h5>
-                        <div style="font-size: 24px; font-weight: 800; color: var(--primary); margin: 10px 0;">KSh 25,000</div>
-                        <ul style="text-align: left; font-size: 14px; margin: 15px 0; padding-left: 20px;">
-                            <li>All VIP features PLUS</li>
-                            <li>1-on-1 business coaching</li>
-                            <li>Revenue sharing opportunities</li>
-                            <li>Mastermind group access</li>
-                            <li>Lifetime platform updates</li>
-                            <li>100% higher earning rates</li>
-                            <li>Partnership opportunities</li>
-                            <li>+100% REFERRAL BONUS</li>
-                            <li>Residual income streams</li>
-                        </ul>
-                        <button class="btn btn-danger" style="padding: 8px 16px;" id="upgradeElite">Upgrade to Elite</button>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="payment-actions">
-                <button class="btn btn-primary" id="goToMembershipPage">Upgrade Now</button>
-                <button class="btn btn-danger" id="cancelUpgrade">Maybe Later</button>
-            </div>
-        </div>
-    </div>
-
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script>
         // ===== SUPABASE CONFIGURATION =====
@@ -2160,19 +1727,8 @@
 
         // ===== APPLICATION CONFIGURATION =====
         const APP_CONFIG = {
-            ADMIN_MPESA_NUMBER: "0780619918",
-            TASK_ACCESS_FEE: 200,
             AUTO_REFRESH_INTERVAL: 24 * 60 * 60 * 1000,
             AUTO_SAVE_INTERVAL: 2 * 60 * 1000,
-            PAYMENT_CHECK_INTERVAL: 30 * 1000,
-            MEMBERSHIP_PACKAGES: {
-                'starter': { price: 3500, name: 'Starter' },
-                'pro': { price: 5500, name: 'Pro' },
-                'premium': { price: 8000, name: 'Premium' },
-                'executive': { price: 15000, name: 'Executive' },
-                'vip': { price: 20000, name: 'VIP' },
-                'elite': { price: 25000, name: 'Elite' }
-            }
         };
 
         // Global variables
@@ -2188,12 +1744,8 @@
         let timerInterval = null;
         let timerSeconds = 0;
         let isTimerRunning = false;
-        let isAssigningTask = false;
         let currentUserTask = null;
-        let currentPaymentType = null;
-        let currentPaymentAmount = 0;
         let purchasedTools = [];
-        let paymentCheckInterval = null;
 
         // DOM Elements
         const mobileMenuBtn = document.getElementById('mobileMenuBtn');
@@ -2205,33 +1757,6 @@
         const refreshCountdown = document.getElementById('refreshCountdown');
         const taskModal = document.getElementById('taskModal');
         const closeTaskModalBtn = document.getElementById('closeTaskModal');
-        
-        // Manual Payment Modal Elements
-        const manualPaymentModal = document.getElementById('manualPaymentModal');
-        const closeManualPaymentModalBtn = document.getElementById('closeManualPaymentModal');
-        const manualPaymentTitle = document.getElementById('manualPaymentTitle');
-        const manualPaymentDescription = document.getElementById('manualPaymentDescription');
-        const manualPaymentAmount = document.getElementById('manualPaymentAmount');
-        const manualMpesaAmount = document.getElementById('manualMpesaAmount');
-        const mpesaNumberDisplay = document.getElementById('mpesaNumberDisplay');
-        const copyMpesaNumberBtn = document.getElementById('copyMpesaNumber');
-        const transactionMessage = document.getElementById('transactionMessage');
-        const paymentStatusIndicator = document.getElementById('paymentStatusIndicator');
-        const submitPaymentBtn = document.getElementById('submitPayment');
-        const cancelManualPaymentBtn = document.getElementById('cancelManualPayment');
-        
-        // Membership Upgrade Modal Elements
-        const membershipUpgradeModal = document.getElementById('membershipUpgradeModal');
-        const closeMembershipUpgradeModalBtn = document.getElementById('closeMembershipUpgradeModal');
-        const requiredMembershipLevel = document.getElementById('requiredMembershipLevel');
-        const goToMembershipPageBtn = document.getElementById('goToMembershipPage');
-        const cancelUpgradeBtn = document.getElementById('cancelUpgrade');
-        const upgradeStarterBtn = document.getElementById('upgradeStarter');
-        const upgradeProBtn = document.getElementById('upgradePro');
-        const upgradePremiumBtn = document.getElementById('upgradePremium');
-        const upgradeExecutiveBtn = document.getElementById('upgradeExecutive');
-        const upgradeVIPBtn = document.getElementById('upgradeVIP');
-        const upgradeEliteBtn = document.getElementById('upgradeElite');
 
         // Initialize app
         document.addEventListener('DOMContentLoaded', function() {
@@ -2243,7 +1768,6 @@
             await checkAuth();
             startAutoRefreshTimer();
             setupAutoSave();
-            startPaymentMonitor();
         }
 
         function setupEventListeners() {
@@ -2269,13 +1793,9 @@
             });
 
             closeTaskModalBtn.addEventListener('click', closeTaskModal);
-            closeManualPaymentModalBtn.addEventListener('click', closeManualPaymentModal);
-            closeMembershipUpgradeModalBtn.addEventListener('click', closeMembershipUpgradeModal);
             
             window.addEventListener('click', function(e) {
                 if (e.target === taskModal) closeTaskModal();
-                if (e.target === manualPaymentModal) closeManualPaymentModal();
-                if (e.target === membershipUpgradeModal) closeMembershipUpgradeModal();
             });
 
             // Filter event listeners
@@ -2286,21 +1806,6 @@
                 clearTimeout(searchTimeout);
                 searchTimeout = setTimeout(() => renderTasks(), 300);
             });
-
-            // Manual payment event listeners
-            copyMpesaNumberBtn.addEventListener('click', copyMpesaNumber);
-            submitPaymentBtn.addEventListener('click', submitManualPayment);
-            cancelManualPaymentBtn.addEventListener('click', closeManualPaymentModal);
-            
-            // Membership upgrade event listeners
-            goToMembershipPageBtn.addEventListener('click', redirectToMembership);
-            cancelUpgradeBtn.addEventListener('click', closeMembershipUpgradeModal);
-            upgradeStarterBtn.addEventListener('click', () => upgradeMembership('starter'));
-            upgradeProBtn.addEventListener('click', () => upgradeMembership('pro'));
-            upgradePremiumBtn.addEventListener('click', () => upgradeMembership('premium'));
-            upgradeExecutiveBtn.addEventListener('click', () => upgradeMembership('executive'));
-            upgradeVIPBtn.addEventListener('click', () => upgradeMembership('vip'));
-            upgradeEliteBtn.addEventListener('click', () => upgradeMembership('elite'));
         }
 
         async function checkAuth() {
@@ -2480,15 +1985,8 @@
                     statusBadge = '<div class="task-status-container in-progress">🔵 Task In Progress</div>';
                     actionButton = '<button class="btn btn-warning" onclick="viewTaskDetails(\'' + task.id + '\')">Continue Task</button>';
                 } else if (canAssign) {
-                    // Check if payment is pending or approved
-                    const paymentStatus = getPaymentStatus(task.id);
-                    if (paymentStatus === 'approved') {
-                        actionButton = '<button class="btn btn-success" onclick="assignTaskAfterPayment(\'' + task.id + '\')">Start Task Now</button>';
-                    } else if (paymentStatus === 'pending') {
-                        actionButton = '<button class="btn btn-warning" disabled>Payment Under Review</button>';
-                    } else {
-                        actionButton = '<button class="btn btn-primary" onclick="showManualPaymentModal(\'' + task.id + '\', \'task_access\')">🔒 Purchase Access (KSh 200)</button>';
-                    }
+                    // SIMPLIFIED: Users can start tasks directly without payment
+                    actionButton = '<button class="btn btn-primary" onclick="assignTask(\'' + task.id + '\')">Start Task</button>';
                 }
 
                 // Add audio icon for transcription tasks
@@ -2509,12 +2007,6 @@
                     '<div class="task-actions">' + actionButton + '</div>' +
                 '</div>';
             }).join('');
-        }
-
-        function getPaymentStatus(taskId) {
-            // This would check the payment status for a specific task
-            // For now, we'll implement this in the payment monitor
-            return null;
         }
 
         function renderMyTasks() {
@@ -2690,49 +2182,12 @@
             }, APP_CONFIG.AUTO_SAVE_INTERVAL);
         }
 
-        // ===== PAYMENT WORKFLOW FUNCTIONS =====
-        function startPaymentMonitor() {
-            // Check immediately
-            checkApprovedPayments();
-            
-            // Then check every 30 seconds
-            paymentCheckInterval = setInterval(checkApprovedPayments, APP_CONFIG.PAYMENT_CHECK_INTERVAL);
-        }
-
-        async function checkApprovedPayments() {
+        async function assignTask(taskId) {
             try {
-                const { data: approvedPayments, error } = await supabaseClient
-                    .from('payments')
-                    .select('*')
-                    .eq('user_id', currentUser.id)
-                    .eq('status', 'approved')
-                    .is('task_assigned', null); // Only get payments where task hasn't been assigned yet
-
-                if (error) throw error;
-
-                if (approvedPayments && approvedPayments.length > 0) {
-                    console.log('Found approved payments:', approvedPayments.length);
-                    for (const payment of approvedPayments) {
-                        await assignTaskAfterPayment(payment);
-                    }
-                    // Reload tasks after assignments
-                    await loadUserTasks();
-                    renderTasks();
-                }
-            } catch (error) {
-                console.error('Error checking approved payments:', error);
-            }
-        }
-
-        async function assignTaskAfterPayment(payment) {
-            try {
-                console.log('Assigning task for payment:', payment.id);
-                
                 // Check if user already has this task
-                const existingTask = userTasks.find(ut => ut.task_id === payment.task_id);
+                const existingTask = userTasks.find(ut => ut.task_id === taskId);
                 if (existingTask) {
-                    console.log('Task already assigned to user');
-                    await markPaymentAsProcessed(payment.id);
+                    showMessage('You already have this task assigned', 'info');
                     return;
                 }
 
@@ -2741,58 +2196,36 @@
                     .from('user_tasks')
                     .insert([{ 
                         user_id: currentUser.id, 
-                        task_id: payment.task_id, 
+                        task_id: taskId, 
                         status: 'assigned', 
                         assigned_at: new Date().toISOString(),
-                        time_spent: 0,
-                        payment_id: payment.id
+                        time_spent: 0
                     }])
                     .select()
                     .single();
 
                 if (error) {
                     if (error.code === '23505') {
-                        console.log('Task already assigned (unique constraint)');
+                        showMessage('Task already assigned', 'info');
                     } else {
                         throw error;
                     }
                 }
 
-                // Mark payment as processed
-                await markPaymentAsProcessed(payment.id);
+                showMessage('Task assigned successfully! You can now start working on it.', 'success');
                 
-                showMessage(`✅ Task access granted! You can now work on "${getTaskTitle(payment.task_id)}".`, 'success');
+                // Reload user tasks
+                await loadUserTasks();
+                renderTasks();
                 
             } catch (error) {
-                console.error('Error assigning task after payment:', error);
-                showMessage('Error assigning task after payment approval', 'error');
-            }
-        }
-
-        function getTaskTitle(taskId) {
-            const task = allTasks.find(t => t.id === taskId);
-            return task ? task.title : 'the task';
-        }
-
-        async function markPaymentAsProcessed(paymentId) {
-            try {
-                const { error } = await supabaseClient
-                    .from('payments')
-                    .update({ task_assigned: true })
-                    .eq('id', paymentId);
-
-                if (error) throw error;
-                console.log('Payment marked as processed:', paymentId);
-            } catch (error) {
-                console.error('Error marking payment as processed:', error);
+                console.error('Error assigning task:', error);
+                showMessage('Failed to assign task: ' + error.message, 'error');
             }
         }
 
         async function handleLogout() {
             try {
-                if (paymentCheckInterval) {
-                    clearInterval(paymentCheckInterval);
-                }
                 const { error } = await supabaseClient.auth.signOut();
                 if (error) throw error;
                 window.location.href = "login.html";
@@ -2813,133 +2246,6 @@
             }
         }
 
-        function closeManualPaymentModal() {
-            manualPaymentModal.style.display = 'none';
-            transactionMessage.value = '';
-            paymentStatusIndicator.style.display = 'none';
-            currentPaymentType = null;
-            currentPaymentAmount = 0;
-        }
-        
-        function closeMembershipUpgradeModal() {
-            membershipUpgradeModal.style.display = 'none';
-        }
-
-        function showManualPaymentModal(taskId, paymentType) {
-            const task = allTasks.find(t => t.id === taskId);
-            if (!task) return;
-            
-            let amount = APP_CONFIG.TASK_ACCESS_FEE;
-            let description = `Pay KSh ${amount} to access "${task.title}" task`;
-            
-            currentPaymentType = paymentType;
-            currentPaymentAmount = amount;
-            currentTaskId = taskId;
-            
-            manualPaymentTitle.textContent = 'Purchase Task Access';
-            manualPaymentDescription.textContent = description;
-            manualPaymentAmount.textContent = `KSh ${amount}`;
-            manualMpesaAmount.textContent = amount.toString();
-            mpesaNumberDisplay.textContent = APP_CONFIG.ADMIN_MPESA_NUMBER;
-            
-            paymentStatusIndicator.style.display = 'none';
-            transactionMessage.value = '';
-            
-            manualPaymentModal.style.display = 'flex';
-        }
-        
-        function showMembershipUpgradeModal(requiredLevel) {
-            requiredMembershipLevel.textContent = formatMembership(requiredLevel);
-            membershipUpgradeModal.style.display = 'flex';
-        }
-
-        function copyMpesaNumber() {
-            navigator.clipboard.writeText(APP_CONFIG.ADMIN_MPESA_NUMBER).then(() => {
-                showMessage('M-Pesa number copied to clipboard', 'success');
-            }).catch(err => {
-                console.error('Failed to copy text: ', err);
-                showMessage('Failed to copy M-Pesa number', 'error');
-            });
-        }
-
-        async function submitManualPayment() {
-            const message = transactionMessage.value.trim();
-            
-            if (!message) {
-                showMessage('Please paste the M-Pesa confirmation message', 'error');
-                return;
-            }
-            
-            try {
-                showMessage('Submitting payment for admin review...', 'info');
-                
-                const { data, error } = await supabaseClient
-                    .from('payments')
-                    .insert([{
-                        user_id: currentUser.id,
-                        transaction_message: message,
-                        amount: currentPaymentAmount,
-                        payment_type: currentPaymentType,
-                        task_id: currentTaskId,
-                        status: 'pending',
-                        payment_method: 'manual_mpesa',
-                        created_at: new Date().toISOString(),
-                        task_assigned: null
-                    }]);
-                
-                if (error) throw error;
-                
-                paymentStatusIndicator.style.display = 'block';
-                paymentStatusIndicator.className = 'payment-status-indicator pending';
-                paymentStatusIndicator.textContent = 'Payment Under Review - Admin will approve within 24 hours';
-                
-                showMessage('✅ Payment submitted for admin approval. You will receive access once approved.', 'success');
-                
-                setTimeout(() => {
-                    closeManualPaymentModal();
-                }, 3000);
-                
-            } catch (error) {
-                console.error('Payment error:', error);
-                showMessage('Failed to submit payment: ' + error.message, 'error');
-            }
-        }
-
-        async function upgradeMembership(level) {
-            try {
-                const packageInfo = APP_CONFIG.MEMBERSHIP_PACKAGES[level];
-                if (!packageInfo) {
-                    showMessage('Invalid membership level', 'error');
-                    return;
-                }
-
-                showMessage(`Initiating upgrade to ${packageInfo.name} package...`, 'info');
-                
-                const { data, error } = await supabaseClient
-                    .from('membership_upgrades')
-                    .insert([{
-                        user_id: currentUser.id,
-                        requested_level: level,
-                        amount: packageInfo.price,
-                        status: 'pending',
-                        created_at: new Date().toISOString()
-                    }]);
-                
-                if (error) throw error;
-                
-                showMessage(`✅ Upgrade to ${packageInfo.name} requested! Please complete payment of KSh ${packageInfo.price.toLocaleString()} to activate your new membership.`, 'success');
-                closeMembershipUpgradeModal();
-                
-            } catch (error) {
-                console.error('Membership upgrade error:', error);
-                showMessage('Failed to request membership upgrade: ' + error.message, 'error');
-            }
-        }
-        
-        function redirectToMembership() {
-            window.location.href = 'membership.html';
-        }
-
         // ===== TASK WORKSPACE FUNCTIONS =====
         async function viewTaskDetails(taskId) {
             const task = allTasks.find(t => t.id === taskId);
@@ -2950,7 +2256,7 @@
             const userTask = userTasks.find(ut => ut.task_id === taskId);
             
             if (!userTask) {
-                showMessage('You need to purchase access to this task first', 'error');
+                showMessage('You need to start this task first', 'error');
                 return;
             }
 
@@ -3759,6 +3065,7 @@
         // Global functions for workspace
         window.showTab = showTab;
         window.viewTaskDetails = viewTaskDetails;
+        window.assignTask = assignTask;
         window.submitTask = submitTask;
         window.submitTranscriptionTask = submitTranscriptionTask;
         window.closeTaskModal = closeTaskModal;
@@ -3767,8 +3074,6 @@
         window.addTableColumn = addTableColumn;
         window.clearTable = clearTable;
         window.downloadTable = downloadTable;
-        window.showMembershipUpgradeModal = showMembershipUpgradeModal;
-        window.showManualPaymentModal = showManualPaymentModal;
         window.handleFiles = handleFiles;
         window.playPauseAudio = togglePlayback;
         window.skipBackward = skipBackward;
@@ -3792,8 +3097,8 @@
         window.runSpellCheck = runSpellCheck;
         window.checkReadability = checkReadability;
         window.testAudio = testAudio;
-        window.assignTaskAfterPayment = assignTaskAfterPayment;
     </script>
 </body>
 </html>
+
 
