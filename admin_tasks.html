@@ -1444,7 +1444,21 @@
                 const task = submission.task;
                 const user = submission.user;
 
-                const wordAnalysis = analyzeWordCount(submission.submission_data || '', task.word_count_target);
+                // FIXED: Get submission data from the correct columns
+                const submissionData = submission.work_data || submission.submission_data || '';
+                const submittedContent = submission.submitted_content || '';
+                
+                // Extract content from work_data if it's an object
+                let content = '';
+                if (typeof submissionData === 'object' && submissionData !== null) {
+                    content = submissionData.content || submissionData.transcription || JSON.stringify(submissionData, null, 2);
+                } else if (submissionData) {
+                    content = submissionData;
+                } else if (submittedContent) {
+                    content = submittedContent;
+                }
+
+                const wordAnalysis = analyzeWordCount(content, task.word_count_target);
                 const timeTaken = submission.time_spent ? formatTimeTaken(submission.time_spent) : 'Not recorded';
                 const userBalance = user?.balance || 0;
 
@@ -1527,12 +1541,12 @@
                         </div>
 
                         <div class="submission-content">
-                            ${submission.submission_data || 'No content submitted'}
+                            ${content || 'No content submitted'}
                         </div>
 
                         <div class="admin-actions">
                             <button class="btn btn-success" id="approve-btn-${submission.id}" 
-                                onclick="approveTask('${submission.id}', '${submission.task_id}', '${user?.id}', ${task.reward_amount || 0}, ${userBalance})"
+                                onclick="approveTask('${submission.id}', '${submission.task_id}', '${submission.user_id}', ${task.reward_amount || 0})"
                                 ${isProcessing[submission.id] ? 'disabled' : ''}>
                                 ${isProcessing[submission.id] ? '<span class="loading"></span> Processing...' : '✅ Approve & Pay'}
                             </button>
@@ -1552,8 +1566,8 @@
             }).join('');
         }
 
-        // FIXED: Enhanced approveTask function with proper column names
-        async function approveTask(userTaskId, taskId, userId, rewardAmount, currentBalance) {
+        // FIXED: Fully functional approveTask function that updates user_tasks properly
+        async function approveTask(userTaskId, taskId, userId, rewardAmount) {
             if (isProcessing[userTaskId]) {
                 showMessage('This task is already being processed', 'warning');
                 return;
@@ -1571,36 +1585,30 @@
                 }
                 if (rejectBtn) rejectBtn.disabled = true;
 
-                // CRITICAL FIX: Verify task is still in submitted status
-                const { data: currentTask, error: checkError } = await supabaseClient
-                    .from('user_tasks')
-                    .select('status, submission_data')
-                    .eq('id', userTaskId)
-                    .single();
-
-                if (checkError) {
-                    throw new Error('Failed to verify task status: ' + checkError.message);
-                }
-
-                if (!currentTask) {
-                    throw new Error('Task not found in database');
-                }
-
-                if (currentTask.status !== 'submitted') {
-                    // Task was already processed by another admin or in another tab
-                    showMessage(`Task has already been ${currentTask.status}. Refreshing list...`, 'warning');
-                    await loadSubmissions(); // Reload to get current state
-                    return;
-                }
-
-                // Verify submission data exists
-                if (!currentTask.submission_data || currentTask.submission_data.trim() === '') {
-                    throw new Error('Task has no submission data');
-                }
-
                 showMessage('Approving task and processing payment...', 'info');
 
-                // FIXED: Update task status with correct column names
+                // First, get the current user data to know their current balance
+                const { data: userData, error: userError } = await supabaseClient
+                    .from('profiles')
+                    .select('balance, tasks_completed, total_earnings')
+                    .eq('id', userId)
+                    .single();
+
+                if (userError) {
+                    console.error('Error fetching user data:', userError);
+                    throw userError;
+                }
+
+                const currentBalance = userData?.balance || 0;
+                const currentTasksCompleted = userData?.tasks_completed || 0;
+                const currentTotalEarnings = userData?.total_earnings || 0;
+
+                // Calculate new values
+                const newBalance = parseFloat(currentBalance) + parseFloat(rewardAmount);
+                const newTasksCompleted = parseInt(currentTasksCompleted) + 1;
+                const newTotalEarnings = parseFloat(currentTotalEarnings) + parseFloat(rewardAmount);
+
+                // CRITICAL FIX: Update user_tasks table with ALL required fields
                 const { error: taskUpdateError } = await supabaseClient
                     .from('user_tasks')
                     .update({
@@ -1609,29 +1617,14 @@
                         paid_amount: parseFloat(rewardAmount),
                         admin_reviewed_at: new Date().toISOString()
                     })
-                    .eq('id', userTaskId)
-                    .eq('status', 'submitted'); // CRITICAL: Only update if still submitted
+                    .eq('id', userTaskId);
 
                 if (taskUpdateError) {
-                    if (taskUpdateError.code === 'PGRST116') { // No rows updated
-                        throw new Error('Task was already processed by another admin');
-                    }
+                    console.error('Task update error:', taskUpdateError);
                     throw taskUpdateError;
                 }
 
-                // Update user balance and stats
-                const newBalance = parseFloat(currentBalance) + parseFloat(rewardAmount);
-                const { data: userProfile, error: profileError } = await supabaseClient
-                    .from('profiles')
-                    .select('tasks_completed, total_earnings')
-                    .eq('id', userId)
-                    .single();
-
-                if (profileError) throw profileError;
-
-                const newTasksCompleted = (parseInt(userProfile.tasks_completed) || 0) + 1;
-                const newTotalEarnings = (parseFloat(userProfile.total_earnings) || 0) + parseFloat(rewardAmount);
-
+                // Update user profile with new balance and stats
                 const { error: profileUpdateError } = await supabaseClient
                     .from('profiles')
                     .update({
@@ -1641,9 +1634,16 @@
                     })
                     .eq('id', userId);
 
-                if (profileUpdateError) throw profileUpdateError;
+                if (profileUpdateError) {
+                    console.error('Profile update error:', profileUpdateError);
+                    throw profileUpdateError;
+                }
 
-                // CRITICAL FIX: Remove from local data array
+                console.log(`Task ${userTaskId} approved successfully for user ${userId}`);
+                console.log(`User balance updated from ${currentBalance} to ${newBalance}`);
+                console.log(`Tasks completed: ${newTasksCompleted}, Total earnings: ${newTotalEarnings}`);
+
+                // Remove from local data array
                 allSubmissions = allSubmissions.filter(sub => sub.id !== userTaskId);
                 
                 // Remove from UI
@@ -1679,7 +1679,7 @@
             form.style.display = form.style.display === 'block' ? 'none' : 'block';
         }
 
-        // FIXED: Enhanced rejectTask function with proper column names
+        // FIXED: Fully functional rejectTask function that updates user_tasks properly
         async function rejectTask(userTaskId) {
             if (isProcessing[userTaskId]) {
                 showMessage('This task is already being processed', 'warning');
@@ -1701,40 +1701,25 @@
                 if (approveBtn) approveBtn.disabled = true;
                 if (rejectBtn) rejectBtn.disabled = true;
 
-                // CRITICAL FIX: Verify task is still in submitted status
-                const { data: currentTask, error: checkError } = await supabaseClient
-                    .from('user_tasks')
-                    .select('status')
-                    .eq('id', userTaskId)
-                    .single();
-
-                if (checkError) throw checkError;
-
-                if (currentTask.status !== 'submitted') {
-                    showMessage(`Task has already been ${currentTask.status}. Refreshing list...`, 'warning');
-                    await loadSubmissions();
-                    return;
-                }
-
-                // FIXED: Use correct column names without updated_at
+                // CRITICAL FIX: Update user_tasks table with ALL required fields
                 const { error } = await supabaseClient
                     .from('user_tasks')
                     .update({
                         status: 'rejected',
                         admin_feedback: feedback,
-                        admin_reviewed_at: new Date().toISOString()
+                        admin_reviewed_at: new Date().toISOString(),
+                        completed_at: new Date().toISOString()
                     })
-                    .eq('id', userTaskId)
-                    .eq('status', 'submitted'); // CRITICAL: Only update if still submitted
+                    .eq('id', userTaskId);
 
                 if (error) {
-                    if (error.code === 'PGRST116') {
-                        throw new Error('Task was already processed by another admin');
-                    }
+                    console.error('Rejection update error:', error);
                     throw error;
                 }
 
-                // CRITICAL FIX: Remove from local data array
+                console.log(`Task ${userTaskId} rejected successfully`);
+
+                // Remove from local data array
                 allSubmissions = allSubmissions.filter(sub => sub.id !== userTaskId);
                 
                 // Remove from UI
@@ -2014,9 +1999,20 @@
         }
 
         function analyzeWordCount(text, targetCount) {
-            const words = text.trim().split(/\s+/).length;
-            const characters = text.length;
-            const sentences = text.split(/[.!?]+/).length - 1;
+            // Handle object data
+            if (typeof text === 'object' && text !== null) {
+                if (text.content) {
+                    text = text.content;
+                } else if (text.transcription) {
+                    text = text.transcription;
+                } else {
+                    text = JSON.stringify(text);
+                }
+            }
+            
+            const words = text.toString().trim().split(/\s+/).length;
+            const characters = text.toString().length;
+            const sentences = text.toString().split(/[.!?]+/).length - 1;
             const avgSentenceLength = sentences > 0 ? words / sentences : 0;
             
             let quality = 'good';
@@ -2051,6 +2047,7 @@
     </script>
 </body>
 </html>
+
 
 
 
