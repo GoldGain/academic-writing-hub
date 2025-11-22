@@ -1,0 +1,1436 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel - Gold Gain Academic Hub</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* ===== CSS VARIABLES ===== */
+        :root {
+            --primary: #004aad; 
+            --primary-light: #3a6fc8; 
+            --primary-dark: #003580;
+            --secondary: #ff6b35; 
+            --success: #28a745; 
+            --warning: #ffc107;
+            --danger: #dc3545; 
+            --light: #f8f9fa; 
+            --dark: #343a40;
+            --gray: #6c757d; 
+            --border: #dee2e6; 
+            --gradient-primary: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            --gradient-success: linear-gradient(135deg, var(--success), #34ce57);
+            --gradient-warning: linear-gradient(135deg, var(--warning), #ffd54f);
+            --gradient-danger: linear-gradient(135deg, var(--danger), #e35d6a);
+            --gradient-light: linear-gradient(135deg, var(--light), #e9ecef);
+            --shadow-light: 0 4px 12px rgba(0,0,0,0.08);
+            --shadow-medium: 0 8px 25px rgba(0,0,0,0.15);
+            --shadow-heavy: 0 15px 35px rgba(0,0,0,0.2);
+            --border-radius-sm: 8px;
+            --border-radius-md: 12px;
+            --border-radius-lg: 16px;
+            --border-radius-xl: 20px;
+            --transition-fast: 0.2s;
+            --transition-normal: 0.3s;
+            --font-size-xs: 12px;
+            --font-size-sm: 14px;
+            --font-size-md: 16px;
+            --font-size-lg: 18px;
+            --font-size-xl: 20px;
+            --font-size-xxl: 24px;
+            --font-size-xxxl: 28px;
+            --font-size-hero: 32px;
+            --spacing-xs: 5px;
+            --spacing-sm: 10px;
+            --spacing-md: 15px;
+            --spacing-lg: 20px;
+            --spacing-xl: 25px;
+            --spacing-xxl: 30px;
+            --spacing-xxxl: 35px;
+        }
+        
+        /* ===== RESET & BASE STYLES ===== */
+        * { 
+            margin: 0; 
+            padding: 0; 
+            box-sizing: border-box; 
+        }
+        
+        body { 
+            font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif; 
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%); 
+            color: #333; 
+            line-height: 1.6; 
+            min-height: 100vh;
+        }
+        
+        /* ===== HEADER STYLES ===== */
+        header {
+            background: var(--gradient-primary);
+            color: #fff; 
+            padding: var(--spacing-md) var(--spacing-lg);
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center;
+            box-shadow: var(--shadow-medium); 
+            position: sticky; 
+            top: 0; 
+            z-index: 1000;
+            border-bottom: 3px solid var(--secondary);
+        }
+        
+        .header-left h1 { 
+            margin: 0; 
+            font-size: var(--font-size-xxl); 
+            font-weight: 800; 
+            letter-spacing: -0.5px; 
+            color: white;
+        }
+        
+        .header-left .slogan { 
+            font-size: var(--font-size-sm); 
+            opacity: 0.9; 
+            margin-top: var(--spacing-xs); 
+            font-weight: 500; 
+        }
+        
+        .header-right { 
+            display: flex; 
+            align-items: center; 
+            gap: var(--spacing-md); 
+        }
+        
+        .user-menu { 
+            display: flex; 
+            align-items: center; 
+            gap: var(--spacing-sm); 
+            cursor: pointer; 
+            padding: var(--spacing-sm) var(--spacing-md); 
+            border-radius: var(--border-radius-md); 
+            transition: all var(--transition-normal); 
+            background: rgba(255,255,255,0.1); 
+        }
+        
+        .user-menu:hover { 
+            background: rgba(255,255,255,0.2); 
+            transform: translateY(-2px); 
+        }
+        
+        .user-avatar { 
+            width: 40px; 
+            height: 40px; 
+            border-radius: 50%; 
+            background: var(--gradient-secondary); 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            font-weight: bold; 
+            color: white; 
+            font-size: var(--font-size-md); 
+            box-shadow: 0 4px 10px rgba(255,107,53,0.3); 
+        }
+        
+        /* ===== MAIN LAYOUT ===== */
+        .container { 
+            display: flex; 
+            min-height: calc(100vh - 70px); 
+        }
+        
+        /* ===== SIDEBAR NAVIGATION ===== */
+        nav {
+            width: 280px; 
+            background: linear-gradient(180deg, #fff 0%, #f8f9fa 100%); 
+            border-right: 1px solid var(--border);
+            padding: var(--spacing-xl) 0; 
+            transition: transform var(--transition-normal) ease; 
+            box-shadow: 3px 0 15px rgba(0,0,0,0.08);
+            display: flex; 
+            flex-direction: column;
+        }
+        
+        nav a {
+            padding: var(--spacing-md) var(--spacing-xl); 
+            text-decoration: none; 
+            color: var(--dark);
+            display: flex; 
+            align-items: center; 
+            gap: var(--spacing-md); 
+            transition: all var(--transition-normal);
+            border-left: 4px solid transparent; 
+            font-weight: 500; 
+            margin: 2px var(--spacing-sm);
+            border-radius: 0 var(--border-radius-md) var(--border-radius-md) 0;
+        }
+        
+        nav a:hover { 
+            background: var(--gradient-primary); 
+            color: #fff; 
+            border-left-color: var(--secondary); 
+            transform: translateX(5px); 
+            box-shadow: 0 4px 12px rgba(0,74,173,0.2); 
+        }
+        
+        nav a.active { 
+            background: var(--gradient-primary); 
+            color: #fff; 
+            border-left-color: var(--secondary); 
+            font-weight: 600; 
+            box-shadow: 0 4px 12px rgba(0,74,173,0.25); 
+        }
+        
+        /* ===== MAIN CONTENT AREA ===== */
+        main { 
+            flex: 1; 
+            padding: var(--spacing-xxl); 
+            overflow-y: auto; 
+            background: transparent; 
+            width: 100%;
+        }
+        
+        /* ===== PAGE HEADER ===== */
+        .page-header {
+            background: var(--gradient-primary);
+            color: white; 
+            padding: var(--spacing-xxl); 
+            border-radius: var(--border-radius-xl); 
+            box-shadow: var(--shadow-medium);
+            margin-bottom: var(--spacing-xxl); 
+            position: relative; 
+            overflow: hidden;
+        }
+        
+        .page-header h1 { 
+            font-size: var(--font-size-hero); 
+            margin-bottom: var(--spacing-sm); 
+            font-weight: 800; 
+            position: relative; 
+            color: white;
+        }
+        
+        .page-header p { 
+            opacity: 0.95; 
+            font-size: var(--font-size-lg); 
+            font-weight: 400; 
+            position: relative; 
+            max-width: 600px; 
+        }
+        
+        /* ===== STATS CARDS ===== */
+        .stats-cards {
+            display: grid; 
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: var(--spacing-xl); 
+            margin-bottom: var(--spacing-xxxl);
+        }
+        
+        .stat-card {
+            background: white; 
+            padding: var(--spacing-xl); 
+            border-radius: var(--border-radius-lg);
+            box-shadow: var(--shadow-light); 
+            text-align: center;
+            border-left: 5px solid var(--primary); 
+            transition: all var(--transition-normal) ease;
+            position: relative; 
+            overflow: hidden;
+        }
+        
+        .stat-card:hover { 
+            transform: translateY(-5px); 
+            box-shadow: var(--shadow-medium); 
+        }
+        
+        .stat-card.pending { border-left-color: var(--warning); }
+        .stat-card.approved { border-left-color: var(--success); }
+        .stat-card.rejected { border-left-color: var(--danger); }
+        .stat-card.total { border-left-color: var(--primary); }
+        
+        .stat-value { 
+            font-size: var(--font-size-xxxl); 
+            font-weight: 800; 
+            color: var(--primary); 
+            margin-bottom: var(--spacing-sm); 
+        }
+        
+        .stat-card.pending .stat-value { color: var(--warning); }
+        .stat-card.approved .stat-value { color: var(--success); }
+        .stat-card.rejected .stat-value { color: var(--danger); }
+        
+        .stat-label { 
+            color: var(--gray); 
+            font-size: var(--font-size-md); 
+            font-weight: 600; 
+            text-transform: uppercase; 
+            letter-spacing: 0.5px; 
+        }
+        
+        /* ===== ADMIN TABS ===== */
+        .admin-tabs {
+            display: flex; 
+            gap: var(--spacing-md); 
+            margin-bottom: var(--spacing-xl);
+            border-bottom: 3px solid var(--border); 
+            padding-bottom: var(--spacing-xs); 
+            flex-wrap: wrap;
+        }
+        
+        .tab-btn {
+            padding: var(--spacing-md) var(--spacing-xl); 
+            background: none; 
+            border: none;
+            border-bottom: 4px solid transparent; 
+            font-weight: 600;
+            color: var(--gray); 
+            cursor: pointer; 
+            transition: all var(--transition-normal);
+            border-radius: var(--border-radius-md) var(--border-radius-md) 0 0; 
+            font-size: var(--font-size-md); 
+        }
+        
+        .tab-btn:hover { 
+            color: var(--primary); 
+            background: rgba(0,74,173,0.05); 
+        }
+        
+        .tab-btn.active { 
+            color: var(--primary); 
+            border-bottom-color: var(--primary); 
+            background: rgba(0,74,173,0.08); 
+            font-weight: 700; 
+        }
+        
+        /* ===== PAYMENTS GRID ===== */
+        .payments-grid {
+            display: grid;
+            gap: var(--spacing-lg);
+        }
+        
+        .payment-card {
+            background: white;
+            border-radius: var(--border-radius-lg);
+            padding: var(--spacing-xl);
+            box-shadow: var(--shadow-medium);
+            border-left: 5px solid var(--warning);
+            transition: all var(--transition-normal);
+        }
+        
+        .payment-card.approved {
+            border-left-color: var(--success);
+            background: linear-gradient(135deg, #ffffff, #f8fff9);
+        }
+        
+        .payment-card.rejected {
+            border-left-color: var(--danger);
+            background: linear-gradient(135deg, #ffffff, #fff8f8);
+        }
+        
+        .payment-card:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-heavy);
+        }
+        
+        .payment-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: var(--spacing-lg);
+        }
+        
+        .payment-user {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-md);
+        }
+        
+        .user-avatar-small {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: var(--gradient-primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: var(--font-size-lg);
+            box-shadow: 0 4px 10px rgba(0,74,173,0.3);
+        }
+        
+        .user-info {
+            flex: 1;
+        }
+        
+        .user-info h4 {
+            margin: 0 0 5px 0;
+            color: var(--primary);
+            font-size: var(--font-size-lg);
+        }
+        
+        .user-info p {
+            margin: 2px 0;
+            color: var(--gray);
+            font-size: var(--font-size-sm);
+        }
+        
+        .user-stats {
+            display: flex;
+            gap: var(--spacing-lg);
+            margin-top: var(--spacing-sm);
+        }
+        
+        .user-stat {
+            text-align: center;
+            padding: var(--spacing-sm);
+            background: var(--light);
+            border-radius: var(--border-radius-sm);
+            min-width: 80px;
+        }
+        
+        .user-stat-value {
+            font-size: var(--font-size-lg);
+            font-weight: 800;
+            color: var(--primary);
+        }
+        
+        .user-stat-label {
+            font-size: var(--font-size-xs);
+            color: var(--gray);
+            text-transform: uppercase;
+            font-weight: 600;
+        }
+        
+        .payment-amount {
+            font-size: var(--font-size-xxl);
+            font-weight: 900;
+            color: var(--success);
+            text-align: right;
+        }
+        
+        .payment-details {
+            background: var(--gradient-light);
+            padding: var(--spacing-lg);
+            border-radius: var(--border-radius-md);
+            margin: var(--spacing-lg) 0;
+        }
+        
+        .detail-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: var(--spacing-sm);
+            padding: var(--spacing-sm) 0;
+            border-bottom: 1px solid var(--border);
+        }
+        
+        .detail-row:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+        }
+        
+        .transaction-message {
+            background: white;
+            padding: var(--spacing-lg);
+            border-radius: var(--border-radius-md);
+            border: 2px solid var(--border);
+            margin: var(--spacing-lg) 0;
+            font-family: monospace;
+            white-space: pre-wrap;
+            word-break: break-word;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+        
+        .payment-actions {
+            display: flex;
+            gap: var(--spacing-md);
+            justify-content: flex-end;
+        }
+        
+        /* ===== BUTTONS ===== */
+        .btn {
+            padding: var(--spacing-md) var(--spacing-xl);
+            border: none;
+            border-radius: var(--border-radius-md);
+            font-weight: 700;
+            cursor: pointer;
+            transition: all var(--transition-normal);
+            font-size: var(--font-size-md);
+        }
+        
+        .btn-success {
+            background: var(--gradient-success);
+            color: white;
+        }
+        
+        .btn-danger {
+            background: var(--gradient-danger);
+            color: white;
+        }
+        
+        .btn-warning {
+            background: var(--gradient-warning);
+            color: var(--dark);
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(0,0,0,0.2);
+        }
+        
+        .status-badge {
+            padding: var(--spacing-xs) var(--spacing-md);
+            border-radius: 20px;
+            font-weight: 700;
+            font-size: var(--font-size-sm);
+        }
+        
+        .status-pending {
+            background: var(--gradient-warning);
+            color: var(--dark);
+        }
+        
+        .status-approved {
+            background: var(--gradient-success);
+            color: white;
+        }
+        
+        .status-rejected {
+            background: var(--gradient-danger);
+            color: white;
+        }
+        
+        .no-payments {
+            text-align: center;
+            padding: var(--spacing-xxxl);
+            color: var(--gray);
+        }
+        
+        .no-payments h3 {
+            margin-bottom: var(--spacing-md);
+            color: var(--dark);
+        }
+        
+        /* ===== LOADING STYLES ===== */
+        .loading-spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255,255,255,.3);
+            border-radius: 50%;
+            border-top-color: #fff;
+            animation: spin 1s ease-in-out infinite;
+            margin-right: var(--spacing-sm);
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        .message {
+            padding: var(--spacing-lg);
+            border-radius: var(--border-radius-md);
+            margin: var(--spacing-lg) 0;
+            text-align: center;
+            font-weight: 700;
+            font-size: var(--font-size-md);
+            box-shadow: var(--shadow-light);
+        }
+        
+        .message.success {
+            background: linear-gradient(135deg, #d4edda, #c3e6cb);
+            color: #155724;
+            border: 1px solid #b1dfbb;
+        }
+        
+        .message.error {
+            background: linear-gradient(135deg, #f8d7da, #f5c6cb);
+            color: #721c24;
+            border: 1px solid #f1b0b7;
+        }
+        
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.7);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            color: white;
+            font-size: var(--font-size-xl);
+            font-weight: 700;
+        }
+        
+        .refresh-btn {
+            background: var(--gradient-primary);
+            color: white;
+            border: none;
+            padding: var(--spacing-sm) var(--spacing-md);
+            border-radius: var(--border-radius-sm);
+            cursor: pointer;
+            font-weight: 600;
+            transition: all var(--transition-normal);
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-sm);
+        }
+        
+        .refresh-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,74,173,0.3);
+        }
+        
+        /* ===== RESPONSIVE DESIGN ===== */
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column;
+            }
+            
+            nav {
+                width: 100%;
+                height: auto;
+            }
+            
+            .payment-header {
+                flex-direction: column;
+                gap: var(--spacing-md);
+            }
+            
+            .payment-actions {
+                justify-content: center;
+                flex-direction: column;
+            }
+            
+            .admin-tabs {
+                flex-direction: column;
+            }
+            
+            .user-stats {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            
+            main {
+                padding: var(--spacing-lg);
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-left">
+            <h1>Gold Gain Academic Hub</h1>
+            <div class="slogan">Admin Panel - Complete Payment Management</div>
+        </div>
+        <div class="header-right">
+            <div class="user-menu" id="userMenu">
+                <div class="user-avatar" id="userAvatar">A</div>
+                <span class="user-name" id="userName">Admin</span>
+            </div>
+            <button class="refresh-btn" onclick="loadPayments()" id="refreshBtn">
+                🔄 Refresh
+            </button>
+        </div>
+    </header>
+
+    <div class="container">
+        <nav id="sidebar">
+            <a href="dashboard.html">🏠 Dashboard</a>
+            <a href="tasks.html">📋 Tasks</a>
+            <a href="admin.html" class="active">👑 Admin Panel</a>
+            <a href="membership.html">💳 Membership</a>
+            <a href="withdraw.html">💵 Withdraw</a>
+            <a href="profile.html">🙍 Profile</a>
+            <a href="#" id="logoutBtn">🚪 Logout</a>
+        </nav>
+
+        <main>
+            <div class="page-header">
+                <h1>👑 Complete Admin Panel</h1>
+                <p>Manage all user payments, view detailed user information, and assign tasks after approval.</p>
+            </div>
+
+            <div class="stats-cards">
+                <div class="stat-card total">
+                    <div class="stat-value" id="totalPayments">0</div>
+                    <div class="stat-label">Total Payments</div>
+                </div>
+                <div class="stat-card pending">
+                    <div class="stat-value" id="pendingPayments">0</div>
+                    <div class="stat-label">Pending Review</div>
+                </div>
+                <div class="stat-card approved">
+                    <div class="stat-value" id="approvedPayments">0</div>
+                    <div class="stat-label">Approved</div>
+                </div>
+                <div class="stat-card rejected">
+                    <div class="stat-value" id="rejectedPayments">0</div>
+                    <div class="stat-label">Rejected</div>
+                </div>
+            </div>
+
+            <div class="admin-tabs">
+                <button class="tab-btn active" data-tab="pending">⏳ Pending Payments</button>
+                <button class="tab-btn" data-tab="approved">✅ Approved Payments</button>
+                <button class="tab-btn" data-tab="rejected">❌ Rejected Payments</button>
+                <button class="tab-btn" data-tab="all">📋 All Payments</button>
+            </div>
+
+            <div id="messageContainer"></div>
+
+            <div class="payments-grid" id="paymentsContainer">
+                <div class="no-payments">
+                    <h3>📭 Loading Payments...</h3>
+                    <p>Please wait while we load all payment data and user information.</p>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <div id="loadingOverlay" class="loading-overlay" style="display: none;">
+        <div style="text-align: center;">
+            <div class="loading-spinner"></div>
+            <div style="margin-top: 20px;">Processing...</div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script>
+        // ===== SUPABASE CONFIGURATION =====
+        const SUPABASE_URL = "https://lfrjtklkbppihaaiuxef.supabase.co";
+        const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imxmcmp0a2xrYnBwaWhhYWl1eGVmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTkwNTI5MzMsImV4cCI6MjA3NDYyODkzM30.2FVqnt5daF2Tw-RmVBwOGgt4GuIQQSkG8IUZt30QxIM";
+
+        // Initialize Supabase client
+        const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+        // Global variables
+        let currentUser = null;
+        let allPayments = [];
+        let currentTab = 'pending';
+
+        // DOM Elements
+        const paymentsContainer = document.getElementById('paymentsContainer');
+        const messageContainer = document.getElementById('messageContainer');
+        const logoutBtn = document.getElementById('logoutBtn');
+        const loadingOverlay = document.getElementById('loadingOverlay');
+        const refreshBtn = document.getElementById('refreshBtn');
+
+        // Initialize app
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeApp();
+        });
+
+        function setupEventListeners() {
+            // Tab buttons
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    showTab(this.getAttribute('data-tab'));
+                });
+            });
+
+            // Logout button
+            logoutBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                handleLogout();
+            });
+
+            // Refresh button
+            refreshBtn.addEventListener('click', function() {
+                loadPayments();
+            });
+        }
+
+        async function checkAuth() {
+            try {
+                const { data: { session }, error } = await supabaseClient.auth.getSession();
+                if (!session || error) {
+                    window.location.href = "login.html";
+                    return;
+                }
+                currentUser = session.user;
+                
+                console.log('Admin user logged in:', currentUser.email);
+                
+            } catch (error) {
+                console.error('Auth error:', error);
+                window.location.href = "login.html";
+            }
+        }
+
+        async function loadPayments() {
+            showLoading('Loading all payments and user information...');
+            refreshBtn.disabled = true;
+            refreshBtn.innerHTML = '🔄 Loading...';
+
+            try {
+                console.log('Loading payments from database...');
+                
+                // Load payments separately first (no joins to avoid foreign key errors)
+                const { data: payments, error } = await supabaseClient
+                    .from('payments')
+                    .select('*')
+                    .order('created_at', { ascending: false });
+
+                if (error) throw error;
+
+                console.log('Payments loaded:', payments?.length || 0);
+                
+                if (!payments || payments.length === 0) {
+                    allPayments = [];
+                    updateStats();
+                    renderPayments();
+                    return;
+                }
+
+                // Enrich payments with user and task information using separate queries
+                allPayments = await enrichPaymentsWithSeparateQueries(payments);
+                
+                updateStats();
+                renderPayments();
+                
+            } catch (error) {
+                console.error('Error in loadPayments:', error);
+                showMessage('Failed to load payments: ' + error.message, 'error');
+                
+                paymentsContainer.innerHTML = `
+                    <div class="no-payments">
+                        <h3>❌ Database Error</h3>
+                        <p>${error.message}</p>
+                        <button class="btn btn-primary" onclick="loadPayments()" style="margin-top: 20px;">
+                            🔄 Try Again
+                        </button>
+                    </div>
+                `;
+            } finally {
+                hideLoading();
+                refreshBtn.disabled = false;
+                refreshBtn.innerHTML = '🔄 Refresh';
+            }
+        }
+
+        async function enrichPaymentsWithSeparateQueries(payments) {
+            if (!payments || payments.length === 0) return [];
+            
+            try {
+                console.log(`Enriching ${payments.length} payments with separate queries`);
+                
+                // Get all unique user IDs and task IDs
+                const userIds = [...new Set(payments.map(p => p.user_id).filter(id => id))];
+                const taskIds = [...new Set(payments.map(p => p.task_id).filter(id => id))];
+                
+                console.log(`Found ${userIds.length} users and ${taskIds.length} tasks`);
+                
+                // Batch fetch user profiles
+                const userProfilesMap = await batchGetUserProfiles(userIds);
+                console.log('User profiles loaded:', Object.keys(userProfilesMap).length);
+                
+                // Batch fetch task data
+                const tasksMap = await batchGetTasks(taskIds);
+                console.log('Tasks loaded:', Object.keys(tasksMap).length);
+                
+                // Batch fetch user statistics
+                const userStatsMap = await batchGetUserStatistics(userIds);
+                console.log('User stats loaded:', Object.keys(userStatsMap).length);
+                
+                // Combine all data
+                const enrichedPayments = payments.map(payment => {
+                    const userProfile = userProfilesMap[payment.user_id] || { 
+                        full_name: 'Unknown User', 
+                        email: 'email@notfound.com',
+                        membership_level: 'Unknown',
+                        balance: 0,
+                        tasks_completed: 0,
+                        total_earnings: 0
+                    };
+                    
+                    const task = tasksMap[payment.task_id] || { 
+                        title: payment.task_id ? `Task ${payment.task_id.substring(0, 8)}` : 'General Access',
+                        reward_amount: 0 
+                    };
+                    
+                    const userStats = userStatsMap[payment.user_id] || {
+                        tasks_completed: 0,
+                        total_earnings: 0,
+                        balance: 0
+                    };
+                    
+                    return {
+                        ...payment,
+                        user: userProfile,
+                        task: task,
+                        userStats: userStats
+                    };
+                });
+                
+                return enrichedPayments;
+            } catch (error) {
+                console.error('Error enriching payments:', error);
+                // Return basic payment data if enrichment fails
+                return payments.map(payment => ({
+                    ...payment,
+                    user: { 
+                        full_name: 'Unknown User', 
+                        email: 'email@notfound.com',
+                        membership_level: 'Unknown',
+                        balance: 0,
+                        tasks_completed: 0,
+                        total_earnings: 0
+                    },
+                    task: { 
+                        title: payment.task_id ? `Task ${payment.task_id.substring(0, 8)}` : 'General Access',
+                        reward_amount: 0 
+                    },
+                    userStats: {
+                        tasks_completed: 0,
+                        total_earnings: 0,
+                        balance: 0
+                    }
+                }));
+            }
+        }
+
+        async function batchGetUserProfiles(userIds) {
+            if (!userIds || userIds.length === 0) return {};
+            
+            const profilesMap = {};
+            
+            try {
+                // Get user profiles from profiles table
+                const { data: profiles, error } = await supabaseClient
+                    .from('profiles')
+                    .select('id, full_name, email, membership_level, balance, tasks_completed, total_earnings')
+                    .in('id', userIds);
+
+                if (!error && profiles) {
+                    profiles.forEach(profile => {
+                        profilesMap[profile.id] = profile;
+                    });
+                }
+                
+                // For any missing users, try to get basic info from auth
+                const missingUserIds = userIds.filter(id => !profilesMap[id]);
+                if (missingUserIds.length > 0) {
+                    console.log('Missing profiles for users:', missingUserIds);
+                    
+                    // Create placeholder profiles for missing users
+                    missingUserIds.forEach(userId => {
+                        profilesMap[userId] = { 
+                            full_name: `User ${userId.substring(0, 8)}`, 
+                            email: `${userId.substring(0, 8)}@user.com`,
+                            membership_level: 'Unknown',
+                            balance: 0,
+                            tasks_completed: 0,
+                            total_earnings: 0
+                        };
+                    });
+                }
+                
+            } catch (error) {
+                console.error('Error in batchGetUserProfiles:', error);
+                
+                // Create placeholder profiles for all users if query fails
+                userIds.forEach(userId => {
+                    profilesMap[userId] = { 
+                        full_name: `User ${userId.substring(0, 8)}`, 
+                        email: `${userId.substring(0, 8)}@user.com`,
+                        membership_level: 'Unknown',
+                        balance: 0,
+                        tasks_completed: 0,
+                        total_earnings: 0
+                    };
+                });
+            }
+            
+            return profilesMap;
+        }
+
+        async function batchGetTasks(taskIds) {
+            if (!taskIds || taskIds.length === 0) return {};
+            
+            const tasksMap = {};
+            
+            try {
+                const { data: tasks, error } = await supabaseClient
+                    .from('tasks')
+                    .select('id, title, reward_amount')
+                    .in('id', taskIds);
+
+                if (!error && tasks) {
+                    tasks.forEach(task => {
+                        tasksMap[task.id] = task;
+                    });
+                }
+                
+                // Create placeholder tasks for any missing ones
+                const missingTaskIds = taskIds.filter(id => !tasksMap[id]);
+                missingTaskIds.forEach(taskId => {
+                    tasksMap[taskId] = { 
+                        title: `Task ${taskId.substring(0, 8)}`,
+                        reward_amount: 0 
+                    };
+                });
+                
+            } catch (error) {
+                console.error('Error in batchGetTasks:', error);
+                
+                // Create placeholder tasks for all if query fails
+                taskIds.forEach(taskId => {
+                    tasksMap[taskId] = { 
+                        title: `Task ${taskId.substring(0, 8)}`,
+                        reward_amount: 0 
+                    };
+                });
+            }
+            
+            return tasksMap;
+        }
+
+        async function batchGetUserStatistics(userIds) {
+            if (!userIds || userIds.length === 0) return {};
+            
+            const statsMap = {};
+            
+            try {
+                // Get completed tasks count for all users
+                const { data: completedTasks, error: tasksError } = await supabaseClient
+                    .from('user_tasks')
+                    .select('user_id, id')
+                    .in('user_id', userIds)
+                    .eq('status', 'approved');
+
+                if (!tasksError && completedTasks) {
+                    // Count tasks per user
+                    completedTasks.forEach(task => {
+                        if (!statsMap[task.user_id]) {
+                            statsMap[task.user_id] = { tasks_completed: 0, total_earnings: 0, balance: 0 };
+                        }
+                        statsMap[task.user_id].tasks_completed++;
+                    });
+                }
+
+                // Get total earnings for all users
+                const { data: userTasks, error: earningsError } = await supabaseClient
+                    .from('user_tasks')
+                    .select('user_id, paid_amount')
+                    .in('user_id', userIds)
+                    .eq('status', 'approved');
+
+                if (!earningsError && userTasks) {
+                    userTasks.forEach(task => {
+                        if (!statsMap[task.user_id]) {
+                            statsMap[task.user_id] = { tasks_completed: 0, total_earnings: 0, balance: 0 };
+                        }
+                        statsMap[task.user_id].total_earnings += (task.paid_amount || 0);
+                    });
+                }
+
+                // Get user balances from profiles
+                const { data: profiles, error: profilesError } = await supabaseClient
+                    .from('profiles')
+                    .select('id, balance')
+                    .in('id', userIds);
+
+                if (!profilesError && profiles) {
+                    profiles.forEach(profile => {
+                        if (!statsMap[profile.id]) {
+                            statsMap[profile.id] = { tasks_completed: 0, total_earnings: 0, balance: 0 };
+                        }
+                        statsMap[profile.id].balance = profile.balance || 0;
+                    });
+                }
+
+                // Ensure all users have stats entries
+                userIds.forEach(userId => {
+                    if (!statsMap[userId]) {
+                        statsMap[userId] = {
+                            tasks_completed: 0,
+                            total_earnings: 0,
+                            balance: 0
+                        };
+                    }
+                });
+
+            } catch (error) {
+                console.error('Error in batchGetUserStatistics:', error);
+                
+                // Create default stats for all users if query fails
+                userIds.forEach(userId => {
+                    statsMap[userId] = {
+                        tasks_completed: 0,
+                        total_earnings: 0,
+                        balance: 0
+                    };
+                });
+            }
+            
+            return statsMap;
+        }
+
+        function updateStats() {
+            const total = allPayments.length;
+            const pending = allPayments.filter(p => p.status === 'pending').length;
+            const approved = allPayments.filter(p => p.status === 'approved').length;
+            const rejected = allPayments.filter(p => p.status === 'rejected').length;
+
+            document.getElementById('totalPayments').textContent = total;
+            document.getElementById('pendingPayments').textContent = pending;
+            document.getElementById('approvedPayments').textContent = approved;
+            document.getElementById('rejectedPayments').textContent = rejected;
+        }
+
+        function renderPayments() {
+            let filteredPayments = allPayments;
+            
+            switch(currentTab) {
+                case 'pending':
+                    filteredPayments = filteredPayments.filter(p => p.status === 'pending');
+                    break;
+                case 'approved':
+                    filteredPayments = filteredPayments.filter(p => p.status === 'approved');
+                    break;
+                case 'rejected':
+                    filteredPayments = filteredPayments.filter(p => p.status === 'rejected');
+                    break;
+                case 'all':
+                    // Show all payments
+                    break;
+            }
+
+            if (filteredPayments.length === 0) {
+                paymentsContainer.innerHTML = `
+                    <div class="no-payments">
+                        <h3>📭 No ${currentTab === 'all' ? '' : currentTab} Payments</h3>
+                        <p>No ${currentTab === 'all' ? '' : currentTab} payments found in the system.</p>
+                        ${currentTab === 'pending' ? '<p>Users will appear here once they submit payments for review.</p>' : ''}
+                    </div>
+                `;
+                return;
+            }
+
+            paymentsContainer.innerHTML = filteredPayments.map(payment => {
+                const user = payment.user || {};
+                const task = payment.task || {};
+                const userStats = payment.userStats || {};
+                const createdDate = new Date(payment.created_at).toLocaleDateString();
+                const createdTime = new Date(payment.created_at).toLocaleTimeString();
+
+                return `
+                    <div class="payment-card ${payment.status}">
+                        <div class="payment-header">
+                            <div class="payment-user">
+                                <div class="user-avatar-small">
+                                    ${user.full_name ? user.full_name.charAt(0).toUpperCase() : 'U'}
+                                </div>
+                                <div class="user-info">
+                                    <h4>${user.full_name || 'Unknown User'}</h4>
+                                    <p>📧 ${user.email || 'No email'}</p>
+                                    <p>🎯 ${user.membership_level || 'Unknown'} Membership</p>
+                                    
+                                    <div class="user-stats">
+                                        <div class="user-stat">
+                                            <div class="user-stat-value">${userStats.tasks_completed || 0}</div>
+                                            <div class="user-stat-label">Tasks Done</div>
+                                        </div>
+                                        <div class="user-stat">
+                                            <div class="user-stat-value">KSh ${(userStats.total_earnings || 0).toLocaleString()}</div>
+                                            <div class="user-stat-label">Total Earned</div>
+                                        </div>
+                                        <div class="user-stat">
+                                            <div class="user-stat-value">KSh ${(user.balance || 0).toLocaleString()}</div>
+                                            <div class="user-stat-label">Balance</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="payment-amount">
+                                KSh ${payment.amount}
+                                <div style="font-size: 14px; color: var(--gray); margin-top: 5px;">Payment</div>
+                            </div>
+                        </div>
+
+                        <div class="payment-details">
+                            <div class="detail-row">
+                                <strong>Transaction ID:</strong>
+                                <span style="font-family: monospace; font-size: 12px;">${payment.id}</span>
+                            </div>
+                            <div class="detail-row">
+                                <strong>Task:</strong>
+                                <span>${task.title || 'General Task Access'}</span>
+                            </div>
+                            <div class="detail-row">
+                                <strong>Task Reward:</strong>
+                                <span>KSh ${task.reward_amount || '0'}</span>
+                            </div>
+                            <div class="detail-row">
+                                <strong>Payment Type:</strong>
+                                <span>${payment.payment_type || 'task_access'}</span>
+                            </div>
+                            <div class="detail-row">
+                                <strong>User ID:</strong>
+                                <span style="font-family: monospace; font-size: 12px;">${payment.user_id}</span>
+                            </div>
+                            <div class="detail-row">
+                                <strong>Submitted:</strong>
+                                <span>${createdDate} at ${createdTime}</span>
+                            </div>
+                            <div class="detail-row">
+                                <strong>Status:</strong>
+                                <span class="status-badge status-${payment.status}">
+                                    ${payment.status.charAt(0).toUpperCase() + payment.status.slice(1)}
+                                </span>
+                            </div>
+                        </div>
+
+                        <div>
+                            <strong>M-Pesa Message:</strong>
+                            <div class="transaction-message">${payment.transaction_message}</div>
+                        </div>
+
+                        ${payment.status === 'pending' ? `
+                            <div class="payment-actions">
+                                <button class="btn btn-success" onclick="approvePayment('${payment.id}', '${payment.user_id}', '${payment.task_id}')">
+                                    ✅ Approve & Grant Access
+                                </button>
+                                <button class="btn btn-danger" onclick="rejectPayment('${payment.id}')">
+                                    ❌ Reject Payment
+                                </button>
+                            </div>
+                        ` : ''}
+
+                        ${payment.status === 'approved' ? `
+                            <div style="text-align: center; padding: 10px; background: var(--success); color: white; border-radius: 8px; margin-top: 15px;">
+                                ✅ Payment Approved - User has task access
+                            </div>
+                        ` : ''}
+
+                        ${payment.status === 'rejected' ? `
+                            <div style="text-align: center; padding: 10px; background: var(--danger); color: white; border-radius: 8px; margin-top: 15px;">
+                                ❌ Payment Rejected
+                            </div>
+                        ` : ''}
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function showTab(tabName) {
+            currentTab = tabName;
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            document.querySelector(`[data-tab="${tabName}"]`).classList.add('active');
+            renderPayments();
+        }
+
+        async function approvePayment(paymentId, userId, taskId) {
+            if (!confirm('Are you sure you want to approve this payment and grant task access?')) {
+                return;
+            }
+
+            showLoading('Approving payment and assigning task...');
+
+            try {
+                console.log('Starting payment approval process...');
+                console.log('Payment ID:', paymentId);
+                console.log('User ID:', userId);
+                console.log('Task ID:', taskId);
+
+                // 1. Update payment status
+                const { error: paymentError } = await supabaseClient
+                    .from('payments')
+                    .update({ 
+                        status: 'approved',
+                        updated_at: new Date().toISOString()
+                    })
+                    .eq('id', paymentId);
+
+                if (paymentError) {
+                    console.error('Payment update error:', paymentError);
+                    throw new Error('Failed to update payment: ' + paymentError.message);
+                }
+
+                console.log('Payment updated successfully');
+
+                // 2. Assign task to user (if taskId exists and is valid)
+                if (taskId && taskId !== 'null' && taskId !== 'undefined' && taskId !== '') {
+                    try {
+                        console.log('Starting task assignment for task ID:', taskId);
+                        
+                        // First check if user already has this task to avoid duplicates
+                        const { data: existingTask, error: checkError } = await supabaseClient
+                            .from('user_tasks')
+                            .select('id')
+                            .eq('user_id', userId)
+                            .eq('task_id', taskId)
+                            .maybeSingle();
+
+                        if (checkError && checkError.code !== 'PGRST116') {
+                            console.warn('Check existing task error:', checkError);
+                        }
+
+                        // Only create task assignment if it doesn't exist
+                        if (!existingTask) {
+                            console.log('Creating new task assignment...');
+                            
+                            const userTaskData = {
+                                user_id: userId,
+                                task_id: taskId,
+                                status: 'assigned',
+                                assigned_at: new Date().toISOString(),
+                                work_data: {
+                                    payment_approved: true,
+                                    approved_at: new Date().toISOString(),
+                                    payment_id: paymentId
+                                }
+                            };
+
+                            const { data: assignedTask, error: taskError } = await supabaseClient
+                                .from('user_tasks')
+                                .insert(userTaskData)
+                                .select();
+
+                            if (taskError) {
+                                console.error('Task assignment error:', taskError);
+                                throw new Error('Failed to assign task: ' + taskError.message);
+                            }
+                            
+                            console.log('Task assigned successfully:', assignedTask);
+                            
+                            // Update user profile to increment task count
+                            const { error: profileError } = await supabaseClient
+                                .from('profiles')
+                                .update({
+                                    updated_at: new Date().toISOString()
+                                })
+                                .eq('id', userId);
+                                
+                            if (profileError) {
+                                console.warn('Profile update warning:', profileError);
+                            }
+                        } else {
+                            console.log('Task already assigned to user, updating existing assignment...');
+                            
+                            // Update existing task assignment
+                            const { error: updateError } = await supabaseClient
+                                .from('user_tasks')
+                                .update({
+                                    status: 'assigned',
+                                    assigned_at: new Date().toISOString(),
+                                    work_data: {
+                                        payment_approved: true,
+                                        approved_at: new Date().toISOString(),
+                                        payment_id: paymentId
+                                    }
+                                })
+                                .eq('id', existingTask.id);
+                                
+                            if (updateError) {
+                                console.error('Task update error:', updateError);
+                            }
+                        }
+                    } catch (taskError) {
+                        console.error('Task assignment failed:', taskError);
+                        // Don't throw here, just log the error but continue with payment approval
+                        showMessage('Payment approved but task assignment had issues: ' + taskError.message, 'error');
+                    }
+                } else {
+                    console.log('No valid task ID provided for assignment');
+                }
+
+                showMessage('✅ Payment approved! Task access granted successfully.', 'success');
+                await loadPayments();
+                
+            } catch (error) {
+                console.error('Approval error:', error);
+                showMessage('Error: ' + error.message, 'error');
+            } finally {
+                hideLoading();
+            }
+        }
+
+        async function rejectPayment(paymentId) {
+            if (!confirm('Are you sure you want to reject this payment?')) {
+                return;
+            }
+
+            showLoading('Rejecting payment...');
+
+            try {
+                const { error } = await supabaseClient
+                    .from('payments')
+                    .update({ 
+                        status: 'rejected',
+                        updated_at: new Date().toISOString()
+                    })
+                    .eq('id', paymentId);
+
+                if (error) throw error;
+
+                showMessage('❌ Payment rejected.', 'success');
+                await loadPayments();
+                
+            } catch (error) {
+                console.error('Rejection error:', error);
+                showMessage('Error: ' + error.message, 'error');
+            } finally {
+                hideLoading();
+            }
+        }
+
+        function showMessage(message, type) {
+            const existingMessages = document.querySelectorAll('.message');
+            existingMessages.forEach(msg => msg.remove());
+            
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${type}`;
+            messageDiv.textContent = message;
+            
+            messageContainer.insertBefore(messageDiv, messageContainer.firstChild);
+            
+            setTimeout(() => {
+                if (messageDiv.parentNode) {
+                    messageDiv.remove();
+                }
+            }, 5000);
+        }
+
+        function showLoading(message = 'Loading...') {
+            loadingOverlay.style.display = 'flex';
+            loadingOverlay.innerHTML = `
+                <div style="text-align: center;">
+                    <div class="loading-spinner"></div>
+                    <div style="margin-top: 20px;">${message}</div>
+                </div>
+            `;
+        }
+
+        function hideLoading() {
+            loadingOverlay.style.display = 'none';
+        }
+
+        async function handleLogout() {
+            try {
+                const { error } = await supabaseClient.auth.signOut();
+                if (error) throw error;
+                window.location.href = "login.html";
+            } catch (error) {
+                console.error('Logout error:', error);
+            }
+        }
+
+        // Initialize app
+        async function initializeApp() {
+            setupEventListeners();
+            await checkAuth();
+            await loadPayments();
+        }
+
+        // Global functions
+        window.showTab = showTab;
+        window.approvePayment = approvePayment;
+        window.rejectPayment = rejectPayment;
+        window.loadPayments = loadPayments;
+    </script>
+</body>
+</html>
