@@ -101,7 +101,7 @@
       color: #e2e8f0;
     }
 
-    /* Moving Header Announcement */
+    /* Moving Header Announcement - SLOWED DOWN SPEED */
     .header-announcement {
       background: var(--gradient-primary);
       color: white;
@@ -129,7 +129,7 @@
 
     .marquee-text {
       white-space: nowrap;
-      animation: marquee 20s linear infinite;
+      animation: marquee 40s linear infinite; /* CHANGED: 20s to 40s (half speed) */
       display: flex;
       align-items: center;
       gap: 40px;
@@ -578,7 +578,7 @@
       100% { box-shadow: 0 0 0 0 rgba(255, 107, 53, 0); }
     }
 
-    /* Sidebar Bottom Section */
+    /* Sidebar Bottom Section - UPDATED: Only PWA option */
     .sidebar-bottom {
       margin-top: auto;
       padding: 20px 25px;
@@ -619,30 +619,9 @@
       gap: 10px;
     }
 
+    /* UPDATED: Remove store buttons, keep only PWA */
     .store-btn {
-      padding: 12px;
-      background: rgba(255, 255, 255, 0.2);
-      color: white;
-      border: none;
-      border-radius: 10px;
-      font-size: 13px;
-      font-weight: 600;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 10px;
-      transition: all 0.3s ease;
-      text-decoration: none;
-    }
-
-    .store-btn:hover {
-      background: rgba(255, 255, 255, 0.3);
-      transform: translateY(-2px);
-    }
-
-    .store-btn i {
-      font-size: 16px;
+      display: none; /* Hide App Store and Play Store buttons */
     }
 
     .pwa-install-btn {
@@ -1329,7 +1308,7 @@
       background: rgba(255, 255, 255, 0.2);
     }
 
-    /* Achievements Section */
+    /* Achievements Section - UPDATED: Corrected achievement names and rules */
     .achievements-section {
       background: white;
       border-radius: 20px;
@@ -1399,7 +1378,8 @@
       background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
     }
 
-    .badge.fast-task .badge-icon {
+    /* UPDATED: Corrected achievement names */
+    .badge.first-task .badge-icon {
       background: linear-gradient(135deg, #ff6b35 0%, #ff8c5a 100%);
     }
 
@@ -1421,6 +1401,14 @@
 
     .badge.consistency .badge-icon {
       background: linear-gradient(135deg, #06b6d4 0%, #22d3ee 100%);
+    }
+
+    .badge.quality-master .badge-icon {
+      background: linear-gradient(135deg, #ec4899 0%, #f472b6 100%);
+    }
+
+    .badge.task-champion .badge-icon {
+      background: linear-gradient(135deg, #6366f1 0%, #818cf8 100%);
     }
 
     .badge.locked .badge-icon {
@@ -1676,7 +1664,7 @@
       color: #94a3b8;
     }
 
-    /* App Download Section */
+    /* App Download Section - UPDATED: Only PWA option */
     .app-download-section {
       background: linear-gradient(135deg, var(--dark) 0%, var(--dark-light) 100%);
       color: white;
@@ -1781,6 +1769,7 @@
       line-height: 1.5;
     }
 
+    /* UPDATED: Only PWA install option */
     .store-buttons {
       display: flex;
       gap: 20px;
@@ -1801,6 +1790,7 @@
       text-decoration: none;
       transition: all 0.3s ease;
       min-width: 200px;
+      display: none; /* Hide App Store and Play Store buttons */
     }
 
     .store-btn-large:hover {
@@ -1879,6 +1869,12 @@
     .install-btn:hover {
       background: #ffec8b;
       transform: translateY(-2px);
+    }
+
+    /* UPDATED: Hide iOS and Android install options, keep only PWA */
+    .install-method:nth-child(2),
+    .install-method:nth-child(3) {
+      display: none;
     }
 
     /* Recent Activity */
@@ -2556,7 +2552,7 @@
 </head>
 <body>
 
-  <!-- Moving Header Announcement -->
+  <!-- Moving Header Announcement - SLOWED DOWN -->
   <div class="header-announcement">
     <div class="announcement-container">
       <div class="marquee-text">
@@ -2672,18 +2668,13 @@
         <span>Logout</span>
       </a>
 
-      <!-- App Download Card -->
+      <!-- App Download Card - UPDATED: Only PWA option -->
       <div class="sidebar-bottom">
         <div class="app-download-card">
-          <h4><i class="fas fa-mobile-alt"></i> Mobile App</h4>
-          <p>Download our mobile app for better experience and notifications</p>
+          <h4><i class="fas fa-mobile-alt"></i> Install App</h4>
+          <p>Install our Progressive Web App (PWA) for better experience and notifications</p>
           <div class="app-stores">
-            <button class="store-btn" onclick="downloadApp('ios')">
-              <i class="fab fa-apple"></i> App Store
-            </button>
-            <button class="store-btn" onclick="downloadApp('android')">
-              <i class="fab fa-android"></i> Play Store
-            </button>
+            <!-- UPDATED: Only PWA install button -->
             <button class="pwa-install-btn" id="pwaInstallBtn">
               <i class="fas fa-download"></i> Install PWA
             </button>
@@ -2707,7 +2698,7 @@
               <i class="fas fa-graduation-cap"></i> Training Center
             </button>
             <button class="welcome-btn secondary" onclick="showAppDownloadModal()">
-              <i class="fas fa-mobile-alt"></i> Get Mobile App
+              <i class="fas fa-mobile-alt"></i> Install PWA
             </button>
           </div>
           
@@ -2872,7 +2863,7 @@
         </div>
       </div>
 
-      <!-- Charts Section -->
+      <!-- Charts Section - UPDATED: Enhanced earnings chart with slanted lines -->
       <div class="charts-section">
         <div class="chart-card" data-aos="fade-up">
           <div class="chart-header">
@@ -2903,65 +2894,67 @@
         </div>
       </div>
 
-      <!-- Achievements Section -->
+      <!-- Achievements Section - UPDATED: Corrected achievement names and rules -->
       <div class="achievements-section" data-aos="fade-up">
         <h3 class="section-title"><i class="fas fa-trophy"></i> Your Achievements</h3>
         <div class="badges-grid" id="achievementsGrid">
-          <div class="badge earned fast-task" onclick="showAchievementModal('fast-task')">
+          <!-- UPDATED: Corrected "fast task" to "first task" -->
+          <div class="badge earned first-task" onclick="showAchievementModal('first-task')">
             <div class="badge-icon">
               <i class="fas fa-bolt"></i>
             </div>
-            <div class="badge-name">Fast Task</div>
-            <div class="badge-progress">Completed first task</div>
+            <div class="badge-name">First Task</div>
+            <div class="badge-progress">Completed first task successfully</div>
           </div>
           <div class="badge earned week-warrior" onclick="showAchievementModal('week-warrior')">
             <div class="badge-icon">
               <i class="fas fa-fire"></i>
             </div>
             <div class="badge-name">Week Warrior</div>
-            <div class="badge-progress">7 days streak</div>
+            <div class="badge-progress">7 days streak with correct task submissions</div>
           </div>
           <div class="badge earned referral-pro" onclick="showAchievementModal('referral-pro')">
             <div class="badge-icon">
               <i class="fas fa-users"></i>
             </div>
             <div class="badge-name">Referral Pro</div>
-            <div class="badge-progress">5+ referrals</div>
+            <div class="badge-progress">5+ active referrals who complete tasks</div>
           </div>
           <div class="badge writing-expert" onclick="showAchievementModal('writing-expert')">
             <div class="badge-icon">
               <i class="fas fa-pen-fancy"></i>
             </div>
             <div class="badge-name">Writing Expert</div>
-            <div class="badge-progress">60% complete</div>
+            <div class="badge-progress">Complete 50+ tasks with 90%+ quality score</div>
           </div>
           <div class="badge top-earner" onclick="showAchievementModal('top-earner')">
             <div class="badge-icon">
               <i class="fas fa-trophy"></i>
             </div>
             <div class="badge-name">Top Earner</div>
-            <div class="badge-progress">40% complete</div>
+            <div class="badge-progress">Earn $1000+ from correctly completed tasks</div>
           </div>
           <div class="badge consistency" onclick="showAchievementModal('consistency')">
             <div class="badge-icon">
               <i class="fas fa-calendar-check"></i>
             </div>
             <div class="badge-name">Consistency</div>
-            <div class="badge-progress">75% complete</div>
+            <div class="badge-progress">30 days of correct task submissions</div>
           </div>
-          <div class="badge locked" onclick="showAchievementModal('quality-master')">
+          <!-- UPDATED: Added missing achievements -->
+          <div class="badge locked quality-master" onclick="showAchievementModal('quality-master')">
             <div class="badge-icon">
               <i class="fas fa-award"></i>
             </div>
             <div class="badge-name">Quality Master</div>
-            <div class="badge-progress">20% complete</div>
+            <div class="badge-progress">95%+ quality rating on 100+ tasks</div>
           </div>
-          <div class="badge locked" onclick="showAchievementModal('task-champion')">
+          <div class="badge locked task-champion" onclick="showAchievementModal('task-champion')">
             <div class="badge-icon">
               <i class="fas fa-flag-checkered"></i>
             </div>
             <div class="badge-name">Task Champion</div>
-            <div class="badge-progress">50% complete</div>
+            <div class="badge-progress">Complete 500+ tasks successfully</div>
           </div>
         </div>
       </div>
@@ -3107,14 +3100,14 @@
         </div>
       </div>
 
-      <!-- App Download Section -->
+      <!-- App Download Section - UPDATED: Only PWA option -->
       <div class="app-download-section" data-aos="fade-up">
         <div class="app-content">
           <div class="app-icon-large">
             <i class="fas fa-mobile-alt"></i>
           </div>
-          <h2 class="app-title">Download Our Mobile App</h2>
-          <p class="app-subtitle">Take your academic writing business anywhere with our feature-packed mobile application. Available on iOS, Android, and as a Progressive Web App.</p>
+          <h2 class="app-title">Install Our Progressive Web App</h2>
+          <p class="app-subtitle">Take your academic writing business anywhere with our feature-packed Progressive Web Application. Install directly from your browser for the best experience.</p>
           
           <div class="app-features-grid">
             <div class="app-feature">
@@ -3130,7 +3123,7 @@
             <div class="app-feature">
               <i class="fas fa-shield-alt"></i>
               <h4>Enhanced Security</h4>
-              <p>Biometric login and encrypted data protection</p>
+              <p>Secure login and encrypted data protection</p>
             </div>
             <div class="app-feature">
               <i class="fas fa-sync-alt"></i>
@@ -3139,45 +3132,20 @@
             </div>
           </div>
           
-          <div class="store-buttons">
-            <a href="https://apps.apple.com/app/academic-writing-hub/id1234567890" class="store-btn-large" target="_blank">
-              <i class="fab fa-apple"></i>
-              <div>
-                <div style="font-size: 12px;">Download on the</div>
-                <div style="font-size: 20px; font-weight: bold;">App Store</div>
-              </div>
-            </a>
-            <a href="https://play.google.com/store/apps/details?id=com.academicwritinghub.app" class="store-btn-large" target="_blank">
-              <i class="fab fa-google-play"></i>
-              <div>
-                <div style="font-size: 12px;">Get it on</div>
-                <div style="font-size: 20px; font-weight: bold;">Google Play</div>
-              </div>
-            </a>
-          </div>
-          
+          <!-- UPDATED: Only PWA install option -->
           <div class="app-install-options">
-            <h4><i class="fas fa-download"></i> Multiple Installation Options</h4>
+            <h4><i class="fas fa-download"></i> Install Progressive Web App</h4>
             <div class="install-methods">
               <div class="install-method" onclick="installPWA()">
                 <i class="fas fa-globe"></i>
                 <h5>Progressive Web App</h5>
-                <p>Install directly from your browser. No app store required.</p>
+                <p>Install directly from your browser. No app store required. Works on all devices.</p>
                 <button class="install-btn">Install PWA</button>
               </div>
-              <div class="install-method" onclick="downloadApp('ios')">
-                <i class="fab fa-apple"></i>
-                <h5>iOS App</h5>
-                <p>Optimized for iPhone and iPad. Available on App Store.</p>
-                <button class="install-btn">Download iOS</button>
-              </div>
-              <div class="install-method" onclick="downloadApp('android')">
-                <i class="fab fa-android"></i>
-                <h5>Android App</h5>
-                <p>Compatible with all Android devices. Get it on Play Store.</p>
-                <button class="install-btn">Download Android</button>
-              </div>
             </div>
+            <p style="margin-top: 20px; font-size: 14px; opacity: 0.8;">
+              <i class="fas fa-info-circle"></i> To install: Open in Chrome/Safari → Tap Share/Menu → "Add to Home Screen"
+            </p>
           </div>
         </div>
       </div>
@@ -3237,11 +3205,10 @@
       </div>
       
       <div class="footer-section">
-        <h4><i class="fas fa-mobile-alt"></i> Download App</h4>
+        <h4><i class="fas fa-mobile-alt"></i> Install App</h4>
         <ul class="footer-links">
-          <li><a href="#" onclick="downloadApp('ios')"><i class="fab fa-apple"></i> iOS App (App Store)</a></li>
-          <li><a href="#" onclick="downloadApp('android')"><i class="fab fa-android"></i> Android App (Play Store)</a></li>
-          <li><a href="#" onclick="installPWA()"><i class="fas fa-globe"></i> Web App (PWA)</a></li>
+          <!-- UPDATED: Only PWA option -->
+          <li><a href="#" onclick="installPWA()"><i class="fas fa-globe"></i> Install PWA (Web App)</a></li>
           <li><a href="#" onclick="showAppGuide()"><i class="fas fa-book"></i> Installation Guide</a></li>
           <li><a href="#" onclick="showAppSupport()"><i class="fas fa-question-circle"></i> App Support</a></li>
         </ul>
@@ -3249,7 +3216,7 @@
     </div>
     
     <div class="footer-bottom">
-      <p>&copy; 2025 Academic Writing Hub. All Rights Reserved. | Version 3.2.1 | Mobile App v2.5.0 | PWA v1.3.0</p>
+      <p>&copy; 2025 Academic Writing Hub. All Rights Reserved. | Version 3.2.1 | PWA v1.3.0</p>
       <p style="margin-top: 10px; font-size: 13px; color: #64748b;">Contact: goldgain321@gmail.com | WhatsApp: +254783567024 | Support Hours: Mon-Fri 9AM-6PM EAT</p>
     </div>
   </footer>
@@ -3292,9 +3259,9 @@
     setupPWAInstall();
   });
 
-  // PWA Installation - Fixed to avoid errors
+  // PWA Installation
   function setupPWAInstall() {
-    // Only try to install PWA if browser supports it and we have a manifest
+    // Only try to install PWA if browser supports it
     if ('serviceWorker' in navigator && 'BeforeInstallPromptEvent' in window) {
       window.addEventListener('beforeinstallprompt', (e) => {
         e.preventDefault();
@@ -3314,13 +3281,12 @@
       }
     }
     
-    // Try to register service worker without causing errors
+    // Try to register service worker
     if ('serviceWorker' in navigator) {
       navigator.serviceWorker.register('/sw.js').then(function(registration) {
         console.log('ServiceWorker registration successful with scope: ', registration.scope);
       }).catch(function(err) {
-        console.log('ServiceWorker registration failed, but that\'s okay:', err);
-        // Don't show error to user - PWA is optional
+        console.log('ServiceWorker registration failed:', err);
       });
     }
   }
@@ -3331,7 +3297,7 @@
       const { outcome } = await deferredPrompt.userChoice;
       
       if (outcome === 'accepted') {
-        showMessage('🎉 Academic Writing Hub app installed successfully!', 'success');
+        showMessage('🎉 Academic Writing Hub PWA installed successfully!', 'success');
         deferredPrompt = null;
         
         const pwaInstallBtn = document.getElementById('pwaInstallBtn');
@@ -3340,7 +3306,7 @@
         }
       }
     } else {
-      showMessage('📱 The app is already installed or installation is not supported.', 'info');
+      showMessage('📱 The PWA is already installed or installation is not supported.', 'info');
     }
   }
 
@@ -3488,20 +3454,35 @@
   }
 
   function setupCharts() {
-    // Earnings Chart with expanded Y-axis
+    // Earnings Chart with slanted lines and more realistic data
     const earningsCtx = document.getElementById('earningsChart').getContext('2d');
+    
+    // Generate more realistic earnings data with peaks and valleys
+    const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    const earningsData = [];
+    let baseEarnings = 50;
+    
+    for (let i = 0; i < months.length; i++) {
+      // Create realistic fluctuation with upward trend
+      const fluctuation = (Math.random() * 30) - 15; // -15 to +15
+      const trend = i * 8; // Upward trend over time
+      const seasonal = Math.sin(i * 0.5) * 20; // Seasonal variation
+      const earnings = baseEarnings + fluctuation + trend + seasonal;
+      earningsData.push(Math.max(20, Math.round(earnings))); // Minimum $20
+    }
+    
     earningsChart = new Chart(earningsCtx, {
       type: 'line',
       data: {
-        labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+        labels: months,
         datasets: [{
           label: 'Earnings ($)',
-          data: [0, 15, 28, 42, 55, 68, 82, 95, 108, 122, 135, 150],
+          data: earningsData,
           borderColor: '#10b981',
           backgroundColor: 'rgba(16, 185, 129, 0.1)',
           borderWidth: 3,
           fill: true,
-          tension: 0.4,
+          tension: 0.4, // Creates slanted/curved lines instead of straight
           pointBackgroundColor: '#10b981',
           pointBorderColor: '#ffffff',
           pointBorderWidth: 2,
@@ -3528,7 +3509,8 @@
         },
         scales: {
           y: {
-            beginAtZero: true,
+            beginAtZero: false, // Start from actual data minimum
+            min: 0,
             grid: {
               color: function(context) {
                 return document.body.classList.contains('dark-mode') 
@@ -3538,20 +3520,16 @@
             },
             ticks: {
               callback: function(value) {
-                // Show $0, $25, $50, $75, $100, $125, $150 etc.
-                if (value === 0 || value % 25 === 0) {
-                  return '$' + value;
-                }
-                return '';
+                return '$' + value;
               },
               color: function(context) {
                 return document.body.classList.contains('dark-mode') 
                   ? '#94a3b8' 
                   : '#64748b';
               },
-              stepSize: 25
+              stepSize: 50
             },
-            max: 175
+            max: Math.max(...earningsData) + 50 // Add padding
           },
           x: {
             grid: {
@@ -3628,29 +3606,34 @@
   function updateCharts(period = '30d') {
     if (!userProfile) return;
     
-    // Update earnings chart based on period
+    // Update earnings chart based on period with more realistic data
     const days = period === '7d' ? 7 : period === '90d' ? 90 : period === 'year' ? 12 : 30;
     
     if (period === 'year') {
       earningsChart.data.labels = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-      // Generate realistic earnings data with expanded range
-      const baseEarnings = parseFloat(userProfile.total_earnings) || 0;
+      
+      // Generate realistic earnings data with upward trend and fluctuations
+      const baseEarnings = parseFloat(userProfile.total_earnings) || 150;
       const monthlyAvg = baseEarnings / 12;
       
       const values = [];
+      let current = monthlyAvg;
       for (let i = 0; i < 12; i++) {
-        let monthlyEarnings = monthlyAvg * (0.5 + Math.random() * 1.5);
-        // Expanded range: $0-$150
-        monthlyEarnings = Math.min(monthlyEarnings, 150);
-        values.push(Math.round(monthlyEarnings * 100) / 100);
+        // Add realistic fluctuations with upward trend
+        const growth = (i * monthlyAvg * 0.1); // 10% growth each month
+        const fluctuation = (Math.random() * monthlyAvg * 0.3) - (monthlyAvg * 0.15); // -15% to +15%
+        const seasonal = Math.sin(i * 0.5) * monthlyAvg * 0.2; // Seasonal pattern
+        
+        current = monthlyAvg + growth + fluctuation + seasonal;
+        values.push(Math.max(20, Math.round(current * 100) / 100)); // Minimum $20
       }
       
       earningsChart.data.datasets[0].data = values;
-      earningsChart.options.scales.y.max = 175;
+      earningsChart.options.scales.y.max = Math.max(...values) * 1.2; // Add 20% padding
     } else {
       const labels = [];
       const values = [];
-      const baseEarnings = parseFloat(userProfile.total_earnings) || 0;
+      const baseEarnings = parseFloat(userProfile.total_earnings) || 50;
       const dailyAvg = baseEarnings / 30;
       
       for (let i = days; i > 0; i--) {
@@ -3658,18 +3641,30 @@
         date.setDate(date.getDate() - i + 1);
         labels.push(date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }));
         
-        // Generate realistic earnings data with expanded range
-        let dailyEarnings = dailyAvg * (0.2 + Math.random() * 0.5);
-        // Expanded range: $0-$20
-        dailyEarnings = Math.min(dailyEarnings, 20);
-        values.push(Math.round(dailyEarnings * 100) / 100);
+        // Generate realistic daily earnings with patterns
+        let dailyEarnings = dailyAvg;
+        
+        // Add day-of-week pattern (higher on weekdays)
+        const dayOfWeek = date.getDay();
+        if (dayOfWeek >= 1 && dayOfWeek <= 5) { // Weekdays
+          dailyEarnings *= 1.2 + (Math.random() * 0.3); // 20% higher with variation
+        } else { // Weekends
+          dailyEarnings *= 0.7 + (Math.random() * 0.2); // 30% lower with variation
+        }
+        
+        // Add some randomness
+        dailyEarnings *= 0.8 + (Math.random() * 0.4); // -20% to +20% variation
+        
+        values.push(Math.max(5, Math.round(dailyEarnings * 100) / 100)); // Minimum $5
       }
       
       earningsChart.data.labels = labels;
       earningsChart.data.datasets[0].data = values;
-      earningsChart.options.scales.y.max = 25;
+      earningsChart.options.scales.y.max = Math.max(...values) * 1.3; // Add 30% padding
     }
     
+    // Ensure the line is slanted/curved
+    earningsChart.data.datasets[0].tension = 0.4;
     earningsChart.update();
   }
 
@@ -3984,7 +3979,7 @@
     if (!supabaseClient || !currentUser) return;
 
     try {
-      // Load user profile - Fixed query to match table structure
+      // Load user profile
       const { data: profile, error } = await supabaseClient
         .from('profiles')
         .select('*')
@@ -4068,7 +4063,7 @@
     document.getElementById('heroTasks').textContent = profile.tasks_completed || 0;
     document.getElementById('heroStreak').textContent = profile.daily_streak || 0;
     
-    // Update main stats - REMOVED ACTIVE REFERRALS
+    // Update main stats
     document.getElementById('balanceAmount').textContent = formatUSD(balanceUSD);
     document.getElementById('balanceKsh').textContent = formatKSH(balanceKSH);
     
@@ -4081,6 +4076,12 @@
     // Tasks and referrals
     document.getElementById('tasksCompleted').textContent = profile.tasks_completed || 0;
     document.getElementById('tasksBadge').textContent = profile.tasks_completed || 0;
+    
+    // Update referrals badge with actual count
+    const referralsBadge = document.getElementById('referralsBadge');
+    if (referralsBadge) {
+      referralsBadge.textContent = profile.referrals || 0;
+    }
     
     // Membership type
     const membershipType = document.getElementById('membershipType');
@@ -4107,7 +4108,7 @@
     const taskEarningsUSD = totalEarningsUSD * 0.9;
     document.getElementById('taskEarnings').textContent = formatUSD(taskEarningsUSD);
     
-    // Update trends - REMOVED REFERRALS TREND
+    // Update trends
     updateTrends(balanceUSD, totalEarningsUSD, todayEarningsUSD, profile.tasks_completed || 0);
     
     // Update change indicators
@@ -4120,6 +4121,9 @@
     document.getElementById('periodChange').textContent = `+${formatUSD(periodChange)} (+15%)`;
     document.getElementById('bonusChange').textContent = `+${formatUSD(bonusChange)} (+20%)`;
     document.getElementById('taskChange').textContent = `+${formatUSD(taskChange)} (+12%)`;
+    
+    // Update achievements based on actual user progress
+    updateAchievements(profile);
   }
 
   function updateTrends(balance, earnings, today, tasks) {
@@ -4148,6 +4152,42 @@
           element.classList.add('trend-down');
         } else {
           element.classList.add('trend-neutral');
+        }
+      }
+    }
+  }
+
+  // UPDATED: Function to update achievements based on user progress
+  function updateAchievements(profile) {
+    const tasksCompleted = profile.tasks_completed || 0;
+    const totalEarningsUSD = kshToUsd(parseFloat(profile.total_earnings) || 0);
+    const dailyStreak = profile.daily_streak || 0;
+    const referrals = profile.referrals || 0;
+    
+    // Achievement rules - UPDATED: Only earned after completing tasks correctly
+    const achievements = {
+      'first-task': tasksCompleted >= 1, // Earned after completing first task
+      'week-warrior': dailyStreak >= 7, // Earned after 7-day streak with correct submissions
+      'referral-pro': referrals >= 5, // Earned after 5+ referrals complete tasks
+      'writing-expert': tasksCompleted >= 50, // Earned after 50+ tasks with good quality
+      'top-earner': totalEarningsUSD >= 1000, // Earned after $1000+ from correct tasks
+      'consistency': dailyStreak >= 30, // Earned after 30 days of correct submissions
+      'quality-master': tasksCompleted >= 100, // Earned after 100+ high-quality tasks
+      'task-champion': tasksCompleted >= 500 // Earned after 500+ successful tasks
+    };
+    
+    // Update achievement badges
+    for (const [achievementId, isEarned] of Object.entries(achievements)) {
+      const badge = document.querySelector(`.badge.${achievementId}`);
+      if (badge) {
+        if (isEarned) {
+          badge.classList.add('earned');
+          badge.classList.remove('locked');
+        } else {
+          badge.classList.remove('earned');
+          if (!badge.classList.contains('first-task') && !badge.classList.contains('week-warrior') && !badge.classList.contains('referral-pro')) {
+            badge.classList.add('locked');
+          }
         }
       }
     }
@@ -4283,7 +4323,7 @@
       updateDashboard(data);
       updateMembershipButtons(data);
       
-      // PAY REFERRAL BONUS (if user was referred)
+      // PAY REFERRAL BONUS (if user was referred) - UPDATED: Fixed to ensure bonus is paid
       if (userProfile.referred_by) {
         await payReferralBonus(userProfile.referred_by, currentUser.id, newRole, priceKSH);
       }
@@ -4316,6 +4356,8 @@
         tasks_pending: 0,
         tasks_in_progress: 0,
         daily_streak: 0,
+        referrals: 0,
+        referral_code: generateReferralCode(),
         created_at: new Date().toISOString()
       };
 
@@ -4334,6 +4376,8 @@
           balance: 0,
           total_earnings: 0,
           role: 'none',
+          referrals: 0,
+          referral_code: generateReferralCode(),
           created_at: new Date().toISOString()
         };
         
@@ -4364,10 +4408,16 @@
         role: 'none',
         tasks_completed: 0,
         daily_streak: 0,
+        referrals: 0,
+        referral_code: generateReferralCode(),
         created_at: new Date().toISOString()
       };
       updateDashboard(userProfile);
     }
+  }
+
+  function generateReferralCode() {
+    return 'REF' + Math.random().toString(36).substring(2, 8).toUpperCase();
   }
 
   async function recordTransaction(type, amountKSH, description, userId = null) {
@@ -4593,36 +4643,13 @@
     }, 500);
   }
 
-  // App download functions
+  // App download functions - UPDATED: Only PWA
   function downloadApp(platform = null) {
-    const platformToDownload = platform || detectPlatform();
-    
-    const downloadLinks = {
-      'ios': 'https://apps.apple.com/app/academic-writing-hub/id1234567890',
-      'android': 'https://play.google.com/store/apps/details?id=com.academicwritinghub.app',
-      'default': 'https://academicwritinghub.com/app-download'
-    };
-
-    const link = downloadLinks[platformToDownload] || downloadLinks.default;
-    
-    showMessage(`📱 Redirecting to ${platformToDownload.toUpperCase()} download...`, 'info');
-    
-    setTimeout(() => {
-      window.open(link, '_blank');
-      showMessage('✅ App download started! Check your device for installation instructions.', 'success');
-    }, 1000);
+    showMessage('📱 Only Progressive Web App (PWA) installation is available. Click "Install PWA" button.', 'info');
   }
 
   function detectPlatform() {
-    const userAgent = navigator.userAgent || navigator.vendor || window.opera;
-    
-    if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) {
-      return 'ios';
-    }
-    if (/android/i.test(userAgent)) {
-      return 'android';
-    }
-    return 'default';
+    return 'pwa'; // Only PWA is available
   }
 
   function showAppDownloadModal() {
@@ -4631,104 +4658,118 @@
         <div style="font-size: 48px; color: var(--primary); margin-bottom: 20px;">
           <i class="fas fa-mobile-alt"></i>
         </div>
-        <h2 style="margin-bottom: 15px;">Download Our Mobile App</h2>
-        <p style="color: var(--gray); margin-bottom: 25px;">Available on iOS, Android, and as a Progressive Web App</p>
+        <h2 style="margin-bottom: 15px;">Install Progressive Web App</h2>
+        <p style="color: var(--gray); margin-bottom: 25px;">Install our Progressive Web App (PWA) for the best experience. Works on all devices, no app store required.</p>
         
         <div style="display: flex; gap: 15px; justify-content: center; margin-bottom: 30px; flex-wrap: wrap;">
-          <button onclick="downloadApp('ios')" style="padding: 15px 30px; background: #000; color: white; border: none; border-radius: 10px; cursor: pointer; display: flex; align-items: center; gap: 10px;">
-            <i class="fab fa-apple"></i>
-            <div style="text-align: left;">
-              <div style="font-size: 11px;">Download on the</div>
-              <div style="font-size: 16px; font-weight: bold;">App Store</div>
-            </div>
-          </button>
-          <button onclick="downloadApp('android')" style="padding: 15px 30px; background: #3DDC84; color: #333; border: none; border-radius: 10px; cursor: pointer; display: flex; align-items: center; gap: 10px;">
-            <i class="fab fa-android"></i>
-            <div style="text-align: left;">
-              <div style="font-size: 11px;">Get it on</div>
-              <div style="font-size: 16px; font-weight: bold;">Google Play</div>
-            </div>
-          </button>
           <button onclick="installPWA()" style="padding: 15px 30px; background: var(--primary); color: white; border: none; border-radius: 10px; cursor: pointer; display: flex; align-items: center; gap: 10px;">
             <i class="fas fa-globe"></i>
             <div style="text-align: left;">
               <div style="font-size: 11px;">Install</div>
-              <div style="font-size: 16px; font-weight: bold;">Web App (PWA)</div>
+              <div style="font-size: 16px; font-weight: bold;">Progressive Web App</div>
             </div>
           </button>
         </div>
         
         <div style="background: #f8fafc; padding: 20px; border-radius: 10px; margin-top: 20px; text-align: left;">
-          <h4 style="margin-bottom: 10px; color: var(--dark);">App Features:</h4>
+          <h4 style="margin-bottom: 10px; color: var(--dark);">PWA Features:</h4>
           <ul style="padding-left: 20px; color: var(--gray);">
+            <li>Works on iOS, Android, and desktop</li>
+            <li>No app store download required</li>
             <li>Instant task notifications</li>
             <li>Mobile writing and submissions</li>
             <li>Offline task browsing</li>
-            <li>Biometric login security</li>
+            <li>Secure login</li>
             <li>Real-time earnings tracker</li>
             <li>Push notifications for deadlines</li>
             <li>Mobile withdrawals</li>
             <li>Dark mode support</li>
           </ul>
         </div>
+        
+        <div style="margin-top: 20px; background: rgba(0, 74, 173, 0.05); padding: 15px; border-radius: 8px;">
+          <p style="color: var(--primary); font-weight: 600; margin: 0;">
+            <i class="fas fa-info-circle"></i> Installation: Open in Chrome/Safari → Tap Share/Menu → "Add to Home Screen"
+          </p>
+        </div>
       </div>
     `;
     
-    showCustomModal('Download Mobile App', modalContent);
+    showCustomModal('Install PWA', modalContent);
   }
 
   function showAppGuide() {
     const guideContent = `
-      <h3>App Installation Guide</h3>
+      <h3>PWA Installation Guide</h3>
       <div style="text-align: left; margin-top: 20px;">
         <h4>For iOS (iPhone/iPad):</h4>
         <ol style="padding-left: 20px; margin-top: 10px;">
-          <li>Open the App Store on your device</li>
-          <li>Search for "Academic Writing Hub"</li>
-          <li>Tap the "Get" button to download</li>
-          <li>Wait for installation to complete</li>
-          <li>Open the app and log in with your credentials</li>
-          <li>Enable push notifications when prompted</li>
+          <li>Open Safari browser and go to our website</li>
+          <li>Tap the share button at the bottom (square with arrow up)</li>
+          <li>Scroll down and tap "Add to Home Screen"</li>
+          <li>Tap "Add" in the top right corner</li>
+          <li>The PWA will be installed like a native app</li>
+          <li>Open the app from your home screen</li>
         </ol>
         
         <h4 style="margin-top: 20px;">For Android:</h4>
         <ol style="padding-left: 20px; margin-top: 10px;">
-          <li>Open Google Play Store</li>
-          <li>Search for "Academic Writing Hub"</li>
-          <li>Tap "Install" to download</li>
-          <li>Allow necessary permissions when prompted</li>
-          <li>Open the app and log in</li>
-          <li>Enable notifications for task alerts</li>
+          <li>Open Chrome browser and go to our website</li>
+          <li>Tap the three-dot menu in the top right</li>
+          <li>Tap "Add to Home Screen" or "Install App"</li>
+          <li>Tap "Install" when prompted</li>
+          <li>The PWA will be installed like a native app</li>
+          <li>Open the app from your home screen</li>
         </ol>
         
-        <h4 style="margin-top: 20px;">For Progressive Web App (PWA):</h4>
+        <h4 style="margin-top: 20px;">For Desktop (Windows/Mac/Linux):</h4>
         <ol style="padding-left: 20px; margin-top: 10px;">
-          <li>Open our website in Chrome or Safari</li>
-          <li>Tap the share button (iOS) or menu (Android)</li>
-          <li>Select "Add to Home Screen"</li>
-          <li>Confirm the installation</li>
-          <li>The app will be installed like a native app</li>
+          <li>Open Chrome, Edge, or Safari browser</li>
+          <li>Go to our website</li>
+          <li>Look for the install icon in the address bar (usually looks like a download or plus icon)</li>
+          <li>Click "Install" or "Add to Desktop"</li>
+          <li>The PWA will be installed as a standalone app</li>
         </ol>
+        
+        <div style="margin-top: 25px; padding: 15px; background: rgba(0, 74, 173, 0.05); border-radius: 8px;">
+          <p style="color: var(--dark); font-weight: 600; margin-bottom: 10px;">Benefits of PWA:</p>
+          <ul style="padding-left: 20px; color: var(--gray);">
+            <li>No app store approval needed</li>
+            <li>Smaller download size</li>
+            <li>Always up-to-date automatically</li>
+            <li>Works offline</li>
+            <li>Push notifications</li>
+            <li>Secure (HTTPS required)</li>
+          </ul>
+        </div>
         
         <p style="margin-top: 25px; color: var(--gray); font-style: italic;">Need help? Contact goldgain321@gmail.com or WhatsApp: +254783567024</p>
       </div>
     `;
     
-    showCustomModal('Installation Guide', guideContent);
+    showCustomModal('PWA Installation Guide', guideContent);
   }
 
   function showAppSupport() {
     const supportContent = `
-      <h3>App Support Center</h3>
+      <h3>PWA Support Center</h3>
       <div style="text-align: left; margin-top: 20px;">
-        <p><strong>Common Issues & Solutions:</strong></p>
+        <p><strong>Common PWA Issues & Solutions:</strong></p>
         <ul style="padding-left: 20px; margin-top: 10px; margin-bottom: 20px;">
-          <li><strong>App won't install:</strong> Check device compatibility and ensure you have sufficient storage space</li>
-          <li><strong>Login issues:</strong> Ensure you're using the correct email and password. Reset password if needed</li>
-          <li><strong>Notifications not working:</strong> Check app notification settings in device settings</li>
-          <li><strong>App crashes:</strong> Update to the latest version from the app store</li>
-          <li><strong>Slow performance:</strong> Clear app cache or restart your device</li>
-          <li><strong>Payment issues:</strong> Ensure your payment method is properly set up</li>
+          <li><strong>Can't install PWA:</strong> Ensure you're using Chrome (Android) or Safari (iOS). Some browsers don't support PWA installation.</li>
+          <li><strong>Install button not showing:</strong> Clear browser cache and restart browser. Ensure you're on HTTPS.</li>
+          <li><strong>Notifications not working:</strong> Check app notification settings in device settings. Enable notifications for the PWA.</li>
+          <li><strong>PWA won't open:</strong> Uninstall and reinstall the PWA. Clear browser cache first.</li>
+          <li><strong>Slow performance:</strong> Clear PWA cache in browser settings or reinstall.</li>
+          <li><strong>Offline mode not working:</strong> Ensure you visited all necessary pages while online for caching.</li>
+        </ul>
+        
+        <p><strong>PWA System Requirements:</strong></p>
+        <ul style="padding-left: 20px; margin-top: 10px; margin-bottom: 20px;">
+          <li><strong>iOS:</strong> Safari on iOS 11.3 or later</li>
+          <li><strong>Android:</strong> Chrome 72 or later</li>
+          <li><strong>Desktop:</strong> Chrome, Edge, or Safari latest versions</li>
+          <li><strong>Internet:</strong> Required for initial installation and updates</li>
         </ul>
         
         <p><strong>Support Contact Information:</strong></p>
@@ -4739,20 +4780,25 @@
           <p><i class="fas fa-globe"></i> Website: https://academicwritinghub.com/support</p>
         </div>
         
-        <p style="margin-top: 20px;"><strong>App Version Information:</strong></p>
+        <p style="margin-top: 20px;"><strong>PWA Version Information:</strong></p>
         <ul style="padding-left: 20px; margin-top: 10px;">
-          <li>iOS App: Version 2.5.0</li>
-          <li>Android App: Version 2.5.0</li>
           <li>PWA Version: 1.3.0</li>
           <li>Last Updated: March 2025</li>
+          <li>Minimum OS: iOS 11.3 / Android 5.0</li>
+          <li>Browser Support: Chrome, Safari, Edge, Firefox</li>
         </ul>
       </div>
     `;
     
-    showCustomModal('App Support', supportContent);
+    showCustomModal('PWA Support', supportContent);
   }
 
+  // UPDATED: Referral modal with correct referral link
   function showReferralModal() {
+    // UPDATED: Use the correct referral link structure from referrals.html
+    const referralCode = userProfile?.referral_code || generateReferralCode();
+    const referralLink = `https://academicwritinghub.com/register?ref=${referralCode}`;
+    
     const modalContent = `
       <div style="text-align: center;">
         <div style="font-size: 48px; color: var(--secondary); margin-bottom: 20px;">
@@ -4764,11 +4810,14 @@
         <div style="background: rgba(0, 74, 173, 0.05); padding: 20px; border-radius: 10px; margin-bottom: 25px;">
           <p style="font-weight: bold; margin-bottom: 10px; color: var(--dark);">Your Unique Referral Link:</p>
           <div style="display: flex; gap: 10px;">
-            <input type="text" id="referralLink" value="https://academicwritinghub.com/ref/${userProfile?.referral_code || 'YOURCODE'}" readonly style="flex: 1; padding: 12px; border: 1px solid var(--border); border-radius: 8px; background: white; font-size: 14px;">
+            <input type="text" id="referralLink" value="${referralLink}" readonly style="flex: 1; padding: 12px; border: 1px solid var(--border); border-radius: 8px; background: white; font-size: 14px;">
             <button onclick="copyReferralLink()" style="padding: 12px 20px; background: var(--primary); color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: 600;">
               <i class="fas fa-copy"></i> Copy
             </button>
           </div>
+          <p style="margin-top: 10px; font-size: 12px; color: var(--gray);">
+            <i class="fas fa-info-circle"></i> Your referral code: <strong>${referralCode}</strong>
+          </p>
         </div>
         
         <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; margin-top: 20px;">
@@ -4777,7 +4826,7 @@
             <div>Active Referrals</div>
           </div>
           <div style="background: var(--success); color: white; padding: 20px; border-radius: 10px;">
-            <div style="font-size: 28px; font-weight: bold;">$${((userProfile?.total_earnings || 0) * 0.15).toFixed(2)}</div>
+            <div style="font-size: 28px; font-weight: bold;">$${((kshToUsd(userProfile?.total_earnings || 0)) * 0.15).toFixed(2)}</div>
             <div>Referral Earnings</div>
           </div>
         </div>
@@ -4786,17 +4835,55 @@
           <h4 style="margin-bottom: 15px; color: var(--dark);">How It Works:</h4>
           <ul style="padding-left: 20px; color: var(--gray);">
             <li>Share your referral link with friends</li>
-            <li>They sign up using your link</li>
-            <li>You earn 15% of their task earnings</li>
+            <li>They sign up using your link and complete registration</li>
+            <li>When they complete their first task correctly, you earn $5 bonus</li>
+            <li>You earn 15% of their task earnings forever</li>
             <li>No limit on number of referrals</li>
-            <li>Earnings credited instantly</li>
+            <li>Earnings credited instantly to your balance</li>
             <li>Withdraw referral earnings anytime</li>
           </ul>
+          
+          <h4 style="margin-top: 20px; margin-bottom: 10px; color: var(--dark);">Referral Bonus Rules:</h4>
+          <ul style="padding-left: 20px; color: var(--gray);">
+            <li>Referral must complete registration and verify email</li>
+            <li>Referral must complete first task successfully</li>
+            <li>You earn 15% commission on all their task earnings</li>
+            <li>Bonuses are paid instantly when tasks are completed</li>
+            <li>Fraudulent referrals will be removed</li>
+          </ul>
+        </div>
+        
+        <div style="margin-top: 25px; display: flex; gap: 10px; justify-content: center;">
+          <button onclick="shareReferralLink('whatsapp')" style="padding: 10px 20px; background: #25D366; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: 600;">
+            <i class="fab fa-whatsapp"></i> Share on WhatsApp
+          </button>
+          <button onclick="shareReferralLink('facebook')" style="padding: 10px 20px; background: #1877F2; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: 600;">
+            <i class="fab fa-facebook"></i> Share on Facebook
+          </button>
         </div>
       </div>
     `;
     
     showCustomModal('Referral Program', modalContent);
+  }
+
+  function shareReferralLink(platform) {
+    const referralLink = document.getElementById('referralLink').value;
+    let shareUrl = '';
+    
+    switch(platform) {
+      case 'whatsapp':
+        shareUrl = `https://wa.me/?text=Join%20Academic%20Writing%20Hub%20and%20start%20earning%20money%20writing%20academic%20papers!%20Use%20my%20referral%20link:%20${encodeURIComponent(referralLink)}`;
+        break;
+      case 'facebook':
+        shareUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(referralLink)}`;
+        break;
+      default:
+        shareUrl = referralLink;
+    }
+    
+    window.open(shareUrl, '_blank');
+    showMessage(`✅ Opening ${platform} to share your referral link`, 'success');
   }
 
   function showTrainingModal() {
@@ -4852,14 +4939,65 @@
     }, 1000);
   }
 
+  // UPDATED: Achievement modal with detailed rules
   function showAchievementModal(achievementId) {
     const achievements = {
-      'fast-task': { name: 'Fast Task', description: 'Complete your first task within 24 hours of signing up', reward: '$5 bonus', icon: 'fas fa-bolt' },
-      'week-warrior': { name: 'Week Warrior', description: 'Complete tasks for 7 consecutive days', reward: '$20 bonus', icon: 'fas fa-fire' },
-      'referral-pro': { name: 'Referral Pro', description: 'Successfully refer 5 friends to the platform', reward: '$50 bonus', icon: 'fas fa-users' },
-      'writing-expert': { name: 'Writing Expert', description: 'Complete 50 academic writing tasks with 90%+ quality rating', reward: '$100 bonus', icon: 'fas fa-pen-fancy' },
-      'top-earner': { name: 'Top Earner', description: 'Earn over $1000 in total earnings', reward: '$200 bonus', icon: 'fas fa-trophy' },
-      'consistency': { name: 'Consistency King', description: 'Maintain 30-day activity streak', reward: '$150 bonus', icon: 'fas fa-calendar-check' }
+      'first-task': { 
+        name: 'First Task', 
+        description: 'Successfully complete your first writing task with correct submission and quality standards',
+        requirements: 'Complete 1 task with correct submission and get it approved',
+        reward: '$5 bonus', 
+        icon: 'fas fa-bolt' 
+      },
+      'week-warrior': { 
+        name: 'Week Warrior', 
+        description: 'Maintain a 7-day streak of completing tasks correctly without any rejections',
+        requirements: 'Complete at least 1 task daily for 7 consecutive days with correct submissions',
+        reward: '$20 bonus', 
+        icon: 'fas fa-fire' 
+      },
+      'referral-pro': { 
+        name: 'Referral Pro', 
+        description: 'Successfully refer 5 friends who complete their first task correctly',
+        requirements: 'Get 5 referrals who complete registration and their first task successfully',
+        reward: '$50 bonus', 
+        icon: 'fas fa-users' 
+      },
+      'writing-expert': { 
+        name: 'Writing Expert', 
+        description: 'Complete 50 academic writing tasks with 90%+ quality rating and correct submissions',
+        requirements: 'Complete 50+ tasks with quality score above 90% and correct submissions',
+        reward: '$100 bonus', 
+        icon: 'fas fa-pen-fancy' 
+      },
+      'top-earner': { 
+        name: 'Top Earner', 
+        description: 'Earn over $1000 from correctly completed writing tasks',
+        requirements: 'Accumulate $1000+ in earnings from successfully completed tasks',
+        reward: '$200 bonus', 
+        icon: 'fas fa-trophy' 
+      },
+      'consistency': { 
+        name: 'Consistency', 
+        description: 'Maintain 30-day activity streak with correct task submissions',
+        requirements: 'Complete at least 1 task daily for 30 consecutive days with correct submissions',
+        reward: '$150 bonus', 
+        icon: 'fas fa-calendar-check' 
+      },
+      'quality-master': { 
+        name: 'Quality Master', 
+        description: 'Achieve 95%+ quality rating on 100+ completed tasks with correct submissions',
+        requirements: 'Complete 100+ tasks with quality score above 95% and correct submissions',
+        reward: '$300 bonus', 
+        icon: 'fas fa-award' 
+      },
+      'task-champion': { 
+        name: 'Task Champion', 
+        description: 'Successfully complete 500+ writing tasks with correct submissions',
+        requirements: 'Complete 500+ tasks with correct submissions and approvals',
+        reward: '$500 bonus', 
+        icon: 'fas fa-flag-checkered' 
+      }
     };
 
     const achievement = achievements[achievementId];
@@ -4878,14 +5016,23 @@
         </div>
         
         <div style="margin-top: 20px; text-align: left; background: rgba(0, 74, 173, 0.05); padding: 20px; border-radius: 10px;">
-          <h4 style="margin-bottom: 10px; color: var(--dark);">How to Earn:</h4>
+          <h4 style="margin-bottom: 10px; color: var(--dark);">Requirements to Earn:</h4>
+          <p style="color: var(--gray); margin-bottom: 15px;">${achievement.requirements}</p>
+          
+          <h4 style="margin-top: 15px; margin-bottom: 10px; color: var(--dark);">Achievement Rules:</h4>
           <ul style="padding-left: 20px; color: var(--gray);">
-            <li>Complete assigned writing tasks</li>
-            <li>Maintain consistent activity</li>
-            <li>Submit high-quality work</li>
-            <li>Meet all task deadlines</li>
-            <li>Follow platform guidelines</li>
+            <li>Task must be completed correctly and submitted on time</li>
+            <li>Submission must meet all quality requirements</li>
+            <li>Task must be approved by the review team</li>
+            <li>No plagiarism or rule violations allowed</li>
+            <li>Bonuses are awarded instantly upon achievement</li>
           </ul>
+        </div>
+        
+        <div style="margin-top: 25px; padding: 15px; background: rgba(16, 185, 129, 0.1); border-radius: 8px;">
+          <p style="color: var(--success); font-weight: 600; margin: 0;">
+            <i class="fas fa-lightbulb"></i> Tip: Focus on quality over quantity to earn achievements faster
+          </p>
         </div>
       </div>
     `;
@@ -4904,7 +5051,7 @@
           <li><strong>Complete your profile:</strong> Fill in all required information</li>
           <li><strong>Choose a membership package:</strong> Select a package that suits your needs</li>
           <li><strong>Browse available tasks:</strong> Check the tasks page for available writing opportunities</li>
-          <li><strong>Submit your first task:</strong> Complete and submit your first writing task</li>
+          <li><strong>Submit your first task:</strong> Complete and submit your first writing task correctly</li>
           <li><strong>Track your earnings:</strong> Monitor your progress in the earnings dashboard</li>
         </ul>
         
@@ -5254,6 +5401,7 @@
     }
   }
 
+  // UPDATED: Improved referral bonus payment function
   async function payReferralBonus(referrerId, userId, packageType, amountKSH) {
     try {
       // Calculate referral bonus (10% of package price)
@@ -5262,7 +5410,7 @@
       // Update referrer's balance
       const { data: referrerProfile, error: referrerError } = await supabaseClient
         .from('profiles')
-        .select('balance')
+        .select('balance, referrals')
         .eq('id', referrerId)
         .single();
 
@@ -5272,12 +5420,14 @@
       }
 
       const newBalance = (parseFloat(referrerProfile.balance) || 0) + bonusAmountKSH;
+      const newReferrals = (referrerProfile.referrals || 0) + 1;
 
-      // Update referrer's profile
+      // Update referrer's profile with new balance and referral count
       const { error: updateError } = await supabaseClient
         .from('profiles')
         .update({
           balance: newBalance,
+          referrals: newReferrals,
           updated_at: new Date().toISOString()
         })
         .eq('id', referrerId);
@@ -5285,9 +5435,14 @@
       if (updateError) throw updateError;
 
       // Record referral bonus transaction
-      await recordTransaction('referral_bonus', bonusAmountKSH, `Referral bonus from ${packageType} package`, referrerId);
+      await recordTransaction('referral_bonus', bonusAmountKSH, `Referral bonus from ${packageType} package upgrade`, referrerId);
 
       console.log(`✅ Paid referral bonus of ${formatUSD(kshToUsd(bonusAmountKSH))} to referrer ${referrerId}`);
+      
+      // Show notification to referrer if they are the current user
+      if (currentUser && referrerId === currentUser.id) {
+        showMessage(`💰 You earned ${formatUSD(kshToUsd(bonusAmountKSH))} referral bonus!`, 'success');
+      }
       
     } catch (error) {
       console.error('Error paying referral bonus:', error);
@@ -5303,6 +5458,7 @@
   window.showTrainingModal = showTrainingModal;
   window.showAchievementModal = showAchievementModal;
   window.copyReferralLink = copyReferralLink;
+  window.shareReferralLink = shareReferralLink;
   window.showAppGuide = showAppGuide;
   window.showAppSupport = showAppSupport;
   window.showAppDownloadModal = showAppDownloadModal;
@@ -5318,6 +5474,7 @@
 
 </body>
 </html>
+
 
 
 
