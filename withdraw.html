@@ -512,12 +512,14 @@
     <main>
       <div class="page-header">
         <h1><i class="fas fa-money-bill-wave"></i> Withdraw Earnings</h1>
-        <p>Request withdrawal of your earnings to your M-Pesa account</p>
+        <!-- CHANGED: Updated description -->
+        <p>Request withdrawal of your earnings to your M-Pesa account (Available 24/7)</p>
       </div>
 
       <div class="balance-card">
         <div class="balance-label">Available Balance</div>
-        <div class="balance-amount" id="balanceAmount">KSh 0.00</div>
+        <!-- CHANGED: Changed from KSh to USD -->
+        <div class="balance-amount" id="balanceAmount">$0.00</div>
         <div class="balance-label" id="withdrawableInfo">Select an amount to withdraw</div>
       </div>
 
@@ -525,11 +527,13 @@
         <h3 style="color: #856404; margin-bottom: 15px;"><i class="fas fa-info-circle"></i> Withdrawal Rules</h3>
         <ul class="rules-list">
           <li>10% transaction tax applies to all withdrawals</li>
-          <li>Withdrawals processed on <strong>Wednesdays and Fridays</strong> only</li>
+          <!-- CHANGED: Removed Wednesday/Friday restriction -->
+          <li>Withdrawals processed <strong>24/7</strong> (Available every day)</li>
           <li>Processing time: 24-48 hours after approval</li>
           <li>Ensure your M-Pesa number is registered in your name</li>
           <li>Withdrawal password required for security</li>
-          <li><strong>Maximum one withdrawal per withdrawal day</strong></li>
+          <!-- CHANGED: Updated to daily limit -->
+          <li><strong>Maximum one withdrawal per day</strong></li>
         </ul>
       </div>
 
@@ -539,28 +543,31 @@
         <h3 class="section-title"><i class="fas fa-wallet"></i> Request Withdrawal</h3>
         
         <div class="form-group">
-          <label>Select Amount (KSh)</label>
+          <!-- CHANGED: Label to USD -->
+          <label>Select Amount (USD)</label>
           <div class="amount-options" id="amountOptions">
-            <button type="button" class="amount-btn" data-amount="500">KSh 500</button>
-            <button type="button" class="amount-btn" data-amount="1500">KSh 1,500</button>
-            <button type="button" class="amount-btn" data-amount="2000">KSh 2,000</button>
-            <button type="button" class="amount-btn" data-amount="2500">KSh 2,500</button>
-            <button type="button" class="amount-btn" data-amount="3000">KSh 3,000</button>
-            <button type="button" class="amount-btn" data-amount="3500">KSh 3,500</button>
-            <button type="button" class="amount-btn" data-amount="4000">KSh 4,000</button>
-            <button type="button" class="amount-btn" data-amount="4500">KSh 4,500</button>
-            <button type="button" class="amount-btn" data-amount="8000">KSh 8,000</button>
-            <button type="button" class="amount-btn" data-amount="12000">KSh 12,000</button>
-            <button type="button" class="amount-btn" data-amount="15000">KSh 15,000</button>
-            <button type="button" class="amount-btn" data-amount="20000">KSh 20,000</button>
-            <button type="button" class="amount-btn" data-amount="30000">KSh 30,000</button>
-            <button type="button" class="amount-btn" data-amount="40000">KSh 40,000</button>
-            <button type="button" class="amount-btn" data-amount="50000">KSh 50,000</button>
+            <!-- CHANGED: All amounts converted to USD (1 USD = 129 KSh) -->
+            <button type="button" class="amount-btn" data-amount="3.88">$3.88 ≈ KSh 500</button>
+            <button type="button" class="amount-btn" data-amount="11.63">$11.63 ≈ KSh 1,500</button>
+            <button type="button" class="amount-btn" data-amount="15.50">$15.50 ≈ KSh 2,000</button>
+            <button type="button" class="amount-btn" data-amount="19.38">$19.38 ≈ KSh 2,500</button>
+            <button type="button" class="amount-btn" data-amount="23.26">$23.26 ≈ KSh 3,000</button>
+            <button type="button" class="amount-btn" data-amount="27.13">$27.13 ≈ KSh 3,500</button>
+            <button type="button" class="amount-btn" data-amount="31.01">$31.01 ≈ KSh 4,000</button>
+            <button type="button" class="amount-btn" data-amount="34.88">$34.88 ≈ KSh 4,500</button>
+            <button type="button" class="amount-btn" data-amount="62.02">$62.02 ≈ KSh 8,000</button>
+            <button type="button" class="amount-btn" data-amount="93.02">$93.02 ≈ KSh 12,000</button>
+            <button type="button" class="amount-btn" data-amount="116.28">$116.28 ≈ KSh 15,000</button>
+            <button type="button" class="amount-btn" data-amount="155.04">$155.04 ≈ KSh 20,000</button>
+            <button type="button" class="amount-btn" data-amount="232.56">$232.56 ≈ KSh 30,000</button>
+            <button type="button" class="amount-btn" data-amount="310.08">$310.08 ≈ KSh 40,000</button>
+            <button type="button" class="amount-btn" data-amount="387.60">$387.60 ≈ KSh 50,000</button>
           </div>
         </div>
         
         <div class="selected-amount-display" id="selectedAmountDisplay" style="display: none;">
-          Selected Amount: <span id="selectedAmount">KSh 0</span>
+          <!-- CHANGED: Changed from KSh to USD -->
+          Selected Amount: <span id="selectedAmount">$0</span>
         </div>
         
         <div id="taxCalculation" style="display: none;">
@@ -571,15 +578,18 @@
             <div class="tax-breakdown">
               <div>
                 <div>Requested Amount</div>
-                <div class="amount" id="requestedAmount">KSh 0</div>
+                <!-- CHANGED: Changed from KSh to USD -->
+                <div class="amount" id="requestedAmount">$0</div>
               </div>
               <div>
                 <div>Tax (10%)</div>
-                <div class="amount" id="taxAmount">KSh 0</div>
+                <!-- CHANGED: Changed from KSh to USD -->
+                <div class="amount" id="taxAmount">$0</div>
               </div>
               <div>
                 <div>You Receive</div>
-                <div class="amount" id="netAmount">KSh 0</div>
+                <!-- CHANGED: Changed from KSh to USD -->
+                <div class="amount" id="netAmount">$0</div>
               </div>
             </div>
           </div>
@@ -640,7 +650,8 @@
           <thead>
             <tr>
               <th>Date</th>
-              <th>Amount</th>
+              <!-- CHANGED: Changed from Amount to Amount (USD) -->
+              <th>Amount (USD)</th>
               <th>M-Pesa</th>
               <th>Status</th>
             </tr>
@@ -666,9 +677,13 @@
     // Initialize Supabase client
     const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
+    // ADDED: Conversion rate (1 USD = 129 KSh)
+    const USD_TO_KSH_RATE = 129;
+    const KSH_TO_USD_RATE = 1 / USD_TO_KSH_RATE;
+
     let currentUser = null;
     let userProfile = null;
-    let selectedAmount = 0;
+    let selectedAmount = 0; // This will now be in USD
 
     // Initialize the application
     document.addEventListener('DOMContentLoaded', function() {
@@ -722,8 +737,8 @@
                 // Add selected class to clicked button
                 this.classList.add('selected');
                 
-                // Set selected amount
-                selectedAmount = parseInt(this.getAttribute('data-amount'));
+                // Set selected amount (in USD)
+                selectedAmount = parseFloat(this.getAttribute('data-amount'));
                 
                 // Update UI
                 updateSelectedAmountDisplay();
@@ -741,12 +756,31 @@
         }
     }
 
+    // ADDED: Helper function to convert KSh to USD
+    function kshToUsd(kshAmount) {
+        return (kshAmount * KSH_TO_USD_RATE).toFixed(2);
+    }
+
+    // ADDED: Helper function to convert USD to KSh
+    function usdToKsh(usdAmount) {
+        return (usdAmount * USD_TO_KSH_RATE).toFixed(0);
+    }
+
+    // ADDED: Format USD currency
+    function formatUSD(amount) {
+        return '$' + parseFloat(amount).toLocaleString(undefined, {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2
+        });
+    }
+
     function updateSelectedAmountDisplay() {
         const selectedAmountDisplay = document.getElementById('selectedAmountDisplay');
         const selectedAmountSpan = document.getElementById('selectedAmount');
         
         if (selectedAmountDisplay && selectedAmountSpan) {
-            selectedAmountSpan.textContent = 'KSh ' + selectedAmount.toLocaleString();
+            // CHANGED: Show USD amount
+            selectedAmountSpan.textContent = formatUSD(selectedAmount);
             selectedAmountDisplay.style.display = 'block';
         }
     }
@@ -759,9 +793,10 @@
             const tax = amount * 0.10;
             const netAmount = amount - tax;
             
-            document.getElementById('requestedAmount').textContent = 'KSh ' + amount.toLocaleString();
-            document.getElementById('taxAmount').textContent = 'KSh ' + tax.toLocaleString();
-            document.getElementById('netAmount').textContent = 'KSh ' + netAmount.toLocaleString();
+            // CHANGED: Show USD amounts
+            document.getElementById('requestedAmount').textContent = formatUSD(amount);
+            document.getElementById('taxAmount').textContent = formatUSD(tax);
+            document.getElementById('netAmount').textContent = formatUSD(netAmount);
             
             taxCalculation.style.display = 'block';
         } else {
@@ -769,11 +804,9 @@
         }
     }
 
-    // Function to check if today is a withdrawal day (Wednesday or Friday)
+    // CHANGED: Always return true for withdrawals 24/7
     function isWithdrawalDay() {
-        const today = new Date();
-        const dayOfWeek = today.getDay();
-        return dayOfWeek === 3 || dayOfWeek === 5;
+        return true; // Withdrawals available every day
     }
 
     // Function to get today's date string in YYYY-MM-DD format
@@ -845,28 +878,31 @@
     function updateUI(profile) {
         const balanceAmount = document.getElementById('balanceAmount');
         if (balanceAmount) {
-            const balance = parseFloat(profile.balance) || 0;
-            balanceAmount.textContent = 'KSh ' + balance.toLocaleString();
+            const balanceKSH = parseFloat(profile.balance) || 0;
+            // CHANGED: Convert KSh balance to USD for display
+            const balanceUSD = kshToUsd(balanceKSH);
+            balanceAmount.textContent = formatUSD(balanceUSD);
         }
         
         const infoElement = document.getElementById('withdrawableInfo');
         if (infoElement) {
-            const currentBalance = parseFloat(profile.balance) || 0;
+            const currentBalanceKSH = parseFloat(profile.balance) || 0;
+            const currentBalanceUSD = kshToUsd(currentBalanceKSH);
             const isTodayWithdrawalDay = isWithdrawalDay();
             
-            if (currentBalance >= 500 && isTodayWithdrawalDay) {
-                infoElement.innerHTML = 'Select an amount to withdraw (Maximum: KSh ' + Math.min(currentBalance, 50000).toLocaleString() + ')';
+            // CHANGED: Minimum amount in USD (500 KSh = 3.88 USD)
+            const minWithdrawalUSD = 3.88;
+            
+            if (currentBalanceUSD >= minWithdrawalUSD && isTodayWithdrawalDay) {
+                // CHANGED: Show USD amounts
+                infoElement.innerHTML = 'Select an amount to withdraw (Maximum: ' + formatUSD(Math.min(currentBalanceUSD, 387.60)) + ')';
                 infoElement.style.color = 'var(--success)';
             } else if (!isTodayWithdrawalDay) {
-                const today = new Date();
-                const dayNames = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-                const nextWithdrawalDay = today.getDay() <= 3 ? 3 : 5;
-                const nextDayName = dayNames[nextWithdrawalDay];
-                
-                infoElement.innerHTML = 'Withdrawals only on Wednesdays and Fridays. Next withdrawal day: ' + nextDayName;
+                // This should never happen now, but keeping as fallback
+                infoElement.innerHTML = 'Withdrawals available 24/7';
                 infoElement.style.color = 'var(--warning)';
             } else {
-                infoElement.innerHTML = 'You need at least KSh 500 to withdraw';
+                infoElement.innerHTML = 'You need at least ' + formatUSD(minWithdrawalUSD) + ' to withdraw';
                 infoElement.style.color = 'var(--danger)';
             }
         }
@@ -882,38 +918,30 @@
         const passwordInput = document.getElementById('withdrawPassword');
         const withdrawBtn = document.getElementById('withdrawBtn');
 
-        const amount = selectedAmount;
+        const amountUSD = selectedAmount; // User selects USD amount
         const mpesaNumber = mpesaInput.value.trim().replace(/\s/g, '');
         const password = passwordInput.value.trim();
-        const currentBalance = parseFloat(userProfile.balance) || 0;
+        const currentBalanceKSH = parseFloat(userProfile.balance) || 0;
+        const currentBalanceUSD = kshToUsd(currentBalanceKSH);
 
-        // Validation - Check if today is a withdrawal day
-        if (!isWithdrawalDay()) {
-            const today = new Date();
-            const dayNames = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-            const dayName = dayNames[today.getDay()];
-            const nextWithdrawalDay = today.getDay() <= 3 ? 3 : 5;
-            const nextDayName = dayNames[nextWithdrawalDay];
-            
-            showMessage('Withdrawals are only processed on Wednesdays and Fridays. Today is ' + dayName + '. Next withdrawal day: ' + nextDayName, 'error');
-            return;
-        }
-
+        // CHANGED: Always allow withdrawals (removed day check)
         // Validation - Check if user has already withdrawn today
         const hasWithdrawn = await hasWithdrawnToday();
         if (hasWithdrawn) {
-            showMessage('You have already made a withdrawal today. Only one withdrawal is allowed per withdrawal day.', 'error');
+            showMessage('You have already made a withdrawal today. Only one withdrawal is allowed per day.', 'error');
             return;
         }
 
         // Validation
-        if (!amount || amount < 500) {
-            showMessage('Please select an amount to withdraw', 'error');
+        // CHANGED: Minimum amount in USD (3.88 USD = 500 KSh)
+        if (!amountUSD || amountUSD < 3.88) {
+            showMessage('Minimum withdrawal amount is $3.88', 'error');
             return;
         }
 
-        if (amount > 50000) {
-            showMessage('Maximum withdrawal amount is KSh 50,000 per transaction', 'error');
+        // CHANGED: Maximum amount in USD (387.60 USD = 50,000 KSh)
+        if (amountUSD > 387.60) {
+            showMessage('Maximum withdrawal amount is $387.60 per transaction', 'error');
             return;
         }
 
@@ -927,9 +955,9 @@
             return;
         }
 
-        // Only check if user has enough for the withdrawal amount
-        if (amount > currentBalance) {
-            showMessage('Insufficient balance. You need KSh ' + amount.toLocaleString() + ' to withdraw KSh ' + (amount - (amount * 0.10)).toLocaleString() + ' after tax', 'error');
+        // CHANGED: Check balance in USD
+        if (amountUSD > currentBalanceUSD) {
+            showMessage('Insufficient balance. You need ' + formatUSD(amountUSD) + ' to withdraw ' + formatUSD(amountUSD - (amountUSD * 0.10)) + ' after tax', 'error');
             return;
         }
 
@@ -943,8 +971,13 @@
             withdrawBtn.innerHTML = '<span class="loading"></span> Processing...';
             withdrawBtn.disabled = true;
 
-            const taxAmount = amount * 0.10;
-            const netAmount = amount - taxAmount;
+            const taxAmountUSD = amountUSD * 0.10;
+            const netAmountUSD = amountUSD - taxAmountUSD;
+            
+            // Convert to KSh for database storage
+            const amountKSH = usdToKsh(amountUSD);
+            const taxAmountKSH = usdToKsh(taxAmountUSD);
+            const netAmountKSH = usdToKsh(netAmountUSD);
 
             // Create withdrawal request
             const { error } = await supabaseClient
@@ -953,9 +986,9 @@
                     {
                         user_id: currentUser.id,
                         user_email: currentUser.email,
-                        amount: netAmount,
-                        original_amount: amount,
-                        tax_amount: taxAmount,
+                        amount: parseFloat(netAmountKSH), // Store in KSh
+                        original_amount: parseFloat(amountKSH), // Store in KSh
+                        tax_amount: parseFloat(taxAmountKSH), // Store in KSh
                         mpesa_number: mpesaNumber,
                         status: 'pending',
                         created_at: new Date().toISOString()
@@ -964,16 +997,16 @@
 
             if (error) throw error;
 
-            // Only deduct the withdrawal amount from balance
-            const newBalance = currentBalance - amount;
+            // Only deduct the withdrawal amount from balance (in KSh)
+            const newBalanceKSH = currentBalanceKSH - parseFloat(amountKSH);
             const { error: updateError } = await supabaseClient
                 .from('profiles')
-                .update({ balance: newBalance })
+                .update({ balance: newBalanceKSH })
                 .eq('id', currentUser.id);
 
             if (updateError) throw updateError;
 
-            userProfile.balance = newBalance;
+            userProfile.balance = newBalanceKSH;
             updateUI(userProfile);
 
             // Clear form
@@ -988,7 +1021,8 @@
                 selectedButton.classList.remove('selected');
             }
 
-            showMessage('Withdrawal request submitted successfully! KSh ' + taxAmount.toLocaleString() + ' tax deducted. Net amount: KSh ' + netAmount.toLocaleString(), 'success');
+            // CHANGED: Show amounts in USD
+            showMessage('Withdrawal request submitted successfully! ' + formatUSD(taxAmountUSD) + ' tax deducted. Net amount: ' + formatUSD(netAmountUSD), 'success');
             
             await loadWithdrawalHistory();
 
@@ -1085,7 +1119,9 @@
 
             historyBody.innerHTML = withdrawals.map(function(withdrawal) {
                 const date = new Date(withdrawal.created_at).toLocaleDateString();
-                const amount = 'KSh ' + (parseFloat(withdrawal.amount) || 0).toLocaleString();
+                // CHANGED: Convert KSh amount from database to USD for display
+                const amountKSH = parseFloat(withdrawal.amount) || 0;
+                const amountUSD = kshToUsd(amountKSH);
                 const mpesa = withdrawal.mpesa_number || '-';
                 
                 let statusClass = 'status-pending';
@@ -1102,7 +1138,8 @@
                     statusText = 'Processing';
                 }
 
-                return '<tr><td>' + date + '</td><td>' + amount + '</td><td>' + mpesa + '</td><td><span class="status-badge ' + statusClass + '">' + statusText + '</span></td></tr>';
+                // CHANGED: Show amount in USD
+                return '<tr><td>' + date + '</td><td>' + formatUSD(amountUSD) + '</td><td>' + mpesa + '</td><td><span class="status-badge ' + statusClass + '">' + statusText + '</span></td></tr>';
             }).join('');
 
         } catch (error) {
